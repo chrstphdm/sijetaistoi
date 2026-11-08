@@ -27,10 +27,10 @@ const JOURNAL: Command[] = [
   { type: 'advance_month', month: '2027-03' },
   { type: 'resolve_event', eventId: 'chaudiere', optionId: 'etaler' },
   { type: 'vote', rule },
-  { type: 'answer', entry: { questionId: 'ref', judgement: 'rather_yes', freeText: 'ma phrase', turn: 1, context: '' } },
+  { type: 'answer', entry: { questionId: 'ref', judgement: 'rather_yes', freeText: 'ma phrase', turn: 1, characterId: 'claire', context: '' } },
   { type: 'emit_callback', ruleId: 'r1', sign: 'unfavourable' },
   { type: 'cast', draw: draw('marc-anne') },
-  { type: 'answer', entry: { questionId: 'ref', judgement: 'rather_no', freeText: null, turn: 2, context: '' } },
+  { type: 'answer', entry: { questionId: 'ref', judgement: 'rather_no', freeText: null, turn: 2, characterId: 'marc-anne', context: '' } },
 ]
 
 describe('journal de commandes', () => {

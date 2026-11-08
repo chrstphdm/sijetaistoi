@@ -20,11 +20,14 @@ import { ReformVote } from './components/ReformVote.tsx'
 import { ImpactForEach, rotationOrder } from './components/ImpactForEach.tsx'
 import { JudgementScale } from './components/JudgementScale.tsx'
 import { CallbackPanel, QuotaBlockedNote } from './components/Callback.tsx'
+import { SummaryScreen } from './components/Summary.tsx'
+import { buildSummary, type KpiAnswer } from '@/core/summary.ts'
+import { replay, type Command } from '@/core/game.ts'
 
 const REFORM = reforms[0]!
 const SEED = 'demo-2027'
 
-type Phase = 'living' | 'judging' | 'impact' | 'collision'
+type Phase = 'living' | 'judging' | 'impact' | 'collision' | 'summary'
 
 const traitsOf = (c: (typeof characters)[number]) => ({
   ...c.traits,
@@ -40,6 +43,20 @@ export function App() {
   const [log, setLog] = useState<readonly OpinionEntry[]>([])
   const [signs, setSigns] = useState<readonly CallbackSign[]>([])
   const [who, setWho] = useState(0)
+  const [kpi, setKpi] = useState<KpiAnswer | null>(null)
+
+  /**
+   * Le journal de commandes. C'est lui, et non les états locaux ci-dessus,
+   * qui sert à construire le bilan : le même chemin que pour une sauvegarde
+   * rechargée, donc le même résultat. Les états locaux ne pilotent que
+   * l'affichage immédiat.
+   */
+  const [journal, setJournal] = useState<readonly Command[]>(() => [
+    { type: 'start', seed: SEED, contentVersion: '0.1.0', hypothesisSetId: 'sensibilite-faible' },
+    { type: 'cast', draw: { picked: characters[0]!.id, pool: characters.map((c) => c.id),
+      eligible: characters.map((c) => c.id), applied: [], relaxed: [], uniform: true } },
+  ])
+  const record = (...cmds: Command[]) => setJournal((j) => [...j, ...cmds])
 
   const random = useMemo(() => createRandom(SEED), [])
   const current = characters[who]!
@@ -58,21 +75,22 @@ export function App() {
       status: 'in_force',
     }
     setWorld((w) => applyRule(w, rule))
+    record({ type: 'vote', rule })
     setPhase('judging')
   }
 
   const answer = (j: Judgement) => {
     setJudgement(j)
-    setLog((l) => [
-      ...l,
-      {
-        questionId: REFORM.id,
-        judgement: j,
-        freeText: wording.trim() || null,
-        turn: l.length + 1,
-        context: `vote sur ${REFORM.descriptiveTitle}`,
-      },
-    ])
+    const entry = {
+      questionId: REFORM.id,
+      judgement: j,
+      freeText: wording.trim() || null,
+      turn: log.length + 1,
+      characterId: current.id,
+      context: `vote sur ${REFORM.descriptiveTitle}`,
+    }
+    setLog((l) => [...l, entry])
+    record({ type: 'answer', entry })
   }
 
   /* --- Collision : incarner l'autre personnage et subir sa propre règle ---
@@ -108,11 +126,23 @@ export function App() {
     const result = buildCollision(characters[nextIndex]!)
     if (result.kind === 'selected') setSigns((s) => [...s, result.callback.sign])
     setCollision(result)
+    record({
+      type: 'cast',
+      draw: { picked: characters[nextIndex]!.id, pool: characters.map((c) => c.id),
+        eligible: characters.map((c) => c.id), applied: ['not_already_played'], relaxed: [], uniform: true },
+    })
+    if (result.kind === 'selected')
+      record({ type: 'emit_callback', ruleId: result.callback.rule.id, sign: result.callback.sign })
     setWho(nextIndex)
     setPhase('collision')
   }
 
   const previousAnswer = log.find((e) => e.questionId === REFORM.id)
+
+  const summary = useMemo(() => buildSummary(replay(journal)), [journal])
+
+  const nameOf = (id: string) =>
+    characters.find((c) => c.id === id)?.identity.firstName ?? id
 
   return (
     <main>
@@ -216,6 +246,18 @@ export function App() {
             </section>
           )}
         </>
+      )}
+
+      {phase === 'collision' && (
+        <section className="sheet">
+          <button type="button" onClick={() => setPhase('summary')}>
+            Terminer la partie
+          </button>
+        </section>
+      )}
+
+      {phase === 'summary' && (
+        <SummaryScreen summary={summary} characterName={nameOf} kpi={kpi} onKpi={setKpi} />
       )}
 
       <section className="sheet" aria-labelledby="registry-title">

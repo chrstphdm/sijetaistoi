@@ -6,6 +6,7 @@ import {
 
 const entry = (over: Partial<OpinionEntry> & Pick<OpinionEntry, 'questionId' | 'judgement' | 'turn'>): OpinionEntry => ({
   freeText: null,
+  characterId: null,
   context: '',
   ...over,
 })

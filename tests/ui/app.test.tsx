@@ -164,3 +164,57 @@ describe('question « bien et juste » et rappel', () => {
     }
   })
 })
+
+describe('bilan de fin de partie', () => {
+  const playThrough = async (user: ReturnType<typeof userEvent.setup>, phrase: string) => {
+    await user.type(screen.getByLabelText(/qu’est-ce qui te paraît juste/), phrase)
+    await user.click(screen.getAllByRole('button', { name: 'Décider ceci' })[1]!)
+    await user.click(screen.getByRole('radio', { name: 'plutôt oui' }))
+    await user.click(screen.getByRole('button', { name: /ce que cela change pour chacun/i }))
+    await user.click(screen.getByRole('button', { name: /Quelques mois plus tard/ }))
+    await user.click(screen.getByRole('radio', { name: 'plutôt non' }))
+    await user.click(screen.getByRole('button', { name: /Terminer la partie/ }))
+  }
+
+  it('restitue les décisions et les personnages incarnés', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await playThrough(user, 'ma règle à moi')
+
+    const head = screen.getByRole('heading', { name: 'Ce que tu as décidé' }).closest('section')!
+    expect(within(head).getByText('« ma règle à moi »')).toBeTruthy()
+    expect(head.textContent).toContain('Claire')
+    expect(head.textContent).toContain('Marc et Anne')
+  })
+
+  it('n’affiche aucun score ni étiquette politique', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await playThrough(user, 'ma phrase')
+
+    const text = document.body.textContent?.toLowerCase() ?? ''
+    for (const forbidden of ['de gauche', 'de droite', 'ton score', 'tu es plutôt', '%']) {
+      expect(text).not.toContain(forbidden)
+    }
+  })
+
+  it('dit explicitement quand la partie est trop courte pour conclure', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await playThrough(user, 'ma phrase')
+    // Deux réponses seulement : sous le seuil de preuve.
+    expect(screen.getByText(/trop courte pour qu’on puisse en dire quoi que ce soit/)).toBeTruthy()
+  })
+
+  it('pose la question KPI, qui ne porte pas sur l’opinion politique', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await playThrough(user, 'ma phrase')
+
+    const kpi = screen.getByRole('heading', { name: 'Une dernière question' }).closest('section')!
+    expect(kpi.textContent).toContain('pas réalisé')
+    for (const word of ['impôt', 'taxe', 'réforme']) {
+      expect(kpi.textContent?.toLowerCase()).not.toContain(word)
+    }
+  })
+})

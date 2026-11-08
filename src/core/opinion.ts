@@ -32,6 +32,16 @@ export type OpinionEntry = {
   readonly freeText: string | null
   /** Rang du tour, et non horodatage : le moteur reste pur. */
   readonly turn: number
+  /**
+   * Personnage incarne au moment de la reponse.
+   *
+   * Indispensable pour attribuer correctement un changement d'avis dans le
+   * bilan. Le deduire apres coup de l'historique des tirages donnerait une
+   * attribution approximative — et affirmer « apres avoir incarne Yanis »
+   * alors que c'etait quelqu'un d'autre serait une affirmation fausse sur
+   * le joueur, exactement ce que le projet s'interdit.
+   */
+  readonly characterId: string | null
   /** Ce que le joueur avait vu ou vecu au moment de repondre. */
   readonly context: string
 }
