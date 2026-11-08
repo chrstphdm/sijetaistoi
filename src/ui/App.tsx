@@ -97,6 +97,7 @@ export function App() {
           <ReformVote
             reform={reform}
             order={rotationOrder(reform.options.length, state.act)}
+            who={character.identity.firstName}
             onVote={actions.vote}
           />
 

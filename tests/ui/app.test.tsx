@@ -146,25 +146,51 @@ describe('registre et consultation', () => {
     const user = userEvent.setup()
     render(<App />)
     // Aucune décision prise : rien à relire, donc rien à afficher.
-    expect(screen.queryByRole('button', { name: /décision prise/ })).toBeNull()
+    expect(screen.queryByRole('button', { name: /Revoir ta décision/ })).toBeNull()
 
     await playAct(user, 'ma règle')
-    const toggle = screen.getByRole('button', { name: /1 décision prise/ })
+    const toggle = screen.getByRole('button', { name: /Revoir ta décision/ })
     await user.click(toggle)
     const timeline = screen.getByRole('navigation', { name: /Où tu en es/ })
     expect(within(timeline).getByText('« ma règle »')).toBeTruthy()
   })
 
-  it('situe le joueur dans la partie sans jamais le noter', () => {
+  it('situe le joueur en français ordinaire, sans jamais le noter', () => {
     render(<App />)
     const timeline = screen.getByRole('navigation', { name: /Où tu en es/ })
-    // Trois actes affichés, le premier marqué comme l'étape courante.
+    expect(timeline.textContent).toContain('Acte 1 sur 3')
     expect(within(timeline).getAllByRole('listitem')).toHaveLength(3)
     expect(timeline.querySelector('[aria-current="step"]')).toBeTruthy()
-    // Aucun vocabulaire de progression chiffrée.
-    for (const w of ['%', 'progression', 'complété', 'étape 1 sur']) {
+    // Aucun vocabulaire de progression chiffrée ni de jargon de conception.
+    for (const w of ['%', 'progression', 'complété', 'rencontre', 'mois vécu']) {
       expect(timeline.textContent?.toLowerCase()).not.toContain(w)
     }
+  })
+
+  it('dit à chaque instant POUR QUI le joueur décide', async () => {
+    // C'est la confusion la plus grave relevée en test : si la différence
+    // entre décider pour son personnage et décider pour tout le monde n'est
+    // pas évidente, le mécanisme central du jeu ne fonctionne plus.
+    const user = userEvent.setup()
+    render(<App />)
+    const timeline = () => screen.getByRole('navigation', { name: /Où tu en es/ })
+
+    await user.click(screen.getByRole('button', { name: /Commencer le mois/ }))
+    expect(timeline().textContent).toMatch(/tu décides pour \w+/)
+    expect(screen.getByText('Décision personnelle')).toBeTruthy()
+    expect(screen.getByText(/n’engage que .* ce mois-ci/)).toBeTruthy()
+
+    for (let i = 0; i < 12; i++) {
+      const reveal = screen.queryByRole('button', { name: /Voir les possibilités/ })
+      if (reveal) { await user.click(reveal); await user.click(screen.getAllByRole('button', { name: 'Choisir' })[0]!); continue }
+      const skip = screen.queryByRole('button', { name: /Mois suivant/ })
+      if (skip) { await user.click(skip); continue }
+      break
+    }
+
+    expect(timeline().textContent).toContain('tu décides pour tout le monde')
+    expect(screen.getByText('Décision collective')).toBeTruthy()
+    expect(screen.getByText(/devient une règle pour/)).toBeTruthy()
   })
 
   it('permet de consulter les autres personnages sans y inciter', async () => {

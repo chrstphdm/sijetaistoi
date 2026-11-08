@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { ReformT, ReformOptionT } from '@/schemas/index.ts'
+import { ScopeBand } from './ScopeBand.tsx'
 
 /**
  * L'ecran de vote.
@@ -25,6 +26,7 @@ import type { ReformT, ReformOptionT } from '@/schemas/index.ts'
 type Props = {
   readonly reform: ReformT
   readonly order: readonly number[]
+  readonly who: string
   readonly onVote: (option: ReformOptionT) => void
 }
 
@@ -48,20 +50,17 @@ function oneLiner(option: ReformOptionT): string {
   return `Profite à : ${part(winners)}.`
 }
 
-export function ReformVote({ reform, order, onVote }: Props) {
+export function ReformVote({ reform, order, who, onVote }: Props) {
   const [open, setOpen] = useState<string | null>(null)
 
   return (
     <section className="sheet" aria-labelledby="reform-title">
-      <p className="sheet__kicker">Décision collective</p>
+      <p className="sheet__kicker">Une question posée à tout le pays</p>
       <h2 id="reform-title">{reform.descriptiveTitle}</h2>
 
-      <p>{reform.context}</p>
+      <ScopeBand scope="collective" who={who} />
 
-      <p className="contract" role="note">
-        <strong>Cette règle s’appliquera à tous les personnages de cette partie</strong>, y compris
-        à ceux que tu incarneras plus tard.
-      </p>
+      <p>{reform.context}</p>
 
       <p className="provenance">
         {reform.options.length} possibilités, dans un ordre tiré au sort. Déplie-en une pour voir

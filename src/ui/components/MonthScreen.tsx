@@ -7,6 +7,7 @@ import { euros } from '@/core/money.ts'
 import { motionFor } from '@/motion/table.ts'
 import { Amount } from './Amount.tsx'
 import { MonthlyBudget } from './MonthlyBudget.tsx'
+import { ScopeBand } from './ScopeBand.tsx'
 
 /**
  * Un mois vecu.
@@ -69,6 +70,7 @@ export function MonthScreen({
         >
           <p className="sheet__kicker">Ce mois-ci</p>
           <h2 id="event-title">{event.descriptiveTitle}</h2>
+          <ScopeBand scope="personal" who={firstName} />
           <p>{event.text}</p>
 
           <p>
