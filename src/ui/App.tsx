@@ -6,6 +6,7 @@ import { characters, reforms } from '@/content/load.ts'
 import { CONSTRAINT_STATEMENTS } from '@/core/casting.ts'
 import { useGame } from './useGame.ts'
 import { CharacterIntro } from './components/CharacterIntro.tsx'
+import { Timeline } from './components/Timeline.tsx'
 import { MonthScreen } from './components/MonthScreen.tsx'
 import { ReformVote } from './components/ReformVote.tsx'
 import { ImpactForEach, rotationOrder } from './components/ImpactForEach.tsx'
@@ -21,7 +22,6 @@ export function App() {
   const { state, step, character, budget, stocks, month, reform, actions } = game
   const [scale, setScale] = useState<Scale>('slack')
   const [kpi, setKpi] = useState<KpiAnswer | null>(null)
-  const [showRegistry, setShowRegistry] = useState(false)
   const [showOthers, setShowOthers] = useState(false)
 
   const nameOf = (id: string) =>
@@ -31,6 +31,8 @@ export function App() {
 
   return (
     <main>
+      <Timeline state={state} step={step} nameOf={nameOf} month={month} />
+
       {step.kind === 'intro' && (
         <CharacterIntro
           character={character} month={month} act={state.act}
@@ -164,24 +166,6 @@ export function App() {
           transparence du tirage permet de vérifier que le jeu n'envoie pas le
           joueur là où ça fait mal. Les deux restent repliés par défaut. */}
       <aside className="footer-tools">
-        {step.kind !== 'summary' && (
-          <details open={showRegistry} onToggle={(e) => setShowRegistry(e.currentTarget.open)}>
-            <summary>Le registre des lois ({state.world.rules.length})</summary>
-            {state.world.rules.length === 0 ? (
-              <p className="provenance">Aucune règle décidée pour l’instant.</p>
-            ) : (
-              <ol>
-                {state.world.rules.map((r) => (
-                  <li key={r.id}>
-                    <strong>{r.shortLabel}</strong> — décidé en {r.diegeticMonth}
-                    {r.playerWording && <blockquote>« {r.playerWording} »</blockquote>}
-                  </li>
-                ))}
-              </ol>
-            )}
-          </details>
-        )}
-
         <details>
           <summary>Comment ce jeu choisit tes personnages</summary>
           <p className="provenance">

@@ -200,3 +200,121 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
   color: var(--ink-2);
   padding: var(--space-2) 0;
 }
+
+/* ------------------------------------------------------------------ */
+/* Relevé mensuel                                                      */
+/* ------------------------------------------------------------------ */
+
+/* Barre de répartition : MÊME traitement visuel pour les trois segments.
+   Elle montre une proportion, elle ne hiérarchise pas. Les pourcentages
+   sont écrits en toutes lettres à côté : l'information ne dépend jamais
+   de la seule couleur. */
+.bar {
+  display: flex;
+  height: 10px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  overflow: hidden;
+  margin: var(--space-4) 0 var(--space-2);
+}
+.bar__seg { display: block; height: 100%; }
+.bar__seg--a { background: var(--perspective-a); }
+.bar__seg--b { background: var(--tint-b); }
+.bar__seg--c { background: var(--paper-sunk); }
+
+.bar__legend {
+  display: flex; flex-wrap: wrap; gap: var(--space-4);
+  font-family: system-ui, sans-serif; font-size: 13px; color: var(--ink-2);
+  max-width: none; margin-bottom: var(--space-6);
+}
+.bar__key {
+  display: inline-block; width: 10px; height: 10px;
+  margin-inline-end: var(--space-1);
+  border: 1px solid var(--rule); vertical-align: baseline;
+}
+.bar__key--a { background: var(--perspective-a); }
+.bar__key--b { background: var(--tint-b); }
+.bar__key--c { background: var(--paper-sunk); }
+
+.ledger-group { margin-bottom: var(--space-6); }
+.ledger-group__title {
+  font-family: system-ui, sans-serif; font-size: 13px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3);
+  margin-bottom: var(--space-2);
+}
+.ledger-list { margin: 0; }
+.ledger-row {
+  display: flex; align-items: baseline; gap: var(--space-2);
+  font-family: system-ui, sans-serif; font-size: 15px;
+  padding: var(--space-1) 0;
+}
+/* Ligne de conduite pointillée entre le libellé et le montant : on suit du
+   regard sans avoir besoin d'un fond alterné. */
+.ledger-row dt { flex: 0 1 auto; }
+.ledger-row::after {
+  content: ''; order: 1; flex: 1 1 auto;
+  border-bottom: 1px dotted var(--rule-hair);
+  transform: translateY(-0.25em);
+}
+.ledger-row dd { order: 2; margin: 0; flex: 0 0 auto; }
+.ledger-row--total { font-weight: 600; border-top: 1px solid var(--rule-hair); padding-top: var(--space-2); margin-top: var(--space-1); }
+
+/* Le reste à vivre a EXACTEMENT le poids du total engagé : le grossir
+   ferait lire le solde comme un score d'habileté, alors que l'essentiel
+   du résultat n'a pas été choisi. */
+.ledger-row--slack {
+  font-weight: 600; font-size: 17px;
+  border-top: 2px solid var(--rule-strong);
+  padding-top: var(--space-3); margin-top: var(--space-4);
+}
+
+/* ------------------------------------------------------------------ */
+/* Chronologie                                                         */
+/* ------------------------------------------------------------------ */
+
+/* Elle situe, elle ne note pas : aucune barre de complétion, aucun
+   pourcentage, aucun vocabulaire de progression chiffrée. */
+.timeline {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 10;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule-hair);
+  padding: var(--space-2) var(--space-4);
+  margin: 0 calc(-1 * var(--space-4));
+}
+.timeline__acts {
+  display: flex; gap: var(--space-2);
+  list-style: none; margin: 0; padding: 0;
+  max-width: var(--measure-doc); margin-inline: auto;
+}
+.timeline__act {
+  flex: 1 1 0;
+  display: flex; align-items: baseline; gap: var(--space-1);
+  font-family: system-ui, sans-serif; font-size: 13px;
+  color: var(--ink-3);
+  padding: var(--space-1) var(--space-2);
+  border-top: 3px solid var(--rule-hair);
+  min-width: 0;
+}
+.timeline__act--done { color: var(--ink-2); border-top-color: var(--rule); }
+.timeline__act--here { color: var(--ink); border-top-color: var(--perspective-a); font-weight: 600; }
+.timeline__n { font-variant-numeric: tabular-nums; }
+.timeline__who { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.timeline__state { margin-inline-start: auto; font-weight: 400; font-size: 12px; }
+@media (max-width: 520px) { .timeline__state { display: none; } }
+
+.timeline__now {
+  max-width: var(--measure-doc); margin: var(--space-1) auto 0;
+  font-family: system-ui, sans-serif; font-size: 13px; color: var(--ink-3);
+}
+.timeline__toggle {
+  font: inherit; color: var(--ink-2);
+  background: none; border: none; border-bottom: 1px dotted var(--rule);
+  padding: 0; cursor: pointer;
+}
+.timeline__rules {
+  max-width: var(--measure-doc); margin: var(--space-3) auto;
+  font-family: system-ui, sans-serif; font-size: 14px;
+}
+.timeline__rules blockquote { font-size: 14px; }

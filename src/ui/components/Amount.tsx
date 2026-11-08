@@ -25,10 +25,18 @@ type Props = {
   readonly nature: Value['nature']
   /** Affiche le signe explicitement. Pour un flux, pas pour un solde. */
   readonly signed?: boolean
+  /**
+   * Mode compact : le signe arithmetique seul a l'ecran, le mot en toutes
+   * lettres etant reserve au lecteur d'ecran. Pour un releve ou chaque
+   * ligne repeterait « en moins » douze fois de suite, ce qui le rend
+   * illisible sans rien ajouter — la colonne et le signe suffisent a
+   * porter l'information visuellement.
+   */
+  readonly compact?: boolean
   readonly label?: string
 }
 
-export function Amount({ cents, nature, signed = false, label }: Props) {
+export function Amount({ cents, nature, signed = false, compact = false, label }: Props) {
   const negative = cents < 0
   // Les deux glyphes ont la meme surface d'encre : aucun n'est plus saillant.
   const glyph = negative ? '▼' : '▲'
@@ -42,10 +50,10 @@ export function Amount({ cents, nature, signed = false, label }: Props) {
   return (
     <span className="amount" data-nature={nature} title={NATURE_LABEL[nature]}>
       <span aria-hidden="true">
-        {signed && <span aria-hidden="true">{glyph} </span>}
+        {signed && !compact && <span aria-hidden="true">{glyph} </span>}
         {signed && negative ? '−' : signed ? '+' : ''}
         {text}
-        {signed && <span className="amount__word"> {word}</span>}
+        {signed && !compact && <span className="amount__word"> {word}</span>}
       </span>
       <span className="sr-only">{label ? `${label} : ${description}` : description}</span>
     </span>

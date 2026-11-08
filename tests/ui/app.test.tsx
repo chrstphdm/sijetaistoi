@@ -142,15 +142,29 @@ describe('une partie complète en trois actes', () => {
 })
 
 describe('registre et consultation', () => {
-  it('rend le registre consultable dès qu’une règle existe', async () => {
+  it('rend les décisions relisables depuis la chronologie', async () => {
     const user = userEvent.setup()
     render(<App />)
-    expect(screen.getByText(/Le registre des lois \(0\)/)).toBeTruthy()
+    // Aucune décision prise : rien à relire, donc rien à afficher.
+    expect(screen.queryByRole('button', { name: /décision prise/ })).toBeNull()
 
     await playAct(user, 'ma règle')
-    const registry = screen.getByText(/Le registre des lois \(1\)/).closest('details')!
-    await user.click(within(registry).getByText(/Le registre des lois/))
-    expect(within(registry).getByText('« ma règle »')).toBeTruthy()
+    const toggle = screen.getByRole('button', { name: /1 décision prise/ })
+    await user.click(toggle)
+    const timeline = screen.getByRole('navigation', { name: /Où tu en es/ })
+    expect(within(timeline).getByText('« ma règle »')).toBeTruthy()
+  })
+
+  it('situe le joueur dans la partie sans jamais le noter', () => {
+    render(<App />)
+    const timeline = screen.getByRole('navigation', { name: /Où tu en es/ })
+    // Trois actes affichés, le premier marqué comme l'étape courante.
+    expect(within(timeline).getAllByRole('listitem')).toHaveLength(3)
+    expect(timeline.querySelector('[aria-current="step"]')).toBeTruthy()
+    // Aucun vocabulaire de progression chiffrée.
+    for (const w of ['%', 'progression', 'complété', 'étape 1 sur']) {
+      expect(timeline.textContent?.toLowerCase()).not.toContain(w)
+    }
   })
 
   it('permet de consulter les autres personnages sans y inciter', async () => {
