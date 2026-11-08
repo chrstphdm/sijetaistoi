@@ -5,6 +5,7 @@ import { motionFor } from '@/motion/table.ts'
 import { optionLookup, toBudgetLines, toStocks } from '@/content/load.ts'
 import type { CharacterT } from '@/schemas/index.ts'
 import { Amount } from './Amount.tsx'
+import { Seal } from './Seal.tsx'
 
 /**
  * « Le choix vu par chacun ».
@@ -102,6 +103,8 @@ export function ImpactForEach({ characters, world, scale, onScaleChange, screenI
               className="enter-rise"
               style={{ '--enter-ms': `${motion.enterMs}ms`, '--translate-px': '6px' } as React.CSSProperties}
             >
+              <Seal id={c.id} allIds={characters.map((x) => x.id)} size={22} />
+              {' '}
               <strong>{c.identity.firstName}</strong>
               {' — '}
               {delta === 0 ? (

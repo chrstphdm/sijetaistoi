@@ -6,7 +6,7 @@ import { characters, reforms } from '@/content/load.ts'
 import { CONSTRAINT_STATEMENTS } from '@/core/casting.ts'
 import { useGame } from './useGame.ts'
 import { CharacterIntro } from './components/CharacterIntro.tsx'
-import { Timeline } from './components/Timeline.tsx'
+import { GameRail } from './components/GameRail.tsx'
 import { MonthScreen } from './components/MonthScreen.tsx'
 import { ReformVote } from './components/ReformVote.tsx'
 import { ImpactForEach, rotationOrder } from './components/ImpactForEach.tsx'
@@ -29,13 +29,19 @@ export function App() {
   const judgement = lastJudgement(state, reform.id)
   const previous = state.opinions.filter((o) => o.questionId === reform.id)[0]
 
-  return (
-    <main>
-      <Timeline state={state} step={step} nameOf={nameOf} month={month} />
+  const allIds = characters.map((c) => c.id)
 
+  return (
+    <div className="layout">
+      <GameRail
+        state={state} step={step} nameOf={nameOf} allIds={allIds}
+        month={month} monthsDone={game.monthsDone}
+      />
+
+      <main className="layout__main">
       {step.kind === 'intro' && (
         <CharacterIntro
-          character={character} month={month} act={state.act}
+          character={character} month={month} act={state.act} allIds={allIds}
           onContinue={actions.startMonths}
         />
       )}
@@ -57,7 +63,7 @@ export function App() {
       {step.kind === 'callback' && (
         <>
           <CharacterIntro
-            character={character} month={month} act={state.act}
+            character={character} month={month} act={state.act} allIds={allIds}
             onContinue={actions.startMonths}
           />
           {step.selection.kind === 'selected' && (
@@ -186,6 +192,7 @@ export function App() {
           </p>
         </details>
       </aside>
-    </main>
+      </main>
+    </div>
   )
 }

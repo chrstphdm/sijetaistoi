@@ -168,14 +168,34 @@ describe('registre et consultation', () => {
 
   it('situe le joueur en français ordinaire, sans jamais le noter', () => {
     render(<App />)
-    const timeline = screen.getByRole('navigation', { name: /Où tu en es/ })
-    expect(timeline.textContent).toContain('Acte 1 sur 3')
-    expect(within(timeline).getAllByRole('listitem')).toHaveLength(3)
-    expect(timeline.querySelector('[aria-current="step"]')).toBeTruthy()
+    const rail = screen.getByRole('navigation', { name: /Où tu en es/ })
+    // Trois actes, chacun nommé, le premier marqué comme étape courante.
+    expect(rail.textContent).toContain('Acte 1')
+    expect(rail.textContent).toContain('Acte 3')
+    expect(rail.querySelector('[aria-current="step"]')).toBeTruthy()
     // Aucun vocabulaire de progression chiffrée ni de jargon de conception.
-    for (const w of ['%', 'progression', 'complété', 'rencontre', 'mois vécu']) {
-      expect(timeline.textContent?.toLowerCase()).not.toContain(w)
+    for (const w of ['%', 'progression', 'complété', 'étape 1 sur']) {
+      expect(rail.textContent?.toLowerCase()).not.toContain(w)
     }
+  })
+
+  it('montre l’avancement des mois, et l’écrit pour les lecteurs d’écran', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.click(screen.getByRole('button', { name: /Commencer le mois/ }))
+
+    const months = screen.getByRole('list', { name: /Mois vécus/ })
+    expect(months.children.length).toBeGreaterThan(1)
+    // L'état de chaque mois est écrit, jamais porté par la seule forme.
+    expect(months.textContent).toContain('en cours')
+    expect(months.textContent).toContain('à venir')
+  })
+
+  it('donne à chaque personnage un sceau, sans dessiner aucun corps', () => {
+    render(<App />)
+    const seal = document.querySelector('.seal')
+    expect(seal).toBeTruthy()
+    expect(seal?.querySelectorAll('rect').length).toBe(12)
   })
 
   it('dit à chaque instant POUR QUI le joueur décide', async () => {

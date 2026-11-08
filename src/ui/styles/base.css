@@ -311,6 +311,245 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
 .scope--collective .scope__tag { color: var(--perspective-a); }
 
 /* ------------------------------------------------------------------ */
+/* Colonne d'avancement                                                */
+/* ------------------------------------------------------------------ */
+
+/* Deux colonnes à partir de 900 px ; en dessous, la colonne redevient un
+   bandeau collé en haut. Une seule navigation dans le DOM, dans les deux
+   cas : dupliquer le repère créerait deux points de repère concurrents
+   pour un lecteur d'écran. */
+.layout { display: block; }
+.layout__main { min-width: 0; }
+
+.rail {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 10;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  padding: var(--space-3) var(--space-4) var(--space-2);
+  margin: 0 calc(-1 * var(--space-4)) var(--space-4);
+}
+
+.rail__acts { list-style: none; margin: 0; padding: 0; display: flex; gap: var(--space-2); }
+.rail__act {
+  flex: 1 1 0; min-width: 0;
+  display: flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-2);
+  border-top: 3px solid var(--rule-hair);
+  font-family: system-ui, sans-serif;
+  color: var(--ink-3);
+}
+.rail__act--past { color: var(--ink-2); border-top-color: var(--rule); }
+/* L'acte courant est marqué par le trait ET par le gras. La phrase en
+   dessous le nomme en toutes lettres : jamais la seule couleur. */
+.rail__act--here {
+  color: var(--ink); font-weight: 700;
+  border-top-color: var(--perspective-a); border-top-width: 4px;
+}
+
+.rail__seal { flex: 0 0 auto; line-height: 0; }
+.rail__seal--empty {
+  display: block; width: 28px; height: 28px;
+  border: 1px dashed var(--rule-hair); border-radius: 2px;
+}
+.rail__who { display: flex; flex-direction: column; min-width: 0; }
+.rail__actno { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
+.rail__name { font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Un carré par mois : rempli pour un mois vécu, creux pour le mois en
+   cours, vide pour un mois à venir. L'état est aussi écrit pour les
+   lecteurs d'écran. */
+.rail__months { display: flex; gap: 3px; list-style: none; margin: 0 0 0 auto; padding: 0; }
+.rail__month {
+  width: 8px; height: 8px;
+  border: 1px solid var(--rule); border-radius: 1px;
+}
+.rail__month--past { background: var(--perspective-a); border-color: var(--perspective-a); }
+.rail__month--here { border-color: var(--perspective-a); border-width: 2px; }
+
+.rail__now {
+  font-family: system-ui, sans-serif; font-size: 13px;
+  color: var(--ink-2); margin: var(--space-2) 0 0; max-width: none;
+}
+.rail__month-label { color: var(--ink-3); margin-inline-end: var(--space-2); }
+.rail__rules { font-family: system-ui, sans-serif; font-size: 13px; margin-top: var(--space-2); }
+.rail__rules ol { margin: var(--space-2) 0 0; padding-inline-start: var(--space-4); }
+.rail__rules blockquote { font-size: 13px; margin-top: var(--space-1); }
+
+.timeline__toggle {
+  font: inherit; color: var(--ink-2);
+  background: none; border: none; border-bottom: 1px dotted var(--rule);
+  padding: 0; cursor: pointer; min-height: 24px;
+}
+
+/* Le sceau : identité visuelle d'un personnage, sans aucun corps.
+   Teinte attribuée par rang alphabétique, densité d'encre identique pour
+   tous — voir Seal.tsx. */
+.seal rect { fill: oklch(0.55 0.1 var(--seal-hue)); }
+.seal { flex: 0 0 auto; vertical-align: middle; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .seal rect { fill: oklch(0.78 0.1 var(--seal-hue)); }
+}
+:root[data-theme='dark'] .seal rect { fill: oklch(0.78 0.1 var(--seal-hue)); }
+
+.intro__head { display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-3); }
+.intro__head h1 { margin: 0; }
+
+@media (min-width: 900px) {
+  .layout {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 1fr);
+    gap: var(--space-8);
+    align-items: start;
+  }
+  .rail {
+    position: sticky;
+    top: var(--space-4);
+    margin: var(--space-8) 0 0;
+    padding: var(--space-4);
+    border: 1px solid var(--rule-hair);
+    border-radius: 2px;
+    background: var(--paper-raised);
+  }
+  .rail__acts { flex-direction: column; gap: 0; }
+  .rail__act {
+    border-top: none;
+    border-left: 3px solid var(--rule-hair);
+    padding: var(--space-3) var(--space-2);
+  }
+  .rail__act--past { border-left-color: var(--rule); }
+  .rail__act--here { border-left-color: var(--perspective-a); border-left-width: 4px; }
+  .rail__months { margin: var(--space-1) 0 0; }
+  .rail__who { flex: 1 1 auto; }
+  .rail__act { flex-wrap: wrap; }
+  .layout__main .sheet:first-child { margin-top: var(--space-8); }
+}
+
+/* Outils de pied de page : accessibles partout, discrets par défaut. */
+.footer-tools {
+  max-width: var(--measure-doc);
+  margin: var(--space-4) auto;
+  padding: 0 var(--space-6);
+}
+.footer-tools details { margin-bottom: var(--space-2); }
+.footer-tools summary {
+  font-family: system-ui, sans-serif;
+  font-size: 14px;
+  color: var(--ink-2);
+  padding: var(--space-2) 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Relevé mensuel                                                      */
+/* ------------------------------------------------------------------ */
+
+/* Barre de répartition : MÊME traitement visuel pour les trois segments.
+   Elle montre une proportion, elle ne hiérarchise pas. Les pourcentages
+   sont écrits en toutes lettres à côté : l'information ne dépend jamais
+   de la seule couleur. */
+.bar {
+  display: flex;
+  height: 10px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  overflow: hidden;
+  margin: var(--space-4) 0 var(--space-2);
+}
+.bar__seg { display: block; height: 100%; }
+.bar__seg--a { background: var(--perspective-a); }
+.bar__seg--b { background: var(--tint-b); }
+.bar__seg--c { background: var(--paper-sunk); }
+
+.bar__legend {
+  display: flex; flex-wrap: wrap; gap: var(--space-4);
+  font-family: system-ui, sans-serif; font-size: 13px; color: var(--ink-2);
+  max-width: none; margin-bottom: var(--space-6);
+}
+.bar__key {
+  display: inline-block; width: 10px; height: 10px;
+  margin-inline-end: var(--space-1);
+  border: 1px solid var(--rule); vertical-align: baseline;
+}
+.bar__key--a { background: var(--perspective-a); }
+.bar__key--b { background: var(--tint-b); }
+.bar__key--c { background: var(--paper-sunk); }
+
+.ledger-group { margin-bottom: var(--space-6); }
+.ledger-group__title {
+  font-family: system-ui, sans-serif; font-size: 13px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3);
+  margin-bottom: var(--space-2);
+}
+.ledger-list { margin: 0; }
+.ledger-row {
+  display: flex; align-items: baseline; gap: var(--space-2);
+  font-family: system-ui, sans-serif; font-size: 15px;
+  padding: var(--space-1) 0;
+}
+/* Ligne de conduite pointillée entre le libellé et le montant : on suit du
+   regard sans avoir besoin d'un fond alterné. */
+.ledger-row dt { flex: 0 1 auto; }
+.ledger-row::after {
+  content: ''; order: 1; flex: 1 1 auto;
+  border-bottom: 1px dotted var(--rule-hair);
+  transform: translateY(-0.25em);
+}
+.ledger-row dd { order: 2; margin: 0; flex: 0 0 auto; }
+.ledger-row--total { font-weight: 600; border-top: 1px solid var(--rule-hair); padding-top: var(--space-2); margin-top: var(--space-1); }
+
+/* Le reste à vivre a EXACTEMENT le poids du total engagé : le grossir
+   ferait lire le solde comme un score d'habileté, alors que l'essentiel
+   du résultat n'a pas été choisi. */
+.ledger-row--slack {
+  font-weight: 600; font-size: 17px;
+  border-top: 2px solid var(--rule-strong);
+  padding-top: var(--space-3); margin-top: var(--space-4);
+}
+
+/* ------------------------------------------------------------------ */
+/* Bandeau de portée : pour qui cette décision vaut-elle ?             */
+/* ------------------------------------------------------------------ */
+
+/* Les deux portées diffèrent par la FORME et par les MOTS, jamais par la
+   seule couleur : intitulé explicite, phrase de portée, et traitement
+   visuel distinct. C'est la distinction dont dépend tout le mécanisme du
+   jeu — une règle collective suit le joueur, un choix personnel non. */
+.scope {
+  max-width: none;
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  font-family: system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.scope__tag {
+  display: block;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  margin-bottom: var(--space-1);
+}
+
+/* Personnelle : discrète, dans la matière du document. */
+.scope--personal {
+  background: var(--paper-sunk);
+  border-left: 3px solid var(--rule);
+  color: var(--ink-2);
+}
+/* --ink-3 ne donne que 4,37:1 sur le fond creusé, sous le minimum de 4,5:1
+   exigé pour du petit texte. Relevé par axe-core dans un vrai navigateur. */
+.scope--personal .scope__tag { color: var(--ink-2); }
+
+/* Collective : encadrée pleine, nettement distincte du reste de la page. */
+.scope--collective {
+  background: var(--tint-a);
+  border: 2px solid var(--perspective-a);
+  border-radius: 2px;
+  color: var(--ink);
+}
+.scope--collective .scope__tag { color: var(--perspective-a); }
+
+/* ------------------------------------------------------------------ */
 /* Chronologie                                                         */
 /* ------------------------------------------------------------------ */
 

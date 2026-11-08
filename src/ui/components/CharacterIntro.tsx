@@ -1,4 +1,5 @@
 import type { CharacterT } from '@/schemas/index.ts'
+import { Seal } from './Seal.tsx'
 
 /**
  * L'arrivee dans un personnage.
@@ -8,11 +9,12 @@ import type { CharacterT } from '@/schemas/index.ts'
  * revenu est un dossier, pas quelqu'un.
  */
 export function CharacterIntro({
-  character, month, act, onContinue,
+  character, month, act, allIds, onContinue,
 }: {
   readonly character: CharacterT
   readonly month: string
   readonly act: number
+  readonly allIds: readonly string[]
   readonly onContinue: () => void
 }) {
   const { identity, embodiedDetails, shortTermGoal, narrative } = character
@@ -21,7 +23,11 @@ export function CharacterIntro({
       <p className="sheet__kicker">
         {month} · acte {act}
       </p>
-      <h1 id="intro-title">Tu es {identity.firstName}.</h1>
+      <div className="intro__head">
+        <Seal id={character.id} allIds={allIds} size={64}
+          label={`Motif de ${identity.firstName}`} />
+        <h1 id="intro-title">Tu es {identity.firstName}.</h1>
+      </div>
       <p>
         {identity.age} ans, {identity.identityLine}.
       </p>
