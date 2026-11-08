@@ -63,6 +63,16 @@ export function useGame(seed: string) {
   const [usedEvents, setUsedEvents] = useState<readonly string[]>([])
   const [reformIndex, setReformIndex] = useState(0)
 
+  /**
+   * Ordre des reformes, tire une fois au debut de la partie.
+   *
+   * Le corpus en compte plus qu'une partie n'en presente : sans tirage,
+   * chaque partie montrerait les memes, et les autres ne seraient jamais
+   * vues. Le tirage passe par le flux `events`, qui porte deja ce qui
+   * survient dans le monde.
+   */
+  const reformOrder = useMemo(() => random.events.shuffle(reforms), [random])
+
   const state: GameState = useMemo(
     () => journal.reduce(apply, initialState(seed, '0.1.0', 'sensibilite-faible')),
     [journal, seed],
@@ -71,7 +81,7 @@ export function useGame(seed: string) {
 
   const character = characters.find((c) => c.id === state.currentCharacterId) ?? characters[0]!
   const traits = traitsOf(character)
-  const reform = reforms[Math.min(reformIndex, reforms.length - 1)]!
+  const reform = reformOrder[Math.min(reformIndex, reformOrder.length - 1)]!
 
   /* ------------------------------------------------------------ budget */
   const lines: BudgetLine[] = useMemo(() => {
@@ -215,7 +225,7 @@ export function useGame(seed: string) {
     setRecurring([])
     setOneOff(0)
     setWording('')
-    setReformIndex((i) => Math.min(i + 1, reforms.length - 1))
+    setReformIndex((i) => Math.min(i + 1, reformOrder.length - 1))
     setStep({ kind: 'callback', selection })
   }
 

@@ -1,0 +1,128 @@
+{
+  "id": "protection-independants",
+  "charterVersion": "1.0",
+  "descriptiveTitle": "Protection sociale des travailleurs indépendants",
+  "statedBy": "Le Conseil budgétaire, acteur fictif de ce jeu",
+  "context": "Un travailleur indépendant n'est pas indemnisé pour un arrêt de travail court, n'a pas accès au chômage dans les mêmes conditions qu'un salarié, et cotise différemment pour sa retraite. Le Conseil budgétaire demande s'il faut rapprocher les deux régimes, et qui financerait ce rapprochement.",
+  "objective": { "amount": 3.5, "unit": "EUR_bn", "nature": "fiction", "note": "Montant posé par un acteur fictif du jeu. Il ne décrit aucune nécessité constatée." },
+  "contextSourceIds": ["insee-artisanat-revenus"],
+  "modelLimitations": "Ce modèle compare des cotisations et des droits à droit constant. Il ne chiffre ni la valeur d'une protection pour quelqu'un qui n'en a jamais eu, ni l'effet sur le nombre de créations d'entreprises — effet dont le sens lui-même est débattu — ni les situations mixtes où une personne cumule salariat et activité indépendante.",
+
+  "options": [
+    {
+      "id": "statu-quo",
+      "label": "Ne rien changer",
+      "decisionDescription": "Les deux régimes restent distincts : cotisations plus faibles pour les indépendants, protection plus faible également.",
+      "families": ["status_quo"],
+      "isStatusQuo": true,
+      "effects": [
+        { "id": "sq-indep", "kind": "budget_line", "code": "impots", "monthlyDelta": 0,
+          "scope": { "when": { "and": [["activities", "contains", "self_employed"]] }, "description": "Indépendants : cotisations inchangées" },
+          "horizon": "y1", "uncertainty": "established" },
+        { "id": "sq-risque", "kind": "budget_line", "code": "sante", "monthlyDelta": -38,
+          "scope": { "when": { "and": [["activities", "contains", "self_employed"]] }, "description": "Indépendants : prévoyance privée pour compenser l'absence d'indemnisation" },
+          "horizon": "y1", "uncertainty": "debated", "hypothesisId": "protection-independants" }
+      ],
+      "argumentsFor": [
+        "Des cotisations plus faibles laissent une trésorerie plus souple, ce qui compte quand les revenus sont irréguliers.",
+        "Chacun peut arbitrer lui-même entre cotiser davantage et s'assurer autrement, selon son activité et son risque."
+      ],
+      "argumentsAgainst": [
+        "Un arrêt de travail court n'est pas indemnisé, ce qui fait reposer le risque entier sur une personne seule.",
+        "La prévoyance privée coûte plus cher à protection égale, et elle est refusée ou surtarifée à qui a déjà un antécédent."
+      ]
+    },
+    {
+      "id": "alignement-complet",
+      "label": "Aligner cotisations et droits sur le régime salarié",
+      "decisionDescription": "Les indépendants cotisent au même niveau que les salariés et accèdent aux mêmes droits : indemnités journalières dès le premier jour, retraite au même taux.",
+      "families": ["levies", "public_spending"],
+      "effects": [
+        { "id": "ac-cotis", "kind": "budget_line", "code": "impots", "monthlyDelta": -210,
+          "scope": { "when": { "and": [["activities", "contains", "self_employed"]] }, "description": "Indépendants : cotisations alignées" },
+          "horizon": "y1", "uncertainty": "established" },
+        { "id": "ac-prevoyance", "kind": "budget_line", "code": "sante", "monthlyDelta": 155,
+          "scope": { "when": { "and": [["activities", "contains", "self_employed"]] }, "description": "Indépendants : prévoyance privée devenue inutile" },
+          "horizon": "y1", "uncertainty": "debated", "hypothesisId": "protection-independants" },
+        { "id": "ac-recette", "kind": "public_finance", "publicBillions": 3.5,
+          "scope": { "description": "Finances publiques" }, "horizon": "y1", "uncertainty": "debated", "hypothesisId": "protection-independants" }
+      ],
+      "argumentsFor": [
+        "À protection égale, cotisation égale : la différence de statut cesse de déterminer le droit à être soigné ou indemnisé.",
+        "La mutualisation coûte moins cher que la prévoyance individuelle, et elle n'exclut personne pour antécédent."
+      ],
+      "argumentsAgainst": [
+        "Une cotisation fixe mensuelle est difficile à absorber quand le revenu varie du simple au quadruple selon les mois.",
+        "Le niveau de cotisation pourrait décourager certaines créations d'activité, même si le sens de cet effet est débattu."
+      ]
+    },
+    {
+      "id": "alignement-partiel",
+      "label": "Aligner d'abord l'indemnisation des arrêts courts",
+      "decisionDescription": "Seule l'indemnisation des arrêts de travail est alignée, avec une hausse de cotisation correspondante. La retraite reste inchangée.",
+      "families": ["levies", "scope_efficiency"],
+      "isCompromise": true,
+      "effects": [
+        { "id": "ap-cotis", "kind": "budget_line", "code": "impots", "monthlyDelta": -72,
+          "scope": { "when": { "and": [["activities", "contains", "self_employed"]] }, "description": "Indépendants : cotisation supplémentaire" },
+          "horizon": "y1", "uncertainty": "established" },
+        { "id": "ap-prevoyance", "kind": "budget_line", "code": "sante", "monthlyDelta": 96,
+          "scope": { "when": { "and": [["activities", "contains", "self_employed"]] }, "description": "Indépendants : part de prévoyance privée devenue inutile" },
+          "horizon": "y1", "uncertainty": "debated", "hypothesisId": "protection-independants" },
+        { "id": "ap-recette", "kind": "public_finance", "publicBillions": 1.2,
+          "scope": { "description": "Finances publiques" }, "horizon": "y1", "uncertainty": "debated", "hypothesisId": "protection-independants" }
+      ],
+      "argumentsFor": [
+        "L'arrêt de travail est le risque qui met le plus vite une activité indépendante en péril, et il coûte peu à couvrir.",
+        "La hausse de cotisation reste modérée, donc absorbable même pour une activité à revenus irréguliers."
+      ],
+      "argumentsAgainst": [
+        "L'écart de retraite demeure, et c'est lui qui produit les différences les plus importantes sur une vie entière.",
+        "Un alignement partiel installe durablement un régime intermédiaire difficile à faire évoluer ensuite."
+      ]
+    },
+    {
+      "id": "financement-general",
+      "label": "Financer l'alignement par l'impôt plutôt que par les cotisations",
+      "decisionDescription": "Les droits des indépendants sont alignés, et le coût est financé par l'impôt plutôt que par une hausse de leurs cotisations.",
+      "families": ["levies", "debt_financing"],
+      "effects": [
+        { "id": "fg-indep", "kind": "budget_line", "code": "sante", "monthlyDelta": 155,
+          "scope": { "when": { "and": [["activities", "contains", "self_employed"]] }, "description": "Indépendants : protection alignée sans hausse de cotisation" },
+          "horizon": "y1", "uncertainty": "debated", "hypothesisId": "protection-independants" },
+        { "id": "fg-contribuables", "kind": "budget_line", "code": "impots", "monthlyDelta": -26,
+          "scope": { "when": { "and": [["incomeDecile", "gte", 5]] }, "description": "Ménages à partir du cinquième décile" },
+          "horizon": "y1", "uncertainty": "established" },
+        { "id": "fg-recette", "kind": "public_finance", "publicBillions": 3.5,
+          "scope": { "description": "Finances publiques" }, "horizon": "y1", "uncertainty": "established" }
+      ],
+      "argumentsFor": [
+        "Le risque d'arrêt de travail concerne tout le monde : le faire porter par l'impôt correspond à une couverture universelle.",
+        "La charge ne retombe pas sur des trésoreries irrégulières, ce qui évite l'effet de seuil des mois creux."
+      ],
+      "argumentsAgainst": [
+        "Des personnes qui cotisent déjà pour leur propre protection financent en plus celle d'autres actifs.",
+        "Déconnecter la cotisation du droit affaiblit le lien entre ce qu'on verse et ce qu'on reçoit, qui fonde le régime."
+      ]
+    },
+    {
+      "id": "contester-cadrage",
+      "label": "Je conteste la façon dont la question est posée",
+      "decisionDescription": "Le joueur refuse le cadrage : la question n'est pas d'aligner deux régimes mais de savoir pourquoi la protection dépend du statut d'emploi plutôt que de la situation.",
+      "families": ["challenge_framing"],
+      "effects": [
+        { "id": "cc", "kind": "service_level",
+          "scope": { "description": "Aucun effet budgétaire modélisé" }, "horizon": "y1", "uncertainty": "established",
+          "note": "Contester le cadrage ne produit aucun effet chiffré dans ce modèle. Cette absence est une limite du jeu, pas un jugement sur la pertinence de la contestation." }
+      ],
+      "argumentsFor": [
+        "Beaucoup de situations réelles mêlent salariat et activité indépendante, et aucune des options ne les décrit.",
+        "Raisonner par statut reconduit une architecture héritée, alors que les formes d'emploi ont changé."
+      ],
+      "argumentsAgainst": [
+        "Refondre l'architecture entière est hors de portée d'une décision budgétaire annuelle.",
+        "Les personnes concernées attendent une réponse maintenant, et ne rien trancher revient au statu quo."
+      ]
+    }
+  ]
+}

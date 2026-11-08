@@ -1,0 +1,21 @@
+{
+  "id": "hausse-loyer",
+  "charterVersion": "1.0",
+  "descriptiveTitle": "Révision annuelle du loyer",
+  "valence": "negative",
+  "intensity": 1,
+  "dramaticFunction": ["TRAINE"],
+  "eligibility": { "or": [["tenure", "eq", "tenant_private"], ["tenure", "eq", "tenant_social"]] },
+  "probability": "uniform",
+  "cost": { "amount": 34, "unit": "EUR_month", "nature": "fiction" },
+  "text": "Le bail est révisé : 34 € de plus par mois à partir du prochain terme. C'est la troisième révision depuis l'entrée dans le logement.",
+  "options": [
+    { "id": "accepter", "label": "Accepter la révision", "effects": [{ "type": "recurring", "amount": 34, "code": "logement" }] },
+    { "id": "contester", "label": "Vérifier le calcul et contester si besoin", "effects": [{ "type": "recurring", "amount": 12, "code": "logement" }], "narrativeTrace": "contestation-loyer" },
+    { "id": "chercher", "label": "Commencer à chercher autre chose", "effects": [{ "type": "recurring", "amount": 34, "code": "logement" }, { "type": "one_off", "amount": 120 }], "narrativeTrace": "recherche-logement" }
+  ],
+  "microQuestion": {
+    "text": "L'évolution des loyers doit-elle être encadrée par la loi ?",
+    "principlesInTension": ["besoin", "liberte-de-choix", "solidarite"]
+  }
+}

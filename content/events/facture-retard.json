@@ -1,0 +1,21 @@
+{
+  "id": "facture-retard",
+  "charterVersion": "1.0",
+  "descriptiveTitle": "Une facture payée avec 45 jours de retard",
+  "valence": "negative",
+  "intensity": 3,
+  "dramaticFunction": ["CHOC"],
+  "eligibility": { "and": [["activities", "contains", "self_employed"]] },
+  "probability": "uniform",
+  "cost": { "amount": 3200, "unit": "EUR", "nature": "fiction" },
+  "text": "Le plus gros client annonce un décalage de paiement : 3 200 € attendus ce mois-ci n'arriveront qu'en novembre. Le travail est livré, accepté, et facturé depuis six semaines.",
+  "options": [
+    { "id": "attendre", "label": "Attendre, et puiser dans la trésorerie", "effects": [{ "type": "one_off", "amount": 3200 }] },
+    { "id": "relancer", "label": "Relancer avec pénalités de retard", "effects": [{ "type": "spread", "amount": 3100, "months": 2 }], "narrativeTrace": "relance-client" },
+    { "id": "decouvert", "label": "Passer en découvert le temps que ça rentre", "effects": [{ "type": "one_off", "amount": 3200 }, { "type": "recurring", "amount": 45, "code": "impots" }] }
+  ],
+  "microQuestion": {
+    "text": "Un revenu qui arrive avec deux mois de retard doit-il être traité comme un revenu régulier ?",
+    "principlesInTension": ["securite-economique", "egalite-de-traitement", "responsabilite-individuelle"]
+  }
+}

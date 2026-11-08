@@ -1,0 +1,128 @@
+{
+  "id": "revalorisation-pensions",
+  "charterVersion": "1.0",
+  "descriptiveTitle": "Revalorisation annuelle des pensions",
+  "statedBy": "Le Conseil budgétaire, acteur fictif de ce jeu",
+  "context": "Les pensions sont revalorisées chaque année selon une règle d'indexation. Le Conseil budgétaire propose de moduler cette revalorisation pour dégager 6 milliards d'euros, affectés au financement des pensions les plus faibles. Il demande comment répartir l'effort.",
+  "objective": { "amount": 6, "unit": "EUR_bn", "nature": "fiction", "note": "Montant posé par un acteur fictif du jeu. Il ne décrit aucune nécessité constatée." },
+  "contextSourceIds": ["insee-niveaux-de-vie"],
+  "modelLimitations": "Ce modèle calcule un écart de première année. Son effet cumulé dépend entièrement de ce qui se passe ensuite — un rattrapage ultérieur l'annule, son absence le rend permanent — et ce point est contesté. Le modèle ignore aussi les comportements d'épargne et les transferts entre générations au sein des familles.",
+
+  "options": [
+    {
+      "id": "statu-quo",
+      "label": "Ne rien changer",
+      "decisionDescription": "Toutes les pensions sont revalorisées selon la règle actuelle. Les 6 Md€ ne sont pas dégagés et le minimum de pension reste à son niveau.",
+      "families": ["status_quo"],
+      "isStatusQuo": true,
+      "effects": [
+        { "id": "sq-retraites", "kind": "budget_line", "code": "prestations", "monthlyDelta": 0,
+          "scope": { "when": { "and": [["activities", "contains", "retired"]] }, "description": "Retraités : revalorisation maintenue" },
+          "horizon": "y1", "uncertainty": "established" },
+        { "id": "sq-minimum", "kind": "budget_line", "code": "prestations", "monthlyDelta": -31,
+          "scope": { "when": { "and": [["activities", "contains", "retired"], ["incomeDecile", "lte", 3]] }, "description": "Retraités des trois premiers déciles : minimum non relevé" },
+          "horizon": "y1", "uncertainty": "debated", "hypothesisId": "indexation-pensions" }
+      ],
+      "argumentsFor": [
+        "Une pension résulte de cotisations versées sous des règles connues : en modifier l'indexation revient à changer le contrat après coup.",
+        "Les retraités ne peuvent pas compenser une baisse par un surcroît d'activité, contrairement aux actifs."
+      ],
+      "argumentsAgainst": [
+        "Les pensions les plus faibles restent à leur niveau, alors que leurs titulaires sont les plus exposés à la hausse des prix.",
+        "Une revalorisation uniforme en pourcentage augmente l'écart en euros entre les pensions élevées et les pensions faibles."
+      ]
+    },
+    {
+      "id": "sous-indexation-uniforme",
+      "label": "Revaloriser toutes les pensions d'un point de moins",
+      "decisionDescription": "La revalorisation est réduite d'un point pour toutes les pensions, sans exception. Le produit relève le minimum de pension.",
+      "families": ["public_spending"],
+      "effects": [
+        { "id": "sui-tous", "kind": "budget_line", "code": "prestations", "monthlyDelta": -17,
+          "scope": { "when": { "and": [["activities", "contains", "retired"]] }, "description": "Tous les retraités" },
+          "horizon": "y1", "uncertainty": "established" },
+        { "id": "sui-minimum", "kind": "budget_line", "code": "prestations", "monthlyDelta": 48,
+          "scope": { "when": { "and": [["activities", "contains", "retired"], ["incomeDecile", "lte", 3]] }, "description": "Retraités des trois premiers déciles : minimum relevé" },
+          "horizon": "y1", "uncertainty": "debated", "hypothesisId": "indexation-pensions" },
+        { "id": "sui-economie", "kind": "public_finance", "publicBillions": 6,
+          "scope": { "description": "Finances publiques" }, "horizon": "y1", "uncertainty": "established" }
+      ],
+      "argumentsFor": [
+        "L'effort est réparti sur l'ensemble des pensions, ce qui évite d'avoir à fixer un seuil toujours contestable.",
+        "Le relèvement du minimum profite nettement aux pensions les plus faibles, qui gagnent plus qu'elles ne perdent."
+      ],
+      "argumentsAgainst": [
+        "Un point de moins représente une part bien plus lourde du reste à vivre pour une petite pension que pour une grosse.",
+        "Si l'écart n'est jamais rattrapé, il se cumule chaque année et devient considérable au bout de dix ans."
+      ]
+    },
+    {
+      "id": "sous-indexation-ciblee",
+      "label": "Ne sous-indexer qu'au-dessus d'un seuil",
+      "decisionDescription": "Les pensions inférieures au seuil sont revalorisées normalement ; au-dessus, la revalorisation est réduite de deux points.",
+      "families": ["public_spending", "scope_efficiency"],
+      "isCompromise": true,
+      "effects": [
+        { "id": "sic-modestes", "kind": "budget_line", "code": "prestations", "monthlyDelta": 48,
+          "scope": { "when": { "and": [["activities", "contains", "retired"], ["incomeDecile", "lte", 3]] }, "description": "Retraités des trois premiers déciles" },
+          "horizon": "y1", "uncertainty": "debated", "hypothesisId": "indexation-pensions" },
+        { "id": "sic-au-dessus", "kind": "budget_line", "code": "prestations", "monthlyDelta": -44,
+          "scope": { "when": { "and": [["activities", "contains", "retired"], ["incomeDecile", "gte", 4]] }, "description": "Retraités à partir du quatrième décile" },
+          "horizon": "y1", "uncertainty": "established" },
+        { "id": "sic-economie", "kind": "public_finance", "publicBillions": 6,
+          "scope": { "description": "Finances publiques" }, "horizon": "y1", "uncertainty": "debated", "hypothesisId": "indexation-pensions" }
+      ],
+      "argumentsFor": [
+        "L'effort porte sur les pensions qui peuvent l'absorber, et les plus faibles sont intégralement préservées.",
+        "Le même montant est dégagé en épargnant entièrement les retraités les plus exposés à la hausse des prix."
+      ],
+      "argumentsAgainst": [
+        "Un seuil crée un effet de bord : quelques euros de pension en plus font basculer dans la catégorie qui paie.",
+        "Une pension élevée peut correspondre à une carrière longue et à des cotisations importantes, et la sous-indexer rompt le lien entre contribution et droit."
+      ]
+    },
+    {
+      "id": "cotisation-actifs",
+      "label": "Prendre la même somme sur les cotisations des actifs",
+      "decisionDescription": "Les pensions sont toutes revalorisées normalement, et les 6 Md€ sont prélevés sur les cotisations retraite des actifs.",
+      "families": ["levies"],
+      "effects": [
+        { "id": "ca-retraites", "kind": "budget_line", "code": "prestations", "monthlyDelta": 48,
+          "scope": { "when": { "and": [["activities", "contains", "retired"], ["incomeDecile", "lte", 3]] }, "description": "Retraités des trois premiers déciles : minimum relevé" },
+          "horizon": "y1", "uncertainty": "debated", "hypothesisId": "indexation-pensions" },
+        { "id": "ca-actifs", "kind": "budget_line", "code": "salaire-net", "monthlyDelta": -34,
+          "scope": { "when": { "or": [["activities", "contains", "employee"], ["activities", "contains", "self_employed"]] }, "description": "Actifs occupés" },
+          "horizon": "y1", "uncertainty": "established" },
+        { "id": "ca-recette", "kind": "public_finance", "publicBillions": 6,
+          "scope": { "description": "Finances publiques" }, "horizon": "y1", "uncertainty": "established" }
+      ],
+      "argumentsFor": [
+        "Le système repose sur la solidarité entre générations : faire porter l'ajustement sur les actifs en respecte le principe.",
+        "Aucune pension déjà liquidée n'est modifiée, donc aucun droit acquis n'est remis en cause."
+      ],
+      "argumentsAgainst": [
+        "Les actifs financent un système dont ils ignorent les règles qui s'appliqueront à eux, et la charge se répète chaque année.",
+        "Une cotisation uniforme pèse davantage, en part du reste à vivre, sur les salaires modestes que sur les salaires élevés."
+      ]
+    },
+    {
+      "id": "contester-cadrage",
+      "label": "Je conteste la façon dont la question est posée",
+      "decisionDescription": "Le joueur refuse le cadrage : opposer les retraités entre eux, ou les retraités aux actifs, suppose que l'enveloppe soit fixe et que personne d'autre ne puisse contribuer.",
+      "families": ["challenge_framing"],
+      "effects": [
+        { "id": "cc", "kind": "service_level",
+          "scope": { "description": "Aucun effet budgétaire modélisé" }, "horizon": "y1", "uncertainty": "established",
+          "note": "Contester le cadrage ne produit aucun effet chiffré dans ce modèle. Cette absence est une limite du jeu, pas un jugement sur la pertinence de la contestation." }
+      ],
+      "argumentsFor": [
+        "Les revenus du patrimoine ne figurent dans aucune des options, alors qu'ils représentent une part importante des ressources des ménages âgés aisés.",
+        "Poser la question comme un partage entre générations masque les écarts considérables qui existent à l'intérieur de chacune."
+      ],
+      "argumentsAgainst": [
+        "Élargir l'assiette suppose un accord sur ce qu'on y inclut, qui ne va pas de soi et prendrait des années.",
+        "Les pensions se revalorisent à date fixe : ne pas trancher revient à appliquer la règle actuelle."
+      ]
+    }
+  ]
+}

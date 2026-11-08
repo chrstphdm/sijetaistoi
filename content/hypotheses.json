@@ -138,5 +138,61 @@
         ]
       }
     ]
+  },
+  {
+    "id": "incidence-tva",
+    "question": "Une hausse de la TVA est-elle intégralement répercutée sur les prix payés par les ménages ?",
+    "status": "highly_debated",
+    "whyDebated": "La répercussion dépend du secteur, de la concurrence et du moment du cycle. Les travaux disponibles observent aussi bien des répercussions complètes que partielles, et parfois asymétriques selon que le taux monte ou baisse. Le désaccord porte sur l'ampleur et sur la durée du phénomène, pas sur son existence.",
+    "readings": [
+      {
+        "id": "A",
+        "mechanismLabel": "Répercussion intégrale et immédiate sur les prix de détail",
+        "parameters": {
+          "passThrough": 1.0
+        },
+        "sourceIds": [
+          "insee-budget-des-familles"
+        ]
+      },
+      {
+        "id": "B",
+        "mechanismLabel": "Répercussion partielle, une part étant absorbée par les marges",
+        "parameters": {
+          "passThrough": 0.7
+        },
+        "sourceIds": [
+          "insee-budget-des-familles"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "protection-independants",
+    "question": "Aligner la protection sociale des indépendants sur celle des salariés modifie-t-il le nombre de créations d'entreprises ?",
+    "status": "highly_debated",
+    "whyDebated": "L'effet dépend de ce qui pèse le plus dans la décision de se mettre à son compte : le niveau de cotisation, le niveau de protection, ou des facteurs qui ne relèvent d'aucun des deux. Les comparaisons internationales portent sur des systèmes trop différents pour trancher, et le sens même de l'effet est discuté.",
+    "readings": [
+      {
+        "id": "A",
+        "mechanismLabel": "Le coût domine : des cotisations plus élevées découragent la création",
+        "parameters": {
+          "creationDelta": -0.08
+        },
+        "sourceIds": [
+          "insee-artisanat-revenus"
+        ]
+      },
+      {
+        "id": "B",
+        "mechanismLabel": "La protection domine : un meilleur filet encourage à franchir le pas",
+        "parameters": {
+          "creationDelta": 0.05
+        },
+        "sourceIds": [
+          "insee-artisanat-revenus"
+        ]
+      }
+    ]
   }
 ]

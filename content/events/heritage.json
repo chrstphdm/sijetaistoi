@@ -1,0 +1,22 @@
+{
+  "id": "heritage",
+  "charterVersion": "1.0",
+  "descriptiveTitle": "Une succession se règle",
+  "valence": "positive",
+  "intensity": 3,
+  "dramaticFunction": ["RESPIRATION"],
+  "eligibility": { "and": [["householdSize", "gte", 1]] },
+  "probability": "uniform",
+  "cost": { "amount": 11000, "unit": "EUR", "nature": "fiction", "range": [4000, 38000], "note": "Part nette après droits et frais, extrêmement variable selon la composition du patrimoine et le nombre d'héritiers." },
+  "text": "La succession d'une grand-tante se règle après dix-huit mois. La part nette revenant au foyer est de 11 000 €, droits et frais déduits.",
+  "options": [
+    { "id": "epargner", "label": "Tout mettre de côté", "effects": [{ "type": "one_off", "amount": -11000 }] },
+    { "id": "solder-dettes", "label": "Solder les crédits en cours", "effects": [{ "type": "one_off", "amount": -11000 }, { "type": "recurring", "amount": -190, "code": "credit-conso" }] },
+    { "id": "travaux", "label": "Faire les travaux repoussés", "effects": [{ "type": "one_off", "amount": -3000 }, { "type": "recurring", "amount": -40, "code": "energie" }] },
+    { "id": "aider", "label": "En donner une partie à un proche qui en a besoin", "effects": [{ "type": "one_off", "amount": -5500 }], "narrativeTrace": "don-familial" }
+  ],
+  "microQuestion": {
+    "text": "Recevoir un patrimoine qu'on n'a pas constitué devrait-il être imposé comme un revenu ?",
+    "principlesInTension": ["merite", "egalite-de-traitement", "solidarite", "responsabilite-individuelle"]
+  }
+}

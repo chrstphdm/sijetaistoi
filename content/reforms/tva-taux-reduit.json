@@ -1,0 +1,343 @@
+{
+  "id": "tva-taux-reduit",
+  "charterVersion": "1.0",
+  "descriptiveTitle": "Niveau du taux réduit de TVA",
+  "statedBy": "Le Conseil budgétaire, acteur fictif de ce jeu",
+  "context": "Le taux réduit de TVA s'applique notamment à l'alimentation, aux transports et à certains travaux. Le Conseil budgétaire propose d'en relever le niveau pour maintenir le taux de remboursement des soins courants, dont le financement n'est plus assuré à droit constant. Un point supplémentaire rapporterait environ 4 milliards d'euros par an.",
+  "objective": {
+    "amount": 4,
+    "unit": "EUR_bn",
+    "nature": "fiction",
+    "note": "Montant posé par un acteur fictif du jeu. Il ne décrit aucune nécessité constatée."
+  },
+  "contextSourceIds": [
+    "insee-budget-des-familles"
+  ],
+  "modelLimitations": "Ce modèle applique une hausse de prix proportionnelle à la part de chaque poste dans le budget. Il ignore les changements de consommation, les reports vers d'autres produits, les effets sur l'emploi des secteurs concernés, et le fait que la répercussion réelle sur les prix est elle-même débattue.",
+  "options": [
+    {
+      "id": "statu-quo",
+      "label": "Ne rien changer",
+      "decisionDescription": "Le taux réduit reste inchangé. Les 4 Md€ ne sont pas levés, et le taux de remboursement des soins courants baisse à due concurrence.",
+      "families": [
+        "status_quo"
+      ],
+      "isStatusQuo": true,
+      "effects": [
+        {
+          "id": "statu-quo-soins",
+          "kind": "budget_line",
+          "code": "sante",
+          "monthlyDelta": -22,
+          "scope": {
+            "description": "Tous les ménages : reste à charge sur les soins courants"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "incidence-tva"
+        },
+        {
+          "id": "sq-prix",
+          "kind": "budget_line",
+          "code": "alimentation",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Tous les ménages : aucune hausse de prix"
+          },
+          "horizon": "y1",
+          "uncertainty": "established"
+        }
+      ],
+      "argumentsFor": [
+        "L'alimentation et les transports pèsent proportionnellement plus lourd dans les budgets modestes : y toucher atteint d'abord ceux qui ont le moins de marge.",
+        "Un reste à charge sur les soins se module selon l'usage, alors qu'une hausse de prix frappe chaque achat quel que soit l'état de santé."
+      ],
+      "argumentsAgainst": [
+        "Un reste à charge plus élevé conduit certains à renoncer à des soins, et ce renoncement se concentre sur les ménages les plus modestes.",
+        "Le taux réduit bénéficie en montant absolu davantage aux ménages qui consomment le plus, donc aux plus aisés."
+      ]
+    },
+    {
+      "id": "hausse-uniforme",
+      "label": "Un point de plus sur tout le taux réduit",
+      "decisionDescription": "Le taux réduit passe d'un point. Alimentation, transports et travaux concernés augmentent dans la même proportion.",
+      "families": [
+        "levies"
+      ],
+      "effects": [
+        {
+          "kind": "budget_line",
+          "code": "sante",
+          "monthlyDelta": 22,
+          "scope": {
+            "description": "Tous les ménages : taux de remboursement des soins maintenu"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "incidence-tva",
+          "note": "Contrepartie estimée en reste à charge évité. Elle suppose que la recette soit effectivement affectée aux soins, ce qu'aucun mécanisme ne garantit.",
+          "id": "hausse-uniforme-soins"
+        },
+        {
+          "id": "tva-modeste",
+          "kind": "budget_line",
+          "code": "alimentation",
+          "monthlyDelta": -9,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "lte",
+                  4
+                ]
+              ]
+            },
+            "description": "Quatre premiers déciles"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "incidence-tva"
+        },
+        {
+          "id": "tva-aise",
+          "kind": "budget_line",
+          "code": "alimentation",
+          "monthlyDelta": -19,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  5
+                ]
+              ]
+            },
+            "description": "Cinquième décile et au-delà"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "incidence-tva",
+          "note": "Montant plus élevé en euros, mais plus faible en part du reste à vivre. Changez d'échelle pour le voir."
+        },
+        {
+          "id": "tva-recette",
+          "kind": "public_finance",
+          "publicBillions": 4,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "incidence-tva"
+        }
+      ],
+      "argumentsFor": [
+        "L'assiette est très large, donc le taux nécessaire pour lever une somme donnée reste faible et le rendement prévisible.",
+        "Chacun contribue à proportion de ce qu'il consomme, sans que personne ait à déclarer quoi que ce soit."
+      ],
+      "argumentsAgainst": [
+        "En part du reste à vivre, la même hausse pèse plusieurs fois plus lourd sur un budget contraint que sur un budget confortable.",
+        "La répercussion réelle sur les prix est débattue, donc le rendement annoncé de la mesure est incertain."
+      ]
+    },
+    {
+      "id": "hausse-ciblee",
+      "label": "Un point de plus, sauf sur les produits alimentaires de base",
+      "decisionDescription": "La hausse épargne une liste de produits alimentaires de base. Elle rapporte moins, et suppose de définir cette liste.",
+      "families": [
+        "levies",
+        "scope_efficiency"
+      ],
+      "isCompromise": true,
+      "effects": [
+        {
+          "kind": "budget_line",
+          "code": "sante",
+          "monthlyDelta": 13,
+          "scope": {
+            "description": "Tous les ménages : taux de remboursement des soins maintenu"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "incidence-tva",
+          "note": "Contrepartie estimée en reste à charge évité. Elle suppose que la recette soit effectivement affectée aux soins, ce qu'aucun mécanisme ne garantit.",
+          "id": "hausse-ciblee-soins"
+        },
+        {
+          "id": "tvac-modeste",
+          "kind": "budget_line",
+          "code": "alimentation",
+          "monthlyDelta": -3,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "lte",
+                  4
+                ]
+              ]
+            },
+            "description": "Quatre premiers déciles"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "incidence-tva"
+        },
+        {
+          "id": "tvac-aise",
+          "kind": "budget_line",
+          "code": "alimentation",
+          "monthlyDelta": -14,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  5
+                ]
+              ]
+            },
+            "description": "Cinquième décile et au-delà"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "incidence-tva"
+        },
+        {
+          "id": "tvac-recette",
+          "kind": "public_finance",
+          "publicBillions": 2.4,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "incidence-tva"
+        }
+      ],
+      "argumentsFor": [
+        "L'effet sur les budgets les plus contraints est nettement réduit, pour une recette qui reste substantielle.",
+        "Le principe d'un taux plus faible sur l'essentiel est déjà admis : il s'agit d'en préciser le périmètre."
+      ],
+      "argumentsAgainst": [
+        "Définir la liste des produits de base est un arbitrage interminable, coûteux à gérer et contesté à chaque révision.",
+        "Le rendement tombe de 4 à 2,4 Md€, donc l'écart devra être trouvé ailleurs ou abandonné."
+      ]
+    },
+    {
+      "id": "impot-revenu",
+      "label": "Prendre la même somme sur l'impôt sur le revenu",
+      "decisionDescription": "Plutôt que la TVA, la tranche supérieure de l'impôt sur le revenu est relevée pour lever 4 Md€.",
+      "families": [
+        "levies"
+      ],
+      "effects": [
+        {
+          "kind": "budget_line",
+          "code": "sante",
+          "monthlyDelta": 22,
+          "scope": {
+            "description": "Tous les ménages : taux de remboursement des soins maintenu"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "incidence-tva",
+          "note": "Contrepartie estimée en reste à charge évité. Elle suppose que la recette soit effectivement affectée aux soins, ce qu'aucun mécanisme ne garantit.",
+          "id": "impot-revenu-soins"
+        },
+        {
+          "id": "ir-aise",
+          "kind": "budget_line",
+          "code": "impots",
+          "monthlyDelta": -165,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  8
+                ]
+              ]
+            },
+            "description": "Deux derniers déciles"
+          },
+          "horizon": "y1",
+          "uncertainty": "established"
+        },
+        {
+          "id": "ir-autres",
+          "kind": "budget_line",
+          "code": "alimentation",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "lte",
+                  7
+                ]
+              ]
+            },
+            "description": "Jusqu'au septième décile"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet direct. Les effets indirects d'une hausse de l'imposition sur l'activité sont débattus et ne sont pas modélisés ici."
+        },
+        {
+          "id": "ir-recette",
+          "kind": "public_finance",
+          "publicBillions": 4,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "incidence-tva"
+        }
+      ],
+      "argumentsFor": [
+        "La contribution suit le revenu déclaré, donc la capacité à payer, sans peser sur les budgets contraints.",
+        "L'impôt sur le revenu est le prélèvement dont la progressivité est la plus lisible pour celui qui le paie."
+      ],
+      "argumentsAgainst": [
+        "Une assiette étroite rend le rendement sensible aux comportements d'un petit nombre de contribuables.",
+        "Concentrer l'effort sur quelques-uns affaiblit le sentiment que chacun participe au financement commun."
+      ]
+    },
+    {
+      "id": "contester-cadrage",
+      "label": "Je conteste la façon dont la question est posée",
+      "decisionDescription": "Le joueur refuse le cadrage : la question n'est pas de savoir où prendre 4 milliards, mais à quoi ils servent et si cette dépense est la bonne.",
+      "families": [
+        "challenge_framing"
+      ],
+      "effects": [
+        {
+          "id": "cc",
+          "kind": "service_level",
+          "scope": {
+            "description": "Aucun effet budgétaire modélisé"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Contester le cadrage ne produit aucun effet chiffré dans ce modèle. Cette absence est une limite du jeu, pas un jugement sur la pertinence de la contestation."
+        }
+      ],
+      "argumentsFor": [
+        "Présenter un montant à lever sans dire ce qu'il finance empêche de juger si l'effort en vaut la peine.",
+        "Comparer des prélèvements entre eux sans examiner la dépense suppose que celle-ci ne se discute pas."
+      ],
+      "argumentsAgainst": [
+        "Les arbitrages budgétaires réels se posent souvent ainsi : une somme à trouver, dans un délai contraint.",
+        "Refuser de choisir laisse en place la répartition actuelle, qui résulte elle-même de choix antérieurs."
+      ]
+    }
+  ]
+}

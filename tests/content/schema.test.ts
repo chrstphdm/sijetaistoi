@@ -196,3 +196,45 @@ describe('réformes — symétrie imposée par le schéma', () => {
     for (const r of bundle.reforms) expect(r.modelLimitations.length).toBeGreaterThan(50)
   })
 })
+
+describe('corpus complet — cible du plan', () => {
+  it('compte six personnages, douze événements et six réformes', () => {
+    expect(bundle.characters.length).toBe(6)
+    expect(bundle.events.length).toBe(12)
+    expect(bundle.reforms.length).toBe(6)
+  })
+
+  it('couvre les six situations annoncées dans le brief', () => {
+    const activities = bundle.characters.flatMap((c: { traits: { activities: string[] } }) => c.traits.activities)
+    for (const a of ['employee', 'self_employed', 'student', 'retired']) {
+      expect(activities, `aucun personnage « ${a} »`).toContain(a)
+    }
+    const deciles = bundle.characters.map((c: { identity: { incomeDecile: number } }) => c.identity.incomeDecile)
+    // Les situations doivent couvrir l'échelle, pas se concentrer en bas.
+    expect(Math.min(...deciles)).toBeLessThanOrEqual(2)
+    expect(Math.max(...deciles)).toBeGreaterThanOrEqual(8)
+  })
+
+  it('couvre des statuts d’occupation différents', () => {
+    const tenures = new Set(bundle.characters.map((c: { traits: { tenure: string } }) => c.traits.tenure))
+    expect(tenures.size).toBeGreaterThanOrEqual(3)
+  })
+
+  it('chaque réforme mobilise au moins trois familles de leviers', () => {
+    for (const r of bundle.reforms) {
+      const families = new Set(r.options.flatMap((o: { families: string[] }) => o.families))
+      expect(families.size, `réforme ${r.id}`).toBeGreaterThanOrEqual(3)
+    }
+  })
+
+  it('aucune réforme ne concerne un seul personnage', () => {
+    // Une réforme qui ne toucherait qu'une situation ne produirait aucune
+    // comparaison, donc aucun déclic.
+    for (const r of bundle.reforms) {
+      const scopes = r.options.flatMap((o: { effects: { scope: { description: string } }[] }) =>
+        o.effects.map((e) => e.scope.description),
+      )
+      expect(new Set(scopes).size, `réforme ${r.id}`).toBeGreaterThanOrEqual(3)
+    }
+  })
+})
