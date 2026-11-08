@@ -98,17 +98,16 @@ export function App() {
             onVote={actions.vote}
           />
 
-          <section className="sheet">
-            <button
-              type="button"
-              onClick={() => {
-                setShowOthers((v) => !v)
-                if (!showOthers) actions.consultOthers()
+          <aside className="footer-tools">
+            <details
+              open={showOthers}
+              onToggle={(e) => {
+                const opened = e.currentTarget.open
+                if (opened && !showOthers) actions.consultOthers()
+                setShowOthers(opened)
               }}
             >
-              {showOthers ? 'Masquer' : 'Consulter'} les autres personnages
-            </button>
-            {showOthers && (
+              <summary>Consulter les autres personnages</summary>
               <ul className="details">
                 {characters
                   .filter((c) => c.id !== character.id)
@@ -118,8 +117,8 @@ export function App() {
                     </li>
                   ))}
               </ul>
-            )}
-          </section>
+            </details>
+          </aside>
         </>
       )}
 
@@ -160,54 +159,48 @@ export function App() {
         />
       )}
 
-      {/* Le registre, accessible à tout moment : il transforme « le jeu me
-          punit » en « j'ai construit un monde ». */}
-      {step.kind !== 'summary' && (
-        <section className="sheet" aria-labelledby="registry-title">
-          <h2 id="registry-title">
-            Le registre des lois ({state.world.rules.length})
-          </h2>
-          {state.world.rules.length === 0 ? (
-            <p>Aucune règle décidée pour l’instant.</p>
-          ) : (
-            <>
-              <button type="button" onClick={() => setShowRegistry((v) => !v)}>
-                {showRegistry ? 'Masquer' : 'Consulter'}
-              </button>
-              {showRegistry && (
-                <ol>
-                  {state.world.rules.map((r) => (
-                    <li key={r.id}>
-                      <strong>{r.shortLabel}</strong> — décidé en {r.diegeticMonth}
-                      {r.playerWording && <blockquote>« {r.playerWording} »</blockquote>}
-                    </li>
-                  ))}
-                </ol>
-              )}
-            </>
-          )}
-        </section>
-      )}
+      {/* Pied de page : toujours accessible, jamais encombrant. Le registre
+          transforme « le jeu me punit » en « j'ai construit un monde », et la
+          transparence du tirage permet de vérifier que le jeu n'envoie pas le
+          joueur là où ça fait mal. Les deux restent repliés par défaut. */}
+      <aside className="footer-tools">
+        {step.kind !== 'summary' && (
+          <details open={showRegistry} onToggle={(e) => setShowRegistry(e.currentTarget.open)}>
+            <summary>Le registre des lois ({state.world.rules.length})</summary>
+            {state.world.rules.length === 0 ? (
+              <p className="provenance">Aucune règle décidée pour l’instant.</p>
+            ) : (
+              <ol>
+                {state.world.rules.map((r) => (
+                  <li key={r.id}>
+                    <strong>{r.shortLabel}</strong> — décidé en {r.diegeticMonth}
+                    {r.playerWording && <blockquote>« {r.playerWording} »</blockquote>}
+                  </li>
+                ))}
+              </ol>
+            )}
+          </details>
+        )}
 
-      {/* Transparence du tirage : les contraintes sont publiées, pas cachées. */}
-      <section className="sheet" aria-labelledby="draw-title">
-        <h2 id="draw-title">Comment ce jeu choisit tes personnages</h2>
-        <p className="provenance">
-          Le premier personnage est tiré au hasard parmi les {characters.length}, sans aucune
-          contrainte. Les suivants sont tirés au hasard parmi ceux qui satisfont les règles
-          ci-dessous. Le jeu ne choisit jamais le personnage pour qui une décision serait la plus
-          douloureuse.
-        </p>
-        <ul className="provenance">
-          {Object.values(CONSTRAINT_STATEMENTS).map((s) => (
-            <li key={s}>{s}</li>
-          ))}
-        </ul>
-        <p className="provenance">
-          Tirages effectués&nbsp;: {state.castHistory.map((d) => nameOf(d.picked)).join(' → ')}.
-          {reforms.length > 0 && ` Réformes du corpus : ${reforms.length}.`}
-        </p>
-      </section>
+        <details>
+          <summary>Comment ce jeu choisit tes personnages</summary>
+          <p className="provenance">
+            Le premier personnage est tiré au hasard parmi les {characters.length}, sans aucune
+            contrainte. Les suivants sont tirés au hasard parmi ceux qui satisfont les règles
+            ci-dessous. Le jeu ne choisit jamais le personnage pour qui une décision serait la
+            plus douloureuse.
+          </p>
+          <ul className="provenance">
+            {Object.values(CONSTRAINT_STATEMENTS).map((s) => (
+              <li key={s}>{s}</li>
+            ))}
+          </ul>
+          <p className="provenance">
+            Tirages effectués&nbsp;: {state.castHistory.map((d) => nameOf(d.picked)).join(' → ')}.
+            {reforms.length > 0 && ` Réformes du corpus : ${reforms.length}.`}
+          </p>
+        </details>
+      </aside>
     </main>
   )
 }

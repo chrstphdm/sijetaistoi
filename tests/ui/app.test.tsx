@@ -43,12 +43,17 @@ describe('ouverture', () => {
     expect(screen.queryByText('Relevé du mois')).toBeNull()
   })
 
-  it('publie les règles du tirage dès le premier écran', () => {
+  it('publie les règles du tirage, accessibles depuis le premier écran', () => {
     render(<App />)
-    const draw = screen.getByRole('heading', { name: /Comment ce jeu choisit tes personnages/ })
-      .closest('section')!
+    // Replié par défaut pour ne pas encombrer l'écran de décision, mais
+    // toujours présent : la transparence ne doit pas dépendre d'une page à part.
+    const draw = screen
+      .getByText('Comment ce jeu choisit tes personnages')
+      .closest('details')!
     expect(draw.textContent).toContain('tiré au hasard')
-    expect(draw.textContent).toContain('jamais le personnage pour qui une décision serait la plus douloureuse')
+    expect(draw.textContent).toContain(
+      'jamais le personnage pour qui une décision serait la plus douloureuse',
+    )
   })
 })
 
@@ -140,12 +145,11 @@ describe('registre et consultation', () => {
   it('rend le registre consultable dès qu’une règle existe', async () => {
     const user = userEvent.setup()
     render(<App />)
-    expect(screen.getByText('Aucune règle décidée pour l’instant.')).toBeTruthy()
+    expect(screen.getByText(/Le registre des lois \(0\)/)).toBeTruthy()
 
     await playAct(user, 'ma règle')
-    const registry = screen.getByRole('heading', { name: /Le registre des lois/ }).closest('section')!
-    expect(registry.textContent).toContain('(1)')
-    await user.click(within(registry).getByRole('button', { name: 'Consulter' }))
+    const registry = screen.getByText(/Le registre des lois \(1\)/).closest('details')!
+    await user.click(within(registry).getByText(/Le registre des lois/))
     expect(within(registry).getByText('« ma règle »')).toBeTruthy()
   })
 
@@ -160,8 +164,10 @@ describe('registre et consultation', () => {
       if (skip) { await user.click(skip); continue }
       break
     }
-    const btn = screen.getByRole('button', { name: /Consulter les autres personnages/ })
-    await user.click(btn)
-    expect(screen.getByRole('button', { name: /Masquer les autres personnages/ })).toBeTruthy()
+    // Accessible, mais replié : la consultation est possible sans être incitée.
+    const others = screen.getByText('Consulter les autres personnages').closest('details')!
+    expect(others.open).toBe(false)
+    await user.click(within(others).getByText('Consulter les autres personnages'))
+    expect(others.textContent).toMatch(/Claire|Marc et Anne|Yanis|Michèle/)
   })
 })

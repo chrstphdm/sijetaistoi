@@ -1,17 +1,25 @@
+import { useState } from 'react'
 import type { ReformT, ReformOptionT } from '@/schemas/index.ts'
 
 /**
  * L'ecran de vote.
  *
- * Trois proprietes non negociables :
- *   1. Le CONTRAT est annonce avant le vote, pas apres. Sans lui, decouvrir
- *      plus tard qu'on subit sa propre regle est une embuscade ; avec lui,
- *      c'est un engagement.
- *   2. Le probleme est attribue a un ACTEUR FICTIF NOMME, jamais presente
- *      comme une necessite constatee.
- *   3. Les options sont empilees verticalement, de surface identique. Pas de
- *      balayage gauche/droite : en France ce geste reproduit litteralement
- *      l'axe politique.
+ * Contrainte de lisibilite, apprise d'un retour de test : cinq options
+ * affichant chacune leurs effets chiffres, leur incertitude et quatre
+ * arguments, cela fait une quarantaine de lignes a lire avant de pouvoir
+ * decider. Le joueur se perd, et un joueur perdu ne delibere pas.
+ *
+ * D'ou une divulgation progressive. Mais elle ne doit pas devenir un moyen
+ * de cacher ce qui derange : la regle est donc que TOUTES les options ont
+ * exactement la meme structure et la meme quantite d'information visible.
+ * On replie le detail, jamais le desaccord.
+ *
+ * Trois proprietes restent non negociables :
+ *   1. Le CONTRAT est annonce avant le vote.
+ *   2. Le probleme est attribue a un ACTEUR FICTIF NOMME.
+ *   3. Les options sont empilees verticalement, de surface identique :
+ *      pas de balayage gauche/droite, qui reproduirait l'axe politique
+ *      dans le geste meme.
  */
 
 type Props = {
@@ -26,70 +34,112 @@ const UNCERTAINTY_LABEL: Record<string, string> = {
   highly_debated: 'effet très débattu',
 }
 
+/** Resume d'une option en une ligne : qui paie, qui y gagne. */
+function oneLiner(option: ReformOptionT): string {
+  const budget = option.effects.filter((e) => e.kind === 'budget_line' && e.monthlyDelta)
+  const losers = budget.filter((e) => (e.monthlyDelta ?? 0) < 0)
+  const winners = budget.filter((e) => (e.monthlyDelta ?? 0) > 0)
+  if (budget.length === 0) return 'Aucun effet chiffré sur le budget des ménages.'
+  const part = (list: typeof budget) =>
+    list.map((e) => e.scope.description.toLowerCase()).join(', ')
+  if (losers.length && winners.length)
+    return `Coûte à : ${part(losers)}. Profite à : ${part(winners)}.`
+  if (losers.length) return `Coûte à : ${part(losers)}.`
+  return `Profite à : ${part(winners)}.`
+}
+
 export function ReformVote({ reform, order, onVote }: Props) {
+  const [open, setOpen] = useState<string | null>(null)
+
   return (
     <section className="sheet" aria-labelledby="reform-title">
-      <p className="sheet__kicker">Avril 2027 · décision collective</p>
+      <p className="sheet__kicker">Décision collective</p>
       <h2 id="reform-title">{reform.descriptiveTitle}</h2>
 
       <p>{reform.context}</p>
-      <p className="provenance">
-        Objectif de {reform.objective.amount} Md€ posé par {reform.statedBy}.{' '}
-        {reform.objective.note}
-      </p>
 
       <p className="contract" role="note">
-        <strong>Cette décision entre en vigueur en avril 2027.</strong> Elle s’appliquera à tous les
-        personnages de cette partie, y compris ceux que tu incarneras plus tard.
+        <strong>Cette règle s’appliquera à tous les personnages de cette partie</strong>, y compris
+        à ceux que tu incarneras plus tard.
       </p>
 
-      <p className="provenance">Options présentées dans un ordre tiré au sort.</p>
+      <p className="provenance">
+        {reform.options.length} possibilités, dans un ordre tiré au sort. Déplie-en une pour voir
+        ses effets chiffrés et ce qu’on peut dire pour et contre.
+      </p>
 
       <ol className="options">
         {order.map((i) => {
           const o = reform.options[i]!
+          const expanded = open === o.id
           return (
             <li key={o.id}>
               <article className="option">
                 <h3>{o.label}</h3>
-                <p>{o.decisionDescription}</p>
+                <p className="option__summary">{o.decisionDescription}</p>
+                <p className="option__who">{oneLiner(o)}</p>
 
-                <details>
-                  <summary>Ce qu’on peut dire pour et contre</summary>
-                  <p className="option__side">Pour</p>
-                  <ul>{o.argumentsFor.map((a) => <li key={a}>{a}</li>)}</ul>
-                  <p className="option__side">Contre</p>
-                  <ul>{o.argumentsAgainst.map((a) => <li key={a}>{a}</li>)}</ul>
-                </details>
+                <div className="option__actions">
+                  <button type="button" onClick={() => onVote(o)}>
+                    Décider ceci
+                  </button>
+                  <button
+                    type="button"
+                    className="option__more"
+                    aria-expanded={expanded}
+                    onClick={() => setOpen(expanded ? null : o.id)}
+                  >
+                    {expanded ? 'Replier le détail' : 'Voir le détail'}
+                  </button>
+                </div>
 
-                <ul className="effects">
-                  {o.effects.map((e) => (
-                    <li key={e.id}>
-                      {e.scope.description}
-                      {e.monthlyDelta !== undefined && e.monthlyDelta !== 0 && (
-                        <> : {e.monthlyDelta > 0 ? '+' : '−'}{Math.abs(e.monthlyDelta)} €/mois</>
-                      )}
-                      {e.publicBillions !== undefined && (
-                        <> : {e.publicBillions > 0 ? '+' : '−'}{Math.abs(e.publicBillions)} Md€</>
-                      )}
-                      {' '}<span className="provenance">({UNCERTAINTY_LABEL[e.uncertainty]})</span>
-                      {e.note && <div className="provenance">{e.note}</div>}
-                    </li>
-                  ))}
-                </ul>
+                {expanded && (
+                  <div className="option__detail">
+                    <p className="option__side">Effets retenus par le modèle</p>
+                    <ul className="effects">
+                      {o.effects.map((e) => (
+                        <li key={e.id}>
+                          {e.scope.description}
+                          {e.monthlyDelta !== undefined && e.monthlyDelta !== 0 && (
+                            <>
+                              {' : '}
+                              {e.monthlyDelta > 0 ? '+' : '−'}
+                              {Math.abs(e.monthlyDelta)} €/mois
+                            </>
+                          )}
+                          {e.publicBillions !== undefined && e.publicBillions !== 0 && (
+                            <>
+                              {' : '}
+                              {e.publicBillions > 0 ? '+' : '−'}
+                              {Math.abs(e.publicBillions)} Md€
+                            </>
+                          )}{' '}
+                          <span className="provenance">({UNCERTAINTY_LABEL[e.uncertainty]})</span>
+                          {e.note && <div className="provenance">{e.note}</div>}
+                        </li>
+                      ))}
+                    </ul>
 
-                <button type="button" onClick={() => onVote(o)}>
-                  Décider ceci
-                </button>
+                    <p className="option__side">Ce qu’on peut dire pour</p>
+                    <ul>{o.argumentsFor.map((a) => <li key={a}>{a}</li>)}</ul>
+                    <p className="option__side">Ce qu’on peut dire contre</p>
+                    <ul>{o.argumentsAgainst.map((a) => <li key={a}>{a}</li>)}</ul>
+                  </div>
+                )}
               </article>
             </li>
           )
         })}
       </ol>
 
-      <p className="provenance">
-        <strong>Ce que ce modèle ne prend pas en compte.</strong> {reform.modelLimitations}
-      </p>
+      <details className="footnote">
+        <summary>D’où vient ce chiffre, et ce que ce modèle ignore</summary>
+        <p className="provenance">
+          Objectif de {reform.objective.amount} Md€ posé par {reform.statedBy}.{' '}
+          {reform.objective.note}
+        </p>
+        <p className="provenance">{reform.modelLimitations}</p>
+      </details>
     </section>
   )
 }
