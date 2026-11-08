@@ -1,0 +1,85 @@
+/*
+ * Jetons de design — « le dossier vivant ».
+ *
+ * Principe de parite chromatique : les deux accents ont une clarte L* quasi
+ * identique (delta 0,03) et un contraste IDENTIQUE (6,17:1). Aucun des deux
+ * ne « crie » plus que l'autre. C'est une propriete mesurable, reverifiee
+ * par `npm run check:contrast`, et non une appreciation.
+ *
+ * Les accents encodent le POINT DE VUE, jamais le gain ou la perte.
+ * Le signe est porte par trois canaux redondants : signe arithmetique,
+ * glyphe de meme surface d'encre, et mot en toutes lettres.
+ */
+:root {
+  color-scheme: light;
+
+  --paper: #f4f1ea;
+  --paper-raised: #fbf9f5;
+  --paper-sunk: #e8e3d8;
+
+  --rule-hair: #d6cfc0;
+  --rule: #a79c85;
+  --rule-strong: #8e8470;
+
+  --ink: #1e1b16;
+  --ink-2: #5a5348;
+  --ink-3: #6e6759;
+
+  --perspective-a: #236268;
+  --perspective-b: #804e10;
+  --tint-a: #dce8e9;
+  --tint-b: #f1e3d0;
+
+  /* Motion — doit rester synchronise avec src/motion/table.ts */
+  --ease-enter: cubic-bezier(0.2, 0, 0, 1);
+
+  --measure-narrative: 34ch;
+  --measure-doc: 62ch;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --paper: #14130f;
+    --paper-raised: #1e1c17;
+    --paper-sunk: #0c0b09;
+    --rule-hair: #2a271f;
+    --rule: #3a362d;
+    --rule-strong: #726b58;
+    --ink: #ede8dc;
+    --ink-2: #b0a897;
+    --ink-3: #948b79;
+    --perspective-a: #73c0c6;
+    --perspective-b: #e0a85a;
+    --tint-a: #193033;
+    --tint-b: #332616;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --paper: #14130f;
+  --paper-raised: #1e1c17;
+  --paper-sunk: #0c0b09;
+  --rule-hair: #2a271f;
+  --rule: #3a362d;
+  --rule-strong: #726b58;
+  --ink: #ede8dc;
+  --ink-2: #b0a897;
+  --ink-3: #948b79;
+  --perspective-a: #73c0c6;
+  --perspective-b: #e0a85a;
+  --tint-a: #193033;
+  --tint-b: #332616;
+}
+
+@media (min-width: 720px) {
+  :root { --measure-narrative: 56ch; }
+}

@@ -1,0 +1,40 @@
+{
+  "name": "sijetaistoi",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Jeu de role sur les choix politiques et fiscaux. Le joueur incarne successivement plusieurs personnages et vit les consequences des regles qu'il a lui-meme votees.",
+  "license": "AGPL-3.0-or-later",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "build:content": "node scripts/build-content.ts",
+    "lint:content": "node scripts/lint-content.ts",
+    "check:contrast": "node scripts/check-contrast.ts"
+  },
+  "dependencies": {
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "@types/node": "^26.6.6",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.2.1",
+    "fast-check": "4.10.2",
+    "jsdom": "31.0.0",
+    "typescript": "7.0.2",
+    "vite": "8.3.6",
+    "vitest": "5.1.0",
+    "zod": "4.6.7"
+  }
+}
