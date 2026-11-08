@@ -660,3 +660,57 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
 .method li { margin-bottom: var(--space-3); }
 .method__hypo { border-left: 2px solid var(--rule-hair); padding-left: var(--space-4); margin-bottom: var(--space-6); }
 .method__closing { margin-top: var(--space-8); padding-top: var(--space-4); border-top: 1px solid var(--rule); }
+
+/* ------------------------------------------------------------------ */
+/* Atelier                                                             */
+/* ------------------------------------------------------------------ */
+
+.studio { display: flex; flex-direction: column; min-height: 100vh; }
+.studio__bar {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--rule);
+}
+.studio__bar h1 { margin: 0; font-size: 20px; }
+.studio__bar-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-inline-start: auto; }
+
+.studio__body { display: grid; grid-template-columns: 1fr; gap: var(--space-4); padding: var(--space-4); }
+@media (min-width: 900px) { .studio__body { grid-template-columns: 14rem minmax(0, 1fr); } }
+
+.studio__list h2 {
+  font-family: system-ui, sans-serif; font-size: 12px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink-3); margin: var(--space-4) 0 var(--space-1);
+}
+.studio__list ul { list-style: none; margin: 0; padding: 0; }
+.studio__item {
+  width: 100%; text-align: left; border: none; background: none;
+  font-family: system-ui, sans-serif; font-size: 14px; color: var(--ink-2);
+  padding: var(--space-2); border-left: 3px solid transparent; cursor: pointer;
+  min-height: 24px;
+}
+.studio__item--on { color: var(--ink); font-weight: 600; border-left-color: var(--perspective-a); background: var(--tint-a); }
+.studio__dirty { color: var(--perspective-b); font-weight: 700; }
+
+.studio__text {
+  width: 100%; min-height: 24rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; line-height: 1.5;
+  padding: var(--space-3); tab-size: 2;
+  background: var(--paper-raised); color: var(--ink);
+  border: 1px solid var(--rule-strong); border-radius: 2px;
+}
+
+.studio__diag { margin-top: var(--space-4); }
+.studio__diag h3 { font-family: system-ui, sans-serif; font-size: 15px; }
+.studio__diag ul { list-style: none; padding: 0; font-family: system-ui, sans-serif; font-size: 14px; }
+.diag { padding: var(--space-2); border-left: 3px solid var(--rule); margin-bottom: var(--space-1); }
+.diag__tag {
+  display: inline-block; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  margin-inline-end: var(--space-2);
+}
+/* Bloquant et à examiner diffèrent par le MOT et par le filet, pas par la
+   seule couleur. */
+.diag--blocking { border-left-color: var(--perspective-a); background: var(--tint-a); }
+.diag--blocking .diag__tag { color: var(--perspective-a); }
+.diag--warning { border-left-style: dashed; background: var(--paper-sunk); }
+.diag--warning .diag__tag { color: var(--ink-2); }

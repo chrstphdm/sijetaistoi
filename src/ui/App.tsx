@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { buildSummary, type KpiAnswer } from '@/core/summary.ts'
 import { lastJudgement } from '@/core/game.ts'
 import type { Scale } from '@/core/impact.ts'
@@ -8,6 +8,11 @@ import { useGame } from './useGame.ts'
 import { CharacterIntro } from './components/CharacterIntro.tsx'
 import { GameRail } from './components/GameRail.tsx'
 import { MethodScreen } from './components/MethodScreen.tsx'
+
+/** Chargé à la demande : le code de l'Atelier et Zod restent hors du jeu. */
+const Studio = lazy(() =>
+  import('@/studio/Studio.tsx').then((m) => ({ default: m.Studio })),
+)
 import { MonthScreen } from './components/MonthScreen.tsx'
 import { ReformVote } from './components/ReformVote.tsx'
 import { ImpactForEach, rotationOrder } from './components/ImpactForEach.tsx'
@@ -25,6 +30,9 @@ export function App() {
   const [kpi, setKpi] = useState<KpiAnswer | null>(null)
   const [showOthers, setShowOthers] = useState(false)
   const [showMethod, setShowMethod] = useState(false)
+  const [showStudio, setShowStudio] = useState(
+    () => typeof window !== 'undefined' && window.location.hash === '#atelier',
+  )
 
   const nameOf = (id: string) =>
     characters.find((c) => c.id === id)?.identity.firstName ?? id
@@ -32,6 +40,19 @@ export function App() {
   const previous = state.opinions.filter((o) => o.questionId === reform.id)[0]
 
   const allIds = characters.map((c) => c.id)
+
+  if (showStudio) {
+    return (
+      <Suspense fallback={<p className="sheet">Chargement de l’Atelier…</p>}>
+        <Studio
+          onBack={() => {
+            window.location.hash = ''
+            setShowStudio(false)
+          }}
+        />
+      </Suspense>
+    )
+  }
 
   // La page méthode remplace le jeu plutôt que de s'y superposer : c'est un
   // document qu'on lit, pas une infobulle.
@@ -190,6 +211,12 @@ export function App() {
         <p>
           <button type="button" className="timeline__toggle" onClick={() => setShowMethod(true)}>
             Comment ce jeu est construit, et ce qu’il ne parvient pas à éviter
+          </button>
+        </p>
+        <p>
+          <button type="button" className="timeline__toggle"
+            onClick={() => { window.location.hash = '#atelier'; setShowStudio(true) }}>
+            Ouvrir l’Atelier et modifier le contenu
           </button>
         </p>
         <details>
