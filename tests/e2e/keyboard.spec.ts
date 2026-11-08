@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { reach } from './helpers.ts'
 
 /**
  * Une partie doit pouvoir se jouer entièrement au clavier.
@@ -8,7 +9,7 @@ import { expect, test } from '@playwright/test'
  * s'adresse réellement à tout le monde.
  */
 test('le parcours se joue au clavier seul', async ({ page }) => {
-  await page.goto('/')
+  await reach(page, 'reform')
 
   const focusable = await page.evaluate(() => {
     const sel = 'a[href], button, input, textarea, select, [tabindex]:not([tabindex="-1"])'

@@ -11,21 +11,17 @@ import { expect, test, type Page } from '@playwright/test'
  * soit réellement appliqué par le moteur de rendu.
  */
 
+import { reach } from './helpers.ts'
+
 const textOf = (page: Page) => page.locator('main').innerText()
 
 test('prefers-reduced-motion ne retire aucune information', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' })
-  await page.goto('/')
-  await page.getByRole('button', { name: 'Décider ceci' }).nth(1).click()
-  await page.getByRole('radio', { name: 'plutôt oui' }).click()
-  await page.getByRole('button', { name: /ce que cela change pour chacun/i }).click()
+  await reach(page, 'impact')
   const withMotion = await textOf(page)
 
   await page.emulateMedia({ reducedMotion: 'reduce' })
-  await page.goto('/')
-  await page.getByRole('button', { name: 'Décider ceci' }).nth(1).click()
-  await page.getByRole('radio', { name: 'plutôt oui' }).click()
-  await page.getByRole('button', { name: /ce que cela change pour chacun/i }).click()
+  await reach(page, 'impact')
   const withoutMotion = await textOf(page)
 
   expect(withoutMotion).toBe(withMotion)
@@ -34,10 +30,7 @@ test('prefers-reduced-motion ne retire aucune information', async ({ page }) => 
 test('les six blocs de comparaison apparaissent ensemble, sans cascade', async ({ page }) => {
   // Sur un écran dont le message EST la comparaison, différencier la mise en
   // scène ajoute un second canal qui amplifie un personnage.
-  await page.goto('/')
-  await page.getByRole('button', { name: 'Décider ceci' }).nth(1).click()
-  await page.getByRole('radio', { name: 'plutôt oui' }).click()
-  await page.getByRole('button', { name: /ce que cela change pour chacun/i }).click()
+  await reach(page, 'impact')
 
   const delays = await page.locator('.impacts li').evaluateAll((els) =>
     els.map((e) => getComputedStyle(e).animationDelay),
@@ -51,10 +44,7 @@ test('les six blocs de comparaison apparaissent ensemble, sans cascade', async (
 })
 
 test('aucun signe n’est porté par la seule couleur', async ({ page }) => {
-  await page.goto('/')
-  await page.getByRole('button', { name: 'Décider ceci' }).nth(1).click()
-  await page.getByRole('radio', { name: 'plutôt oui' }).click()
-  await page.getByRole('button', { name: /ce que cela change pour chacun/i }).click()
+  await reach(page, 'impact')
 
   // Chaque montant signé porte un mot en toutes lettres, en plus du glyphe.
   const signed = page.locator('.amount__word')

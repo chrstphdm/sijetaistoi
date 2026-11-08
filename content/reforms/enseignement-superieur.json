@@ -1,0 +1,290 @@
+{
+  "id": "enseignement-superieur",
+  "charterVersion": "1.0",
+  "descriptiveTitle": "Financement de l'enseignement supérieur",
+  "statedBy": "Le Conseil budgétaire, acteur fictif de ce jeu",
+  "context": "Le nombre d'étudiants a augmenté plus vite que la dotation des universités. Le Conseil budgétaire estime qu'il manque 1,4 milliard d'euros par an pour maintenir le taux d'encadrement actuel, et demande comment les trouver — ou s'il faut renoncer à les trouver.",
+  "objective": {
+    "amount": 1.4,
+    "unit": "EUR_bn",
+    "nature": "fiction",
+    "note": "Montant posé par un acteur fictif du jeu. Il ne décrit aucune nécessité constatée."
+  },
+  "contextSourceIds": [
+    "insee-niveaux-de-vie"
+  ],
+  "modelLimitations": "Ce modèle ne mesure que l'effet direct sur le budget mensuel des ménages concernés. Il ne prend en compte ni l'effet d'un diplôme sur les revenus futurs, ni les conséquences d'une variation du nombre d'étudiants sur le marché du travail, ni la qualité de l'enseignement dispensé.",
+  "options": [
+    {
+      "id": "statu-quo",
+      "label": "Ne rien changer",
+      "decisionDescription": "La dotation reste au niveau actuel. Le taux d'encadrement continue de se dégrader à mesure que les effectifs augmentent.",
+      "families": [
+        "status_quo"
+      ],
+      "isStatusQuo": true,
+      "effects": [
+        {
+          "id": "sq",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Tous les ménages"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet budgétaire immédiat. La dégradation de l'encadrement n'est pas chiffrée dans ce modèle."
+        }
+      ],
+      "argumentsFor": [
+        "Aucun étudiant ne voit son reste à vivre diminuer, et aucun contribuable ne paie davantage cette année.",
+        "Rien n'établit qu'une dotation supplémentaire améliorerait réellement l'encadrement plutôt que d'autres postes."
+      ],
+      "argumentsAgainst": [
+        "Le taux d'encadrement continue de baisser, ce qui pèse d'abord sur les étudiants les moins autonomes.",
+        "Reporter la décision revient à la laisser prendre par l'évolution des effectifs plutôt que par un choix."
+      ]
+    },
+    {
+      "id": "frais-inscription",
+      "label": "Porter les frais d'inscription de 175 € à 1 175 € par an",
+      "decisionDescription": "Les frais d'inscription augmentent de 1 000 € par an pour tous les étudiants, boursiers compris. Le produit est affecté aux universités.",
+      "families": [
+        "levies"
+      ],
+      "effects": [
+        {
+          "id": "fi-cout",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": -83,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "student"
+                ]
+              ]
+            },
+            "description": "Étudiants"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "1 000 € par an, soit environ 83 € par mois."
+        },
+        {
+          "id": "fi-encadrement",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 12,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "student"
+                ]
+              ]
+            },
+            "description": "Étudiants, à cinq ans"
+          },
+          "horizon": "y5",
+          "uncertainty": "highly_debated",
+          "hypothesisId": "renoncement-etudes",
+          "note": "Contrepartie estimée en services rendus, très incertaine : elle dépend de l'usage réel des fonds."
+        },
+        {
+          "id": "fi-recette",
+          "kind": "public_finance",
+          "publicBillions": 1.4,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "renoncement-etudes"
+        }
+      ],
+      "argumentsFor": [
+        "Les études supérieures augmentent en moyenne les revenus futurs : faire contribuer celui qui en bénéficie relie la charge et l'avantage.",
+        "Les frais français comptent parmi les plus bas d'Europe, et cette différence est financée par des contribuables qui n'ont pas fait d'études."
+      ],
+      "argumentsAgainst": [
+        "Un coût d'entrée dissuade d'abord ceux qui n'ont aucune réserve, indépendamment de leurs résultats scolaires.",
+        "L'effet sur le nombre d'inscriptions est très débattu, donc le rendement annoncé de la mesure est lui-même incertain."
+      ]
+    },
+    {
+      "id": "frais-modules",
+      "label": "Des frais modulés selon le revenu des parents",
+      "decisionDescription": "Les frais varient de 0 € pour les premiers déciles à 1 500 € pour les derniers. Les bourses sont maintenues à leur niveau actuel.",
+      "families": [
+        "levies",
+        "scope_efficiency"
+      ],
+      "isCompromise": true,
+      "effects": [
+        {
+          "id": "fm-modeste",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "student"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  3
+                ]
+              ]
+            },
+            "description": "Étudiants des trois premiers déciles"
+          },
+          "horizon": "y1",
+          "uncertainty": "established"
+        },
+        {
+          "id": "fm-aise",
+          "kind": "budget_line",
+          "code": "enfants",
+          "monthlyDelta": -125,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  8
+                ]
+              ]
+            },
+            "description": "Ménages des deux derniers déciles ayant un enfant étudiant"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "renoncement-etudes"
+        },
+        {
+          "id": "fm-recette",
+          "kind": "public_finance",
+          "publicBillions": 0.6,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "renoncement-etudes"
+        }
+      ],
+      "argumentsFor": [
+        "La contribution suit la capacité à payer, et les étudiants sans réserve ne sont pas dissuadés d'entrer.",
+        "Le dispositif rapporte moins qu'une hausse uniforme, mais il évite l'effet d'éviction que celle-ci produirait."
+      ],
+      "argumentsAgainst": [
+        "Le revenu des parents décrit mal la situation réelle d'un étudiant indépendant ou en rupture familiale.",
+        "Le barème ajoute une complexité administrative dont le coût de gestion réduit le rendement net."
+      ]
+    },
+    {
+      "id": "dotation-reduite",
+      "label": "Réduire la dotation d'autres politiques publiques",
+      "decisionDescription": "Les 1,4 Md€ sont prélevés sur d'autres budgets de l'État, sans précision sur lesquels à ce stade.",
+      "families": [
+        "public_spending"
+      ],
+      "effects": [
+        {
+          "id": "dr-etudiants",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 16,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "student"
+                ]
+              ]
+            },
+            "description": "Étudiants : dotation maintenue, services universitaires préservés"
+          },
+          "horizon": "y1",
+          "uncertainty": "highly_debated",
+          "hypothesisId": "renoncement-etudes",
+          "note": "Contrepartie estimée en services rendus. Très incertaine : elle suppose que la dotation supplémentaire se traduise effectivement en encadrement."
+        },
+        {
+          "id": "dr-indirect",
+          "kind": "budget_line",
+          "code": "sante",
+          "monthlyDelta": -9,
+          "scope": {
+            "description": "Tous les ménages, par effet indirect"
+          },
+          "horizon": "y1",
+          "uncertainty": "highly_debated",
+          "hypothesisId": "renoncement-etudes",
+          "note": "Effet réparti arbitrairement par le modèle faute de savoir quels budgets seraient réduits. Cette imprécision est une limite importante."
+        },
+        {
+          "id": "dr-neutre",
+          "kind": "public_finance",
+          "publicBillions": 0,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "established"
+        }
+      ],
+      "argumentsFor": [
+        "Le besoin est financé sans prélèvement nouveau ni endettement supplémentaire.",
+        "Arbitrer entre des dépenses existantes est le travail ordinaire d'un budget, et évite d'ajouter une recette."
+      ],
+      "argumentsAgainst": [
+        "Tant que les budgets réduits ne sont pas nommés, la mesure déplace le choix sans le trancher.",
+        "Les politiques réduites ont elles aussi des bénéficiaires, qui ne sont pas identifiés ici."
+      ]
+    },
+    {
+      "id": "contester-cadrage",
+      "label": "Je conteste la façon dont la question est posée",
+      "decisionDescription": "Le joueur refuse le cadrage : la question du taux d'encadrement ne se réduit pas à un montant, et d'autres leviers existent — organisation des cursus, part du présentiel, orientation en amont.",
+      "families": [
+        "challenge_framing"
+      ],
+      "effects": [
+        {
+          "id": "cc",
+          "kind": "service_level",
+          "scope": {
+            "description": "Aucun effet budgétaire modélisé"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Contester le cadrage ne produit aucun effet chiffré dans ce modèle. Cette absence est une limite du jeu, pas un jugement sur la pertinence de la contestation."
+        }
+      ],
+      "argumentsFor": [
+        "Poser la question comme un manque de financement exclut d'emblée les leviers qui ne coûtent rien au budget.",
+        "Le taux d'encadrement moyen masque des écarts considérables entre filières, que la question ignore."
+      ],
+      "argumentsAgainst": [
+        "Les leviers d'organisation ont des coûts portés par d'autres acteurs, qui ne disparaissent pas parce qu'ils sortent du budget de l'État.",
+        "Refuser de trancher laisse la dotation inchangée, soit le statu quo sans en assumer le choix."
+      ]
+    }
+  ]
+}

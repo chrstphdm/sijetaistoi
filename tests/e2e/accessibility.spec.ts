@@ -1,25 +1,13 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
+import { reach, settle } from './helpers.ts'
 
-/** Avance jusqu'à une phase donnée du parcours. */
-async function reach(page: Page, phase: 'vote' | 'judging' | 'impact' | 'collision' | 'summary') {
-  await page.goto('/')
-  if (phase === 'vote') return
-  await page.getByRole('button', { name: 'Décider ceci' }).nth(1).click()
-  if (phase === 'judging') return
-  await page.getByRole('radio', { name: 'plutôt oui' }).click()
-  await page.getByRole('button', { name: /ce que cela change pour chacun/i }).click()
-  if (phase === 'impact') return
-  await page.getByRole('button', { name: /Quelques mois plus tard/ }).click()
-  if (phase === 'collision') return
-  await page.getByRole('button', { name: /Terminer la partie/ }).click()
-}
-
-const PHASES = ['vote', 'judging', 'impact', 'collision', 'summary'] as const
+const PHASES = ['intro', 'month', 'reform', 'judgement', 'impact', 'callback', 'summary'] as const
 
 for (const phase of PHASES) {
   test(`aucune violation d'accessibilité — phase ${phase}`, async ({ page }) => {
     await reach(page, phase)
+    await settle(page)
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
       .analyze()
@@ -34,6 +22,7 @@ for (const phase of PHASES) {
 test('les contrastes tiennent aussi en thème sombre', async ({ page }) => {
   await page.emulateMedia({ colorScheme: 'dark' })
   await reach(page, 'impact')
+  await settle(page)
   const results = await new AxeBuilder({ page }).withTags(['wcag2aa']).analyze()
   const contrast = results.violations.filter((v) => v.id === 'color-contrast')
   expect(contrast, JSON.stringify(contrast, null, 1)).toEqual([])

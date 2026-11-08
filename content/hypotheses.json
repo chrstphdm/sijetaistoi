@@ -110,5 +110,33 @@
         ]
       }
     ]
+  },
+  {
+    "id": "indexation-pensions",
+    "question": "Désindexer partiellement les pensions une année donnée a-t-il un effet durable sur le niveau de vie des retraités ?",
+    "status": "debated",
+    "whyDebated": "L'effet dépend de ce qui se passe ensuite : un rattrapage ultérieur annule l'écart, son absence le rend permanent et cumulatif. Les travaux disponibles divergent sur la fréquence réelle des rattrapages, et la question relève autant de l'observation historique que de l'anticipation politique.",
+    "readings": [
+      {
+        "id": "A",
+        "mechanismLabel": "Écart temporaire, rattrapé lors des revalorisations suivantes",
+        "parameters": {
+          "persistenceYears": 2
+        },
+        "sourceIds": [
+          "insee-niveaux-de-vie"
+        ]
+      },
+      {
+        "id": "B",
+        "mechanismLabel": "Écart permanent, qui se cumule d'année en année",
+        "parameters": {
+          "persistenceYears": 25
+        },
+        "sourceIds": [
+          "insee-niveaux-de-vie"
+        ]
+      }
+    ]
   }
 ]

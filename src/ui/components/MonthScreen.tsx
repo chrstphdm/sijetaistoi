@@ -1,0 +1,134 @@
+import { useState } from 'react'
+import type { MonthlyBudget as Budget } from '@/core/types.ts'
+import type { LifeEventT } from '@/schemas/index.ts'
+import { absorptionRegime, REGIME } from '@/core/impact.ts'
+import type { Stocks } from '@/core/types.ts'
+import { euros } from '@/core/money.ts'
+import { motionFor } from '@/motion/table.ts'
+import { Amount } from './Amount.tsx'
+import { MonthlyBudget } from './MonthlyBudget.tsx'
+
+/**
+ * Un mois vecu.
+ *
+ * Revelation en trois temps : le fait seul, un temps pour consulter son
+ * propre releve, puis les options. Le joueur doit avoir regarde son budget
+ * AVANT de choisir — c'est la seule facon de ressentir une contrainte
+ * plutot que de la lire.
+ *
+ * Aucun score, aucune barre de reussite, aucun « tu as bouclé ton mois ».
+ * Le precedent SPENT a echoue mesurablement pour avoir laisse croire que la
+ * situation se resout en faisant de meilleurs choix.
+ */
+
+const REGIME_SENTENCE: Record<number, string> = {
+  [REGIME.IMPERCEPTIBLE]: 'ne change rien à ce mois-ci',
+  [REGIME.ABSORBED]: 'est couvert par ce qui est disponible',
+  [REGIME.ADJUSTABLE_TRADEOFF]: 'oblige à renoncer à des dépenses non contraintes',
+  [REGIME.CONSTRAINED_TRADEOFF]: 'oblige à toucher à des dépenses contraintes',
+  [REGIME.SHORTFALL]: 'ne peut pas être couvert ce mois-ci',
+}
+
+export function MonthScreen({
+  budget, stocks, month, event, firstName, unavailable, onResolve,
+}: {
+  readonly budget: Budget
+  readonly stocks: Stocks
+  readonly month: string
+  readonly event: LifeEventT | null
+  readonly firstName: string
+  readonly unavailable: readonly { option: string; reason: string }[]
+  readonly onResolve: (optionId: string | null) => void
+}) {
+  const [revealed, setRevealed] = useState(false)
+
+  const cost = event ? euros(event.cost.amount) : 0
+  const signedCost = event?.valence === 'positive' ? cost : -cost
+  const motion = event
+    ? motionFor({
+        amountCents: signedCost,
+        netIncomeCents: budget.netIncomeCents,
+        slackCents: budget.slackCents,
+        scale: 'slack',
+      })
+    : null
+
+  return (
+    <>
+      <MonthlyBudget budget={budget} month={month} />
+
+      {event ? (
+        <section
+          className="sheet enter-rise"
+          aria-labelledby="event-title"
+          style={
+            motion
+              ? ({ '--enter-ms': `${motion.enterMs}ms`, '--translate-px': `${motion.translatePx}px` } as React.CSSProperties)
+              : undefined
+          }
+        >
+          <p className="sheet__kicker">Ce mois-ci</p>
+          <h2 id="event-title">{event.descriptiveTitle}</h2>
+          <p>{event.text}</p>
+
+          <p>
+            <Amount cents={signedCost} nature={event.cost.nature} signed label="Montant en jeu" />
+            {event.cost.range && (
+              <span className="provenance">
+                {' '}— fourchette {event.cost.range[0]} à {event.cost.range[1]} €
+              </span>
+            )}
+          </p>
+
+          {!revealed ? (
+            <>
+              <p className="provenance">
+                Prends le temps de regarder le relevé de {firstName} avant de décider.
+              </p>
+              <button type="button" onClick={() => setRevealed(true)}>
+                Voir les possibilités
+              </button>
+            </>
+          ) : (
+            <>
+              <p>
+                Cette somme {REGIME_SENTENCE[absorptionRegime(signedCost, budget, stocks)]}.
+              </p>
+              <ol className="options">
+                {event.options.map((o) => (
+                  <li key={o.id}>
+                    <article className="option">
+                      <h3>{o.label}</h3>
+                      <button type="button" onClick={() => onResolve(o.id)}>
+                        Choisir
+                      </button>
+                    </article>
+                  </li>
+                ))}
+              </ol>
+
+              {unavailable.length > 0 && (
+                <>
+                  <p className="option__side">Ce qui n’est pas possible pour {firstName}</p>
+                  <ul className="provenance">
+                    {unavailable.map((u) => (
+                      <li key={u.option}>{u.reason}</li>
+                    ))}
+                  </ul>
+                </>
+              )}
+            </>
+          )}
+        </section>
+      ) : (
+        <section className="sheet">
+          <p className="sheet__kicker">Ce mois-ci</p>
+          <p>Rien de particulier. Le mois passe.</p>
+          <button type="button" onClick={() => onResolve(null)}>
+            Mois suivant
+          </button>
+        </section>
+      )}
+    </>
+  )
+}

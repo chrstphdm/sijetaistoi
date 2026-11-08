@@ -1,0 +1,21 @@
+{
+  "id": "voiture",
+  "charterVersion": "1.0",
+  "descriptiveTitle": "La voiture ne passe pas le contrôle technique",
+  "valence": "negative",
+  "intensity": 2,
+  "dramaticFunction": ["CHOC"],
+  "eligibility": { "and": [["tenure", "ne", "housed"]] },
+  "probability": "uniform",
+  "cost": { "amount": 750, "unit": "EUR", "nature": "fiction", "range": [520, 1100] },
+  "text": "Contre-visite dans deux mois : freins et rotules à reprendre. Le garage annonce 750 €, et refuse de laisser repartir le véhicule en l'état au-delà du délai.",
+  "options": [
+    { "id": "reparer", "label": "Faire réparer", "effects": [{ "type": "one_off", "amount": 750 }] },
+    { "id": "etaler", "label": "Demander un paiement en trois fois", "effects": [{ "type": "spread", "amount": 790, "months": 3 }] },
+    { "id": "renoncer", "label": "Se passer de voiture quelque temps", "effects": [{ "type": "recurring", "amount": 60, "code": "transport" }], "narrativeTrace": "perte-mobilite" }
+  ],
+  "microQuestion": {
+    "text": "Est-il normal que se déplacer pour travailler soit à la charge de chacun ?",
+    "principlesInTension": ["besoin", "responsabilite-individuelle", "egalite-de-traitement"]
+  }
+}

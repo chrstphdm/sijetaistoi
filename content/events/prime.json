@@ -1,0 +1,21 @@
+{
+  "id": "prime",
+  "charterVersion": "1.0",
+  "descriptiveTitle": "Une prime exceptionnelle",
+  "valence": "positive",
+  "intensity": 1,
+  "dramaticFunction": ["RESPIRATION"],
+  "eligibility": { "and": [["activities", "contains", "employee"]] },
+  "probability": "uniform",
+  "cost": { "amount": 450, "unit": "EUR", "nature": "fiction" },
+  "text": "Une prime de 450 € est versée ce mois-ci, annoncée comme exceptionnelle et non reconductible.",
+  "options": [
+    { "id": "epargner", "label": "La mettre de côté", "effects": [{ "type": "one_off", "amount": -450 }] },
+    { "id": "rattraper", "label": "Rattraper des dépenses reportées", "effects": [{ "type": "one_off", "amount": -450 }, { "type": "recurring", "amount": 20, "code": "habillement" }] },
+    { "id": "rembourser", "label": "Solder une partie du crédit en cours", "effects": [{ "type": "one_off", "amount": -450 }, { "type": "recurring", "amount": -25, "code": "credit-conso" }] }
+  ],
+  "microQuestion": {
+    "text": "Une prime exceptionnelle devrait-elle être soumise aux mêmes prélèvements qu'un salaire ?",
+    "principlesInTension": ["egalite-de-traitement", "merite", "contribution-progressive"]
+  }
+}

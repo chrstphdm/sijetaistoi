@@ -1,0 +1,21 @@
+{
+  "id": "aide-parent",
+  "charterVersion": "1.0",
+  "descriptiveTitle": "Un proche a besoin d'aide",
+  "valence": "negative",
+  "intensity": 2,
+  "dramaticFunction": ["TRAINE"],
+  "eligibility": { "and": [["householdSize", "gte", 1]] },
+  "probability": "uniform",
+  "cost": { "amount": 320, "unit": "EUR", "nature": "fiction" },
+  "text": "Un parent proche ne s'en sort plus seul. Une aide à domicile deux matinées par semaine coûterait 320 € par mois après déduction, et personne d'autre dans la famille n'est en situation de participer.",
+  "options": [
+    { "id": "financer", "label": "Prendre l'aide à domicile en charge", "effects": [{ "type": "recurring", "amount": 320, "code": "sante" }] },
+    { "id": "partager", "label": "Financer une matinée seulement", "effects": [{ "type": "recurring", "amount": 160, "code": "sante" }] },
+    { "id": "s-en-occuper", "label": "S'en occuper soi-même le week-end", "effects": [{ "type": "none" }], "narrativeTrace": "aidant-familial" }
+  ],
+  "microQuestion": {
+    "text": "L'aide à un parent âgé relève-t-elle de la famille ou de la collectivité ?",
+    "principlesInTension": ["solidarite", "responsabilite-individuelle", "besoin"]
+  }
+}

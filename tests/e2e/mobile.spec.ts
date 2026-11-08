@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { playMonths, reach } from './helpers.ts'
 
 test.describe('tenue sur petit écran', () => {
   test('aucun débordement horizontal à 400 px, sur tout le parcours', async ({ page }) => {
@@ -13,24 +14,23 @@ test.describe('tenue sur petit écran', () => {
       expect(scrollWidth, `débordement horizontal sur « ${label} »`).toBeLessThanOrEqual(clientWidth + 1)
     }
 
-    await overflows('vote')
+    await overflows('intro')
+    await page.getByRole('button', { name: /Commencer le mois/ }).click()
+    await overflows('mois')
+    await playMonths(page)
+    await overflows('réforme')
     await page.getByRole('button', { name: 'Décider ceci' }).nth(1).click()
     await overflows('question')
     await page.getByRole('radio', { name: 'plutôt oui' }).click()
     await page.getByRole('button', { name: /ce que cela change pour chacun/i }).click()
     await overflows('impact')
-    await page.getByRole('button', { name: /Quelques mois plus tard/ }).click()
-    await overflows('rappel')
-    await page.getByRole('button', { name: /Terminer la partie/ }).click()
-    await overflows('bilan')
   })
 
   test('les cinq réponses ont la même largeur rendue', async ({ page }) => {
     // jsdom ne calcule aucune mise en page : seul un vrai moteur peut le dire.
     // Une réponse plus large serait une réponse suggérée.
     await page.setViewportSize({ width: 400, height: 800 })
-    await page.goto('/')
-    await page.getByRole('button', { name: 'Décider ceci' }).nth(1).click()
+    await reach(page, 'judgement')
 
     const widths = await page.getByRole('radio').evaluateAll((els) =>
       els.map((e) => Math.round(e.getBoundingClientRect().width)),
@@ -41,7 +41,7 @@ test.describe('tenue sur petit écran', () => {
 
   test('toute cible tactile atteint 24 px, minimum WCAG 2.2', async ({ page }) => {
     await page.setViewportSize({ width: 400, height: 800 })
-    await page.goto('/')
+    await reach(page, 'reform')
     const small = await page.getByRole('button').evaluateAll((els) =>
       els
         .map((e) => ({ t: e.textContent?.slice(0, 40) ?? '', r: e.getBoundingClientRect() }))
