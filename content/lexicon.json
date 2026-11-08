@@ -1,0 +1,305 @@
+{
+  "note": "Lexique contrôlé. Il s'applique à TOUT le contenu, y compris aux chaînes d'interface. AVERTISSEMENT MÉTHODOLOGIQUE : un lexique est lui-même un artefact politique. Décider qu'un mot est connoté est un jugement. Celui-ci vise la symétrie — il coupe dans tous les sens — et il est publié pour pouvoir être contesté. Les entrées « blocking » arrêtent le build ; les entrées « warning » remontent en revue sans bloquer, parce qu'elles peuvent légitimement figurer dans une parole rapportée.",
+  "entries": [
+    {
+      "avoid": "charges sociales",
+      "prefer": "cotisations sociales",
+      "severity": "blocking",
+      "why": "« Charge » qualifie d'emblée le prélèvement comme un poids, là où « cotisation » décrit un mécanisme d'assurance."
+    },
+    {
+      "avoid": "charges patronales",
+      "prefer": "cotisations employeur",
+      "severity": "blocking",
+      "why": "Même cadrage : le mot « charge » tranche un débat sur la nature du prélèvement."
+    },
+    {
+      "avoid": "matraquage fiscal",
+      "prefer": "niveau des prélèvements",
+      "severity": "blocking",
+      "why": "Métaphore de violence subie."
+    },
+    {
+      "avoid": "racket fiscal",
+      "prefer": "niveau des prélèvements",
+      "severity": "blocking",
+      "why": "Assimile l'impôt à un délit."
+    },
+    {
+      "avoid": "spoliation",
+      "prefer": "prélèvement",
+      "severity": "blocking",
+      "why": "Suppose que le prélèvement est illégitime par nature."
+    },
+    {
+      "avoid": "confiscatoire",
+      "prefer": "d'un taux élevé",
+      "severity": "blocking",
+      "why": "Terme de condamnation déguisé en description."
+    },
+    {
+      "avoid": "ras-le-bol fiscal",
+      "prefer": "sentiment sur le niveau des prélèvements",
+      "severity": "blocking",
+      "why": "Slogan de campagne, qui prête un état d'esprit collectif sans l'établir."
+    },
+    {
+      "avoid": "cadeau fiscal",
+      "prefer": "réduction d'impôt",
+      "severity": "blocking",
+      "why": "Suppose une faveur non méritée."
+    },
+    {
+      "avoid": "cadeau aux riches",
+      "prefer": "réduction d'impôt bénéficiant aux plus hauts revenus",
+      "severity": "blocking",
+      "why": "Symétrique du précédent, même défaut."
+    },
+    {
+      "avoid": "optimisation agressive",
+      "prefer": "montage fiscal",
+      "severity": "warning",
+      "why": "« Agressive » est une qualification morale ; à n'employer que si une source la reprend."
+    },
+    {
+      "avoid": "assistanat",
+      "prefer": "prestations sociales",
+      "severity": "blocking",
+      "why": "Terme péjoratif désignant le fait de percevoir une aide."
+    },
+    {
+      "avoid": "assistés",
+      "prefer": "allocataires",
+      "severity": "blocking",
+      "why": "Réduit des personnes à leur statut de bénéficiaire, et le dévalorise."
+    },
+    {
+      "avoid": "profiteurs",
+      "prefer": "allocataires",
+      "severity": "blocking",
+      "why": "Impute une intention frauduleuse."
+    },
+    {
+      "avoid": "fraudeurs sociaux",
+      "prefer": "fraude aux prestations",
+      "severity": "warning",
+      "why": "Désigner des personnes plutôt qu'un phénomène ; acceptable si la source le fait."
+    },
+    {
+      "avoid": "fainéants",
+      "prefer": "personnes sans emploi",
+      "severity": "blocking",
+      "why": "Injure, et imputation d'un choix là où il peut n'y en avoir aucun."
+    },
+    {
+      "avoid": "oisifs",
+      "prefer": "personnes sans emploi",
+      "severity": "blocking",
+      "why": "Impute un choix là où il peut n'y en avoir aucun."
+    },
+    {
+      "avoid": "chômeurs volontaires",
+      "prefer": "personnes sans emploi",
+      "severity": "blocking",
+      "why": "Généralise une situation marginale et contestée."
+    },
+    {
+      "avoid": "trappe à inactivité",
+      "prefer": "effet des seuils sur la reprise d'emploi",
+      "severity": "warning",
+      "why": "Théorie économique débattue présentée comme un fait."
+    },
+    {
+      "avoid": "nantis",
+      "prefer": "ménages les plus aisés",
+      "severity": "blocking",
+      "why": "Terme de dénonciation."
+    },
+    {
+      "avoid": "ultra-riches",
+      "prefer": "ménages aux plus hauts patrimoines",
+      "severity": "blocking",
+      "why": "Catégorie militante sans définition statistique stable."
+    },
+    {
+      "avoid": "privilégiés",
+      "prefer": "ménages aux revenus élevés",
+      "severity": "blocking",
+      "why": "Suppose que l'avantage est indu."
+    },
+    {
+      "avoid": "premiers de cordée",
+      "prefer": "ménages aux revenus élevés",
+      "severity": "blocking",
+      "why": "Métaphore politique datée et orientée."
+    },
+    {
+      "avoid": "ceux qui ne sont rien",
+      "prefer": "ménages modestes",
+      "severity": "blocking",
+      "why": "Citation polémique sortie de son contexte, devenue une formule de dénonciation."
+    },
+    {
+      "avoid": "la France qui se lève tôt",
+      "prefer": "actifs occupés",
+      "severity": "blocking",
+      "why": "Slogan de campagne qui partage implicitement la population entre méritants et autres."
+    },
+    {
+      "avoid": "France périphérique",
+      "prefer": "communes rurales et petites villes",
+      "severity": "warning",
+      "why": "Concept d'un auteur identifié, contesté en géographie."
+    },
+    {
+      "avoid": "pigeons",
+      "prefer": "entrepreneurs",
+      "severity": "blocking",
+      "why": "Référence à un mouvement de protestation daté."
+    },
+    {
+      "avoid": "trou de la sécu",
+      "prefer": "déficit de la sécurité sociale",
+      "severity": "blocking",
+      "why": "Image qui suggère une fuite inexpliquée plutôt qu'un solde."
+    },
+    {
+      "avoid": "dette abyssale",
+      "prefer": "niveau de la dette publique",
+      "severity": "blocking",
+      "why": "Qualificatif dramatisant."
+    },
+    {
+      "avoid": "faillite de l'état",
+      "prefer": "situation des finances publiques",
+      "severity": "blocking",
+      "why": "Scénario contesté présenté comme imminent."
+    },
+    {
+      "avoid": "gabegie",
+      "prefer": "dépense publique",
+      "severity": "blocking",
+      "why": "Accusation de gaspillage présentée comme un constat."
+    },
+    {
+      "avoid": "gaspillage",
+      "prefer": "dépense publique",
+      "severity": "warning",
+      "why": "Porte un jugement ; admissible si une source l'établit."
+    },
+    {
+      "avoid": "mille-feuille administratif",
+      "prefer": "organisation territoriale",
+      "severity": "blocking",
+      "why": "Image polémique qui présente une organisation comme absurde par sa seule description."
+    },
+    {
+      "avoid": "train de vie de l'état",
+      "prefer": "dépenses de fonctionnement",
+      "severity": "blocking",
+      "why": "Formule de dénonciation."
+    },
+    {
+      "avoid": "génération sacrifiée",
+      "prefer": "cohorte née après telle année",
+      "severity": "blocking",
+      "why": "Affirme un préjudice global non établi."
+    },
+    {
+      "avoid": "boomers",
+      "prefer": "générations nées entre 1945 et 1965",
+      "severity": "blocking",
+      "why": "Terme devenu péjoratif."
+    },
+    {
+      "avoid": "retraités dorés",
+      "prefer": "retraités aux pensions élevées",
+      "severity": "blocking",
+      "why": "Généralise et dévalorise."
+    },
+    {
+      "avoid": "réforme courageuse",
+      "prefer": "réforme",
+      "severity": "blocking",
+      "why": "Le courage est une qualification morale de la décision."
+    },
+    {
+      "avoid": "réforme brutale",
+      "prefer": "réforme",
+      "severity": "blocking",
+      "why": "Symétrique du précédent."
+    },
+    {
+      "avoid": "indispensable réforme",
+      "prefer": "réforme",
+      "severity": "blocking",
+      "why": "Présente la nécessité comme établie."
+    },
+    {
+      "avoid": "écologie punitive",
+      "prefer": "fiscalité environnementale",
+      "severity": "blocking",
+      "why": "Qualifie l'intention du législateur."
+    },
+    {
+      "avoid": "taxe punitive",
+      "prefer": "taxe comportementale",
+      "severity": "blocking",
+      "why": "Qualifie l'intention du législateur plutôt que l'effet de la mesure."
+    },
+    {
+      "avoid": "écoterrorisme",
+      "prefer": "action militante",
+      "severity": "blocking",
+      "why": "Assimilation au terrorisme."
+    },
+    {
+      "avoid": "climatosceptique",
+      "prefer": "qui conteste tel point du diagnostic climatique",
+      "severity": "warning",
+      "why": "Étiquette large qui recouvre des positions très différentes."
+    },
+    {
+      "avoid": "fin du monde, fin du mois",
+      "prefer": "arbitrage entre contrainte budgétaire et transition",
+      "severity": "blocking",
+      "why": "Slogan qui pose les deux termes comme exclusifs l'un de l'autre, ce qui est une thèse."
+    },
+    {
+      "avoid": "bon sens",
+      "prefer": "",
+      "severity": "blocking",
+      "why": "Présente une position comme évidente, donc dispensée d'argument."
+    },
+    {
+      "avoid": "évidemment",
+      "prefer": "",
+      "severity": "warning",
+      "why": "Dispense d'argumenter ; à proscrire dans tout texte normatif."
+    },
+    {
+      "avoid": "il faut bien",
+      "prefer": "",
+      "severity": "blocking",
+      "why": "Pose une nécessité sans la démontrer."
+    },
+    {
+      "avoid": "tout le monde sait",
+      "prefer": "",
+      "severity": "blocking",
+      "why": "Argument d'autorité anonyme."
+    },
+    {
+      "avoid": "en réalité",
+      "prefer": "",
+      "severity": "warning",
+      "why": "Suggère que ce qui précède était une illusion."
+    },
+    {
+      "avoid": "la vérité, c'est",
+      "prefer": "",
+      "severity": "blocking",
+      "why": "Pose le propos comme non discutable."
+    }
+  ]
+}
