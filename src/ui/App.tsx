@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { computeMonthlyBudget } from '@/core/budget.ts'
 import type { Scale } from '@/core/impact.ts'
 import {
-  selectCallback, type CallbackCandidate, type CallbackSign,
+  selectCallback, type CallbackCandidate, type CallbackSign, type Selection,
 } from '@/core/callback.ts'
 import {
   movements, relaunchSentence, type Judgement, type OpinionEntry,
@@ -75,31 +75,40 @@ export function App() {
     ])
   }
 
-  /* --- Collision : incarner l'autre personnage et subir sa propre règle --- */
-  const other = characters[(who + 1) % characters.length]!
-  const collision = useMemo(() => {
-    const traits = traitsOf(other)
-    const effects = activeEffectsFor(world, traits, optionLookup)
-    if (effects.length === 0) return { kind: 'none_available' as const }
+  /* --- Collision : incarner l'autre personnage et subir sa propre règle ---
+   *
+   * Le rappel est CALCULE AU MOMENT DE LA TRANSITION, puis figé dans l'état.
+   * Le recalculer à chaque rendu serait un bug subtil : une fois le signe
+   * ajouté à l'historique, le quota le compterait deux fois et bloquerait
+   * le rappel qu'il vient lui-même d'autoriser. Un test l'a attrapé.
+   */
+  const [collision, setCollision] = useState<Selection | null>(null)
 
-    const before = computeMonthlyBudget(toBudgetLines(other))
-    const after = computeMonthlyBudget(applyEffectsToLines(toBudgetLines(other), effects))
+  const buildCollision = (target: (typeof characters)[number]): Selection => {
+    const effects = activeEffectsFor(world, traitsOf(target), optionLookup)
+    if (effects.length === 0) return { kind: 'none_available' }
+
+    const before = computeMonthlyBudget(toBudgetLines(target))
+    const after = computeMonthlyBudget(applyEffectsToLines(toBudgetLines(target), effects))
     const delta = after.slackCents - before.slackCents
 
     const candidate: CallbackCandidate = {
       rule: rulesInForce(world)[0]!,
-      characterId: other.id,
+      characterId: target.id,
       deltaCents: delta,
       here: `Son reste à vivre passe de ${formatEuros(before.slackCents)} à ${formatEuros(after.slackCents)} par mois.`,
       elsewhere:
         'Le programme de rénovation est financé à hauteur de 3 Md€. Les logements les plus mal isolés sont traités en premier.',
     }
     return selectCallback([candidate], signs, random.presentation)
-  }, [world, other, signs, random])
+  }
 
   const goToCollision = () => {
-    if (collision.kind === 'selected') setSigns((s) => [...s, collision.callback.sign])
-    setWho((w) => (w + 1) % characters.length)
+    const nextIndex = (who + 1) % characters.length
+    const result = buildCollision(characters[nextIndex]!)
+    if (result.kind === 'selected') setSigns((s) => [...s, result.callback.sign])
+    setCollision(result)
+    setWho(nextIndex)
     setPhase('collision')
   }
 
@@ -177,14 +186,14 @@ export function App() {
             <p>{current.identity.identityLine}</p>
           </div>
 
-          {collision.kind === 'selected' && (
+          {collision?.kind === 'selected' && (
             <CallbackPanel
               callback={collision.callback}
               characterName={current.identity.firstName}
             />
           )}
-          {collision.kind === 'quota_blocked' && <QuotaBlockedNote />}
-          {collision.kind === 'none_available' && (
+          {collision?.kind === 'quota_blocked' && <QuotaBlockedNote />}
+          {collision?.kind === 'none_available' && (
             <section className="sheet">
               <p>
                 Aucune des règles en vigueur ne concerne {current.identity.firstName}. Ce n’est pas

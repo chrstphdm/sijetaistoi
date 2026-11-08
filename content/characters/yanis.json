@@ -1,0 +1,99 @@
+{
+  "id": "yanis",
+  "charterVersion": "1.0",
+  "fictional": true,
+  "fictionNote": "Personnage fictif. Situation construite pour être plausible au regard des ordres de grandeur publics sur les bourses, les loyers étudiants et les revenus d'appoint. Ne correspond à aucune personne réelle.",
+
+  "identity": {
+    "firstName": "Yanis",
+    "age": 20,
+    "identityLine": "étudiant en deuxième année de licence à Lyon, boursier, colocataire",
+    "incomeDecile": 1,
+    "calibrationSourceIds": ["insee-niveaux-de-vie", "anil-loyers"]
+  },
+
+  "traits": {
+    "activities": ["student", "employee"],
+    "tenure": "tenant_private",
+    "heating": "collective",
+    "householdSize": 1,
+    "childCount": 0,
+    "hasSchoolAgedChild": false
+  },
+
+  "budget": {
+    "lines": [
+      { "code": "prestations", "group": "resource",
+        "value": { "amount": 480, "unit": "EUR_month", "nature": "hypothesis", "hypothesisId": "prestations-calibrage", "note": "Bourse sur critères sociaux et aide au logement" } },
+      { "code": "salaire-net", "group": "resource",
+        "value": { "amount": 390, "unit": "EUR_month", "nature": "fiction", "note": "Douze heures par semaine en librairie" } },
+      { "code": "logement", "group": "constrained",
+        "value": { "amount": 420, "unit": "EUR_month", "nature": "fiction", "note": "Chambre en colocation, charges comprises" } },
+      { "code": "energie", "group": "constrained",
+        "value": { "amount": 45, "unit": "EUR_month", "nature": "extrapolation" } },
+      { "code": "alimentation", "group": "constrained",
+        "value": { "amount": 210, "unit": "EUR_month", "nature": "hypothesis", "hypothesisId": "socle-alimentaire" } },
+      { "code": "transport", "group": "constrained",
+        "value": { "amount": 35, "unit": "EUR_month", "nature": "fiction", "note": "Abonnement transports tarif étudiant" } },
+      { "code": "sante", "group": "constrained",
+        "value": { "amount": 22, "unit": "EUR_month", "nature": "fiction" } },
+      { "code": "loisirs", "group": "adjustable",
+        "value": { "amount": 55, "unit": "EUR_month", "nature": "fiction" } },
+      { "code": "habillement", "group": "adjustable",
+        "value": { "amount": 25, "unit": "EUR_month", "nature": "fiction" } }
+    ]
+  },
+
+  "stocks": {
+    "liquid7d": 310,
+    "liquid60d": 310,
+    "authorisedOverdraft": 0,
+    "netWealth": 310,
+    "precautionFloorMonths": 0
+  },
+
+  "parity": {
+    "strength": "Il a dix-huit mois d'avance sur son mémoire et deux enseignants prêts à le recommander pour un master sélectif.",
+    "vulnerability": "Ses douze heures de travail hebdomadaires sont exactement ce qui tient son budget, et exactement ce qui l'empêche de prendre le stage qui compterait.",
+    "aspirations": [
+      "Entrer dans le master de géographie urbaine qui ne prend que vingt personnes",
+      "Pouvoir rendre à sa sœur les quatre cents euros qu'elle lui a avancés"
+    ],
+    "concerns": [
+      "Que sa bourse soit recalculée à la baisse après le divorce de ses parents",
+      "Devoir arbitrer entre le stage de master et les heures en librairie"
+    ],
+    "nonMonetaryConstraint": "Les heures en librairie tombent le samedi et le lundi, les deux jours où se tiennent les séminaires optionnels.",
+    "nonMonetaryAdvantage": "Vingt ans, aucune charge de famille, et la possibilité de déménager n'importe où sans rien démanteler.",
+    "opinionAgainstOwnInterest": "Il trouve que les bourses devraient être réservées aux filières qui mènent à un emploi : « je fais de la géo, je sais très bien que ça ne devrait pas être prioritaire »."
+  },
+
+  "shortTermGoal": {
+    "label": "Mettre 300 € de côté pour la caution du logement de son stage",
+    "amount": 300,
+    "deadline": "2027-08"
+  },
+
+  "embodiedDetails": [
+    "Il travaille à la bibliothèque jusqu'à la fermeture parce que le chauffage y est meilleur.",
+    "Il appelle sa sœur le mardi soir, après son service.",
+    "Il garde les tickets de caisse dans une boîte à chaussures sans jamais les relire."
+  ],
+
+  "unavailableOptions": [
+    { "option": "puiser-epargne", "reason": "Les 310 € sur son compte sont la caution qu'il met de côté depuis huit mois." },
+    { "option": "demander-aide-famille", "reason": "Ses parents remboursent eux-mêmes un crédit et il a décidé de ne plus rien demander." }
+  ],
+
+  "equivalenceRefs": [
+    { "code": "alimentation", "monthlyAmount": 210, "narrativeLabel": "son alimentation du mois" },
+    { "code": "loisirs", "monthlyAmount": 55, "narrativeLabel": "son budget sorties du mois" },
+    { "code": "projet", "monthlyAmount": 38, "narrativeLabel": "ce qu'il met de côté pour sa caution" }
+  ],
+
+  "narrative": {
+    "story": "Yanis est arrivé à Lyon il y a deux ans avec une valise et une liste de colocations trouvées sur un groupe en ligne. Il a changé trois fois d'appartement avant de trouver celui-ci, qu'il partage avec deux autres étudiants dont l'un ne fait jamais la vaisselle. Il travaille en librairie douze heures par semaine depuis le premier semestre, et il a calculé qu'il perdrait son logement en quatre mois s'il arrêtait. Il n'en parle pas beaucoup : dans son groupe de TD, à peu près tout le monde travaille aussi."
+  },
+
+  "lineOverrides": []
+}
