@@ -1,0 +1,93 @@
+{
+  "id": "marc-anne",
+  "charterVersion": "1.0",
+  "fictional": true,
+  "fictionNote": "Ménage fictif. Situation construite pour être plausible au regard des ordres de grandeur publics sur les revenus des dirigeants de très petites entreprises et les charges de propriétaires accédants. Ne correspond à aucune personne réelle.",
+
+  "identity": {
+    "firstName": "Marc et Anne",
+    "age": 48,
+    "identityLine": "menuisier à son compte et cadre en mutuelle, deux adolescents, propriétaires près de Rennes",
+    "incomeDecile": 9,
+    "calibrationSourceIds": ["insee-artisanat-revenus", "insee-niveaux-de-vie", "anil-loyers"]
+  },
+
+  "budget": {
+    "lines": [
+      { "code": "revenu-independant", "group": "resource",
+        "value": { "amount": 3100, "unit": "EUR_month", "nature": "fiction", "note": "Rémunération lissée : les mois réels varient de 1 900 à 4 800 €" } },
+      { "code": "salaire-net", "group": "resource",
+        "value": { "amount": 3140, "unit": "EUR_month", "nature": "fiction" } },
+      { "code": "logement", "group": "constrained",
+        "value": { "amount": 390, "unit": "EUR_month", "nature": "fiction", "note": "Taxe foncière, assurance et provision travaux ; la mensualité d'emprunt est comptée à part" } },
+      { "code": "energie", "group": "constrained",
+        "value": { "amount": 260, "unit": "EUR_month", "nature": "extrapolation", "note": "Maison de 1978, isolation partielle" } },
+      { "code": "alimentation", "group": "constrained",
+        "value": { "amount": 920, "unit": "EUR_month", "nature": "hypothesis", "hypothesisId": "socle-alimentaire" } },
+      { "code": "transport", "group": "constrained",
+        "value": { "amount": 410, "unit": "EUR_month", "nature": "fiction", "note": "Deux véhicules, dont un utilitaire professionnel" } },
+      { "code": "enfants", "group": "constrained",
+        "value": { "amount": 220, "unit": "EUR_month", "nature": "fiction", "note": "Cantine, licence de hand, transport scolaire" } },
+      { "code": "sante", "group": "constrained",
+        "value": { "amount": 190, "unit": "EUR_month", "nature": "fiction" } },
+      { "code": "credit-immo", "group": "credit",
+        "value": { "amount": 950, "unit": "EUR_month", "nature": "fiction", "note": "Onze annuités restantes" } },
+      { "code": "loisirs", "group": "adjustable",
+        "value": { "amount": 400, "unit": "EUR_month", "nature": "fiction" } },
+      { "code": "habillement", "group": "adjustable",
+        "value": { "amount": 150, "unit": "EUR_month", "nature": "fiction" } }
+    ]
+  },
+
+  "stocks": {
+    "liquid7d": 14200,
+    "liquid60d": 14200,
+    "authorisedOverdraft": 2000,
+    "netWealth": 310000,
+    "precautionFloorMonths": 1
+  },
+
+  "parity": {
+    "strength": "L'atelier tourne depuis dix-neuf ans et le carnet de commandes est plein jusqu'en septembre : Marc n'a jamais eu à licencier.",
+    "vulnerability": "Tout repose sur sa santé. Un dos bloqué trois mois et six salariés se retrouvent sans encadrement, sans qu'aucune assurance ne couvre vraiment ce cas.",
+    "aspirations": [
+      "Transmettre l'atelier à un de ses compagnons plutôt que de le vendre à un groupe",
+      "Qu'Anne puisse passer à quatre cinquièmes sans que cela se discute"
+    ],
+    "concerns": [
+      "Que Lucie choisisse une école privée à neuf mille euros l'année et qu'il ne sache pas dire non",
+      "Que le prochain impayé d'un client soit celui de trop"
+    ],
+    "nonMonetaryConstraint": "Il n'a pas pris trois semaines consécutives de congés depuis sept ans : quand l'atelier s'arrête, rien ne rentre.",
+    "nonMonetaryAdvantage": "Un patrimoine immobilier qui lui ouvre du crédit à tout moment, et un réseau professionnel qui lui amène du travail sans qu'il démarche.",
+    "opinionAgainstOwnInterest": "Il est favorable à une imposition plus lourde des successions : « j'ai monté ça tout seul, je ne vois pas pourquoi mes enfants recevraient tout sans rien faire »."
+  },
+
+  "shortTermGoal": {
+    "label": "Réunir les 6 000 € d'apport promis à Lucie pour la rentrée de septembre",
+    "amount": 6000,
+    "deadline": "2027-09"
+  },
+
+  "embodiedDetails": [
+    "Il se lève à cinq heures quarante depuis vingt ans, y compris le dimanche.",
+    "Hugo fait du hand le mercredi et Marc rate un match sur deux.",
+    "Il n'a jamais réussi à s'empêcher de regarder le carnet de commandes le dimanche soir."
+  ],
+
+  "unavailableOptions": [
+    { "option": "demander-aide-sociale", "reason": "Aucun dispositif ne couvre une baisse de revenu d'indépendant inférieure à un seuil qu'il n'atteint pas." }
+  ],
+
+  "equivalenceRefs": [
+    { "code": "alimentation", "monthlyAmount": 920, "narrativeLabel": "l'alimentation du mois" },
+    { "code": "loisirs", "monthlyAmount": 400, "narrativeLabel": "le budget loisirs du mois" },
+    { "code": "projet", "monthlyAmount": 500, "narrativeLabel": "ce qu'ils mettent de côté pour l'apport de Lucie" }
+  ],
+
+  "narrative": {
+    "story": "Marc a repris l'atelier de son ancien patron en 2008, au pire moment, et il aime rappeler que les trois premières années il s'est payé moins que ses compagnons. Anne travaille dans une mutuelle depuis quinze ans et gagne aujourd'hui un peu plus que lui, ce dont ils plaisantent sans que ce soit tout à fait une plaisanterie. Ils ont acheté la maison en 2016 en pensant qu'ils auraient fini de payer avant que les enfants partent ; il leur reste onze ans. Marc regarde les devis de ses concurrents en se demandant comment ils tiennent ces prix-là."
+  },
+
+  "lineOverrides": []
+}

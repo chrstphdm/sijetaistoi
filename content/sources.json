@@ -1,0 +1,56 @@
+[
+  {
+    "id": "insee-niveaux-de-vie",
+    "name": "Les niveaux de vie en France",
+    "organisation": "INSEE",
+    "affiliation": "statistics_body",
+    "url": "https://www.insee.fr/fr/statistiques/serie/010598842",
+    "vintage": "2024",
+    "scope": "Distribution des niveaux de vie par décile, seuil de pauvreté, médiane."
+  },
+  {
+    "id": "insee-budget-des-familles",
+    "name": "Budget de famille",
+    "organisation": "INSEE",
+    "affiliation": "statistics_body",
+    "url": "https://www.insee.fr/fr/metadonnees/source/serie/s1194",
+    "vintage": "2024",
+    "scope": "Structure de consommation des ménages par poste et par décile."
+  },
+  {
+    "id": "anil-loyers",
+    "name": "Observatoire des loyers",
+    "organisation": "ANIL",
+    "affiliation": "public_institution",
+    "url": "https://www.anil.org/",
+    "vintage": "2026",
+    "scope": "Niveaux de loyer du parc privé par agglomération et par type de logement."
+  },
+  {
+    "id": "drees-salaires-soin",
+    "name": "Les salaires dans le secteur du soin et de l'accompagnement",
+    "organisation": "DREES",
+    "affiliation": "public_institution",
+    "url": "https://drees.solidarites-sante.gouv.fr/",
+    "vintage": "2025",
+    "scope": "Rémunérations des personnels soignants, dont aides-soignants en Ehpad."
+  },
+  {
+    "id": "cnaf-cout-garde",
+    "name": "Observatoire national de la petite enfance",
+    "organisation": "CNAF",
+    "affiliation": "public_institution",
+    "url": "https://www.caf.fr/",
+    "vintage": "2025",
+    "scope": "Restes à charge des familles pour la garde et la restauration scolaire."
+  },
+  {
+    "id": "insee-artisanat-revenus",
+    "name": "Revenus d'activité des non-salariés",
+    "organisation": "INSEE",
+    "affiliation": "statistics_body",
+    "url": "https://www.insee.fr/fr/statistiques/serie/010752747",
+    "vintage": "2024",
+    "scope": "Revenus des indépendants et dirigeants de TPE, dont artisanat du bâtiment."
+  }
+]

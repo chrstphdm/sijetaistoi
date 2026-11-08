@@ -1,0 +1,36 @@
+[
+  { "code": "salaire-net", "label": "Salaire net", "group": "resource", "constrained": false, "kappa": 0,
+    "methodNote": "Net à payer après prélèvement à la source. Les cotisations figurent en prélèvements et ne sont pas redéduites." },
+  { "code": "revenu-independant", "label": "Revenu d'activité indépendante", "group": "resource", "constrained": false, "kappa": 0,
+    "methodNote": "Rémunération nette du dirigeant, lissée en moyenne mensuelle : l'irrégularité réelle est portée par les événements." },
+  { "code": "prestations", "label": "Prestations", "group": "resource", "constrained": false, "kappa": 0,
+    "methodNote": "Prestations familiales et aides au logement agrégées. Ordre de grandeur en attente du branchement d'OpenFisca." },
+  { "code": "pension-alimentaire", "label": "Pension alimentaire", "group": "resource", "constrained": false, "kappa": 0,
+    "methodNote": "Montant perçu, hors impayés. Le risque d'impayé est traité comme un événement." },
+
+  { "code": "logement", "label": "Logement", "group": "constrained", "constrained": true, "kappa": 0.05,
+    "methodNote": "Loyer ou mensualité, charges comprises. Compressible seulement par un déménagement, hors horizon du jeu." },
+  { "code": "energie", "label": "Énergie", "group": "constrained", "constrained": true, "kappa": 0.2,
+    "methodNote": "Électricité, gaz, chauffage. Partiellement compressible, au prix du confort thermique." },
+  { "code": "alimentation", "label": "Alimentation", "group": "constrained", "constrained": true, "kappa": 0.25,
+    "methodNote": "Socle alimentaire. Le caractère incompressible de ce poste est une hypothèse du modèle, pas un fait." },
+  { "code": "transport", "label": "Transport", "group": "constrained", "constrained": true, "kappa": 0.15,
+    "methodNote": "Trajets domicile-travail. Le caractère contraint dépend de la desserte : surchargeable par personnage." },
+  { "code": "enfants", "label": "Enfants", "group": "constrained", "constrained": true, "kappa": 0.1,
+    "methodNote": "Garde, cantine, frais de scolarité. Reste à charge après aides." },
+  { "code": "sante", "label": "Santé", "group": "constrained", "constrained": true, "kappa": 0.1,
+    "methodNote": "Mutuelle et restes à charge récurrents. Les soins ponctuels sont des événements." },
+
+  { "code": "credit-conso", "label": "Crédit en cours", "group": "credit", "constrained": true, "kappa": 0,
+    "methodNote": "Mensualité contractuelle, capital et intérêts confondus." },
+  { "code": "credit-immo", "label": "Crédit immobilier", "group": "credit", "constrained": true, "kappa": 0,
+    "methodNote": "Mensualité d'emprunt. Figure en dépense contrainte, mais constitue aussi une accumulation de patrimoine : cette double nature est signalée au joueur." },
+
+  { "code": "loisirs", "label": "Loisirs", "group": "adjustable", "constrained": false, "kappa": 1,
+    "methodNote": "Sorties, abonnements, vacances. Entièrement arbitrable, ce qui ne veut pas dire indolore." },
+  { "code": "habillement", "label": "Habillement", "group": "adjustable", "constrained": false, "kappa": 0.8,
+    "methodNote": "Reportable quelques mois, pas indéfiniment, en particulier pour des enfants qui grandissent." },
+
+  { "code": "impots", "label": "Impôts et cotisations", "group": "levy", "constrained": true, "kappa": 0,
+    "methodNote": "Impôt sur le revenu et cotisations non déduites du net affiché. Calculé par le moteur fiscal, jamais saisi à la main." }
+]

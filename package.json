@@ -9,15 +9,18 @@
     "node": ">=22.12"
   },
   "scripts": {
-    "dev": "vite",
     "build": "tsc --noEmit && vite build",
+    "build:content": "node scripts/build-content.ts",
+    "check:contrast": "node scripts/check-contrast.ts",
+    "dev": "vite",
+    "lint:content": "node scripts/lint-content.ts",
+    "prebuild": "npm run build:content",
+    "predev": "npm run build:content",
+    "pretest": "npm run build:content",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit",
-    "build:content": "node scripts/build-content.ts",
-    "lint:content": "node scripts/lint-content.ts",
-    "check:contrast": "node scripts/check-contrast.ts"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "react": "19.3.1",

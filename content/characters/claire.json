@@ -1,0 +1,100 @@
+{
+  "id": "claire",
+  "charterVersion": "1.0",
+  "fictional": true,
+  "fictionNote": "Personnage fictif. Situation construite pour être plausible au regard des ordres de grandeur publics sur les salaires du soin, les loyers du parc privé et les restes à charge de garde. Ne correspond à aucune personne réelle.",
+
+  "identity": {
+    "firstName": "Claire",
+    "age": 34,
+    "identityLine": "aide-soignante en Ehpad, une fille de 6 ans, locataire à Amiens",
+    "incomeDecile": 2,
+    "calibrationSourceIds": ["drees-salaires-soin", "anil-loyers", "cnaf-cout-garde"]
+  },
+
+  "budget": {
+    "lines": [
+      { "code": "salaire-net", "group": "resource",
+        "value": { "amount": 1210, "unit": "EUR_month", "nature": "fiction", "note": "0,8 ETP, cohérent avec le bas de la distribution des salaires du soin" } },
+      { "code": "prestations", "group": "resource",
+        "value": { "amount": 430, "unit": "EUR_month", "nature": "hypothesis", "hypothesisId": "prestations-calibrage" } },
+      { "code": "pension-alimentaire", "group": "resource",
+        "value": { "amount": 90, "unit": "EUR_month", "nature": "fiction" } },
+      { "code": "logement", "group": "constrained",
+        "value": { "amount": 665, "unit": "EUR_month", "nature": "fiction", "note": "T3 dans le parc privé, charges comprises" } },
+      { "code": "energie", "group": "constrained",
+        "value": { "amount": 135, "unit": "EUR_month", "nature": "extrapolation" } },
+      { "code": "alimentation", "group": "constrained",
+        "value": { "amount": 340, "unit": "EUR_month", "nature": "hypothesis", "hypothesisId": "socle-alimentaire" } },
+      { "code": "transport", "group": "constrained",
+        "value": { "amount": 75, "unit": "EUR_month", "nature": "fiction" } },
+      { "code": "enfants", "group": "constrained",
+        "value": { "amount": 110, "unit": "EUR_month", "nature": "fact", "sourceId": "cnaf-cout-garde", "note": "Reste à charge cantine et périscolaire" } },
+      { "code": "sante", "group": "constrained",
+        "value": { "amount": 45, "unit": "EUR_month", "nature": "fiction" } },
+      { "code": "credit-conso", "group": "credit",
+        "value": { "amount": 165, "unit": "EUR_month", "nature": "fiction", "note": "Voiture d'occasion, 14 mensualités restantes" } },
+      { "code": "loisirs", "group": "adjustable",
+        "value": { "amount": 40, "unit": "EUR_month", "nature": "fiction" } },
+      { "code": "habillement", "group": "adjustable",
+        "value": { "amount": 30, "unit": "EUR_month", "nature": "fiction" } }
+    ]
+  },
+
+  "stocks": {
+    "liquid7d": 180,
+    "liquid60d": 180,
+    "authorisedOverdraft": 200,
+    "netWealth": -1800,
+    "precautionFloorMonths": 0
+  },
+
+  "parity": {
+    "strength": "Elle connaît par cœur les dispositifs d'aide et ne laisse jamais un dossier traîner : rien de ce à quoi elle a droit ne lui échappe.",
+    "vulnerability": "Une semaine d'arrêt maladie non indemnisée suffit à faire basculer son mois du mauvais côté.",
+    "aspirations": [
+      "Reprendre une formation d'infirmière, qu'elle repousse depuis quatre ans",
+      "Emmener Jade voir la mer l'été prochain"
+    ],
+    "concerns": [
+      "Que la voiture lâche avant l'hiver, parce qu'il n'y a pas de bus après 21 h",
+      "Que Jade finisse par s'apercevoir de ce qu'elle refuse"
+    ],
+    "nonMonetaryConstraint": "Garde exclusive de sa fille : elle ne peut accepter aucune heure supplémentaire le soir, c'est-à-dire aucune des mieux payées.",
+    "nonMonetaryAdvantage": "Un emploi stable en contrat à durée indéterminée, dans un secteur qui peine à recruter : elle ne craint pas de perdre son poste.",
+    "opinionAgainstOwnInterest": "Elle trouve normal de payer la cantine au tarif plein plutôt qu'au tarif modulé : « je préfère que ce soit pareil pour tout le monde, au moins c'est clair »."
+  },
+
+  "shortTermGoal": {
+    "label": "Mettre 400 € de côté avant l'été pour la colonie de Jade",
+    "amount": 400,
+    "deadline": "2027-06"
+  },
+
+  "embodiedDetails": [
+    "Elle appelle sa mère tous les dimanches à dix-huit heures.",
+    "Jade dort avec un doudou lapin auquel il manque une oreille.",
+    "Elle prend toujours son café au distributeur du deuxième étage, jamais à la machine du hall."
+  ],
+
+  "unavailableOptions": [
+    { "option": "travailler-plus", "reason": "Elle a la garde de Jade tous les soirs et il n'y a personne d'autre." },
+    { "option": "puiser-epargne", "reason": "Il n'y a pas d'épargne : 180 € sur le compte, c'est la trésorerie du mois." }
+  ],
+
+  "equivalenceRefs": [
+    { "code": "alimentation", "monthlyAmount": 340, "narrativeLabel": "son alimentation du mois" },
+    { "code": "loisirs", "monthlyAmount": 40, "narrativeLabel": "son budget loisirs du mois" },
+    { "code": "energie", "monthlyAmount": 135, "narrativeLabel": "sa facture d'énergie" },
+    { "code": "projet", "monthlyAmount": 35, "narrativeLabel": "ce qu'elle met de côté pour la colonie de Jade" }
+  ],
+
+  "narrative": {
+    "story": "Claire travaille de nuit trois semaines sur quatre. Elle a commencé comme agent de service il y a douze ans, passé son diplôme d'aide-soignante en cours d'emploi, et elle est aujourd'hui une des plus anciennes de son étage. Elle s'est séparée du père de Jade il y a trois ans ; il paie sa pension, en retard d'une quinzaine de jours la plupart du temps. Elle tient un carnet où elle note ce qu'elle dépense, pas par goût des comptes, mais parce qu'elle a découvert qu'elle dormait mieux en sachant où elle en était."
+  },
+
+  "lineOverrides": [
+    { "code": "transport", "constrained": true,
+      "justification": "Horaires de nuit en Ehpad, aucune desserte en transport en commun après vingt et une heures : la voiture n'est pas un choix." }
+  ]
+}

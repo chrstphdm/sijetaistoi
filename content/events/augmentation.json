@@ -1,0 +1,25 @@
+{
+  "id": "augmentation",
+  "charterVersion": "1.0",
+  "descriptiveTitle": "Revalorisation salariale",
+  "valence": "positive",
+  "intensity": 2,
+  "dramaticFunction": ["RESPIRATION"],
+  "eligibility": { "and": [["activity", "eq", "employee"]] },
+  "probability": "uniform",
+  "cost": { "amount": 70, "unit": "EUR_month", "nature": "fiction", "note": "Revalorisation nette mensuelle, hors effet sur l'impôt et les prestations, que le moteur recalcule." },
+  "text": "La revalorisation annoncée l'an dernier prend effet ce mois-ci : 70 € nets de plus par mois.",
+  "options": [
+    { "id": "mettre-de-cote", "label": "Mettre la différence de côté",
+      "effects": [{ "type": "one_off", "amount": -70 }] },
+    { "id": "desserrer", "label": "Desserrer un peu les dépenses du quotidien",
+      "effects": [{ "type": "recurring", "amount": -70, "code": "alimentation" }] },
+    { "id": "rembourser-avance", "label": "Accélérer le remboursement du crédit en cours",
+      "effects": [{ "type": "recurring", "amount": -140, "code": "credit-conso" }],
+      "narrativeTrace": "desendettement" }
+  ],
+  "microQuestion": {
+    "text": "Une revalorisation qui fait perdre des prestations est-elle encore une revalorisation ?",
+    "principlesInTension": ["merite", "besoin", "contribution-progressive"]
+  }
+}

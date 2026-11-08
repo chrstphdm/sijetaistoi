@@ -11,17 +11,22 @@ export type Unit = 'EUR' | 'EUR_month' | 'EUR_year' | 'EUR_bn' | 'pct'
 
 export type Horizon = 'month' | 'y1' | 'y5' | 'y10'
 
+/**
+ * Les champs optionnels sont explicitement `| undefined` : le projet active
+ * `exactOptionalPropertyTypes`, et ce type doit rester compatible avec celui
+ * qu'infere le schema Zod du contenu — sans que le moteur depende de Zod.
+ */
 export type Value = {
   readonly amount: number
   readonly unit: Unit
   readonly nature: Nature
   /** REQUIS si nature === 'fact'. Verifie au build. */
-  readonly sourceId?: string
+  readonly sourceId?: string | undefined
   /** REQUIS si nature === 'hypothesis'. Verifie au build. */
-  readonly hypothesisId?: string
-  readonly range?: readonly [number, number]
-  readonly horizon?: Horizon
-  readonly note?: string
+  readonly hypothesisId?: string | undefined
+  readonly range?: readonly [number, number] | undefined
+  readonly horizon?: Horizon | undefined
+  readonly note?: string | undefined
 }
 
 /* ------------------------------------------------------------------ */

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "prestations-calibrage",
+    "question": "Quel montant de prestations familiales et d'aide au logement retenir pour un ménage donné, en l'absence de calcul officiel ?",
+    "status": "debated",
+    "whyDebated": "Le montant exact dépend de paramètres que le jeu ne modélise pas encore : date d'ouverture des droits, ressources de l'année de référence, zonage géographique précis, non-recours. Le MVP retient un ordre de grandeur, que le branchement d'OpenFisca remplacera par un calcul réglementaire.",
+    "readings": [
+      {
+        "id": "A",
+        "mechanismLabel": "Taux de recours complet : le ménage perçoit tout ce à quoi il a droit",
+        "parameters": { "recourseRate": 1 },
+        "sourceIds": ["cnaf-cout-garde"]
+      },
+      {
+        "id": "B",
+        "mechanismLabel": "Non-recours partiel : une part des droits n'est pas réclamée",
+        "parameters": { "recourseRate": 0.78 },
+        "sourceIds": ["cnaf-cout-garde"]
+      }
+    ]
+  },
+  {
+    "id": "socle-alimentaire",
+    "question": "Quel budget alimentaire mensuel par unité de consommation considérer comme incompressible ?",
+    "status": "highly_debated",
+    "whyDebated": "La notion de « socle incompressible » n'a pas de définition statistique admise. Les budgets de référence varient selon la méthode : panier normatif construit par des experts, ou observation des dépenses effectives des ménages modestes — les deux donnent des montants sensiblement différents, et le choix entre eux est un choix de conception.",
+    "readings": [
+      {
+        "id": "A",
+        "mechanismLabel": "Panier normatif : ce qu'il faudrait pour une alimentation équilibrée",
+        "parameters": { "perUnitMonthly": 270 },
+        "sourceIds": ["insee-budget-des-familles"]
+      },
+      {
+        "id": "B",
+        "mechanismLabel": "Dépense observée : ce que les ménages modestes dépensent réellement",
+        "parameters": { "perUnitMonthly": 215 },
+        "sourceIds": ["insee-budget-des-familles"]
+      }
+    ]
+  }
+]
