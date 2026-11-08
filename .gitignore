@@ -4,3 +4,7 @@ dist/
 *.local
 coverage/
 content/bundle.json
+
+# Playwright
+test-results/
+playwright-report/

@@ -109,7 +109,12 @@ export function SummaryScreen({
         <h2 id="kpi-title">Une dernière question</h2>
         <fieldset className="scale">
           <legend>{KPI_QUESTION}</legend>
-          <div className="scale__row" role="radiogroup" aria-label={KPI_QUESTION}>
+          <div
+            className="scale__row"
+            role="radiogroup"
+            aria-label={KPI_QUESTION}
+            style={{ '--scale-count': KPI_OPTIONS.length } as React.CSSProperties}
+          >
             {KPI_OPTIONS.map((o) => (
               <button
                 key={o} type="button" role="radio" aria-checked={kpi === o}

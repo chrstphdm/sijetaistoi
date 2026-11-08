@@ -136,12 +136,25 @@ blockquote { margin: var(--space-2) 0 0; padding-left: var(--space-4);
 
 details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: pointer; color: var(--ink-2); }
 
-/* Échelle de jugement : cinq boutons de surface strictement identique.
-   Vérifié en test — une réponse plus large serait une réponse suggérée. */
-.scale__row { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+/* Échelle de jugement : réponses de surface STRICTEMENT identique.
+   Une réponse plus large serait une réponse suggérée.
+
+   Grille et non flex-wrap : en flex, les éléments du dernier rang
+   s'élargissent pour occuper la place restante, et l'écart atteignait 148 px
+   à 400 px de large. Un test Playwright l'a relevé ; jsdom ne pouvait pas le
+   voir, puisqu'il ne calcule aucune mise en page.
+
+   En colonne unique sous 640 px, toutes les réponses occupent la même
+   largeur par construction. */
+.scale__row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2);
+}
+@media (min-width: 640px) {
+  .scale__row { grid-template-columns: repeat(var(--scale-count, 5), 1fr); }
+}
 .scale__btn {
-  flex: 1 1 0;
-  min-width: 6.5rem;
   text-align: center;
   padding: var(--space-3) var(--space-2);
 }
