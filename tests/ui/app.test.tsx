@@ -57,6 +57,8 @@ describe('boucle : vivre, décider, voir les conséquences', () => {
     const user = userEvent.setup()
     render(<App />)
     await user.click(screen.getAllByRole('button', { name: 'Décider ceci' })[1]!)
+    await user.click(screen.getByRole('radio', { name: 'plutôt oui' }))
+    await user.click(screen.getByRole('button', { name: /ce que cela change pour chacun/i }))
 
     const impacts = screen.getByRole('heading', { name: 'Le choix vu par chacun' }).closest('section')!
     expect(within(impacts).getByText('Claire')).toBeTruthy()
@@ -67,6 +69,8 @@ describe('boucle : vivre, décider, voir les conséquences', () => {
     const user = userEvent.setup()
     render(<App />)
     await user.click(screen.getAllByRole('button', { name: 'Décider ceci' })[1]!)
+    await user.click(screen.getByRole('radio', { name: 'plutôt oui' }))
+    await user.click(screen.getByRole('button', { name: /ce que cela change pour chacun/i }))
 
     for (const label of ['en euros', 'en % du revenu', 'en % du reste à vivre', 'en jours de dépenses']) {
       expect(screen.getByLabelText(label)).toBeTruthy()
@@ -82,5 +86,81 @@ describe('boucle : vivre, décider, voir les conséquences', () => {
 
     // Même règle, même monde : seule la mesure affichée diffère.
     expect(textEuros).not.toBe(textSlack)
+  })
+})
+
+describe('question « bien et juste » et rappel', () => {
+  const voteFor = async (user: ReturnType<typeof userEvent.setup>, phrase?: string) => {
+    if (phrase) await user.type(screen.getByLabelText(/qu’est-ce qui te paraît juste/), phrase)
+    await user.click(screen.getAllByRole('button', { name: 'Décider ceci' })[1]!)
+  }
+
+  it('pose la question après le vote, avec les cinq réponses', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await voteFor(user)
+
+    expect(screen.getByRole('heading', { name: /bien et juste/ })).toBeTruthy()
+    for (const label of ['non', 'plutôt non', 'je ne sais pas', 'plutôt oui', 'oui']) {
+      expect(screen.getByRole('radio', { name: label })).toBeTruthy()
+    }
+  })
+
+  it('ne présélectionne aucune réponse : aucune n’est suggérée', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await voteFor(user)
+    for (const r of screen.getAllByRole('radio')) {
+      expect(r.getAttribute('aria-checked')).toBe('false')
+    }
+  })
+
+  it('donne aux cinq réponses la même largeur de base', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await voteFor(user)
+    // Une réponse plus large serait une réponse mise en avant.
+    const flex = screen.getAllByRole('radio').map((b) => getComputedStyle(b).flex)
+    expect(new Set(flex).size).toBe(1)
+  })
+
+  it('cite le joueur verbatim dans le rappel, après changement de personnage', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    const phrase = 'celui qui consomme doit payer'
+    await voteFor(user, phrase)
+    await user.click(screen.getByRole('radio', { name: 'plutôt oui' }))
+    await user.click(screen.getByRole('button', { name: /ce que cela change pour chacun/i }))
+    await user.click(screen.getByRole('button', { name: /Quelques mois plus tard/ }))
+
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain('Marc et Anne')
+    expect(screen.getByText(phrase)).toBeTruthy()
+  })
+
+  it('affiche toujours les deux volets du rappel : ici ET ailleurs', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await voteFor(user, 'ma phrase')
+    await user.click(screen.getByRole('radio', { name: 'oui' }))
+    await user.click(screen.getByRole('button', { name: /ce que cela change pour chacun/i }))
+    await user.click(screen.getByRole('button', { name: /Quelques mois plus tard/ }))
+
+    expect(screen.getByText(/Ce que cette règle a produit ici/)).toBeTruthy()
+    expect(screen.getByText(/Ce qu’elle a produit ailleurs/)).toBeTruthy()
+  })
+
+  it('repose la question en citant la position précédente, sans la commenter', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await voteFor(user, 'ma phrase')
+    await user.click(screen.getByRole('radio', { name: 'plutôt non' }))
+    await user.click(screen.getByRole('button', { name: /ce que cela change pour chacun/i }))
+    await user.click(screen.getByRole('button', { name: /Quelques mois plus tard/ }))
+
+    const relaunch = screen.getByRole('heading', { name: 'La même question' }).closest('section')!
+    expect(within(relaunch).getByText(/ta réponse était « plutôt non »/)).toBeTruthy()
+    for (const word of ['pourtant', 'contradiction', 'incohérent']) {
+      expect(relaunch.textContent?.toLowerCase()).not.toContain(word)
+    }
   })
 })
