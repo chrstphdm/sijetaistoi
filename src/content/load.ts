@@ -55,3 +55,9 @@ export function labelFor(code: string): string {
 
 export const characters = bundle.characters
 export const events = bundle.events
+export const reforms = bundle.reforms
+
+/** Effets d'une option de reforme, pour le moteur de monde. */
+export const optionLookup = (reformId: string, optionId: string) =>
+  bundle.reforms.find((r) => r.id === reformId)?.options.find((o) => o.id === optionId)
+    ?.effects as never

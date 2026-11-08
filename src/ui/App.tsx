@@ -1,139 +1,114 @@
 import { useState } from 'react'
 import { computeMonthlyBudget } from '@/core/budget.ts'
-import { absorptionRegime, comparabilityMetrics, REGIME, type Scale } from '@/core/impact.ts'
-import { characters, events, toBudgetLines, toStocks } from '@/content/load.ts'
-import { euros } from '@/core/money.ts'
-import { motionFor } from '@/motion/table.ts'
-import { Amount } from './components/Amount.tsx'
+import type { Scale } from '@/core/impact.ts'
+import { applyRule, emptyWorld, rulesInForce, type Rule, type WorldState } from '@/core/world.ts'
+import { characters, reforms, toBudgetLines } from '@/content/load.ts'
+import type { ReformOptionT } from '@/schemas/index.ts'
 import { MonthlyBudget } from './components/MonthlyBudget.tsx'
+import { ReformVote } from './components/ReformVote.tsx'
+import { ImpactForEach, rotationOrder } from './components/ImpactForEach.tsx'
 
 /*
- * Écran de démonstration.
- *
- * Plus aucun personnage ni montant n'est écrit ici : tout vient de content/,
- * validé au build. Ce fichier ne contient que de l'affichage, et il sera
- * remplacé par les écrans réels aux étapes suivantes.
+ * Démonstration du cœur de la boucle : vivre, décider, voir les conséquences
+ * sur tout le monde. Les actes, le changement de personnage et le rappel
+ * arrivent aux étapes suivantes.
  */
 
-const REGIME_SENTENCE: Record<number, string> = {
-  [REGIME.IMPERCEPTIBLE]: 'ne change rien à son mois',
-  [REGIME.ABSORBED]: 'est couvert par ce qui est disponible, sans toucher aux dépenses',
-  [REGIME.ADJUSTABLE_TRADEOFF]: 'oblige à renoncer à des dépenses non contraintes',
-  [REGIME.CONSTRAINED_TRADEOFF]: 'oblige à toucher à des dépenses contraintes, ou à s’endetter',
-  [REGIME.SHORTFALL]: 'ne peut pas être couvert ce mois-ci',
-}
-
-const SCALES: readonly { id: Scale; label: string }[] = [
-  { id: 'euros', label: 'en euros' },
-  { id: 'income', label: 'en % du revenu' },
-  { id: 'slack', label: 'en % du reste à vivre' },
-  { id: 'days', label: 'en jours de dépenses' },
-]
-
-const PREPARED = characters.map((c) => ({
-  character: c,
-  budget: computeMonthlyBudget(toBudgetLines(c)),
-  stocks: toStocks(c),
-}))
-
-const EVENT = events.find((e) => e.id === 'chaudiere')!
-const SHOCK = -euros(EVENT.cost.amount)
-
-function formatMetric(scale: Scale, metrics: Record<Scale, number>): string {
-  const v = metrics[scale]
-  if (scale === 'euros') return `${Math.round(v)} €`
-  if (scale === 'days') return `${v.toFixed(1)} jours`
-  return `${(v * 100).toFixed(0)} %`
-}
+const REFORM = reforms[0]!
 
 export function App() {
+  const [world, setWorld] = useState<WorldState>(() => emptyWorld('sensibilite-faible'))
   const [scale, setScale] = useState<Scale>('slack')
+  const [wording, setWording] = useState('')
   const [who, setWho] = useState(0)
-  const current = PREPARED[who]!
-  const { character } = current
+
+  const current = characters[who]!
+  const budget = computeMonthlyBudget(toBudgetLines(current))
+  const voted = rulesInForce(world).length > 0
+
+  const vote = (option: ReformOptionT) => {
+    const rule: Rule = {
+      id: `rule-${world.rules.length + 1}`,
+      reformId: REFORM.id,
+      optionId: option.id,
+      shortLabel: option.label,
+      playerWording: wording.trim() || null,
+      playerJudgement: null,
+      diegeticMonth: '2027-04',
+      replaces: null,
+      status: 'in_force',
+    }
+    setWorld((w) => applyRule(w, rule))
+  }
 
   return (
     <main>
       <div className="sheet">
         <p className="sheet__kicker">Mars 2027</p>
-        <h1>Tu es {character.identity.firstName}.</h1>
-        <p>{character.identity.identityLine}</p>
-        <p>{character.narrative.story}</p>
+        <h1>Tu es {current.identity.firstName}.</h1>
+        <p>{current.identity.identityLine}</p>
+        <p>{current.narrative.story}</p>
         <p>
-          <strong>Ce que tu veux ces prochains mois</strong> : {character.shortTermGoal.label}.
+          <strong>Ce que tu veux ces prochains mois</strong>&nbsp;: {current.shortTermGoal.label}.
         </p>
-        <p>
-          <button type="button" onClick={() => setWho((w) => (w + 1) % PREPARED.length)}>
-            Voir l’autre personnage
-          </button>
-        </p>
+        <button type="button" onClick={() => setWho((w) => (w + 1) % characters.length)}>
+          Voir l’autre personnage
+        </button>
       </div>
 
-      <MonthlyBudget budget={current.budget} month="Mars 2027" />
+      <MonthlyBudget budget={budget} month="Mars 2027" />
 
-      <section className="sheet" aria-labelledby="shock-title">
-        <p className="sheet__kicker">Ce mois-ci</p>
-        <h2 id="shock-title">{EVENT.descriptiveTitle}</h2>
-        <p>{EVENT.text}</p>
-        <p>
-          Devis&nbsp;: <Amount cents={SHOCK} nature={EVENT.cost.nature} signed label="Coût de la réparation" />
-          {EVENT.cost.range && (
-            <span className="amount__word">
-              {' '}— fourchette {EVENT.cost.range[0]} à {EVENT.cost.range[1]} €
-            </span>
-          )}
-        </p>
-
-        <h3>Le même montant, vu par chacun</h3>
-        <p role="note">
-          Changer d’échelle change la mesure, pas les faits. Aucune de ces quatre mesures n’est
-          neutre&nbsp;: chacune suppose une idée différente de ce qui compte.
-        </p>
-
-        <fieldset>
-          <legend>Échelle de comparaison</legend>
-          {SCALES.map((s) => (
-            <label key={s.id} style={{ marginInlineEnd: '1rem' }}>
-              <input
-                type="radio"
-                name="scale"
-                value={s.id}
-                checked={scale === s.id}
-                onChange={() => setScale(s.id)}
-              />{' '}
-              {s.label}
+      {!voted ? (
+        <>
+          <section className="sheet">
+            <label htmlFor="wording">
+              <strong>Avant de décider</strong>, en une phrase&nbsp;: qu’est-ce qui te paraît juste
+              ici&nbsp;?
             </label>
-          ))}
-        </fieldset>
+            <textarea
+              id="wording" rows={3} value={wording}
+              onChange={(e) => setWording(e.target.value)}
+              placeholder="Facultatif. Ce que tu écris sera cité tel quel, plus tard."
+            />
+            <p className="provenance">
+              Ce texte reste sur cet appareil. Il n’est envoyé nulle part.
+            </p>
+          </section>
 
-        <ul>
-          {PREPARED.map(({ character: c, budget, stocks }) => {
-            const metrics = comparabilityMetrics(SHOCK, budget)
-            const regime = absorptionRegime(SHOCK, budget, stocks)
-            const motion = motionFor({
-              amountCents: SHOCK,
-              netIncomeCents: budget.netIncomeCents,
-              slackCents: budget.slackCents,
-              scale: scale === 'days' ? 'slack' : scale,
-            })
-            return (
-              <li
-                key={c.id}
-                className="enter-rise"
-                style={
-                  {
-                    '--enter-ms': `${motion.enterMs}ms`,
-                    '--translate-px': `${motion.translatePx}px`,
-                  } as React.CSSProperties
-                }
-              >
-                <strong>{c.identity.firstName}</strong> — {formatMetric(scale, metrics)}. Cette
-                somme {REGIME_SENTENCE[regime]}.
-              </li>
-            )
-          })}
-        </ul>
-      </section>
+          <ReformVote
+            reform={REFORM}
+            order={rotationOrder(REFORM.options.length, 0)}
+            onVote={vote}
+          />
+        </>
+      ) : (
+        <>
+          <ImpactForEach
+            characters={characters}
+            world={world}
+            scale={scale}
+            onScaleChange={setScale}
+            screenIndex={rulesInForce(world).length}
+          />
+
+          <section className="sheet" aria-labelledby="registry-title">
+            <h2 id="registry-title">Le registre des lois</h2>
+            <ol>
+              {world.rules.map((r) => (
+                <li key={r.id}>
+                  <strong>{r.shortLabel}</strong> — décidé en {r.diegeticMonth}
+                  {r.playerWording && (
+                    <blockquote>« {r.playerWording} »</blockquote>
+                  )}
+                </li>
+              ))}
+            </ol>
+            <button type="button" onClick={() => setWorld(emptyWorld('sensibilite-faible'))}>
+              Revenir au vote
+            </button>
+          </section>
+        </>
+      )}
     </main>
   )
 }

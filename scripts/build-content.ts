@@ -17,6 +17,8 @@ import { ContentBundle } from '../src/schemas/index.ts'
 import { Source, Hypothesis, BudgetLineRef } from '../src/schemas/referentials.ts'
 import { Character } from '../src/schemas/character.ts'
 import { LifeEvent } from '../src/schemas/event.ts'
+import { Reform } from '../src/schemas/reform.ts'
+import { validateCondition, type Condition } from '../src/core/conditions.ts'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 const CONTENT = join(ROOT, 'content')
@@ -59,6 +61,7 @@ const hypotheses = parseArrayFile(Hypothesis, 'hypotheses.json')
 const budgetLines = parseArrayFile(BudgetLineRef, 'budget-lines.json')
 const characters = parseEachFile(Character, listJson('characters'))
 const events = parseEachFile(LifeEvent, listJson('events'))
+const reforms = parseEachFile(Reform, listJson('reforms'))
 
 // --------------------------------------------------- integrite referentielle
 const sourceIds = new Set(sources.map((s) => s.id))
@@ -108,6 +111,33 @@ for (const e of events) {
         complain(file, `options.${o.id}`, `poste inconnu : ${f.code}`)
 }
 
+// Les conditions ne peuvent interroger que le vocabulaire ferme d'attributs.
+// Une condition portant sur un attribut inexistant s'evaluerait a faux en
+// silence, rendant un evenement ou un effet invisible sans que personne le
+// remarque.
+for (const e of events) {
+  for (const msg of validateCondition(e.eligibility as Condition))
+    complain(`events/${e.id}.json`, 'eligibility', msg)
+}
+
+for (const r of reforms) {
+  const file = `reforms/${r.id}.json`
+  for (const id of r.contextSourceIds)
+    if (!sourceIds.has(id)) complain(file, 'contextSourceIds', `source inconnue : ${id}`)
+
+  for (const o of r.options) {
+    for (const ef of o.effects) {
+      if (ef.scope.when)
+        for (const msg of validateCondition(ef.scope.when as Condition, `options.${o.id}.effects.${ef.id}.scope.when`))
+          complain(file, `options.${o.id}`, msg)
+      if (ef.code && !lineCodes.has(ef.code))
+        complain(file, `options.${o.id}.effects.${ef.id}.code`, `poste budgétaire inconnu : ${ef.code}`)
+      if (ef.hypothesisId && !hypothesisIds.has(ef.hypothesisId))
+        complain(file, `options.${o.id}.effects.${ef.id}.hypothesisId`, `hypothèse inconnue : ${ef.hypothesisId}`)
+    }
+  }
+}
+
 // Les sources et hypotheses orphelines ne sont pas une erreur, mais un
 // signal : du contenu a peut-etre ete supprime sans nettoyer son appui.
 const used = new Set<string>()
@@ -121,6 +151,10 @@ for (const c of characters) {
 for (const e of events) {
   if (e.cost.sourceId) used.add(e.cost.sourceId)
   if (e.cost.hypothesisId) used.add(e.cost.hypothesisId)
+}
+for (const r of reforms) {
+  r.contextSourceIds.forEach((s) => used.add(s))
+  for (const o of r.options) for (const ef of o.effects) if (ef.hypothesisId) used.add(ef.hypothesisId)
 }
 // Une source citee par une lecture d'hypothese est bien utilisee : c'est elle
 // qui appuie le parametre retenu.
@@ -150,6 +184,7 @@ const bundle = {
   budgetLines,
   characters,
   events,
+  reforms,
 }
 
 const verified = ContentBundle.safeParse(bundle)
@@ -161,6 +196,9 @@ if (!verified.success) {
 
 writeFileSync(join(CONTENT, 'bundle.json'), JSON.stringify(verified.data, null, 2) + '\n', 'utf8')
 
-console.log(`✓ content/bundle.json — ${fileCount} fichiers, ${characters.length} personnages, ${events.length} événements`)
+console.log(
+  `✓ content/bundle.json — ${fileCount} fichiers, ${characters.length} personnages, ` +
+    `${events.length} événements, ${reforms.length} réformes`,
+)
 console.log(`  ${sources.length} sources, ${hypotheses.length} hypothèses, ${budgetLines.length} postes budgétaires`)
 if (orphans.length) console.log(`  note : ${orphans.length} référence(s) jamais utilisée(s) — ${orphans.join(', ')}`)

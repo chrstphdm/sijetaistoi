@@ -4,25 +4,84 @@
   "descriptiveTitle": "Voyage scolaire à régler",
   "valence": "negative",
   "intensity": 1,
-  "dramaticFunction": ["TRAINE"],
-  "eligibility": { "and": [["household.hasSchoolAgedChild", "eq", true], ["month", "in", [3, 4, 5]]] },
+  "dramaticFunction": [
+    "TRAINE"
+  ],
+  "eligibility": {
+    "and": [
+      [
+        "hasSchoolAgedChild",
+        "eq",
+        true
+      ],
+      [
+        "month",
+        "in",
+        [
+          3,
+          4,
+          5
+        ]
+      ]
+    ]
+  },
   "probability": "uniform",
-  "cost": { "amount": 280, "unit": "EUR", "nature": "fiction" },
+  "cost": {
+    "amount": 280,
+    "unit": "EUR",
+    "nature": "fiction"
+  },
   "text": "Le voyage scolaire de fin d'année doit être réglé avant le 15 : 280 €. L'école propose un paiement en deux fois, et mentionne discrètement l'existence d'un fonds social.",
   "options": [
-    { "id": "une-fois", "label": "Payer en une fois",
-      "effects": [{ "type": "one_off", "amount": 280 }] },
-    { "id": "deux-fois", "label": "Payer en deux fois",
-      "effects": [{ "type": "spread", "amount": 280, "months": 2 }] },
-    { "id": "fonds-social", "label": "Demander une aide au fonds social",
-      "effects": [{ "type": "one_off", "amount": 110 }],
-      "narrativeTrace": "recours-fonds-social" },
-    { "id": "renoncer", "label": "Renoncer au voyage",
-      "effects": [{ "type": "none" }],
-      "narrativeTrace": "renoncement-enfant" }
+    {
+      "id": "une-fois",
+      "label": "Payer en une fois",
+      "effects": [
+        {
+          "type": "one_off",
+          "amount": 280
+        }
+      ]
+    },
+    {
+      "id": "deux-fois",
+      "label": "Payer en deux fois",
+      "effects": [
+        {
+          "type": "spread",
+          "amount": 280,
+          "months": 2
+        }
+      ]
+    },
+    {
+      "id": "fonds-social",
+      "label": "Demander une aide au fonds social",
+      "effects": [
+        {
+          "type": "one_off",
+          "amount": 110
+        }
+      ],
+      "narrativeTrace": "recours-fonds-social"
+    },
+    {
+      "id": "renoncer",
+      "label": "Renoncer au voyage",
+      "effects": [
+        {
+          "type": "none"
+        }
+      ],
+      "narrativeTrace": "renoncement-enfant"
+    }
   ],
   "microQuestion": {
     "text": "Est-il normal qu'un voyage scolaire soit à la charge des familles ?",
-    "principlesInTension": ["besoin", "egalite-de-traitement", "solidarite"]
+    "principlesInTension": [
+      "besoin",
+      "egalite-de-traitement",
+      "solidarite"
+    ]
   }
 }

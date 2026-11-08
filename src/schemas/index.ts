@@ -2,11 +2,13 @@ import { z } from 'zod'
 import { Source, Hypothesis, BudgetLineRef } from './referentials.ts'
 import { Character } from './character.ts'
 import { LifeEvent } from './event.ts'
+import { Reform } from './reform.ts'
 
 export * from './primitives.ts'
 export * from './referentials.ts'
 export * from './character.ts'
 export * from './event.ts'
+export * from './reform.ts'
 
 /** Le paquet compile : ce que le jeu charge au demarrage. */
 export const ContentBundle = z.object({
@@ -17,6 +19,7 @@ export const ContentBundle = z.object({
   budgetLines: z.array(BudgetLineRef),
   characters: z.array(Character).min(1),
   events: z.array(LifeEvent),
+  reforms: z.array(Reform),
 })
 
 export type ContentBundleT = z.infer<typeof ContentBundle>

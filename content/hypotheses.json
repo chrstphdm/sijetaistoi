@@ -8,14 +8,22 @@
       {
         "id": "A",
         "mechanismLabel": "Taux de recours complet : le ménage perçoit tout ce à quoi il a droit",
-        "parameters": { "recourseRate": 1 },
-        "sourceIds": ["cnaf-cout-garde"]
+        "parameters": {
+          "recourseRate": 1
+        },
+        "sourceIds": [
+          "cnaf-cout-garde"
+        ]
       },
       {
         "id": "B",
         "mechanismLabel": "Non-recours partiel : une part des droits n'est pas réclamée",
-        "parameters": { "recourseRate": 0.78 },
-        "sourceIds": ["cnaf-cout-garde"]
+        "parameters": {
+          "recourseRate": 0.78
+        },
+        "sourceIds": [
+          "cnaf-cout-garde"
+        ]
       }
     ]
   },
@@ -28,14 +36,78 @@
       {
         "id": "A",
         "mechanismLabel": "Panier normatif : ce qu'il faudrait pour une alimentation équilibrée",
-        "parameters": { "perUnitMonthly": 270 },
-        "sourceIds": ["insee-budget-des-familles"]
+        "parameters": {
+          "perUnitMonthly": 270
+        },
+        "sourceIds": [
+          "insee-budget-des-familles"
+        ]
       },
       {
         "id": "B",
         "mechanismLabel": "Dépense observée : ce que les ménages modestes dépensent réellement",
-        "parameters": { "perUnitMonthly": 215 },
-        "sourceIds": ["insee-budget-des-familles"]
+        "parameters": {
+          "perUnitMonthly": 215
+        },
+        "sourceIds": [
+          "insee-budget-des-familles"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "incidence-taxe-energie",
+    "question": "Qui supporte réellement une taxe sur l'énergie domestique : le ménage, le fournisseur, ou les deux ?",
+    "status": "highly_debated",
+    "whyDebated": "L'incidence fiscale réelle dépend de l'élasticité de la demande et de la structure concurrentielle du marché. Les travaux économiques ne convergent pas sur la part effectivement répercutée au consommateur final, et ce désaccord porte sur des écarts importants, pas sur des détails.",
+    "readings": [
+      {
+        "id": "A",
+        "mechanismLabel": "Répercussion intégrale sur le prix payé par le ménage",
+        "parameters": {
+          "passThrough": 1.0
+        },
+        "sourceIds": [
+          "insee-budget-des-familles"
+        ]
+      },
+      {
+        "id": "B",
+        "mechanismLabel": "Répercussion partielle, une part étant absorbée par la marge des fournisseurs",
+        "parameters": {
+          "passThrough": 0.65
+        },
+        "sourceIds": [
+          "insee-budget-des-familles"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "renoncement-etudes",
+    "question": "Une hausse des frais d'inscription réduit-elle le nombre d'étudiants, et dans quelle proportion ?",
+    "status": "highly_debated",
+    "whyDebated": "L'effet dépend du dispositif d'accompagnement qui l'entoure — bourses, prêts garantis, modulation selon le revenu — et les études disponibles portent sur des systèmes éducatifs trop différents pour être transposés tels quels au cas français. Le désaccord est autant méthodologique que factuel.",
+    "readings": [
+      {
+        "id": "A",
+        "mechanismLabel": "Effet faible : la demande d'études supérieures est peu sensible au prix",
+        "parameters": {
+          "enrolmentElasticity": -0.04
+        },
+        "sourceIds": [
+          "insee-niveaux-de-vie"
+        ]
+      },
+      {
+        "id": "B",
+        "mechanismLabel": "Effet marqué, concentré sur les ménages les plus modestes",
+        "parameters": {
+          "enrolmentElasticity": -0.21
+        },
+        "sourceIds": [
+          "insee-niveaux-de-vie"
+        ]
       }
     ]
   }

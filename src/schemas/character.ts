@@ -30,6 +30,25 @@ const CharacterBudgetLine = z.object({
   value: Value,
 })
 
+/**
+ * Attributs interrogeables par les conditions du contenu.
+ *
+ * Vocabulaire FERME, synchronise avec TRAIT_VOCABULARY dans
+ * src/core/conditions.ts. Un contenu qui interroge autre chose est rejete
+ * au build : une condition toujours fausse rendrait un evenement invisible
+ * sans que personne s'en apercoive.
+ */
+const Traits = z.object({
+  activities: z
+    .array(z.enum(['employee', 'self_employed', 'student', 'retired', 'unemployed', 'inactive']))
+    .min(1),
+  tenure: z.enum(['owner_with_loan', 'owner_outright', 'tenant_private', 'tenant_social', 'housed']),
+  heating: z.enum(['individual', 'collective']),
+  householdSize: z.number().int().min(1).max(12),
+  childCount: z.number().int().min(0).max(10),
+  hasSchoolAgedChild: z.boolean(),
+})
+
 const Stocks = z.object({
   liquid7d: z.number().min(0),
   liquid60d: z.number().min(0),
@@ -54,6 +73,7 @@ export const Character = z
       calibrationSourceIds: z.array(Id).min(1),
     }),
 
+    traits: Traits,
     budget: z.object({ lines: z.array(CharacterBudgetLine).min(3) }),
     stocks: Stocks,
     parity: Parity,
@@ -104,6 +124,22 @@ export const Character = z
         input: c,
         path: ['budget', 'lines'],
         message: 'un personnage sans aucune ressource ne peut pas être simulé',
+      })
+    }
+    if (c.traits.hasSchoolAgedChild && c.traits.childCount === 0) {
+      ctx.issues.push({
+        code: 'custom',
+        input: c,
+        path: ['traits', 'hasSchoolAgedChild'],
+        message: 'un enfant scolarisé suppose au moins un enfant',
+      })
+    }
+    if (c.traits.householdSize < c.traits.childCount + 1) {
+      ctx.issues.push({
+        code: 'custom',
+        input: c,
+        path: ['traits', 'householdSize'],
+        message: 'la taille du foyer doit couvrir au moins les enfants et un adulte',
       })
     }
     if (c.stocks.liquid60d < c.stocks.liquid7d) {

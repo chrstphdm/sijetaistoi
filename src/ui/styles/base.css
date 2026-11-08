@@ -82,3 +82,56 @@ p { margin: 0 0 var(--space-4); max-width: var(--measure-narrative); }
   white-space: nowrap;
   border: 0;
 }
+
+/* Mentions de provenance et d'incertitude : lisibles, jamais criardes. */
+.provenance { font-family: system-ui, sans-serif; font-size: 13px; color: var(--ink-3); }
+
+/* Le contrat annoncé avant chaque vote. Cadre neutre, pas d'alerte. */
+.contract {
+  border-left: 3px solid var(--perspective-a);
+  padding: var(--space-3) var(--space-4);
+  background: var(--tint-a);
+  max-width: none;
+}
+
+/* Options de vote : surface STRICTEMENT identique, empilées verticalement.
+   Pas de balayage gauche/droite — en France ce geste reproduit l'axe
+   politique dans le mouvement même de la main. */
+.options { list-style: none; padding: 0; }
+.option {
+  border: 1px solid var(--rule-hair);
+  border-radius: 2px;
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  background: var(--paper);
+}
+.option h3 { font-size: 19px; }
+.option__side { font-family: system-ui, sans-serif; font-size: 13px; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--ink-3); margin: var(--space-3) 0 var(--space-1); }
+.effects { font-family: system-ui, sans-serif; font-size: 14px; color: var(--ink-2); }
+
+.impacts { list-style: none; padding: 0; }
+.impacts li { padding: var(--space-3) 0; border-bottom: 1px solid var(--rule-hair); }
+
+fieldset { border: 1px solid var(--rule-hair); border-radius: 2px; padding: var(--space-3); }
+fieldset label { display: inline-block; margin-inline-end: var(--space-4); font-family: system-ui, sans-serif; font-size: 15px; }
+legend { font-family: system-ui, sans-serif; font-size: 13px; color: var(--ink-3); }
+
+button {
+  font: inherit; font-family: system-ui, sans-serif; font-size: 15px;
+  padding: var(--space-2) var(--space-4);
+  background: var(--paper-raised); color: var(--ink);
+  border: 1px solid var(--rule-strong); border-radius: 2px; cursor: pointer;
+}
+button:hover { background: var(--tint-a); }
+
+textarea {
+  font: inherit; width: 100%; padding: var(--space-3);
+  background: var(--paper); color: var(--ink);
+  border: 1px solid var(--rule-strong); border-radius: 2px;
+}
+
+blockquote { margin: var(--space-2) 0 0; padding-left: var(--space-4);
+  border-left: 2px solid var(--rule); font-style: italic; }
+
+details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: pointer; color: var(--ink-2); }

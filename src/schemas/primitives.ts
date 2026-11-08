@@ -99,3 +99,22 @@ export const Value = z
   })
 
 export type ValueInput = z.infer<typeof Value>
+
+/**
+ * Schema d'une condition de contenu.
+ *
+ * La liste des operateurs est importee du moteur plutot que recopiee : une
+ * divergence entre les deux rendrait valide un contenu que le moteur ne sait
+ * pas evaluer, ou l'inverse. La validation des CHEMINS, elle, se fait au
+ * build via validateCondition, parce qu'elle depend du vocabulaire ferme.
+ */
+export const Operator = z.enum(['eq', 'ne', 'lt', 'lte', 'gt', 'gte', 'in', 'contains'])
+
+export const Condition: z.ZodType<unknown> = z.lazy(() =>
+  z.union([
+    z.tuple([z.string(), Operator, z.unknown()]),
+    z.object({ and: z.array(Condition).min(1) }),
+    z.object({ or: z.array(Condition).min(1) }),
+    z.object({ not: Condition }),
+  ]),
+)

@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { Id, Value } from './primitives.ts'
+import { Id, Value, Condition } from './primitives.ts'
 
 /**
  * Fonction dramatique d'un mois.
@@ -9,16 +9,6 @@ import { Id, Value } from './primitives.ts'
  * jeu raconte une thèse qu'il prétend ne pas défendre.
  */
 export const DramaticFunction = z.enum(['CALIBRATION', 'CHOC', 'TRAINE', 'RESPIRATION'])
-
-/** Arbre de conditions, évalué par le moteur. Aucune logique dans le contenu. */
-const Condition: z.ZodType<unknown> = z.lazy(() =>
-  z.union([
-    z.tuple([z.string(), z.enum(['eq', 'ne', 'lt', 'lte', 'gt', 'gte', 'in']), z.unknown()]),
-    z.object({ and: z.array(Condition) }),
-    z.object({ or: z.array(Condition) }),
-    z.object({ not: Condition }),
-  ]),
-)
 
 const EventOption = z.object({
   id: Id,

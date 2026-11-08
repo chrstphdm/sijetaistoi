@@ -1,0 +1,126 @@
+{
+  "id": "contribution-energie",
+  "charterVersion": "1.0",
+  "descriptiveTitle": "Financement de la rénovation des logements",
+  "statedBy": "Le Conseil budgétaire, acteur fictif de ce jeu",
+  "context": "Un programme d'aide à la rénovation des logements mal isolés doit être financé. Trois milliards d'euros par an sont en jeu. Le Conseil budgétaire propose plusieurs façons de les trouver, ou de ne pas les trouver.",
+  "objective": { "amount": 3, "unit": "EUR_bn", "nature": "fiction", "note": "Montant posé par un acteur fictif du jeu. Il ne décrit aucune nécessité constatée." },
+  "contextSourceIds": ["insee-budget-des-familles"],
+  "modelLimitations": "Ce modèle ne prend en compte ni les économies d'énergie futures permises par les rénovations, ni les effets sur l'emploi du secteur du bâtiment, ni les changements de comportement de chauffage. Il mesure un effet de première année sur le budget des ménages, et rien d'autre.",
+
+  "options": [
+    {
+      "id": "statu-quo",
+      "label": "Ne rien changer",
+      "decisionDescription": "Le programme n'est pas financé et n'a pas lieu. Les logements mal isolés le restent, et leurs occupants continuent de payer des factures élevées.",
+      "families": ["status_quo"],
+      "isStatusQuo": true,
+      "effects": [
+        { "id": "sq-rien", "kind": "budget_line", "code": "energie", "monthlyDelta": 0,
+          "scope": { "description": "Tous les ménages" }, "horizon": "y1", "uncertainty": "established",
+          "note": "Aucune variation immédiate. Ce qui ne change pas est aussi une décision." }
+      ],
+      "argumentsFor": [
+        "Les ménages subissent déjà une pression forte sur leurs dépenses contraintes, et ajouter un prélèvement maintenant aggraverait une situation tendue.",
+        "Rien ne garantit qu'un programme public de rénovation atteigne effectivement les logements les plus mal isolés plutôt que les propriétaires les mieux informés."
+      ],
+      "argumentsAgainst": [
+        "Les occupants de logements mal isolés continuent de payer des factures élevées, et ce sont souvent les ménages les plus modestes.",
+        "Reporter la rénovation en augmente le coût futur, et déplace la charge sur ceux qui paieront plus tard."
+      ]
+    },
+    {
+      "id": "taxe-energie",
+      "label": "Une contribution proportionnelle à la consommation d'énergie",
+      "decisionDescription": "Une contribution est ajoutée au prix de l'énergie domestique, proportionnellement à la consommation. Elle rapporte 3 Md€, affectés à la rénovation.",
+      "families": ["levies"],
+      "effects": [
+        { "id": "te-cout", "kind": "budget_line", "code": "energie", "monthlyDelta": -14,
+          "scope": { "when": { "and": [["heating", "eq", "collective"]] }, "description": "Ménages en chauffage collectif" },
+          "horizon": "y1", "uncertainty": "debated", "hypothesisId": "incidence-taxe-energie" },
+        { "id": "te-cout-indiv", "kind": "budget_line", "code": "energie", "monthlyDelta": -27,
+          "scope": { "when": { "and": [["heating", "eq", "individual"]] }, "description": "Ménages en chauffage individuel" },
+          "horizon": "y1", "uncertainty": "debated", "hypothesisId": "incidence-taxe-energie" },
+        { "id": "te-aide", "kind": "budget_line", "code": "energie", "monthlyDelta": 31,
+          "scope": { "when": { "and": [["incomeDecile", "lte", 3]] }, "description": "Trois premiers déciles : rénovation prise en charge en priorité" },
+          "horizon": "y5", "uncertainty": "debated", "hypothesisId": "incidence-taxe-energie",
+          "note": "Gain de facture après rénovation effective, pour les ménages servis en premier." },
+        { "id": "te-recette", "kind": "public_finance", "publicBillions": 3,
+          "scope": { "description": "Finances publiques" }, "horizon": "y1", "uncertainty": "established" }
+      ],
+      "argumentsFor": [
+        "Celui qui consomme le plus d'énergie contribue le plus, ce qui lie la contribution à l'usage effectif plutôt qu'au statut.",
+        "Le produit est affecté à la rénovation des logements les plus mal isolés, donc à ceux dont les occupants paient aujourd'hui le plus cher pour se chauffer."
+      ],
+      "argumentsAgainst": [
+        "La consommation d'énergie dépend surtout de la qualité du logement, que l'occupant ne choisit pas et qu'un locataire ne peut pas modifier.",
+        "Une contribution proportionnelle pèse davantage, en part du reste à vivre, sur les ménages modestes que sur les ménages aisés."
+      ]
+    },
+    {
+      "id": "contribution-patrimoine",
+      "label": "Une contribution assise sur le patrimoine immobilier",
+      "decisionDescription": "Une contribution annuelle est prélevée sur les propriétaires, proportionnellement à la valeur de leur bien. Elle rapporte 3 Md€.",
+      "families": ["levies", "scope_efficiency"],
+      "effects": [
+        { "id": "cp-cout", "kind": "budget_line", "code": "logement", "monthlyDelta": -38,
+          "scope": { "when": { "or": [["tenure", "eq", "owner_with_loan"], ["tenure", "eq", "owner_outright"]] }, "description": "Propriétaires" },
+          "horizon": "y1", "uncertainty": "established" },
+        { "id": "cp-locataires", "kind": "budget_line", "code": "logement", "monthlyDelta": 0,
+          "scope": { "when": { "or": [["tenure", "eq", "tenant_private"], ["tenure", "eq", "tenant_social"]] }, "description": "Locataires" },
+          "horizon": "y1", "uncertainty": "debated", "hypothesisId": "incidence-taxe-energie",
+          "note": "Effet nul à court terme. Une répercussion sur les loyers à plus long terme est débattue." },
+        { "id": "cp-recette", "kind": "public_finance", "publicBillions": 3,
+          "scope": { "description": "Finances publiques" }, "horizon": "y1", "uncertainty": "established" }
+      ],
+      "argumentsFor": [
+        "Le propriétaire décide des travaux et en capte la valorisation : faire porter la contribution sur lui aligne la charge et le pouvoir de décision.",
+        "Le patrimoine immobilier est une assiette large et difficile à déplacer, ce qui rend le prélèvement prévisible et peu contournable."
+      ],
+      "argumentsAgainst": [
+        "Un propriétaire accédant qui rembourse encore son crédit peut avoir un patrimoine élevé et une trésorerie faible, sans moyen de payer.",
+        "Rien ne garantit que la charge ne soit pas répercutée sur les loyers à mesure que les baux se renouvellent."
+      ]
+    },
+    {
+      "id": "par-la-dette",
+      "label": "Financer le programme par l'emprunt",
+      "decisionDescription": "Le programme est financé par emprunt. Aucun ménage ne paie aujourd'hui ; la dette publique augmente de 3 Md€.",
+      "families": ["debt_financing"],
+      "effects": [
+        { "id": "pd-menages", "kind": "budget_line", "code": "energie", "monthlyDelta": 0,
+          "scope": { "description": "Tous les ménages" }, "horizon": "y1", "uncertainty": "established",
+          "note": "Aucun effet immédiat sur les budgets. Les effets à long terme d'un endettement supplémentaire sont débattus et ne sont pas modélisés ici." },
+        { "id": "pd-dette", "kind": "public_finance", "publicBillions": -3,
+          "scope": { "description": "Finances publiques" }, "horizon": "y1", "uncertainty": "established" }
+      ],
+      "argumentsFor": [
+        "Une rénovation profite pendant trente ans : en faire porter le coût sur trente ans d'emprunt répartit la charge sur ceux qui en bénéficient.",
+        "Aucun ménage ne voit son budget contraint davantage l'année où la mesure est prise."
+      ],
+      "argumentsAgainst": [
+        "La charge est déplacée vers des contribuables futurs qui n'ont pas participé à la décision.",
+        "Le coût total est plus élevé une fois les intérêts pris en compte, et ce surcoût dépend de taux que personne ne maîtrise."
+      ]
+    },
+    {
+      "id": "contester-cadrage",
+      "label": "Je conteste la façon dont la question est posée",
+      "decisionDescription": "Le joueur refuse le cadrage : la question ne devrait pas être « où trouver trois milliards » mais porter sur l'obligation de rénovation, la régulation des loyers des passoires thermiques, ou la priorité relative de ce programme.",
+      "families": ["challenge_framing"],
+      "effects": [
+        { "id": "cc-aucun", "kind": "service_level",
+          "scope": { "description": "Aucun effet budgétaire modélisé" }, "horizon": "y1", "uncertainty": "established",
+          "note": "Contester le cadrage ne produit aucun effet chiffré dans ce modèle. Cette absence est une limite du jeu, pas un jugement sur la pertinence de la contestation." }
+      ],
+      "argumentsFor": [
+        "Présenter un problème public comme un arbitrage budgétaire à somme nulle est déjà une façon de le cadrer, et ce cadrage exclut d'autres leviers.",
+        "L'obligation réglementaire et la régulation des loyers sont des outils qui ne coûtent rien au budget public et ne figurent pas parmi les options."
+      ],
+      "argumentsAgainst": [
+        "Refuser de trancher laisse la situation en l'état, ce qui revient en pratique au statu quo tout en évitant d'en assumer le choix.",
+        "Les leviers réglementaires ont eux aussi des coûts, portés par d'autres acteurs, qui ne disparaissent pas parce qu'ils sortent du budget de l'État."
+      ]
+    }
+  ]
+}

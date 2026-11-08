@@ -4,22 +4,71 @@
   "descriptiveTitle": "Chaudière en panne",
   "valence": "negative",
   "intensity": 3,
-  "dramaticFunction": ["CHOC"],
-  "eligibility": { "and": [["housing.heating", "eq", "individual"]] },
+  "dramaticFunction": [
+    "CHOC"
+  ],
+  "eligibility": {
+    "and": [
+      [
+        "heating",
+        "eq",
+        "individual"
+      ]
+    ]
+  },
   "probability": "uniform",
-  "cost": { "amount": 1800, "unit": "EUR", "nature": "fiction", "range": [1400, 2300], "note": "Remplacement, pose comprise. Fourchette large : le prix dépend fortement du modèle et de la région." },
+  "cost": {
+    "amount": 1800,
+    "unit": "EUR",
+    "nature": "fiction",
+    "range": [
+      1400,
+      2300
+    ],
+    "note": "Remplacement, pose comprise. Fourchette large : le prix dépend fortement du modèle et de la région."
+  },
   "text": "La chaudière ne redémarre pas. Le chauffagiste passe le lendemain : elle est à remplacer. Devis à 1 800 €, intervention sous une semaine.",
   "options": [
-    { "id": "payer-comptant", "label": "Payer en une fois",
-      "effects": [{ "type": "one_off", "amount": 1800 }] },
-    { "id": "etaler", "label": "Étaler en quatre mensualités",
-      "effects": [{ "type": "spread", "amount": 1880, "months": 4 }] },
-    { "id": "reporter", "label": "Reporter, et se chauffer à l'appoint électrique",
-      "effects": [{ "type": "recurring", "amount": 95, "code": "energie" }],
-      "narrativeTrace": "report-chauffage" }
+    {
+      "id": "payer-comptant",
+      "label": "Payer en une fois",
+      "effects": [
+        {
+          "type": "one_off",
+          "amount": 1800
+        }
+      ]
+    },
+    {
+      "id": "etaler",
+      "label": "Étaler en quatre mensualités",
+      "effects": [
+        {
+          "type": "spread",
+          "amount": 1880,
+          "months": 4
+        }
+      ]
+    },
+    {
+      "id": "reporter",
+      "label": "Reporter, et se chauffer à l'appoint électrique",
+      "effects": [
+        {
+          "type": "recurring",
+          "amount": 95,
+          "code": "energie"
+        }
+      ],
+      "narrativeTrace": "report-chauffage"
+    }
   ],
   "microQuestion": {
     "text": "Est-il normal qu'un équipement indispensable au logement soit à la charge de l'occupant ?",
-    "principlesInTension": ["besoin", "responsabilite-individuelle", "egalite-de-traitement"]
+    "principlesInTension": [
+      "besoin",
+      "responsabilite-individuelle",
+      "egalite-de-traitement"
+    ]
   }
 }

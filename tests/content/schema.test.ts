@@ -5,6 +5,7 @@ import { Value } from '@/schemas/primitives.ts'
 import { Hypothesis } from '@/schemas/referentials.ts'
 import { Character } from '@/schemas/character.ts'
 import { LifeEvent } from '@/schemas/event.ts'
+import { Reform, ReformOption, Effect } from '@/schemas/reform.ts'
 import { ContentBundle } from '@/schemas/index.ts'
 
 const bundlePath = fileURLToPath(new URL('../../content/bundle.json', import.meta.url))
@@ -133,5 +134,65 @@ describe('paquet compilé', () => {
   it('valide son propre schéma', () => {
     const r = ContentBundle.safeParse(bundle)
     expect(r.success, r.success ? '' : JSON.stringify(r.error?.issues?.slice(0, 3))).toBe(true)
+  })
+})
+
+describe('réformes — symétrie imposée par le schéma', () => {
+  const reform = bundle.reforms[0]
+  const taxe = reform.options.find((o: { id: string }) => o.id === 'taxe-energie')
+
+  it('le corpus réel valide', () => {
+    expect(Reform.safeParse(reform).success).toBe(true)
+  })
+
+  it('refuse une réforme sans statu quo : ne rien faire est une décision', () => {
+    rejects(Reform, {
+      ...reform,
+      options: reform.options
+        .filter((o: { isStatusQuo: boolean }) => !o.isStatusQuo),
+    })
+  })
+
+  it('refuse une réforme sans contestation du cadrage', () => {
+    // Sans cette option, le jeu impose sa propre thèse : que la politique se
+    // réduit à un arbitrage budgétaire à somme nulle.
+    rejects(Reform, {
+      ...reform,
+      options: reform.options.filter(
+        (o: { families: string[] }) => !o.families.includes('challenge_framing'),
+      ),
+    })
+  })
+
+  it('refuse une option dont tous les effets sur les ménages sont défavorables', () => {
+    const oneSided = {
+      ...taxe,
+      effects: taxe.effects.filter(
+        (e: { monthlyDelta?: number }) => e.monthlyDelta === undefined || e.monthlyDelta < 0,
+      ),
+    }
+    rejects(ReformOption, oneSided)
+  })
+
+  it('refuse un déséquilibre du nombre d’arguments pour et contre', () => {
+    rejects(ReformOption, { ...taxe, argumentsAgainst: [taxe.argumentsAgainst[0]] , argumentsFor: [...taxe.argumentsFor, ...taxe.argumentsFor, ...taxe.argumentsFor] })
+  })
+
+  it('refuse un effet débattu qui ne désigne pas son hypothèse', () => {
+    const e = taxe.effects[0]
+    rejects(Effect, { ...e, uncertainty: 'debated', hypothesisId: undefined })
+  })
+
+  it('chaque option porte au moins deux arguments dans chaque sens', () => {
+    for (const r of bundle.reforms) {
+      for (const o of r.options) {
+        expect(o.argumentsFor.length).toBeGreaterThanOrEqual(2)
+        expect(o.argumentsAgainst.length).toBeGreaterThanOrEqual(2)
+      }
+    }
+  })
+
+  it('chaque réforme déclare ce que son modèle ne prend pas en compte', () => {
+    for (const r of bundle.reforms) expect(r.modelLimitations.length).toBeGreaterThan(50)
   })
 })
