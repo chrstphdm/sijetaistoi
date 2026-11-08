@@ -14,6 +14,44 @@
  * la seule couleur : intitule explicite, phrase de portee, et traitement
  * visuel distinct.
  */
+/**
+ * Symboles de portee.
+ *
+ * Un cercle pour « un seul foyer », trois pour « tous les foyers ». Ils
+ * accompagnent TOUJOURS un mot : le symbole seul serait aussi opaque que la
+ * couleur seule.
+ */
+export const SCOPE_SYMBOL = { personal: '\u25CF', collective: '\u25CF\u25CF\u25CF' } as const
+export const SCOPE_WORD = { personal: 'pour Claire seule', collective: 'pour tout le monde' } as const
+
+/**
+ * Marqueur compact, repete sur CHAQUE option.
+ *
+ * Le bandeau en haut d'ecran ne suffit pas : arrive aux options, le joueur
+ * l'a perdu de vue. Releve en test sur « Financer le programme par
+ * l'emprunt », dont la carte ne disait rien de sa portee.
+ *
+ * Pas de biais possible entre options : toutes les options d'un meme ecran
+ * ont la MEME portee, donc le meme marqueur. Il distingue des types
+ * d'ecran, jamais des options entre elles.
+ */
+export function ScopeMark({
+  scope, who,
+}: {
+  readonly scope: 'personal' | 'collective'
+  readonly who?: string
+}) {
+  const personal = scope === 'personal'
+  return (
+    <span className={`mark mark--${scope}`}>
+      <span className="mark__sym" aria-hidden="true">
+        {SCOPE_SYMBOL[scope]}
+      </span>
+      {personal ? `Engage ${who ?? 'ce personnage'} seulement` : 'Engage tout le monde'}
+    </span>
+  )
+}
+
 export function ScopeBand({
   scope, who,
 }: {
@@ -24,6 +62,9 @@ export function ScopeBand({
   return (
     <p className={`scope scope--${scope}`} role="note">
       <span className="scope__tag">
+        <span className="scope__sym" aria-hidden="true">
+          {SCOPE_SYMBOL[scope]}
+        </span>
         {personal ? 'Décision personnelle' : 'Décision collective'}
       </span>
       <span className="scope__text">

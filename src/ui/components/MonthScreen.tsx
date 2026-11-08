@@ -7,7 +7,7 @@ import { euros } from '@/core/money.ts'
 import { motionFor } from '@/motion/table.ts'
 import { Amount } from './Amount.tsx'
 import { MonthlyBudget } from './MonthlyBudget.tsx'
-import { ScopeBand } from './ScopeBand.tsx'
+import { ScopeBand, ScopeMark } from './ScopeBand.tsx'
 
 /**
  * Un mois vecu.
@@ -99,7 +99,8 @@ export function MonthScreen({
               <ol className="options">
                 {event.options.map((o) => (
                   <li key={o.id}>
-                    <article className="option">
+                    <article className="option option--personal">
+                      <ScopeMark scope="personal" who={firstName} />
                       <h3>{o.label}</h3>
                       <button type="button" onClick={() => onResolve(o.id)}>
                         Choisir

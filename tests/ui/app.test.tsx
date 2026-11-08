@@ -8,16 +8,21 @@ afterEach(cleanup)
 
 type User = ReturnType<typeof userEvent.setup>
 
-/** Traverse un acte : intro, les mois, la réforme, la question, l'impact. */
-async function playAct(user: User, phrase?: string) {
-  await user.click(screen.getByRole('button', { name: /Commencer le mois/ }))
-
-  // Les mois s'enchaînent jusqu'à ce que la réforme apparaisse.
+/**
+ * Traverse les mois restants jusqu'à l'écran de réforme.
+ * Gère les trois états possibles : options repliées, options déjà dépliées,
+ * et mois sans événement.
+ */
+async function walkMonths(user: User) {
   for (let guard = 0; guard < 12; guard++) {
     const reveal = screen.queryByRole('button', { name: /Voir les possibilités/ })
     if (reveal) {
       await user.click(reveal)
-      await user.click(screen.getAllByRole('button', { name: 'Choisir' })[0]!)
+      continue
+    }
+    const choose = screen.queryAllByRole('button', { name: 'Choisir' })
+    if (choose.length > 0) {
+      await user.click(choose[0]!)
       continue
     }
     const skip = screen.queryByRole('button', { name: /Mois suivant/ })
@@ -27,6 +32,12 @@ async function playAct(user: User, phrase?: string) {
     }
     break
   }
+}
+
+/** Traverse un acte : intro, les mois, la réforme, la question, l'impact. */
+async function playAct(user: User, phrase?: string) {
+  await user.click(screen.getByRole('button', { name: /Commencer le mois/ }))
+  await walkMonths(user)
 
   if (phrase) await user.type(screen.getByLabelText(/qu’est-ce qui te paraît juste/), phrase)
   await user.click(screen.getAllByRole('button', { name: 'Décider ceci' })[1]!)
@@ -180,30 +191,50 @@ describe('registre et consultation', () => {
     expect(screen.getByText('Décision personnelle')).toBeTruthy()
     expect(screen.getByText(/n’engage que .* ce mois-ci/)).toBeTruthy()
 
-    for (let i = 0; i < 12; i++) {
-      const reveal = screen.queryByRole('button', { name: /Voir les possibilités/ })
-      if (reveal) { await user.click(reveal); await user.click(screen.getAllByRole('button', { name: 'Choisir' })[0]!); continue }
-      const skip = screen.queryByRole('button', { name: /Mois suivant/ })
-      if (skip) { await user.click(skip); continue }
-      break
-    }
+    await walkMonths(user)
 
     expect(timeline().textContent).toContain('tu décides pour tout le monde')
     expect(screen.getByText('Décision collective')).toBeTruthy()
     expect(screen.getByText(/devient une règle pour/)).toBeTruthy()
   })
 
+  it('marque CHAQUE option, pas seulement le haut de l’écran', async () => {
+    // Relevé en test sur « Financer le programme par l'emprunt » : arrivé
+    // aux options, le joueur a perdu le bandeau de vue.
+    const user = userEvent.setup()
+    render(<App />)
+    await user.click(screen.getByRole('button', { name: /Commencer le mois/ }))
+    await user.click(screen.getByRole('button', { name: /Voir les possibilités/ }))
+
+    const personalCards = document.querySelectorAll('.option--personal')
+    expect(personalCards.length).toBeGreaterThan(1)
+    expect(screen.getAllByText(/Engage .* seulement/).length).toBe(personalCards.length)
+
+    await walkMonths(user)
+
+    const collectiveCards = document.querySelectorAll('.option--collective')
+    expect(collectiveCards.length).toBeGreaterThan(1)
+    expect(screen.getAllByText('Engage tout le monde').length).toBe(collectiveCards.length)
+  })
+
+  it('toutes les options d’un même écran portent le MÊME marqueur', async () => {
+    // Un marqueur qui varierait d'une option à l'autre introduirait une
+    // hiérarchie entre elles. Il distingue des types d'écran, jamais des
+    // options entre elles.
+    const user = userEvent.setup()
+    render(<App />)
+    await user.click(screen.getByRole('button', { name: /Commencer le mois/ }))
+    await user.click(screen.getByRole('button', { name: /Voir les possibilités/ }))
+
+    const marks = [...document.querySelectorAll('.option .mark')].map((m) => m.className)
+    expect(new Set(marks).size).toBe(1)
+  })
+
   it('permet de consulter les autres personnages sans y inciter', async () => {
     const user = userEvent.setup()
     render(<App />)
     await user.click(screen.getByRole('button', { name: /Commencer le mois/ }))
-    for (let i = 0; i < 12; i++) {
-      const reveal = screen.queryByRole('button', { name: /Voir les possibilités/ })
-      if (reveal) { await user.click(reveal); await user.click(screen.getAllByRole('button', { name: 'Choisir' })[0]!); continue }
-      const skip = screen.queryByRole('button', { name: /Mois suivant/ })
-      if (skip) { await user.click(skip); continue }
-      break
-    }
+    await walkMonths(user)
     // Accessible, mais replié : la consultation est possible sans être incitée.
     const others = screen.getByText('Consulter les autres personnages').closest('details')!
     expect(others.open).toBe(false)

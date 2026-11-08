@@ -382,3 +382,31 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
   color: var(--ink-2);
   padding: var(--space-2) 0;
 }
+
+/* ------------------------------------------------------------------ */
+/* Marqueur de portée, répété sur chaque option                        */
+/* ------------------------------------------------------------------ */
+
+/* Trois canaux redondants : symbole, mot, couleur. Jamais un seul.
+   Aucun biais possible entre options : toutes celles d'un même écran ont
+   la même portée, donc le même marqueur. Il distingue des types d'écran,
+   jamais des options entre elles. */
+.mark {
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  font-family: system-ui, sans-serif; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 2px var(--space-2);
+  border-radius: 2px;
+  margin-bottom: var(--space-2);
+}
+.mark__sym { font-size: 8px; letter-spacing: 1px; }
+
+.mark--personal { background: var(--paper-sunk); color: var(--ink-2); border: 1px solid var(--rule); }
+.mark--collective { background: var(--perspective-a); color: var(--paper-raised); }
+
+/* Le liseré gauche porte la même distinction sur toute la hauteur de la
+   carte, pour que la portée reste lisible même en diagonale. */
+.option--personal { border-left: 4px solid var(--rule); }
+.option--collective { border-left: 4px solid var(--perspective-a); }
+
+.scope__sym { font-size: 8px; letter-spacing: 1px; margin-inline-end: var(--space-1); }

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { ReformT, ReformOptionT } from '@/schemas/index.ts'
-import { ScopeBand } from './ScopeBand.tsx'
+import { ScopeBand, ScopeMark } from './ScopeBand.tsx'
 
 /**
  * L'ecran de vote.
@@ -73,7 +73,8 @@ export function ReformVote({ reform, order, who, onVote }: Props) {
           const expanded = open === o.id
           return (
             <li key={o.id}>
-              <article className="option">
+              <article className="option option--collective">
+                <ScopeMark scope="collective" />
                 <h3>{o.label}</h3>
                 <p className="option__summary">{o.decisionDescription}</p>
                 <p className="option__who">{oneLiner(o)}</p>
