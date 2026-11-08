@@ -22,7 +22,8 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "verify": "npm run build:content && npm run lint:content && npm run check:contrast && npm run typecheck && npx vitest run"
   },
   "dependencies": {
     "react": "19.3.1",

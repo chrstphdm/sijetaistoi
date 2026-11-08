@@ -13,7 +13,7 @@ import { readFileSync, readdirSync, writeFileSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { z } from 'zod'
-import { ContentBundle } from '../src/schemas/index.ts'
+import { ContentBundle, MethodPage } from '../src/schemas/index.ts'
 import { Source, Hypothesis, BudgetLineRef } from '../src/schemas/referentials.ts'
 import { Character } from '../src/schemas/character.ts'
 import { LifeEvent } from '../src/schemas/event.ts'
@@ -62,6 +62,7 @@ const budgetLines = parseArrayFile(BudgetLineRef, 'budget-lines.json')
 const characters = parseEachFile(Character, listJson('characters'))
 const events = parseEachFile(LifeEvent, listJson('events'))
 const reforms = parseEachFile(Reform, listJson('reforms'))
+const method = parseOne(MethodPage, 'method.json', readJson('method.json'))
 
 // --------------------------------------------------- integrite referentielle
 const sourceIds = new Set(sources.map((s) => s.id))
@@ -185,6 +186,7 @@ const bundle = {
   characters,
   events,
   reforms,
+  method,
 }
 
 const verified = ContentBundle.safeParse(bundle)

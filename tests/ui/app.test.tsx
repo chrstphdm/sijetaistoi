@@ -262,3 +262,59 @@ describe('registre et consultation', () => {
     expect(others.textContent).toMatch(/Claire|Marc et Anne|Yanis|Michèle/)
   })
 })
+
+describe('page méthode', () => {
+  it('est accessible depuis le jeu et expose la partialité résiduelle', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.click(screen.getByRole('button', { name: /Comment ce jeu est construit/ }))
+
+    expect(screen.getByRole('heading', { level: 1, name: /Comment ce jeu est construit/ })).toBeTruthy()
+    // Le cœur du dispositif : dire ce qu'on ne parvient PAS à éviter.
+    expect(screen.getByRole('heading', { name: /ne parvient pas à éviter/ })).toBeTruthy()
+    expect(screen.getByText(/Le cadrage lui-même/)).toBeTruthy()
+    expect(screen.getByText(/Le choix du dénominateur/)).toBeTruthy()
+  })
+
+  it('affiche les règles telles qu’elles sont réellement appliquées', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.click(screen.getByRole('button', { name: /Comment ce jeu est construit/ }))
+
+    // Ces valeurs sont lues dans le code, pas recopiées : une page méthode
+    // qui dérive de ce que le programme fait serait pire que pas de page.
+    const rules = screen.getByRole('heading', { name: /telles qu’elles sont réellement appliquées/ })
+      .closest('section')!
+    expect(rules.textContent).toContain('2 %')
+    expect(rules.textContent).toContain('400 ms')
+    expect(rules.textContent).toContain('150 € par mois')
+    expect(rules.textContent).toContain('1.0.0')
+  })
+
+  it('nomme les deux lectures de chaque hypothèse contestée', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.click(screen.getByRole('button', { name: /Comment ce jeu est construit/ }))
+
+    const hypo = screen.getByRole('heading', { name: /hypothèses contestées/ }).closest('section')!
+    expect(within(hypo).getAllByText(/Lecture A/).length).toBeGreaterThan(0)
+    expect(within(hypo).getAllByText(/Lecture B/).length)
+      .toBe(within(hypo).getAllByText(/Lecture A/).length)
+  })
+
+  it('déclare que rien ne quitte l’appareil', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.click(screen.getByRole('button', { name: /Comment ce jeu est construit/ }))
+    expect(screen.getByText(/ne sont transmis à aucun serveur/)).toBeTruthy()
+    expect(screen.getByText(/ne constitue pas un avis juridique/)).toBeTruthy()
+  })
+
+  it('permet de revenir au jeu', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.click(screen.getByRole('button', { name: /Comment ce jeu est construit/ }))
+    await user.click(screen.getByRole('button', { name: 'Revenir au jeu' }))
+    expect(screen.getByRole('button', { name: /Commencer le mois/ })).toBeTruthy()
+  })
+})

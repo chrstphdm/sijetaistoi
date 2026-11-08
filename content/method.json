@@ -1,0 +1,58 @@
+{
+  "title": "Comment ce jeu est construit",
+  "intro": "Ce jeu prétend ne pas chercher à te convaincre. Une telle prétention ne vaut rien si elle n'est pas vérifiable. Cette page expose donc ce que le dispositif fait, ce qu'il s'interdit, et surtout ce qu'il n'arrive pas à éviter. Elle est écrite pour pouvoir être contestée.",
+  "sections": [
+    {
+      "id": "partialite-residuelle",
+      "title": "Ce que ce jeu ne parvient pas à éviter",
+      "lead": "Les biais que nous savons présents, et que nous n'avons pas supprimés.",
+      "items": [
+        "Le cadrage lui-même. Poser des questions sous la forme « il manque tant de milliards, où les trouver » suppose déjà que la politique se réduise à un arbitrage budgétaire. C'est une thèse, et elle est contestable. Chaque réforme offre donc une option « je conteste la façon dont la question est posée », mais cette option ne produit aucun effet chiffré : le modèle ne sait pas la représenter. Cette asymétrie est une limite réelle, pas un oubli.",
+        "Le choix des sujets. Les mesures présentées ont été choisies par une personne. Un autre choix aurait produit une autre partie. Aucune procédure ne garantit que les sujets retenus sont les plus importants, ni qu'ils couvrent équitablement les préoccupations de chacun.",
+        "Le choix du dénominateur. Rapporter un montant au reste à vivre suppose que ce qui compte est le besoin ; au revenu, que ce qui compte est la proportion ; en euros, qu'un euro est un euro. Aucune de ces trois lectures n'est neutre. Le jeu les expose toutes les trois plutôt que d'en imposer une, mais il choisit malgré tout celle qui s'affiche en premier.",
+        "La sélection des personnages du corpus. Quatre à six situations ne représentent pas une société. Les absents comptent autant que les présents, et leur absence n'est pas neutre.",
+        "La quantification. Les montants sont des ordres de grandeur construits pour être plausibles, pas des prévisions. Les effets des mesures sont calculés par un modèle volontairement simple, qui ignore les comportements, les effets de second tour et l'incidence réelle des prélèvements.",
+        "L'écriture. Les textes ont une voix. Un lexique contrôlé écarte les formulations les plus chargées, mais aucun outil ne rend un texte neutre — il le rend seulement moins ouvertement orienté."
+      ]
+    },
+    {
+      "id": "ce-qui-est-verifie",
+      "title": "Ce qui est vérifié automatiquement",
+      "lead": "Ces règles ne reposent pas sur la bonne volonté de l'auteur : elles bloquent la mise en ligne si elles sont enfreintes.",
+      "items": [
+        "Toute valeur chiffrée porte sa nature : fait sourcé, hypothèse du modèle, extrapolation ou valeur fictive. Un chiffre présenté comme un fait sans source est refusé.",
+        "Toute hypothèse du modèle porte au moins deux lectures nommées par un mécanisme. Une hypothèse à lecture unique trancherait en silence un débat ouvert.",
+        "Toute réforme offre le statu quo et la contestation du cadrage, et chacune de ses options porte au moins deux arguments dans chaque sens, dans un rapport qui ne dépasse pas deux pour un.",
+        "Aucune option n'a que des effets défavorables : qui y gagne doit être identifié, ou l'absence de gagnant explicitée.",
+        "Au plus la moitié des rappels d'une partie peuvent être défavorables. Sans cette règle, le jeu ne montrerait que les conséquences douloureuses des choix du joueur.",
+        "L'intensité d'une animation est calculée par une fonction qui ne reçoit ni l'identité du personnage, ni la mesure concernée, ni l'opinion du joueur, et qui détruit le signe du montant. Un gain et une perte de même ampleur reçoivent donc une mise en scène identique.",
+        "Les fiches de personnages ont des longueurs comparables : un personnage deux fois plus détaillé recevrait deux fois plus d'empathie.",
+        "Le corpus comporte au moins un cinquième d'événements favorables, sinon il raconterait une thèse sur la vie.",
+        "Les deux couleurs d'accent ont la même force perceptive, et aucune information n'est portée par la seule couleur."
+      ]
+    },
+    {
+      "id": "donnees",
+      "title": "Les chiffres",
+      "lead": "Ce que vous voyez à l'écran n'est pas une prévision.",
+      "items": [
+        "Les personnages sont fictifs. Leurs montants sont construits pour être plausibles au regard d'ordres de grandeur publics, mais ils ne décrivent personne.",
+        "Les effets des mesures sont calculés par un modèle de première année, qui ignore volontairement les comportements, les effets de second tour, l'équilibre général et l'incidence fiscale réelle.",
+        "Quand un effet dépend d'une hypothèse contestée, le jeu l'indique et nomme les deux lectures possibles plutôt que d'en retenir une.",
+        "Un branchement sur OpenFisca est prévu pour remplacer les estimations par un calcul réglementaire. Il n'est pas encore en place."
+      ]
+    },
+    {
+      "id": "donnees-personnelles",
+      "title": "Ce que ce site enregistre",
+      "lead": "Rien ne quitte votre appareil.",
+      "items": [
+        "Vos réponses et vos textes libres restent dans votre navigateur. Ils ne sont transmis à aucun serveur, et l'éditeur du site n'y a pas accès.",
+        "Ces réponses portent sur vos opinions politiques, qui sont des données sensibles. Évitez de laisser une partie en cours sur un ordinateur partagé.",
+        "Le site ne charge aucune ressource extérieure : ni police distante, ni mesure d'audience, ni service tiers. Une police distante suffirait à transmettre une adresse qui vous identifie.",
+        "Cette page décrit un état de fait technique, elle ne constitue pas un avis juridique."
+      ]
+    }
+  ],
+  "closing": "Si vous repérez une formulation orientée, un chiffre douteux ou une option manquante, le code et le contenu sont publics et le signalement est le bienvenu."
+}

@@ -19,6 +19,21 @@ for (const phase of PHASES) {
   })
 }
 
+test('la page méthode est accessible, et le reste en thème sombre', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('button', { name: /Comment ce jeu est construit/ }).click()
+  await settle(page)
+  const light = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+    .analyze()
+  expect(light.violations, JSON.stringify(light.violations.map((v) => v.id))).toEqual([])
+
+  await page.emulateMedia({ colorScheme: 'dark' })
+  await settle(page)
+  const dark = await new AxeBuilder({ page }).withTags(['wcag2aa']).analyze()
+  expect(dark.violations, JSON.stringify(dark.violations.map((v) => v.id))).toEqual([])
+})
+
 test('les contrastes tiennent aussi en thème sombre', async ({ page }) => {
   await page.emulateMedia({ colorScheme: 'dark' })
   await reach(page, 'impact')

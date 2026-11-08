@@ -649,3 +649,14 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
 .option--collective { border-left: 4px solid var(--perspective-a); }
 
 .scope__sym { font-size: 8px; letter-spacing: 1px; margin-inline-end: var(--space-1); }
+
+/* Page méthode : un document qu'on lit, pas une infobulle. */
+.layout--single { display: block; }
+.method { max-width: var(--measure-doc); }
+.method__intro { font-size: 19px; }
+.method h2 { margin-top: var(--space-8); font-size: 22px; }
+.method h3 { font-size: 17px; margin-top: var(--space-4); }
+.method ul { max-width: var(--measure-narrative); }
+.method li { margin-bottom: var(--space-3); }
+.method__hypo { border-left: 2px solid var(--rule-hair); padding-left: var(--space-4); margin-bottom: var(--space-6); }
+.method__closing { margin-top: var(--space-8); padding-top: var(--space-4); border-top: 1px solid var(--rule); }

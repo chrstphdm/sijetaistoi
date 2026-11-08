@@ -1,0 +1,62 @@
+name: Vérifications
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Chaque étape correspond à une garantie annoncée dans NOTE-DE-METHODE.md.
+# Si l'une échoue, la garantie n'est plus tenue : rien ne doit être publié.
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          # Version paire, supportée par Vite. Node 25 fonctionne en local
+          # mais émet des avertissements d'incompatibilité.
+          node-version: '24'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Contenu — schémas, provenance, intégrité référentielle
+        run: npm run build:content
+
+      - name: Contenu — lexique, parité narrative, équilibre de valence
+        run: npm run lint:content
+
+      - name: Couleurs — contrastes et parité des accents
+        run: npm run check:contrast
+
+      - name: Types
+        run: npm run typecheck
+
+      - name: Tests unitaires et de propriété
+        run: npx vitest run
+
+      - name: Build de production
+        run: npx vite build
+
+  bout-en-bout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+
+      - name: Accessibilité, clavier, petit écran, lecture muette
+        run: npm run test:e2e
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: rapport-playwright
+          path: playwright-report/
+          retention-days: 7

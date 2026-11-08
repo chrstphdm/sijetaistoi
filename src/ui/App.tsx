@@ -7,6 +7,7 @@ import { CONSTRAINT_STATEMENTS } from '@/core/casting.ts'
 import { useGame } from './useGame.ts'
 import { CharacterIntro } from './components/CharacterIntro.tsx'
 import { GameRail } from './components/GameRail.tsx'
+import { MethodScreen } from './components/MethodScreen.tsx'
 import { MonthScreen } from './components/MonthScreen.tsx'
 import { ReformVote } from './components/ReformVote.tsx'
 import { ImpactForEach, rotationOrder } from './components/ImpactForEach.tsx'
@@ -23,6 +24,7 @@ export function App() {
   const [scale, setScale] = useState<Scale>('slack')
   const [kpi, setKpi] = useState<KpiAnswer | null>(null)
   const [showOthers, setShowOthers] = useState(false)
+  const [showMethod, setShowMethod] = useState(false)
 
   const nameOf = (id: string) =>
     characters.find((c) => c.id === id)?.identity.firstName ?? id
@@ -30,6 +32,18 @@ export function App() {
   const previous = state.opinions.filter((o) => o.questionId === reform.id)[0]
 
   const allIds = characters.map((c) => c.id)
+
+  // La page méthode remplace le jeu plutôt que de s'y superposer : c'est un
+  // document qu'on lit, pas une infobulle.
+  if (showMethod) {
+    return (
+      <div className="layout layout--single">
+        <main className="layout__main">
+          <MethodScreen onBack={() => setShowMethod(false)} />
+        </main>
+      </div>
+    )
+  }
 
   return (
     <div className="layout">
@@ -173,6 +187,11 @@ export function App() {
           transparence du tirage permet de vérifier que le jeu n'envoie pas le
           joueur là où ça fait mal. Les deux restent repliés par défaut. */}
       <aside className="footer-tools">
+        <p>
+          <button type="button" className="timeline__toggle" onClick={() => setShowMethod(true)}>
+            Comment ce jeu est construit, et ce qu’il ne parvient pas à éviter
+          </button>
+        </p>
         <details>
           <summary>Comment ce jeu choisit tes personnages</summary>
           <p className="provenance">
