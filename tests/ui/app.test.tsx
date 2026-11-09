@@ -438,3 +438,113 @@ describe('page d’accueil visuelle', () => {
     expect(document.querySelectorAll('.demo__name')).toHaveLength(6)
   })
 })
+
+describe('projection sur dix ans', () => {
+  const playFullGame = async (user: User) => {
+    await enterGame(user)
+    await playAct(user, 'ma règle')
+    await user.click(screen.getByRole('button', { name: /Quelques mois plus tard/ }))
+    await playAct(user)
+    await user.click(screen.getByRole('button', { name: /Quelques mois plus tard/ }))
+    await playAct(user)
+    await user.click(screen.getByRole('button', { name: /Voir le bilan/ }))
+  }
+
+  it('montre une courbe par personnage, jamais six superposées', async () => {
+    // Les six teintes ont volontairement la même luminance : elles ne
+    // peuvent pas porter l'identité en vision daltonienne. Petits
+    // multiples, donc, chacun portant un nom écrit.
+    const user = userEvent.setup()
+    render(<App />)
+    await playFullGame(user)
+
+    const proj = screen.getByRole('heading', { name: /sur dix ans/ }).closest('section')!
+    expect(proj.querySelectorAll('.proj__chart')).toHaveLength(6)
+    expect(proj.querySelectorAll('.proj > li')).toHaveLength(6)
+  })
+
+  it('emploie une seule couleur de courbe et une échelle commune', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await playFullGame(user)
+
+    const lines = [...document.querySelectorAll('.proj__line')]
+    expect(new Set(lines.map((l) => l.getAttribute('class'))).size).toBe(1)
+    // Des axes propres à chacun feraient paraître identiques des impacts
+    // très inégaux — l'exact contraire du propos.
+    const boxes = [...document.querySelectorAll('.proj__chart')].map((c) => c.getAttribute('viewBox'))
+    expect(new Set(boxes).size).toBe(1)
+  })
+
+  it('donne un équivalent textuel à chaque courbe', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await playFullGame(user)
+    for (const chart of document.querySelectorAll('.proj__chart')) {
+      expect(chart.getAttribute('aria-label')).toMatch(/cumul de (plus|moins)/)
+      expect(chart.getAttribute('aria-label')).toContain('reste à vivre')
+    }
+  })
+
+  it('énonce ce que le calcul suppose, à côté du graphique', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await playFullGame(user)
+    // La limite est énoncée à côté, pas en note de bas de page.
+    expect(screen.getByText(/Que rien d’autre ne bouge pendant dix ans/)).toBeTruthy()
+    expect(screen.getByText(/grossit aussi bien les gains que les coûts/)).toBeTruthy()
+  })
+})
+
+describe('relance : la même question, après l’avoir vécue', () => {
+  it('repose la question sur la décision dont on vient de voir l’effet', async () => {
+    // Sans cela, chaque acte posant une réforme différente, aucune question
+    // n'était jamais reposée — et le suivi des changements d'opinion, au
+    // cœur du projet, ne produisait rien.
+    const user = userEvent.setup()
+    render(<App />)
+    await enterGame(user)
+    await playAct(user, 'ma première règle')
+    await user.click(screen.getByRole('button', { name: /Quelques mois plus tard/ }))
+
+    const relaunch = screen.getByRole('heading', { name: /La même question, maintenant/ })
+      .closest('section')!
+    expect(within(relaunch).getByText(/ta réponse était/)).toBeTruthy()
+    expect(within(relaunch).getByText(/« ma première règle »/)).toBeTruthy()
+  })
+
+  it('note un changement de position sans le juger', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await enterGame(user)
+    await playAct(user, 'ma règle')
+    await user.click(screen.getByRole('button', { name: /Quelques mois plus tard/ }))
+
+    const relaunch = () =>
+      screen.getByRole('heading', { name: /La même question, maintenant/ }).closest('section')!
+    // L'acte précédent avait répondu « plutôt oui » ; on change d'avis.
+    await user.click(within(relaunch()).getByRole('radio', { name: 'non' }))
+
+    expect(within(relaunch()).getByText(/Ta réponse a changé/)).toBeTruthy()
+    for (const w of ['pourtant', 'contradiction', 'incohérent', 'enfin']) {
+      expect(relaunch().textContent?.toLowerCase()).not.toContain(w)
+    }
+  })
+
+  it('remplit le bilan, qui restait vide', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await enterGame(user)
+    await playAct(user, 'ma règle')
+    await user.click(screen.getByRole('button', { name: /Quelques mois plus tard/ }))
+    await user.click(screen.getAllByRole('radio', { name: 'non' })[0]!)
+    await playAct(user)
+    await user.click(screen.getByRole('button', { name: /Quelques mois plus tard/ }))
+    await playAct(user)
+    await user.click(screen.getByRole('button', { name: /Voir le bilan/ }))
+
+    const answers = screen.getByRole('heading', { name: 'Tes réponses' }).closest('section')!
+    expect(answers.textContent).toContain('Ce qui a changé')
+    expect(within(answers).getByText(/est passée de/)).toBeTruthy()
+  })
+})

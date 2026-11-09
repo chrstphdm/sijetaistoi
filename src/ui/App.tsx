@@ -33,6 +33,7 @@ import { ImpactForEach, rotationOrder } from './components/ImpactForEach.tsx'
 import { JudgementScale } from './components/JudgementScale.tsx'
 import { CallbackPanel, QuotaBlockedNote } from './components/Callback.tsx'
 import { SummaryScreen } from './components/Summary.tsx'
+import { ImpactProjection } from './components/ImpactProjection.tsx'
 import { relaunchSentence } from '@/core/opinion.ts'
 import { makeSeed, seedFromUrl, startFreshGame } from './seed.ts'
 
@@ -78,7 +79,6 @@ export function App() {
   const nameOf = (id: string) =>
     characters.find((c) => c.id === id)?.identity.firstName ?? id
   const judgement = lastJudgement(state, reform.id)
-  const previous = state.opinions.filter((o) => o.questionId === reform.id)[0]
 
   const allIds = characters.map((c) => c.id)
 
@@ -181,6 +181,34 @@ export function App() {
               </p>
             </section>
           )}
+
+          {/* LA RELANCE. On repose la question sur la décision dont le joueur
+              vient de voir l'effet, maintenant qu'il l'a vécue d'en face.
+              Sans elle, chaque acte posant une réforme différente, aucune
+              question n'était jamais reposée — et le suivi des changements
+              d'opinion, pourtant au cœur du projet, ne produisait rien. */}
+          {step.selection.kind === 'selected' && (() => {
+            const askedId = step.selection.callback.rule.reformId
+            const earlier = state.opinions.filter((o) => o.questionId === askedId)[0]
+            const latest = lastJudgement(state, askedId)
+            const alreadyAnswered = state.opinions.filter((o) => o.questionId === askedId).length > 1
+            return (
+              <section className="sheet" aria-labelledby="relaunch-title">
+                <h2 id="relaunch-title">La même question, maintenant</h2>
+                {earlier && <p>{relaunchSentence(earlier, `À l’acte ${state.act - 1}`)}</p>}
+                <JudgementScale
+                  value={alreadyAnswered ? latest : null}
+                  onChange={(j) => actions.answerFor(askedId, j)}
+                  legend="Ta réponse maintenant"
+                />
+                {alreadyAnswered && earlier && latest !== earlier.judgement && (
+                  <p className="provenance">
+                    Ta réponse a changé. Le jeu le note, sans en tirer de conclusion.
+                  </p>
+                )}
+              </section>
+            )
+          })()}
         </>
       )}
 
@@ -233,9 +261,6 @@ export function App() {
       {step.kind === 'judgement' && (
         <section className="sheet" aria-labelledby="judge-title">
           <h2 id="judge-title">Est-ce que cette décision te semble bien et juste&nbsp;?</h2>
-          {previous && state.act > 1 && (
-            <p>{relaunchSentence(previous, 'Lors d’un acte précédent')}</p>
-          )}
           <JudgementScale value={judgement} onChange={actions.answer} legend="Ta réponse" />
           {judgement && (
             <p>
@@ -266,6 +291,7 @@ export function App() {
           <SummaryScreen
             summary={buildSummary(state)} characterName={nameOf} kpi={kpi} onKpi={setKpi}
           />
+          <ImpactProjection world={state.world} />
           <section className="sheet" aria-labelledby="again-title">
             <h2 id="again-title">Rejouer</h2>
             <p>

@@ -1570,3 +1570,44 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
 /* ------------------------------------------- Clôture */
 
 .method__closing { font-size: clamp(18px, 2vw, 22px); max-width: 52ch; color: var(--paper); margin-bottom: var(--space-6); }
+
+/* ------------------------------------------------- Projection sur dix ans */
+
+/* Petits multiples plutôt que six courbes superposées : les teintes de
+   personnage ont volontairement la même luminance, donc elles ne peuvent
+   pas porter l'identité en vision daltonienne. Chaque cadre porte un nom
+   écrit, et une seule couleur suffit. */
+.proj { list-style: none; padding: 0; margin: var(--space-6) 0; display: grid; gap: var(--space-4); }
+@media (min-width: 620px) { .proj { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1000px) { .proj { grid-template-columns: repeat(3, 1fr); } }
+
+.proj li {
+  border: 1px solid var(--rule-hair);
+  border-radius: 2px;
+  padding: var(--space-3);
+  background: var(--paper-raised);
+}
+.proj__head {
+  display: flex; align-items: center; gap: var(--space-2);
+  font-family: system-ui, sans-serif; font-size: 14px;
+  margin: 0 0 var(--space-2); max-width: none;
+}
+.proj__total {
+  margin-inline-start: auto;
+  font-variant-numeric: tabular-nums lining-nums;
+  color: var(--ink-2); font-size: 13px; white-space: nowrap;
+}
+
+.proj__chart { width: 100%; height: auto; display: block; }
+.proj__zero { stroke: var(--rule); stroke-width: 0.6; stroke-dasharray: 2 2; }
+/* Une seule couleur : la courbe porte une grandeur, le nom porte l'identité. */
+.proj__line { fill: none; stroke: var(--perspective-a); stroke-width: 1.8; stroke-linejoin: round; stroke-linecap: round; }
+
+.proj li .provenance { margin: var(--space-2) 0 0; }
+
+.proj__caveat {
+  border-left: 3px solid var(--rule-strong);
+  padding: var(--space-3) var(--space-4);
+  background: var(--paper-sunk);
+  max-width: none;
+}

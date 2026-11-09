@@ -190,11 +190,22 @@ export function useGame(seed: string) {
     setStep({ kind: 'judgement' })
   }
 
-  const answer = (judgement: Judgement) => {
+  const answer = (judgement: Judgement) => answerFor(reform.id, judgement)
+
+  /**
+   * Repond a une question donnee, pas forcement celle de l'acte en cours.
+   *
+   * C'est ce qui permet la RELANCE : reposer la question sur une decision
+   * deja prise, au moment ou le joueur vient d'en voir l'effet sur
+   * quelqu'un d'autre. Sans cela, chaque acte posant une reforme
+   * differente, aucune question n'etait jamais reposee — et le suivi des
+   * changements d'opinion, pourtant au coeur du projet, ne produisait rien.
+   */
+  const answerFor = (questionId: string, judgement: Judgement) => {
     record({
       type: 'answer',
       entry: {
-        questionId: reform.id, judgement, freeText: wording.trim() || null,
+        questionId, judgement, freeText: wording.trim() || null,
         turn: state.opinions.length + 1, characterId: character.id,
         context: `acte ${state.act}`,
       },
@@ -238,6 +249,6 @@ export function useGame(seed: string) {
   return {
     state, step, character, budget, stocks, lines, month, reform,
     monthsDone, oneOff, wording, setWording,
-    actions: { toContract, beginGame, startMonths, resolveEvent, vote, answer, toImpact, nextAct, consultOthers },
+    actions: { toContract, beginGame, startMonths, resolveEvent, vote, answer, answerFor, toImpact, nextAct, consultOthers },
   }
 }
