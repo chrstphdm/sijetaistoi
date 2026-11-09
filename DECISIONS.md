@@ -126,3 +126,26 @@ aucune action aux conséquences durables — mais il existe.
 
 `public/_headers` est conservé : il ne sert à rien sur Pages, et resservira si le site
 change un jour d'hébergeur.
+
+## 16 — L'Atelier n'existe qu'en développement
+
+Question du porteur du projet : « tout le monde peut modifier le jeu depuis
+/#atelier ? »
+
+Sur la sécurité, non : l'Atelier n'a aucun serveur où écrire. Il emploie la File
+System Access API, qui fait désigner un dossier sur la machine du visiteur, ou
+retombe sur un téléchargement. Le site déployé est fait de fichiers statiques que
+personne ne peut modifier sans accès au dépôt.
+
+Mais la question a révélé un défaut de conception : sur un site déployé, l'Atelier ne
+sert à **rien**. Le jeu lit un paquet compilé au moment du build ; un visiteur peut
+éditer, enregistrer, et ne rien voir changer — ni pour lui, ni pour personne. Une
+fonctionnalité qui semble agir sans agir est pire qu'une fonctionnalité absente.
+
+Il est donc réservé au développement. `import.meta.env.DEV` vaut `false` à la
+compilation, donc l'import dynamique tombe en code mort et Rollup retire le fichier
+entier : vérifié, ni le code de l'Atelier ni Zod ne sont envoyés au visiteur.
+
+Conséquence sur les tests : l'Atelier est désormais testé sur le serveur de
+développement, et un test vérifie qu'il est bien **absent** du build de production.
+Tester l'Atelier sur le build vérifierait quelque chose qui n'est pas livré.

@@ -32,9 +32,7 @@ test('aucune violation de la politique de sécurité, ni erreur console', async 
   })
   page.on('pageerror', (e) => problems.push(e.message))
 
-  await reach(page, 'impact')
-  await page.goto('/#atelier')
-  await page.waitForSelector('textarea')
+  await reach(page, 'summary')
 
   const csp = problems.filter((p) => /content security policy|refused to/i.test(p))
   expect(csp, csp.join('\n')).toEqual([])
@@ -50,4 +48,16 @@ test('la politique de sécurité est bien déclarée dans la page', async ({ pag
   expect(csp).toContain("default-src 'none'")
   expect(csp).toContain("connect-src 'none'")
   expect(csp).toContain("form-action 'none'")
+})
+
+test('l’Atelier n’est pas livré au visiteur', async ({ page }) => {
+  // Sur un site déployé il serait décoratif et trompeur : il écrit sur la
+  // machine du visiteur, alors que le jeu lit un paquet figé au build.
+  await page.goto('/')
+  await expect(page.getByRole('button', { name: /Ouvrir l’Atelier/ })).toHaveCount(0)
+
+  await page.goto('/#atelier')
+  await expect(page.getByRole('heading', { name: 'Atelier', level: 1 })).toHaveCount(0)
+  // Le jeu s'affiche normalement, le fragment est simplement ignoré.
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Tu es')
 })

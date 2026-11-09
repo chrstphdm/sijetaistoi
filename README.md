@@ -19,10 +19,15 @@ Voir [PLAN.md](PLAN.md) pour la conception complète et la feuille de route.
 
 ```bash
 npm install
-npm run dev        # serveur de développement
-npm test           # 24 tests
-npm run build      # vérification de types + build de production
+npm run dev        # serveur de développement, Atelier inclus
+npm test           # tests unitaires et de propriété
+npm run test:e2e   # accessibilité, clavier, petit écran, isolation réseau
+npm run build      # contenu, lexique, contrastes, types, puis build
 ```
+
+L'**Atelier** — création et modification du contenu sans toucher au code — n'existe
+qu'en développement, sur `#atelier`. Sur un site déployé il serait décoratif : le jeu
+lit un paquet compilé au moment du build.
 
 Node 22.12+ requis.
 

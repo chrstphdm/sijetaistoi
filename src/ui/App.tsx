@@ -9,10 +9,23 @@ import { CharacterIntro } from './components/CharacterIntro.tsx'
 import { GameRail } from './components/GameRail.tsx'
 import { MethodScreen } from './components/MethodScreen.tsx'
 
-/** Chargé à la demande : le code de l'Atelier et Zod restent hors du jeu. */
-const Studio = lazy(() =>
-  import('@/studio/Studio.tsx').then((m) => ({ default: m.Studio })),
-)
+/**
+ * L'Atelier n'existe QU'EN DÉVELOPPEMENT.
+ *
+ * Sur un site déployé il serait décoratif et trompeur : il écrit dans un
+ * dossier de la machine du visiteur, alors que le jeu lit un paquet figé au
+ * moment du build. Un visiteur pourrait éditer, « enregistrer », et ne rien
+ * voir changer — ni pour lui, ni pour personne.
+ *
+ * `import.meta.env.DEV` vaut `false` à la compilation, donc l'import
+ * dynamique tombe en code mort et Rollup retire le fichier entier : le code
+ * de l'Atelier et Zod ne sont pas même envoyés au visiteur.
+ */
+const STUDIO_AVAILABLE = import.meta.env.DEV
+
+const Studio = STUDIO_AVAILABLE
+  ? lazy(() => import('@/studio/Studio.tsx').then((m) => ({ default: m.Studio })))
+  : null
 import { MonthScreen } from './components/MonthScreen.tsx'
 import { ReformVote } from './components/ReformVote.tsx'
 import { ImpactForEach, rotationOrder } from './components/ImpactForEach.tsx'
@@ -31,7 +44,7 @@ export function App() {
   const [showOthers, setShowOthers] = useState(false)
   const [showMethod, setShowMethod] = useState(false)
   const [showStudio, setShowStudio] = useState(
-    () => typeof window !== 'undefined' && window.location.hash === '#atelier',
+    () => STUDIO_AVAILABLE && typeof window !== 'undefined' && window.location.hash === '#atelier',
   )
 
   /**
@@ -42,7 +55,7 @@ export function App() {
    * Relevé par un test de bout en bout.
    */
   useEffect(() => {
-    const sync = () => setShowStudio(window.location.hash === '#atelier')
+    const sync = () => setShowStudio(STUDIO_AVAILABLE && window.location.hash === '#atelier')
     window.addEventListener('hashchange', sync)
     return () => window.removeEventListener('hashchange', sync)
   }, [])
@@ -54,7 +67,7 @@ export function App() {
 
   const allIds = characters.map((c) => c.id)
 
-  if (showStudio) {
+  if (showStudio && Studio) {
     return (
       <Suspense fallback={<p className="sheet">Chargement de l’Atelier…</p>}>
         <Studio
@@ -226,12 +239,14 @@ export function App() {
             Comment ce jeu est construit, et ce qu’il ne parvient pas à éviter
           </button>
         </p>
-        <p>
-          <button type="button" className="timeline__toggle"
-            onClick={() => { window.location.hash = '#atelier'; setShowStudio(true) }}>
-            Ouvrir l’Atelier et modifier le contenu
-          </button>
-        </p>
+        {STUDIO_AVAILABLE && (
+          <p>
+            <button type="button" className="timeline__toggle"
+              onClick={() => { window.location.hash = '#atelier'; setShowStudio(true) }}>
+              Ouvrir l’Atelier et modifier le contenu
+            </button>
+          </p>
+        )}
         <details>
           <summary>Comment ce jeu choisit tes personnages</summary>
           <p className="provenance">
