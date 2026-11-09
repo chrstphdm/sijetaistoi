@@ -24,6 +24,7 @@
     "childCount": 2,
     "hasSchoolAgedChild": true,
     "housingZone": "tendue",
+    "hasCar": true,
     "recognisedDisability": false
   },
   "budget": {

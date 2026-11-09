@@ -25,9 +25,10 @@
   "cost": {
     "amount": 34,
     "unit": "EUR_month",
-    "nature": "fiction"
+    "nature": "fiction",
+    "note": "Révision annuelle indexée sur l'indice de référence des loyers : environ 3 % du loyer, ordre de grandeur des dernières années (plafond légal de 3,5 % en 2023-2024, parc privé comme social)."
   },
-  "text": "Le bail est révisé : 34 € de plus par mois à partir du prochain terme. C'est la troisième révision depuis l'entrée dans le logement.",
+  "text": "Le bail est révisé : {montant} de plus par mois à partir du prochain terme. C'est la troisième révision depuis l'entrée dans le logement.",
   "options": [
     {
       "id": "accepter",
@@ -36,7 +37,11 @@
         {
           "type": "recurring",
           "amount": 34,
-          "code": "logement"
+          "code": "logement",
+          "share": {
+            "rate": 0.03,
+            "of": "logement"
+          }
         }
       ]
     },
@@ -47,7 +52,11 @@
         {
           "type": "recurring",
           "amount": 12,
-          "code": "logement"
+          "code": "logement",
+          "share": {
+            "rate": 0.01,
+            "of": "logement"
+          }
         }
       ],
       "narrativeTrace": "contestation-loyer"
@@ -59,7 +68,11 @@
         {
           "type": "recurring",
           "amount": 34,
-          "code": "logement"
+          "code": "logement",
+          "share": {
+            "rate": 0.03,
+            "of": "logement"
+          }
         },
         {
           "type": "one_off",
@@ -77,5 +90,11 @@
       "liberte-de-choix",
       "solidarite"
     ]
-  }
+  },
+  "costShare": [
+    {
+      "rate": 0.03,
+      "of": "logement"
+    }
+  ]
 }

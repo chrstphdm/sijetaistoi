@@ -169,3 +169,41 @@ export function LookArt({ id }: { readonly id: string }) {
   const Art = LOOK_ART[id]
   return Art ? <div className="look__art" aria-hidden="true"><Art /></div> : null
 }
+
+/* ---------------------------------------------- Garanties de la méthode */
+
+const TRUST_ICONS: Record<string, ReactNode> = {
+  // Une coche dans un bouclier : une règle vérifiée, qui bloque.
+  checks: (
+    <Icon>
+      <path d="M24 5l15 6v11c0 10-6.5 17-15 21-8.5-4-15-11-15-21V11z" />
+      <path d="M17 24l5 5 10-11" />
+    </Icon>
+  ),
+  // Un document cité.
+  sources: (
+    <Icon>
+      <path d="M12 5h17l9 9v29H12z" />
+      <path d="M29 5v9h9M18 22h14M18 29h14M18 36h9" />
+    </Icon>
+  ),
+  // Deux lectures d'un même point : deux chemins depuis un nœud.
+  hypotheses: (
+    <Icon>
+      <circle cx="24" cy="10" r="4" />
+      <path d="M24 14v7M24 21l-11 9v9M24 21l11 9v9" />
+      <circle cx="13" cy="41" r="2.5" /><circle cx="35" cy="41" r="2.5" />
+    </Icon>
+  ),
+  // Une loupe : ce qu'on n'a pas su éviter, mis en évidence.
+  biases: (
+    <Icon>
+      <circle cx="21" cy="21" r="12" />
+      <path d="M30 30l11 11M21 15v8M21 27v.5" />
+    </Icon>
+  ),
+}
+
+export function TrustIcon({ id }: { readonly id: string }) {
+  return TRUST_ICONS[id] ?? null
+}

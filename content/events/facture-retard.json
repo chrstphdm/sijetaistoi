@@ -20,9 +20,10 @@
   "cost": {
     "amount": 3200,
     "unit": "EUR",
-    "nature": "fiction"
+    "nature": "fiction",
+    "note": "Environ 80 % du revenu d'activité indépendante du mois : le plus gros client."
   },
-  "text": "Le plus gros client annonce un décalage de paiement : 3 200 € attendus ce mois-ci n'arriveront qu'en novembre. Le travail est livré, accepté, et facturé depuis six semaines.",
+  "text": "Le plus gros client annonce un décalage de paiement : {montant} attendus ce mois-ci n'arriveront qu'en novembre. Le travail est livré, accepté, et facturé depuis six semaines.",
   "options": [
     {
       "id": "attendre",
@@ -31,7 +32,11 @@
         {
           "type": "one_off",
           "amount": 3200,
-          "settlement": "income_loss"
+          "settlement": "income_loss",
+          "share": {
+            "rate": 0.8,
+            "of": "revenu-independant"
+          }
         }
       ]
     },
@@ -42,7 +47,11 @@
         {
           "type": "spread",
           "amount": 3100,
-          "months": 2
+          "months": 2,
+          "share": {
+            "rate": 0.78,
+            "of": "revenu-independant"
+          }
         }
       ],
       "narrativeTrace": "relance-client"
@@ -54,12 +63,16 @@
         {
           "type": "one_off",
           "amount": 3200,
-          "settlement": "income_loss"
+          "settlement": "income_loss",
+          "share": {
+            "rate": 0.8,
+            "of": "revenu-independant"
+          }
         },
         {
-          "type": "recurring",
-          "amount": 45,
-          "code": "impots"
+          "type": "one_off",
+          "amount": 90,
+          "settlement": "income_loss"
         }
       ]
     }
@@ -71,5 +84,11 @@
       "egalite-de-traitement",
       "responsabilite-individuelle"
     ]
-  }
+  },
+  "costShare": [
+    {
+      "rate": 0.8,
+      "of": "revenu-independant"
+    }
+  ]
 }

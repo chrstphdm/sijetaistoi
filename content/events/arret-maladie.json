@@ -8,11 +8,16 @@
     "CHOC"
   ],
   "eligibility": {
-    "and": [
+    "or": [
       [
-        "householdSize",
-        "gte",
-        1
+        "activities",
+        "contains",
+        "employee"
+      ],
+      [
+        "activities",
+        "contains",
+        "self_employed"
       ]
     ]
   },
@@ -21,13 +26,9 @@
     "amount": 980,
     "unit": "EUR",
     "nature": "fiction",
-    "range": [
-      320,
-      2400
-    ],
-    "note": "Perte nette très variable selon le statut : indemnisation, délai de carence, maintien de salaire."
+    "note": "Salarié : trois jours de carence, puis indemnités journalières et complément employeur — environ 12 % du salaire du mois. Indépendant : carence et indemnités plafonnées — environ 45 % du revenu du mois."
   },
-  "text": "Trois semaines d'arrêt après une chute. Selon le statut, le revenu du mois baisse de quelques dizaines d'euros ou s'effondre.",
+  "text": "Trois semaines d'arrêt après une chute. Selon le statut, le revenu du mois baisse de quelques dizaines d'euros ou s'effondre : ici, {montant} en moins sur le mois.",
   "options": [
     {
       "id": "respecter",
@@ -36,7 +37,30 @@
         {
           "type": "one_off",
           "amount": 980,
-          "settlement": "income_loss"
+          "settlement": "income_loss",
+          "share": {
+            "rate": 0.12,
+            "of": "salaire-net",
+            "when": [
+              "activities",
+              "contains",
+              "employee"
+            ]
+          }
+        },
+        {
+          "type": "one_off",
+          "amount": 980,
+          "settlement": "income_loss",
+          "share": {
+            "rate": 0.45,
+            "of": "revenu-independant",
+            "when": [
+              "activities",
+              "contains",
+              "self_employed"
+            ]
+          }
         }
       ]
     },
@@ -47,7 +71,30 @@
         {
           "type": "one_off",
           "amount": 330,
-          "settlement": "income_loss"
+          "settlement": "income_loss",
+          "share": {
+            "rate": 0.04,
+            "of": "salaire-net",
+            "when": [
+              "activities",
+              "contains",
+              "employee"
+            ]
+          }
+        },
+        {
+          "type": "one_off",
+          "amount": 330,
+          "settlement": "income_loss",
+          "share": {
+            "rate": 0.15,
+            "of": "revenu-independant",
+            "when": [
+              "activities",
+              "contains",
+              "self_employed"
+            ]
+          }
         }
       ],
       "narrativeTrace": "reprise-anticipee"
@@ -59,7 +106,30 @@
         {
           "type": "one_off",
           "amount": 540,
-          "settlement": "income_loss"
+          "settlement": "income_loss",
+          "share": {
+            "rate": 0.06,
+            "of": "salaire-net",
+            "when": [
+              "activities",
+              "contains",
+              "employee"
+            ]
+          }
+        },
+        {
+          "type": "one_off",
+          "amount": 540,
+          "settlement": "income_loss",
+          "share": {
+            "rate": 0.25,
+            "of": "revenu-independant",
+            "when": [
+              "activities",
+              "contains",
+              "self_employed"
+            ]
+          }
         }
       ]
     }
@@ -71,5 +141,25 @@
       "besoin",
       "contribution-proportionnelle"
     ]
-  }
+  },
+  "costShare": [
+    {
+      "rate": 0.12,
+      "of": "salaire-net",
+      "when": [
+        "activities",
+        "contains",
+        "employee"
+      ]
+    },
+    {
+      "rate": 0.45,
+      "of": "revenu-independant",
+      "when": [
+        "activities",
+        "contains",
+        "self_employed"
+      ]
+    }
+  ]
 }

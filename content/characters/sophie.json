@@ -24,6 +24,7 @@
     "childCount": 2,
     "hasSchoolAgedChild": true,
     "housingZone": "detendue",
+    "hasCar": true,
     "recognisedDisability": false
   },
   "budget": {

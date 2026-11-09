@@ -59,6 +59,7 @@ export function toStocks(character: CharacterT): Stocks {
 export function traitsOf(character: CharacterT) {
   return {
     ...character.traits,
+    budgetLines: character.budget.lines.filter((l) => l.value.amount !== 0).map((l) => l.code),
     incomeDecile: character.identity.incomeDecile,
     age: character.identity.age,
   }

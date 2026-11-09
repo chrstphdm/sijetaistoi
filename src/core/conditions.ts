@@ -47,6 +47,13 @@ export const TRAIT_VOCABULARY = {
    * n'obeit pas aux memes regles qu'un minimum social verse a un actif :
    * les confondre ferait disparaitre la question meme. */
   'recognisedDisability': 'boolean',
+  'hasCar': 'boolean',
+  /**
+   * Les lignes que porte le releve du personnage. Calcule, pas declare : il
+   * permet a une option de ne s'offrir qu'a qui la peut — on n'accelere pas
+   * le remboursement d'un credit qu'on n'a pas.
+   */
+  'budgetLines': 'string[]',
   // Contexte de partie, fourni par le moteur et non par le personnage.
   'month': 'number',
   'year': 'number',

@@ -50,10 +50,21 @@ async function walkMonths(user: User) {
   }
 }
 
-/** Traverse un acte : intro, les mois, la réforme, la question, l'impact. */
-async function playAct(user: User, phrase?: string) {
+/** Vit les mois d'un nouvel acte, jusqu'à la relance s'il y en a une. */
+async function liveMonths(user: User) {
   await user.click(screen.getByRole('button', { name: /Commencer le mois/ }))
   await walkMonths(user)
+}
+
+/** Traverse un acte : intro, les mois, la réforme, la question, l'impact. */
+async function playAct(user: User, phrase?: string) {
+  // Absent quand le test a déjà vécu les mois pour répondre à la relance.
+  const begin = screen.queryByRole('button', { name: /Commencer le mois/ })
+  if (begin) await user.click(begin)
+  await walkMonths(user)
+  // La relance vient après les mois, avant la décision collective.
+  const next = screen.queryByRole('button', { name: /Passer à la décision collective/ })
+  if (next) await user.click(next)
 
   if (phrase) await user.type(screen.getByLabelText(/qu’est-ce qui te paraît juste/), phrase)
   await user.click(screen.getAllByRole('button', { name: 'Décider ceci' })[1]!)
@@ -529,11 +540,28 @@ describe('relance : la même question, après l’avoir vécue', () => {
     await enterGame(user)
     await playAct(user, 'ma première règle')
     await user.click(screen.getByRole('button', { name: /Quelques mois plus tard/ }))
+    await liveMonths(user)
 
     const relaunch = screen.getByRole('heading', { name: /La même question, maintenant/ })
       .closest('section')!
     expect(within(relaunch).getByText(/ta réponse était/)).toBeTruthy()
     expect(within(relaunch).getByText(/« ma première règle »/)).toBeTruthy()
+  })
+
+  it('ne la pose qu’après les mois vécus, relevé sous les yeux', async () => {
+    // Elle venait dès l'arrivée chez le personnage, avant qu'on ait vu ses
+    // revenus : on rejugeait une règle sur quelqu'un qu'on ne connaissait pas.
+    const user = userEvent.setup()
+    render(<App />)
+    await enterGame(user)
+    await playAct(user, 'ma règle')
+    await user.click(screen.getByRole('button', { name: /Quelques mois plus tard/ }))
+    expect(screen.queryByRole('heading', { name: /La même question, maintenant/ })).toBeNull()
+
+    await liveMonths(user)
+    expect(screen.getByRole('heading', { name: /La même question, maintenant/ })).toBeTruthy()
+    // Le relevé du personnage est affiché à côté de la question.
+    expect(screen.getByRole('heading', { name: /^Relevé de / })).toBeTruthy()
   })
 
   it('note un changement de position sans le juger', async () => {
@@ -542,6 +570,7 @@ describe('relance : la même question, après l’avoir vécue', () => {
     await enterGame(user)
     await playAct(user, 'ma règle')
     await user.click(screen.getByRole('button', { name: /Quelques mois plus tard/ }))
+    await liveMonths(user)
 
     const relaunch = () =>
       screen.getByRole('heading', { name: /La même question, maintenant/ }).closest('section')!
@@ -560,6 +589,7 @@ describe('relance : la même question, après l’avoir vécue', () => {
     await enterGame(user)
     await playAct(user, 'ma règle')
     await user.click(screen.getByRole('button', { name: /Quelques mois plus tard/ }))
+    await liveMonths(user)
     await user.click(screen.getAllByRole('radio', { name: 'non' })[0]!)
     await playAct(user)
     await user.click(screen.getByRole('button', { name: /Quelques mois plus tard/ }))

@@ -21,17 +21,22 @@
     "amount": 70,
     "unit": "EUR_month",
     "nature": "fiction",
-    "note": "Revalorisation nette mensuelle, hors effet sur l'impôt et les prestations, que le moteur recalcule."
+    "note": "Revalorisation d'environ 2,5 % du salaire net."
   },
-  "text": "La revalorisation annoncée l'an dernier prend effet ce mois-ci : 70 € nets de plus par mois.",
+  "text": "La revalorisation annoncée l'an dernier prend effet ce mois-ci : {montant} nets de plus par mois.",
   "options": [
     {
       "id": "mettre-de-cote",
       "label": "Mettre la différence de côté",
       "effects": [
         {
-          "type": "one_off",
-          "amount": -70
+          "type": "recurring",
+          "amount": -70,
+          "code": "salaire-net",
+          "share": {
+            "rate": -0.025,
+            "of": "salaire-net"
+          }
         }
       ]
     },
@@ -42,7 +47,20 @@
         {
           "type": "recurring",
           "amount": -70,
-          "code": "alimentation"
+          "code": "salaire-net",
+          "share": {
+            "rate": -0.025,
+            "of": "salaire-net"
+          }
+        },
+        {
+          "type": "recurring",
+          "amount": 70,
+          "code": "alimentation",
+          "share": {
+            "rate": 0.025,
+            "of": "salaire-net"
+          }
         }
       ]
     },
@@ -52,11 +70,29 @@
       "effects": [
         {
           "type": "recurring",
-          "amount": -140,
-          "code": "credit-conso"
+          "amount": -70,
+          "code": "salaire-net",
+          "share": {
+            "rate": -0.025,
+            "of": "salaire-net"
+          }
+        },
+        {
+          "type": "recurring",
+          "amount": 70,
+          "code": "credit-conso",
+          "share": {
+            "rate": 0.025,
+            "of": "salaire-net"
+          }
         }
       ],
-      "narrativeTrace": "desendettement"
+      "narrativeTrace": "desendettement",
+      "availableIf": [
+        "budgetLines",
+        "contains",
+        "credit-conso"
+      ]
     }
   ],
   "microQuestion": {
@@ -66,5 +102,11 @@
       "besoin",
       "contribution-progressive"
     ]
-  }
+  },
+  "costShare": [
+    {
+      "rate": -0.025,
+      "of": "salaire-net"
+    }
+  ]
 }

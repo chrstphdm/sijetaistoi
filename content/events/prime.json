@@ -4,18 +4,114 @@
   "descriptiveTitle": "Une prime exceptionnelle",
   "valence": "positive",
   "intensity": 1,
-  "dramaticFunction": ["RESPIRATION"],
-  "eligibility": { "and": [["activities", "contains", "employee"]] },
+  "dramaticFunction": [
+    "RESPIRATION"
+  ],
+  "eligibility": {
+    "and": [
+      [
+        "activities",
+        "contains",
+        "employee"
+      ]
+    ]
+  },
   "probability": "uniform",
-  "cost": { "amount": 450, "unit": "EUR", "nature": "fiction" },
-  "text": "Une prime de 450 € est versée ce mois-ci, annoncée comme exceptionnelle et non reconductible.",
+  "cost": {
+    "amount": 450,
+    "unit": "EUR",
+    "nature": "fiction",
+    "note": "Environ un quart du salaire net mensuel : une prime au prorata du temps de travail."
+  },
+  "text": "Une prime de {montant} est versée ce mois-ci, annoncée comme exceptionnelle et non reconductible.",
   "options": [
-    { "id": "epargner", "label": "La mettre de côté", "effects": [{ "type": "one_off", "amount": -450 }] },
-    { "id": "rattraper", "label": "Rattraper des dépenses reportées", "effects": [{ "type": "one_off", "amount": -450 }, { "type": "recurring", "amount": 20, "code": "habillement" }] },
-    { "id": "rembourser", "label": "Solder une partie du crédit en cours", "effects": [{ "type": "one_off", "amount": -450 }, { "type": "recurring", "amount": -25, "code": "credit-conso" }] }
+    {
+      "id": "epargner",
+      "label": "La mettre de côté",
+      "effects": [
+        {
+          "type": "one_off",
+          "amount": -450,
+          "share": {
+            "rate": -0.25,
+            "of": "salaire-net"
+          }
+        }
+      ]
+    },
+    {
+      "id": "rattraper",
+      "label": "Rattraper des dépenses reportées",
+      "effects": [
+        {
+          "type": "one_off",
+          "amount": -450,
+          "share": {
+            "rate": -0.25,
+            "of": "salaire-net"
+          }
+        },
+        {
+          "type": "one_off",
+          "amount": 270,
+          "settlement": "payment",
+          "share": {
+            "rate": 0.15,
+            "of": "salaire-net"
+          }
+        }
+      ]
+    },
+    {
+      "id": "rembourser",
+      "label": "Solder une partie du crédit en cours",
+      "effects": [
+        {
+          "type": "one_off",
+          "amount": -450,
+          "share": {
+            "rate": -0.25,
+            "of": "salaire-net"
+          }
+        },
+        {
+          "type": "one_off",
+          "amount": 450,
+          "settlement": "payment",
+          "share": {
+            "rate": 0.25,
+            "of": "salaire-net"
+          }
+        },
+        {
+          "type": "recurring",
+          "amount": -12,
+          "code": "credit-conso",
+          "share": {
+            "rate": -0.007,
+            "of": "salaire-net"
+          }
+        }
+      ],
+      "availableIf": [
+        "budgetLines",
+        "contains",
+        "credit-conso"
+      ]
+    }
   ],
   "microQuestion": {
     "text": "Une prime exceptionnelle devrait-elle être soumise aux mêmes prélèvements qu'un salaire ?",
-    "principlesInTension": ["egalite-de-traitement", "merite", "contribution-progressive"]
-  }
+    "principlesInTension": [
+      "egalite-de-traitement",
+      "merite",
+      "contribution-progressive"
+    ]
+  },
+  "costShare": [
+    {
+      "rate": -0.25,
+      "of": "salaire-net"
+    }
+  ]
 }

@@ -16,6 +16,10 @@ export async function playMonths(page: Page) {
     }
     break
   }
+  // La relance, quand l'acte en a une, vient après les mois et avant la
+  // décision collective.
+  const next = page.getByRole('button', { name: /Passer à la décision collective/ })
+  if (await next.isVisible().catch(() => false)) await next.click()
 }
 
 export type Phase =

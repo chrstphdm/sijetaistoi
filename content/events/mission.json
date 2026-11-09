@@ -4,18 +4,79 @@
   "descriptiveTitle": "Une commande inattendue",
   "valence": "positive",
   "intensity": 2,
-  "dramaticFunction": ["RESPIRATION"],
-  "eligibility": { "and": [["activities", "contains", "self_employed"]] },
+  "dramaticFunction": [
+    "RESPIRATION"
+  ],
+  "eligibility": {
+    "and": [
+      [
+        "activities",
+        "contains",
+        "self_employed"
+      ]
+    ]
+  },
   "probability": "uniform",
-  "cost": { "amount": 2400, "unit": "EUR", "nature": "fiction" },
-  "text": "Un ancien client rappelle : un chantier de 2 400 € à livrer sous six semaines. Il faudra décaler deux commandes en cours, et il paie généralement à quarante-cinq jours.",
+  "cost": {
+    "amount": 2400,
+    "unit": "EUR",
+    "nature": "fiction",
+    "note": "Environ 80 % du revenu d'activité indépendante d'un mois."
+  },
+  "text": "Un ancien client rappelle : un chantier de {montant} à livrer sous six semaines. Il faudra décaler deux commandes en cours, et il paie généralement à quarante-cinq jours.",
   "options": [
-    { "id": "accepter", "label": "Accepter la commande", "effects": [{ "type": "one_off", "amount": -2400 }] },
-    { "id": "accepter-acompte", "label": "Accepter, en demandant un acompte", "effects": [{ "type": "spread", "amount": -2400, "months": 2 }] },
-    { "id": "refuser", "label": "Refuser pour tenir les délais en cours", "effects": [{ "type": "none" }], "narrativeTrace": "refus-commande" }
+    {
+      "id": "accepter",
+      "label": "Accepter la commande",
+      "effects": [
+        {
+          "type": "one_off",
+          "amount": -2400,
+          "share": {
+            "rate": -0.8,
+            "of": "revenu-independant"
+          }
+        }
+      ]
+    },
+    {
+      "id": "accepter-acompte",
+      "label": "Accepter, en demandant un acompte",
+      "effects": [
+        {
+          "type": "spread",
+          "amount": -2400,
+          "months": 2,
+          "share": {
+            "rate": -0.8,
+            "of": "revenu-independant"
+          }
+        }
+      ]
+    },
+    {
+      "id": "refuser",
+      "label": "Refuser pour tenir les délais en cours",
+      "effects": [
+        {
+          "type": "none"
+        }
+      ],
+      "narrativeTrace": "refus-commande"
+    }
   ],
   "microQuestion": {
     "text": "Un revenu irrégulier devrait-il être traité différemment d'un salaire par l'impôt ?",
-    "principlesInTension": ["merite", "egalite-de-traitement", "securite-economique"]
-  }
+    "principlesInTension": [
+      "merite",
+      "egalite-de-traitement",
+      "securite-economique"
+    ]
+  },
+  "costShare": [
+    {
+      "rate": -0.8,
+      "of": "revenu-independant"
+    }
+  ]
 }

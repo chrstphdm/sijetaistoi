@@ -1,7 +1,8 @@
 import { useState, type CSSProperties } from 'react'
 import { bundle, characters } from '@/content/load.ts'
 import { durability, setDurability } from '../persistence.ts'
-import { BalanceIcon, HeroCast, LookArt, TheoryIcon } from './HomeArt.tsx'
+import { BalanceIcon, HeroCast, LookArt, TheoryIcon, TrustIcon } from './HomeArt.tsx'
+import { REPO_URL } from '../links.ts'
 import { LoopDiagram } from './LoopDiagram.tsx'
 import { ScaleDemo } from './ScaleDemo.tsx'
 import { Seal, sealHue } from './Seal.tsx'
@@ -30,6 +31,19 @@ export function HomeScreen({ onStart, onMethod }: {
   const byId = new Map(principles.map((p) => [p.id, p]))
   const allIds = characters.map((c) => c.id)
 
+  /*
+   * Les garanties de la méthode, chiffrées depuis les DONNÉES et non
+   * recopiées : un compteur qui dériverait de ce que le jeu fait vraiment
+   * serait pire que pas de compteur.
+   */
+  const section = (id: string) => bundle.method.sections.find((s) => s.id === id)
+  const checks = section('ce-qui-est-verifie')?.items.length ?? 0
+  const biases = section('partialite-residuelle')?.items.length ?? 0
+  const debated = bundle.hypotheses.filter((h) => h.status !== 'consensual').length
+  const organisations = [...new Set(bundle.sources.map((s) => s.organisation))].sort((a, b) =>
+    a.localeCompare(b, 'fr'),
+  )
+
   const start = (
     <button type="button" className="home__start" onClick={onStart}>
       {i.startLabel}
@@ -49,6 +63,14 @@ export function HomeScreen({ onStart, onMethod }: {
               {start}
               <span className="hero__note">{i.duration}</span>
             </p>
+            {/* Dès le bandeau : la façon dont le jeu se garde de convaincre
+                n'est pas une annexe, c'est ce qui le fait fonctionner. */}
+            <p className="hero__trust">
+              <span>{checks} règles de neutralité vérifiées</span>
+              <span>{bundle.sources.length} sources publiques</span>
+              <span>{biases} biais déclarés</span>
+              <a href="#confiance">Comment le jeu se garde de te convaincre&nbsp;↓</a>
+            </p>
           </div>
           <HeroCast />
         </div>
@@ -65,6 +87,61 @@ export function HomeScreen({ onStart, onMethod }: {
             <li><b>20</b><span>minutes environ</span></li>
             <li className="figures--zero"><b>0</b><span>score, classement ou étiquette</span></li>
           </ul>
+        </section>
+
+        {/* LA MÉTHODE, LE PLUS TÔT POSSIBLE. Elle était au bout d'un lien en
+            pied de page, alors que c'est elle qui commande tout le jeu : ce
+            qu'il montre, dans quel ordre, avec quels chiffres. */}
+        <section className="band trust" id="confiance" aria-labelledby="h-trust">
+          <h2 id="h-trust">Comment ce jeu se garde de te convaincre</h2>
+          <p className="lead">
+            Un jeu sur des choix politiques n’est jamais neutre. Celui-ci rend vérifiable ce qu’il
+            fait, ce qu’il s’interdit, et surtout ce qu’il n’arrive pas à éviter.
+          </p>
+          <ul className="trust__grid">
+            <li className="trust__card">
+              <span className="trust__icon"><TrustIcon id="checks" /></span>
+              <p className="trust__figure"><b>{checks}</b> règles vérifiées à chaque mise en ligne</p>
+              <p>
+                Elles bloquent la publication si elles sont enfreintes&nbsp;: chaque chiffre dit
+                s’il est sourcé, supposé ou fictif&nbsp;; chaque option porte des arguments dans les
+                deux sens&nbsp;; aucune n’a que des effets défavorables.
+              </p>
+            </li>
+            <li className="trust__card">
+              <span className="trust__icon"><TrustIcon id="sources" /></span>
+              <p className="trust__figure"><b>{bundle.sources.length}</b> sources publiques</p>
+              <p>
+                Les montants sont calibrés sur des statistiques publiques. L’affiliation de chaque
+                source est déclarée, jamais jugée.
+              </p>
+              <p className="trust__orgs">{organisations.join(' · ')}</p>
+            </li>
+            <li className="trust__card">
+              <span className="trust__icon"><TrustIcon id="hypotheses" /></span>
+              <p className="trust__figure"><b>{debated}</b> hypothèses contestées, deux lectures chacune</p>
+              <p>
+                Là où les travaux disponibles divergent, le jeu ne tranche pas&nbsp;: il nomme les
+                deux lectures, et signale à quel moment un chiffre en dépend.
+              </p>
+            </li>
+            <li className="trust__card">
+              <span className="trust__icon"><TrustIcon id="biases" /></span>
+              <p className="trust__figure"><b>{biases}</b> biais que nous n’avons pas su éviter</p>
+              <p>
+                Le cadrage des questions, le choix des sujets, la mesure affichée en premier… Ils
+                sont publiés, pour pouvoir être contestés.
+              </p>
+            </li>
+          </ul>
+          <p className="trust__actions">
+            <button type="button" className="btn-primary" onClick={onMethod}>
+              Lire comment le jeu est construit
+            </button>
+            <a href={REPO_URL} rel="noopener noreferrer">
+              Charte, sources et code, sur le dépôt public&nbsp;↗
+            </a>
+          </p>
         </section>
 
         {/* Le critère de réussite, en grand : c'est la seule promesse du jeu. */}

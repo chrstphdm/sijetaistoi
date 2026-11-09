@@ -56,6 +56,8 @@ export type Cursor<Step = unknown> = {
    * Optionnel : une sauvegarde anterieure reprend avec un historique vide.
    */
   readonly monthLog?: readonly MonthEntry[]
+  /** Question a reposer apres les mois de l'acte. Optionnel, comme `monthLog`. */
+  readonly pendingRelaunch?: string | null
   readonly wording: string
   /**
    * Position de chaque flux aleatoire.

@@ -10,9 +10,9 @@
   "eligibility": {
     "and": [
       [
-        "tenure",
-        "ne",
-        "housed"
+        "hasCar",
+        "eq",
+        true
       ]
     ]
   },

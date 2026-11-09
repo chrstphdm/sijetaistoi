@@ -7,6 +7,7 @@ import { unfavourableCap } from '@/core/callback.ts'
 import { MIN_OBSERVATIONS } from '@/core/summary.ts'
 import { Icon } from './HomeArt.tsx'
 import { Seal } from './Seal.tsx'
+import { DOCUMENTS, REPO_URL } from '../links.ts'
 
 /**
  * La page methode.
@@ -321,7 +322,9 @@ export function MethodScreen({ onBack }: { readonly onBack?: () => void }) {
               <li key={s.id} className="source">
                 <span className="source__org" aria-hidden="true">{s.organisation}</span>
                 <span className="source__text">
-                  <strong>{s.name}</strong>
+                  {/* Chaque source porte son adresse dans les données : la page
+                      la taisait. Un lien, pas une ressource chargée. */}
+                  <strong><a href={s.url} rel="noopener noreferrer">{s.name}</a></strong>
                   <span className="provenance">
                     {s.organisation} · {AFFILIATION[s.affiliation] ?? s.affiliation} · {s.vintage}
                   </span>
@@ -330,6 +333,27 @@ export function MethodScreen({ onBack }: { readonly onBack?: () => void }) {
               </li>
             ))}
           </ul>
+        </section>
+
+        {/* Tout est consultable. La page affirmait que « le code et le contenu
+            sont publics » sans jamais dire où. */}
+        <section className="band band--tint" aria-labelledby="m-documents">
+          <h2 id="m-documents">Les documents de travail, en entier</h2>
+          <p className="lead">
+            Cette page résume. Les documents qui fondent le jeu sont publiés tels quels, avec
+            l’historique de chaque modification.
+          </p>
+          <ul className="docs">
+            {DOCUMENTS.map((d) => (
+              <li key={d.href} className="doc">
+                <a href={d.href} rel="noopener noreferrer">{d.label}&nbsp;↗</a>
+                <span>{d.what}</span>
+              </li>
+            ))}
+          </ul>
+          <p>
+            <a href={REPO_URL} rel="noopener noreferrer">Le dépôt complet, code et contenu&nbsp;↗</a>
+          </p>
         </section>
 
         <section className="band band--close">

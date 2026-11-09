@@ -58,6 +58,13 @@ const Traits = z.object({
    * absence est le cas general, et l'ecrire partout n'aurait rien ajoute.
    */
   recognisedDisability: z.boolean().default(false),
+  /**
+   * Le foyer a-t-il une voiture ? Declare, sans defaut. L'evenement « la
+   * voiture ne passe pas le controle technique » etait propose a tous ceux
+   * qui ne sont pas heberges : il supposait une voiture a un etudiant dont le
+   * poste transport est un abonnement de 35 EUR.
+   */
+  hasCar: z.boolean(),
 })
 
 const Stocks = z.object({

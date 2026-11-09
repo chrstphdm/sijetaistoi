@@ -112,9 +112,19 @@ for (const e of events) {
   if (e.cost.hypothesisId && !hypothesisIds.has(e.cost.hypothesisId))
     complain(file, 'cost.hypothesisId', `hypothèse inconnue : ${e.cost.hypothesisId}`)
   for (const o of e.options)
-    for (const f of o.effects)
+    for (const f of o.effects) {
       if (f.type === 'recurring' && !lineCodes.has(f.code))
         complain(file, `options.${o.id}`, `poste inconnu : ${f.code}`)
+      // Une part calculée sur une ligne inexistante vaudrait zéro pour tout
+      // le monde, sans que rien ne le signale.
+      if ('share' in f && f.share && !lineCodes.has(f.share.of))
+        complain(file, `options.${o.id}.share.of`, `poste inconnu : ${f.share.of}`)
+      if ('share' in f && f.share?.when)
+        for (const msg of validateCondition(f.share.when as Condition, `options.${o.id}.share.when`))
+          complain(file, `options.${o.id}.share.when`, msg)
+    }
+  for (const [i, sh] of (e.costShare ?? []).entries())
+    if (!lineCodes.has(sh.of)) complain(file, `costShare.${i}.of`, `poste inconnu : ${sh.of}`)
 }
 
 // Les conditions ne peuvent interroger que le vocabulaire ferme d'attributs.
@@ -124,6 +134,12 @@ for (const e of events) {
 for (const e of events) {
   for (const msg of validateCondition(e.eligibility as Condition))
     complain(`events/${e.id}.json`, 'eligibility', msg)
+  // `availableIf` n'était lu nulle part ; maintenant qu'il l'est, il obéit
+  // au même vocabulaire fermé que l'éligibilité.
+  for (const o of e.options)
+    if (o.availableIf)
+      for (const msg of validateCondition(o.availableIf as Condition, `options.${o.id}.availableIf`))
+        complain(`events/${e.id}.json`, `options.${o.id}.availableIf`, msg)
 }
 
 for (const r of reforms) {

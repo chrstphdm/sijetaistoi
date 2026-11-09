@@ -24,6 +24,7 @@
     "childCount": 1,
     "hasSchoolAgedChild": true,
     "housingZone": "detendue",
+    "hasCar": true,
     "recognisedDisability": false
   },
   "budget": {
@@ -92,7 +93,8 @@
         "value": {
           "amount": 75,
           "unit": "EUR_month",
-          "nature": "fiction"
+          "nature": "fiction",
+          "note": "Essence d'une petite voiture : elle travaille de nuit, quand les bus ne circulent plus."
         }
       },
       {

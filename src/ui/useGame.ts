@@ -17,6 +17,7 @@ import type { CharacterT, LifeEventT, ReformOptionT } from '@/schemas/index.ts'
 import { EMPTY_SETUP, type Setup } from './setup.ts'
 import { FORMAT_VERSION, load, save, type Saved } from './persistence.ts'
 import { entryOf, exceptionalOf, type MonthEntry } from './monthLog.ts'
+import { isMeaningful, resolveEvent as resolveFor } from '@/core/eventResolve.ts'
 
 /**
  * Orchestration d'une partie.
@@ -38,6 +39,14 @@ export type Step =
   | { readonly kind: 'intro' }
   | { readonly kind: 'month'; readonly event: LifeEventT | null }
   | { readonly kind: 'callback'; readonly selection: Selection }
+  /**
+   * La relance : la meme question sur une decision deja prise, posee APRES
+   * les mois vecus chez le personnage qu'elle concerne. Elle venait des
+   * l'arrivee, avant que le joueur ait vu ses revenus et son releve : il
+   * devait rejuger une regle sur une personne qu'il ne connaissait pas
+   * encore.
+   */
+  | { readonly kind: 'relaunch'; readonly questionId: string }
   | { readonly kind: 'reform' }
   | { readonly kind: 'judgement' }
   | { readonly kind: 'impact' }
@@ -55,19 +64,23 @@ const CONTENT_VERSION = '0.1.0'
 type StepSnapshot =
   | { readonly kind: 'month'; readonly eventId: string | null }
   | { readonly kind: 'callback'; readonly selection: Selection }
-  | { readonly kind: Exclude<Step['kind'], 'month' | 'callback'> }
+  | { readonly kind: 'relaunch'; readonly questionId: string }
+  | { readonly kind: Exclude<Step['kind'], 'month' | 'callback' | 'relaunch'> }
 
 const snapshotStep = (step: Step): StepSnapshot =>
   step.kind === 'month'
     ? { kind: 'month', eventId: step.event?.id ?? null }
     : step.kind === 'callback'
       ? { kind: 'callback', selection: step.selection }
-      : { kind: step.kind }
+      : step.kind === 'relaunch'
+        ? { kind: 'relaunch', questionId: step.questionId }
+        : { kind: step.kind }
 
 const restoreStep = (snap: StepSnapshot): Step => {
   if (snap.kind === 'month')
     return { kind: 'month', event: events.find((e) => e.id === snap.eventId) ?? null }
   if (snap.kind === 'callback') return { kind: 'callback', selection: snap.selection }
+  if (snap.kind === 'relaunch') return { kind: 'relaunch', questionId: snap.questionId }
   return { kind: snap.kind }
 }
 
@@ -137,6 +150,8 @@ export function useGame(seed: string, setup: Setup = EMPTY_SETUP) {
   // Optionnel dans le curseur : une sauvegarde plus ancienne reprend avec un
   // historique vide plutôt que d'être écartée.
   const [monthLog, setMonthLog] = useState<readonly MonthEntry[]>(restored?.cursor.monthLog ?? [])
+  /** Question a reposer une fois les mois de l'acte vecus. Optionnel dans le curseur. */
+  const [pendingRelaunch, setPendingRelaunch] = useState<string | null>(restored?.cursor.pendingRelaunch ?? null)
 
   /**
    * Ordre des reformes, tire une fois au debut de la partie.
@@ -204,11 +219,16 @@ export function useGame(seed: string, setup: Setup = EMPTY_SETUP) {
 
   /* ----------------------------------------------------- événements */
   const pickEvent = useCallback((): LifeEventT | null => {
+    // Écartés aussi : ceux qui, chiffrés sur CETTE situation, ne mettent
+    // rien en jeu ou ne laissent plus de choix.
     const eligible = events.filter(
-      (e) => !usedEvents.includes(e.id) && evaluate(e.eligibility as Condition, traits),
+      (e) =>
+        !usedEvents.includes(e.id) &&
+        evaluate(e.eligibility as Condition, traits) &&
+        isMeaningful(resolveFor(e, lines, traits)),
     )
     return random.events.pick(eligible) ?? null
-  }, [usedEvents, traits, random])
+  }, [usedEvents, traits, lines, random])
 
   /* ------------------------------------------------------ callbacks */
   const buildCallback = useCallback(
@@ -266,7 +286,8 @@ export function useGame(seed: string, setup: Setup = EMPTY_SETUP) {
     const done = monthsDone + 1
     setMonthsDone(done)
     const target = MONTHS_PER_ACT[state.act - 1] ?? 2
-    if (done >= target) setStep({ kind: 'reform' })
+    if (done >= target)
+      setStep(pendingRelaunch ? { kind: 'relaunch', questionId: pendingRelaunch } : { kind: 'reform' })
     else setStep({ kind: 'month', event: pickEvent() })
   }
 
@@ -342,6 +363,7 @@ export function useGame(seed: string, setup: Setup = EMPTY_SETUP) {
 
     setMonthsDone(0)
     setMonthLog([])
+    setPendingRelaunch(selection.kind === 'selected' ? selection.callback.rule.reformId : null)
     setRecurring([])
     setOneOff(0)
     setWording('')
@@ -350,6 +372,12 @@ export function useGame(seed: string, setup: Setup = EMPTY_SETUP) {
   }
 
   const consultOthers = () => record({ type: 'open_other_characters' })
+
+  /** Fin de la relance : on passe a la decision collective de l'acte. */
+  const toReform = () => {
+    setPendingRelaunch(null)
+    setStep({ kind: 'reform' })
+  }
 
   /**
    * Sauvegarde a chaque changement notable, et jamais depuis l'accueil.
@@ -374,16 +402,27 @@ export function useGame(seed: string, setup: Setup = EMPTY_SETUP) {
         recurring: recurring.map((r) => ({ code: r.code, amountCents: r.amountCents })),
         oneOffCents: oneOff,
         monthLog,
+        pendingRelaunch,
         wording,
         draws: drawCounts(random),
       },
     })
-  }, [seed, journal, step, monthsDone, reformIndex, usedEvents, recurring, oneOff, monthLog, wording, random])
+  }, [seed, journal, step, monthsDone, reformIndex, usedEvents, recurring, oneOff, monthLog, pendingRelaunch, wording, random])
+
+  /*
+   * L'événement du mois, chiffré sur la situation courante. L'étape garde
+   * l'événement BRUT — c'est lui que la sauvegarde référence — et l'écran
+   * reçoit toujours sa version résolue.
+   */
+  const event = useMemo(
+    () => (step.kind === 'month' && step.event ? resolveFor(step.event, lines, traits) : null),
+    [step, lines, traits],
+  )
 
   return {
-    state, step, character, budget, stocks, lines, month, reform,
+    state, step, event, character, budget, stocks, lines, month, reform,
     monthsDone, monthLog, oneOff, wording, setWording,
     restored: restored !== null,
-    actions: { toContract, beginGame, startMonths, resolveEvent, vote, answer, answerFor, toImpact, nextAct, consultOthers },
+    actions: { toContract, beginGame, startMonths, resolveEvent, vote, answer, answerFor, toImpact, nextAct, toReform, consultOthers },
   }
 }

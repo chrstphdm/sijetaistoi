@@ -70,11 +70,97 @@ function Differe({ cents, year, name }: { cents: number; year: number | null; na
   )
 }
 
+/**
+ * Une barre divergente : vers la droite pour ce qui s'ajoute, vers la gauche
+ * pour ce qui se retranche, depuis un axe central.
+ *
+ * MEME COULEUR dans les deux sens : les accents du jeu encodent le point de
+ * vue, jamais le gain ou la perte. Le sens est porte par la direction, et
+ * ecrit a cote — glyphe et mot —, jamais par la seule couleur.
+ */
+function Bar({ value, max, later = false }: { value: number; max: number; later?: boolean }) {
+  const width = max > 0 ? (Math.abs(value) / max) * 50 : 0
+  return (
+    <span
+      className={`impact__bar${value < 0 ? ' impact__bar--minus' : ''}${later ? ' impact__bar--later' : ''}${width === 0 ? ' impact__bar--zero' : ''}`}
+      style={{ '--w': `${width}%` } as React.CSSProperties}
+    />
+  )
+}
+
+/** La valeur dans l'echelle choisie, signee par les trois canaux du jeu. */
+function Signed({ cents, metric }: { cents: number; metric: string }) {
+  const plus = cents > 0
+  return (
+    <span className="amount">
+      {plus ? '▲' : '▼'} {plus ? '+' : '−'}{metric}{' '}
+      <span className="amount__word">{plus ? 'en plus' : 'en moins'}</span>
+    </span>
+  )
+}
+
 export function ImpactForEach({ characters, world, scale, onScaleChange, screenIndex }: Props) {
   const order = rotationOrder(characters.length, screenIndex)
 
   // Motion IDENTIQUE pour tous : calculee une fois, hors de la boucle.
   const motion = motionFor({ amountCents: 0, netIncomeCents: 1, slackCents: 1, scale: 'slack' })
+
+  /*
+   * Les calculs d'abord, le rendu ensuite : la longueur des barres se
+   * rapporte au plus grand effet de l'écran, il faut donc les connaître tous.
+   */
+  const rows = order.map((i) => {
+    const c = characters[i]!
+    const traits = traitsOf(c)
+    const before = computeMonthlyBudget(toBudgetLines(c))
+    const effects = activeEffectsFor(world, traits, optionLookup)
+    /* Dedupliquee : plusieurs regles en vigueur peuvent viser la meme
+       portee, et la repeter donnerait l'impression de plusieurs
+       exclusions la ou il n'y en a qu'une. */
+    const reasons = [...new Set(effects.map((e) => e.effect.scope.description))]
+
+    /*
+     * CE QUI S'APPLIQUE MAINTENANT EN TETE, LE DIFFERE ENSUITE.
+     *
+     * Cet ecran additionnait tous les effets d'une regle sans regarder
+     * leur horizon. La contribution energie coute 14 EUR par mois des
+     * le premier mois aux menages en chauffage collectif, et leur rend
+     * 31 EUR « apres renovation effective », a cinq ans. Le total, +17,
+     * s'affichait au present : l'ecran annoncait un gain immediat a
+     * ceux a qui la mesure coute d'abord. L'erreur jouait dans un seul
+     * sens, et elle a vecu plusieurs mois pendant que les tests
+     * passaient au vert, parce qu'aucun ne lisait `horizon`.
+     *
+     * Le differe n'est pas masque — c'est un effet de la decision, et
+     * le cacher serait l'erreur inverse. Il est date, et separe : dans
+     * le graphique aussi, ou il a sa propre barre, en pointilles.
+     */
+    const deltaTotal =
+      computeMonthlyBudget(applyEffectsToLines(toBudgetLines(c), effects)).slackCents -
+      before.slackCents
+    const delta =
+      computeMonthlyBudget(applyEffectsToLines(toBudgetLines(c), inForceNow(effects)))
+        .slackCents - before.slackCents
+    const deltaDiffere = deltaTotal - delta
+    const differes = effects.filter(
+      (e) => startsAtYear(e.effect.horizon) > 1 && e.deltaCents !== 0,
+    )
+    const aPartirDe = differes.length
+      ? Math.min(...differes.map((e) => startsAtYear(e.effect.horizon)))
+      : null
+
+    // Valeur SIGNEE dans l'echelle choisie : c'est elle que trace la barre.
+    const signedMetric = (cents: number) =>
+      Math.sign(cents) * comparabilityMetrics(cents, before)[scale]
+
+    return {
+      character: c, before, effects, reasons, delta, deltaDiffere, aPartirDe,
+      now: signedMetric(delta), later: signedMetric(deltaDiffere),
+    }
+  })
+  // Une seule echelle pour tout l'ecran : sans elle, les barres ne se
+  // compareraient pas d'une personne a l'autre.
+  const max = Math.max(0, ...rows.flatMap((r) => [Math.abs(r.now), Math.abs(r.later)]))
 
   return (
     <section className="sheet" aria-labelledby="impact-title">
@@ -99,92 +185,90 @@ export function ImpactForEach({ characters, world, scale, onScaleChange, screenI
         ))}
       </fieldset>
 
+      {/* Repère commun à toutes les barres : sens écrit, pas seulement suggéré. */}
+      <p className="impact-axis" aria-hidden="true">
+        <span>◄ en moins</span>
+        <span className="impact-axis__scale">{SCALES.find((x) => x.id === scale)?.label}, même échelle pour tous</span>
+        <span>en plus ►</span>
+      </p>
+
       <ul className="impacts">
-        {order.map((i) => {
-          const c = characters[i]!
-          const traits = traitsOf(c)
-          const before = computeMonthlyBudget(toBudgetLines(c))
-          const effects = activeEffectsFor(world, traits, optionLookup)
-          /* Dedupliquee : plusieurs regles en vigueur peuvent viser la meme
-             portee, et la repeter donnerait l'impression de plusieurs
-             exclusions la ou il n'y en a qu'une. */
-          const reasons = [...new Set(effects.map((e) => e.effect.scope.description))]
-
-          /*
-           * CE QUI S'APPLIQUE MAINTENANT EN TETE, LE DIFFERE ENSUITE.
-           *
-           * Cet ecran additionnait tous les effets d'une regle sans regarder
-           * leur horizon. La contribution energie coute 14 EUR par mois des
-           * le premier mois aux menages en chauffage collectif, et leur rend
-           * 31 EUR « apres renovation effective », a cinq ans. Le total, +17,
-           * s'affichait au present : l'ecran annoncait un gain immediat a
-           * ceux a qui la mesure coute d'abord. L'erreur jouait dans un seul
-           * sens, et elle a vecu plusieurs mois pendant que les tests
-           * passaient au vert, parce qu'aucun ne lisait `horizon`.
-           *
-           * Le differe n'est pas masque — c'est un effet de la decision, et
-           * le cacher serait l'erreur inverse. Il est date, et separe.
-           */
-          const deltaTotal =
-            computeMonthlyBudget(applyEffectsToLines(toBudgetLines(c), effects)).slackCents -
-            before.slackCents
-          const delta =
-            computeMonthlyBudget(applyEffectsToLines(toBudgetLines(c), inForceNow(effects)))
-              .slackCents - before.slackCents
-          const deltaDiffere = deltaTotal - delta
-          const differes = effects.filter(
-            (e) => startsAtYear(e.effect.horizon) > 1 && e.deltaCents !== 0,
-          )
-          const aPartirDe = differes.length
-            ? Math.min(...differes.map((e) => startsAtYear(e.effect.horizon)))
-            : null
-
+        {rows.map((r) => {
+          const c = r.character
+          const { delta, deltaDiffere, aPartirDe, reasons, effects, before } = r
           return (
             <li
               key={c.id}
-              className="enter-rise"
+              className="enter-rise impact"
               style={{ '--enter-ms': `${motion.enterMs}ms`, '--translate-px': '6px' } as React.CSSProperties}
             >
-              <Seal id={c.id} allIds={characters.map((x) => x.id)} size={22} />
-              {' '}
-              <strong>{c.identity.firstName}</strong>
-              {' — '}
-              {delta === 0 ? (
-                <>
-                  aucun effet sur son budget courant.
-                  {/* POURQUOI, et pas seulement « aucun effet ».
-                      Le controle de couverture du build oblige l'auteur a
-                      ecrire, pour chaque personne qu'une option ne touche
-                      pas, quelle portee l'exclut et pour quelle raison. Cet
-                      ecran jetait ce travail : il affichait treize fois la
-                      meme phrase vide. Avec un corpus de treize situations,
-                      la plupart des lignes sont des effets nuls, et une
-                      comparaison faite de phrases identiques ne compare
-                      rien. La portee declaree est reprise telle quelle. */}
-                  {reasons.length > 0 && (
-                    <div className="provenance">Portée déclarée&nbsp;: {reasons.join(' ; ')}.</div>
+              {/* Replié de la même façon pour tout le monde : la barre et la
+                  valeur restent visibles, ce qui permet de comparer les treize
+                  d'un coup d'œil ; les phrases se déplient à la demande. */}
+              <details className="impact__fold">
+              <summary className="impact__head">
+                <span className="impact__who">
+                  <Seal id={c.id} allIds={characters.map((x) => x.id)} size={22} />
+                  <strong>{c.identity.firstName}</strong>
+                </span>
+                {/* Le dessin double la phrase en dessous : décoratif pour un
+                    lecteur d'écran, qui lit la phrase. */}
+                <span className="impact__track" aria-hidden="true">
+                  <Bar value={r.now} max={max} />
+                  {deltaDiffere !== 0 && aPartirDe !== null && <Bar value={r.later} max={max} later />}
+                </span>
+                <span className="impact__value">
+                  {delta !== 0 ? (
+                    <Signed cents={delta} metric={formatMetric(scale, comparabilityMetrics(delta, before))} />
+                  ) : deltaDiffere !== 0 && aPartirDe !== null ? (
+                    <>
+                      <span className="impact__now">rien maintenant</span>
+                      <span className="impact__later">
+                        an {aPartirDe}&nbsp;: <Signed cents={deltaDiffere} metric={formatMetric(scale, comparabilityMetrics(deltaDiffere, before))} />
+                      </span>
+                    </>
+                  ) : (
+                    'aucun effet'
                   )}
-                  <Differe cents={deltaDiffere} year={aPartirDe} name={c.identity.firstName} />
-                </>
-              ) : (
-                <>
-                  {/* L'annuel en tête : 204 € se perçoit, 17 € passe inaperçu.
-                      C'est le même fait, et les deux sont donnés. */}
-                  <Amount cents={delta * 12} nature="hypothesis" signed label={c.identity.firstName} />
-                  {' par an, soit '}
-                  {formatRecurring(delta).split(', soit ')[1]}
-                  {scale !== 'euros' && <> — {formatMetric(scale, comparabilityMetrics(delta, before))}</>}
-                  {'. Cette somme '}
-                  {regimeSentence(absorptionRegime(delta, before, toStocks(c)), delta)}.
-                  <Differe cents={deltaDiffere} year={aPartirDe} name={c.identity.firstName} />
-                </>
-              )}
-              {effects.length === 0 && (
-                <div className="provenance">
-                  Aucune des règles en vigueur ne le concerne. Ce n’est pas la même chose qu’un
-                  effet nul&nbsp;: aucune ne s’applique à sa situation.
-                </div>
-              )}
+                </span>
+              </summary>
+              <div className="impact__text">
+                {delta === 0 ? (
+                  <>
+                    Pour l’instant, aucun effet sur son budget courant.
+                    {/* POURQUOI, et pas seulement « aucun effet ».
+                        Le controle de couverture du build oblige l'auteur a
+                        ecrire, pour chaque personne qu'une option ne touche
+                        pas, quelle portee l'exclut et pour quelle raison. Cet
+                        ecran jetait ce travail : il affichait treize fois la
+                        meme phrase vide. La portee declaree est reprise telle
+                        quelle. */}
+                    {reasons.length > 0 && (
+                      <div className="provenance">Portée déclarée&nbsp;: {reasons.join(' ; ')}.</div>
+                    )}
+                    <Differe cents={deltaDiffere} year={aPartirDe} name={c.identity.firstName} />
+                  </>
+                ) : (
+                  <>
+                    {/* L'annuel en tête : 204 € se perçoit, 17 € passe inaperçu.
+                        C'est le même fait, et les deux sont donnés. */}
+                    <Amount cents={delta * 12} nature="hypothesis" signed label={c.identity.firstName} />
+                    {' par an, soit '}
+                    {formatRecurring(delta).split(', soit ')[1]}
+                    {scale !== 'euros' && <> — {formatMetric(scale, comparabilityMetrics(delta, before))}</>}
+                    {'. Cette somme '}
+                    {regimeSentence(absorptionRegime(delta, before, toStocks(c)), delta)}.
+                    <Differe cents={deltaDiffere} year={aPartirDe} name={c.identity.firstName} />
+                  </>
+                )}
+                {effects.length === 0 && (
+                  <div className="provenance">
+                    Aucune des règles en vigueur ne le concerne. Ce n’est pas la même chose qu’un
+                    effet nul&nbsp;: aucune ne s’applique à sa situation.
+                  </div>
+                )}
+              </div>
+              </details>
             </li>
           )
         })}

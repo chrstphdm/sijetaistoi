@@ -37,6 +37,7 @@ const SCOPE_NOW: Record<Step['kind'], (who: string) => string> = {
   intro: (w) => `tu fais connaissance avec ${w}`,
   callback: (w) => `tu fais connaissance avec ${w}`,
   month: (w) => `tu décides pour ${w}`,
+  relaunch: () => 'tu redonnes ton avis sur une règle',
   reform: () => 'tu décides pour tout le monde',
   judgement: () => 'tu donnes ton avis',
   impact: () => 'tu vois ce que ça change pour chacun',

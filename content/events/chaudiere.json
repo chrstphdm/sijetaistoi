@@ -13,6 +13,14 @@
         "heating",
         "eq",
         "individual"
+      ],
+      [
+        "tenure",
+        "in",
+        [
+          "owner_outright",
+          "owner_with_loan"
+        ]
       ]
     ]
   },

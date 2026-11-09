@@ -51,7 +51,9 @@ test('aucun signe n’est porté par la seule couleur', async ({ page }) => {
   const count = await signed.count()
   expect(count).toBeGreaterThan(0)
   for (let i = 0; i < count; i++) {
-    const text = (await signed.nth(i).innerText()).trim()
+    // `textContent` et non `innerText` : les phrases de chaque personne sont
+    // repliées, et `innerText` rend vide un texte replié. Le mot y est bien.
+    const text = ((await signed.nth(i).textContent()) ?? '').trim()
     expect(['en plus', 'en moins']).toContain(text)
   }
 })

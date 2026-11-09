@@ -67,16 +67,17 @@ export function MonthTrend({
   past, current, total,
 }: {
   readonly past: readonly MonthEntry[]
-  readonly current: MonthEntry
+  /** `null` une fois tous les mois vécus : il n'y a plus de mois en cours. */
+  readonly current: MonthEntry | null
   readonly total: number
 }) {
-  const upcoming = Math.max(0, total - past.length - 1)
+  const upcoming = Math.max(0, total - past.length - (current ? 1 : 0))
   return (
     <figure className="trend">
       <figcaption className="trend__title">Mois après mois, dans cet acte</figcaption>
       <ol className="trend__months">
         {past.map((e) => <Column key={e.month} entry={e} state="past" />)}
-        <Column entry={current} state="here" />
+        {current && <Column entry={current} state="here" />}
         {Array.from({ length: upcoming }, (_, i) => (
           <li key={`a-venir-${i}`} className="trend__month trend__month--next">
             <span className="trend__col" aria-hidden="true" />

@@ -60,6 +60,7 @@ function titleOf(step: Step, act: number, firstName: string): string {
     case 'intro': return `Acte ${act} — ${firstName}`
     case 'month': return `Acte ${act} — un mois de ${firstName}`
     case 'callback': return `Acte ${act} — ${firstName}, sous tes règles`
+    case 'relaunch': return `Acte ${act} — la même question, maintenant`
     case 'reform': return `Acte ${act} — une décision collective`
     case 'judgement': return `Acte ${act} — ton jugement`
     case 'impact': return `Acte ${act} — ce que cela change pour chacun`
@@ -211,7 +212,7 @@ export function App() {
   }
 
   return (
-    <div className={`layout${step.kind === 'month' ? ' layout--ledger' : ''}`} id="haut">
+    <div className="layout" id="haut">
       <SkipLink />
       {/* Colonne latérale : pendant un mois, le relevé reste sous les yeux
           AU-DESSUS des actes, et la colonne principale se consacre à
@@ -223,14 +224,16 @@ export function App() {
           state={state} step={step} nameOf={nameOf} allIds={allIds}
           month={month} monthsDone={game.monthsDone}
         />
-        {step.kind === 'month' && (
+        {(step.kind === 'month' || step.kind === 'relaunch') && (
           <MonthlyBudget
             budget={budget} month={month} variant="panel"
             owner={character.identity.firstName}
           >
             <MonthTrend
               past={game.monthLog}
-              current={{ ...entryOf(budget, month), exceptionalCents: null, label: null }}
+              current={step.kind === 'month'
+                ? { ...entryOf(budget, month), exceptionalCents: null, label: null }
+                : null}
               total={MONTHS_PER_ACT[state.act - 1] ?? game.monthLog.length + 1}
             />
           </MonthlyBudget>
@@ -254,10 +257,10 @@ export function App() {
              la révélation en trois temps sauterait dès le deuxième mois, et
              le joueur choisirait sans avoir regardé son budget. */
           key={`${state.act}-${game.monthsDone}`}
-          budget={budget} stocks={stocks} month={month} event={step.event}
+          budget={budget} stocks={stocks} month={month} event={game.event}
           firstName={character.identity.firstName}
           unavailable={character.unavailableOptions}
-          onResolve={(optionId) => actions.resolveEvent(step.event, optionId)}
+          onResolve={(optionId) => actions.resolveEvent(game.event, optionId)}
         />
       )}
 
@@ -284,35 +287,46 @@ export function App() {
             </section>
           )}
 
-          {/* LA RELANCE. On repose la question sur la décision dont le joueur
-              vient de voir l'effet, maintenant qu'il l'a vécue d'en face.
-              Sans elle, chaque acte posant une réforme différente, aucune
-              question n'était jamais reposée — et le suivi des changements
-              d'opinion, pourtant au cœur du projet, ne produisait rien. */}
-          {step.selection.kind === 'selected' && (() => {
-            const askedId = step.selection.callback.rule.reformId
-            const earlier = state.opinions.filter((o) => o.questionId === askedId)[0]
-            const latest = lastJudgement(state, askedId)
-            const alreadyAnswered = state.opinions.filter((o) => o.questionId === askedId).length > 1
-            return (
-              <section className="sheet" aria-labelledby="relaunch-title">
-                <h2 id="relaunch-title">La même question, maintenant</h2>
-                {earlier && <p>{relaunchSentence(earlier, `À l’acte ${state.act - 1}`)}</p>}
-                <JudgementScale
-                  value={alreadyAnswered ? latest : null}
-                  onChange={(j) => actions.answerFor(askedId, j)}
-                  legend="Ta réponse maintenant"
-                />
-                {alreadyAnswered && earlier && latest !== earlier.judgement && (
-                  <p className="provenance">
-                    Ta réponse a changé. Le jeu le note, sans en tirer de conclusion.
-                  </p>
-                )}
-              </section>
-            )
-          })()}
         </>
       )}
+
+      {/* LA RELANCE. On repose la question sur la décision dont le joueur a
+          vu l'effet, APRÈS avoir vécu les mois du personnage qu'elle
+          concerne : son relevé et son évolution sont dans la colonne
+          latérale. Elle venait dès l'arrivée, avant qu'on ait vu ses
+          revenus. Sans relance, chaque acte posant une réforme différente,
+          aucune question n'était jamais reposée — et le suivi des
+          changements d'opinion, au cœur du projet, ne produisait rien. */}
+      {step.kind === 'relaunch' && (() => {
+        const askedId = step.questionId
+        const earlier = state.opinions.filter((o) => o.questionId === askedId)[0]
+        const latest = lastJudgement(state, askedId)
+        const alreadyAnswered = state.opinions.filter((o) => o.questionId === askedId).length > 1
+        const rule = state.world.rules.find((r) => r.reformId === askedId)
+        return (
+          <section className="sheet" aria-labelledby="relaunch-title">
+            <p className="sheet__kicker">Après quelques mois avec {character.identity.firstName}</p>
+            <h2 id="relaunch-title">La même question, maintenant</h2>
+            {rule && <p>Ta règle&nbsp;: <strong>{rule.shortLabel}</strong>.</p>}
+            {earlier && <p>{relaunchSentence(earlier, `À l’acte ${state.act - 1}`)}</p>}
+            <JudgementScale
+              value={alreadyAnswered ? latest : null}
+              onChange={(j) => actions.answerFor(askedId, j)}
+              legend="Ta réponse maintenant"
+            />
+            {alreadyAnswered && earlier && latest !== earlier.judgement && (
+              <p className="provenance">
+                Ta réponse a changé. Le jeu le note, sans en tirer de conclusion.
+              </p>
+            )}
+            <p>
+              <button type="button" className="btn-primary" onClick={actions.toReform}>
+                Passer à la décision collective
+              </button>
+            </p>
+          </section>
+        )
+      })()}
 
       {step.kind === 'reform' && (
         <>
