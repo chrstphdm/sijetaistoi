@@ -61,3 +61,31 @@ test('l’Atelier n’est pas livré au visiteur', async ({ page }) => {
   // Le jeu s'affiche normalement, le fragment est simplement ignoré.
   await expect(page.getByRole('button', { name: 'Commencer' }).first()).toBeVisible()
 })
+
+test('deux parties successives ne sont pas identiques', async ({ page }) => {
+  // Défaut relevé en test utilisateur : « je tombe toujours sur le même
+  // parcours ». La graine était codée en dur, donc il n'existait qu'une
+  // seule partie possible.
+  const firstCharacter = async () => {
+    await page.goto('/')
+    await page.getByRole('button', { name: 'Commencer' }).first().click()
+    await page.getByRole('button', { name: /je commence/i }).click()
+    return (await page.getByRole('heading', { level: 1 }).innerText()).replace('Tu es ', '')
+  }
+
+  const seen = new Set<string>()
+  for (let i = 0; i < 10; i++) seen.add(await firstCharacter())
+  expect(seen.size, `toujours le même personnage : ${[...seen]}`).toBeGreaterThan(1)
+})
+
+test('une graine donnée rejoue exactement la même partie', async ({ page }) => {
+  const openWithSeed = async () => {
+    await page.goto('/?graine=abcd2345')
+    await page.getByRole('button', { name: 'Commencer' }).first().click()
+    await page.getByRole('button', { name: /je commence/i }).click()
+    return page.getByRole('heading', { level: 1 }).innerText()
+  }
+  // La variété ne doit pas coûter la rejouabilité : une partie doit pouvoir
+  // être rejouée à l'identique pour rester auditable.
+  expect(await openWithSeed()).toBe(await openWithSeed())
+})

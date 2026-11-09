@@ -34,11 +34,25 @@ import { JudgementScale } from './components/JudgementScale.tsx'
 import { CallbackPanel, QuotaBlockedNote } from './components/Callback.tsx'
 import { SummaryScreen } from './components/Summary.tsx'
 import { relaunchSentence } from '@/core/opinion.ts'
+import { makeSeed, seedFromUrl, startFreshGame } from './seed.ts'
 
-const SEED = 'partie-1'
 
 export function App() {
-  const game = useGame(SEED)
+  /**
+   * Une graine par partie, lue dans l'adresse si elle y est.
+   *
+   * Elle était codée en dur, ce qui donnait exactement UNE partie possible :
+   * mêmes personnages, même ordre de réformes, mêmes événements. Relevé en
+   * test utilisateur — « je tombe toujours sur le même parcours ».
+   *
+   * La laisser dans l'adresse permet de rejouer une partie à l'identique,
+   * de la partager, et de vérifier que le tirage n'était pas arrangé. C'est
+   * la contrepartie concrète de la transparence promise sur le tirage.
+   */
+  const [seed] = useState(
+    () => (typeof window === 'undefined' ? 'hors-navigateur' : seedFromUrl(window.location.search) ?? makeSeed()),
+  )
+  const game = useGame(seed)
   const { state, step, character, budget, stocks, month, reform, actions } = game
   const [scale, setScale] = useState<Scale>('slack')
   const [kpi, setKpi] = useState<KpiAnswer | null>(null)
@@ -248,9 +262,28 @@ export function App() {
       )}
 
       {step.kind === 'summary' && (
-        <SummaryScreen
-          summary={buildSummary(state)} characterName={nameOf} kpi={kpi} onKpi={setKpi}
-        />
+        <>
+          <SummaryScreen
+            summary={buildSummary(state)} characterName={nameOf} kpi={kpi} onKpi={setKpi}
+          />
+          <section className="sheet" aria-labelledby="again-title">
+            <h2 id="again-title">Rejouer</h2>
+            <p>
+              Une autre partie tire d’autres personnages et d’autres décisions parmi les six
+              de chaque. Le corpus en contient plus qu’une partie n’en présente.
+            </p>
+            <p>
+              <button type="button" onClick={startFreshGame}>
+                Commencer une nouvelle partie
+              </button>
+            </p>
+            <p className="provenance">
+              Cette partie-ci porte la graine <code>{seed}</code>. Elle est inscrite dans
+              l’adresse : la rouvrir rejoue exactement la même partie, ce qui permet de la
+              partager ou de vérifier que le tirage n’était pas arrangé.
+            </p>
+          </section>
+        </>
       )}
 
       {/* Pied de page : toujours accessible, jamais encombrant. Le registre

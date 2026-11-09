@@ -22,9 +22,19 @@ export type Phase =
   | 'home' | 'contract' | 'intro' | 'month' | 'reform'
   | 'judgement' | 'impact' | 'callback' | 'summary'
 
+/**
+ * Graine fixe pour les parcours de test.
+ *
+ * Depuis que chaque partie tire sa propre graine, deux parcours successifs
+ * ne presentent plus les memes personnages. Les tests qui comparent deux
+ * passages — la lecture muette, par exemple — doivent donc jouer la MEME
+ * partie. Les tests de variete, eux, ouvrent volontairement sans graine.
+ */
+export const SEED_TEST = 'test2345'
+
 /** Avance jusqu'à une phase donnée du parcours. */
 export async function reach(page: Page, phase: Phase) {
-  await page.goto('/')
+  await page.goto(`/?graine=${SEED_TEST}`)
   if (phase === 'home') return
 
   await page.getByRole('button', { name: 'Commencer' }).first().click()

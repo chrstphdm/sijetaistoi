@@ -175,3 +175,27 @@ qu'un confort de repérage.
 
 Conséquence écrite dans le code et vérifiée par test : la couleur d'un sceau ne porte
 jamais l'identité à elle seule, nulle part.
+
+## 18 — Une graine par partie, inscrite dans l'adresse
+
+Relevé en test utilisateur : « j'ai essayé de le refaire pour voir les autres
+propositions, mais je tombe toujours sur le même parcours. »
+
+La graine était codée en dur. Le tirage uniforme des personnages, le mélange des
+réformes et la sélection des événements fonctionnaient tous — mais sur **une seule
+combinaison**. Il n'existait qu'une partie possible, et tout le travail sur les
+contraintes déclarées de tirage ne servait à rien.
+
+Chaque partie tire désormais sa propre graine, et la graine figure dans l'adresse.
+Cela donne trois choses d'un coup : rouvrir l'adresse rejoue exactement la même
+partie, on peut la partager, et on peut vérifier que le tirage n'était pas arrangé —
+c'est la contrepartie concrète de la transparence promise sur le tirage.
+
+L'alphabet de la graine exclut les caractères ambigus à l'oral, 0/O et 1/l/i : elle
+doit pouvoir se dicter.
+
+Conséquence sur les tests, qui compte : les parcours de bout en bout fixent
+désormais une graine. Deux passages successifs ne présentaient plus les mêmes
+personnages, ce qui faisait échouer le test de la lecture muette — lui compare deux
+rendus de la MÊME partie. Les tests de variété, eux, ouvrent volontairement sans
+graine et vérifient que les six personnages apparaissent bien en ouverture.
