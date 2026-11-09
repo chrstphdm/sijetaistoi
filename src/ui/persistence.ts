@@ -1,3 +1,4 @@
+import type { MonthEntry } from './monthLog.ts'
 import type { Command } from '@/core/game.ts'
 import type { DrawCounts } from '@/core/rng.ts'
 
@@ -50,6 +51,11 @@ export type Cursor<Step = unknown> = {
   readonly usedEvents: readonly string[]
   readonly recurring: readonly { readonly code: string; readonly amountCents: number }[]
   readonly oneOffCents: number
+  /**
+   * Releve de chaque mois deja vecu dans l'acte, pour le releve lateral.
+   * Optionnel : une sauvegarde anterieure reprend avec un historique vide.
+   */
+  readonly monthLog?: readonly MonthEntry[]
   readonly wording: string
   /**
    * Position de chaque flux aleatoire.

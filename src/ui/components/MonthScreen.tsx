@@ -8,7 +8,6 @@ import { euros } from '@/core/money.ts'
 import { optionAvailability } from '@/core/availability.ts'
 import { motionFor } from '@/motion/table.ts'
 import { Amount } from './Amount.tsx'
-import { MonthlyBudget } from './MonthlyBudget.tsx'
 import { ScopeBand, ScopeMark } from './ScopeBand.tsx'
 
 /**
@@ -50,8 +49,8 @@ export function MonthScreen({
 
   return (
     <>
-      <MonthlyBudget budget={budget} month={month} />
-
+      {/* Le relevé n'est plus ici : il reste affiché dans la colonne
+          latérale pendant tout le mois. Cet écran se consacre à l'événement. */}
       {event ? (
         <section
           className="sheet enter-rise"
@@ -62,7 +61,7 @@ export function MonthScreen({
               : undefined
           }
         >
-          <p className="sheet__kicker">Ce mois-ci</p>
+          <p className="sheet__kicker">Ce mois-ci · {month}</p>
           <h2 id="event-title">{event.descriptiveTitle}</h2>
           <ScopeBand scope="personal" who={firstName} />
           <p>{event.text}</p>
@@ -142,7 +141,7 @@ export function MonthScreen({
         </section>
       ) : (
         <section className="sheet">
-          <p className="sheet__kicker">Ce mois-ci</p>
+          <p className="sheet__kicker">Ce mois-ci · {month}</p>
           <p>Rien de particulier. Le mois passe.</p>
           <button type="button" className="btn-primary" onClick={() => onResolve(null)}>
             Mois suivant

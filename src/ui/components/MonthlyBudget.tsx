@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import type { MonthlyBudget as Budget, BudgetLine } from '@/core/types.ts'
 import { labelFor } from '@/content/load.ts'
 import { Amount } from './Amount.tsx'
@@ -25,7 +26,25 @@ type Group = { readonly title: string; readonly lines: readonly BudgetLine[]; re
 
 const pct = (part: number, whole: number) => (whole <= 0 ? 0 : Math.round((part / whole) * 100))
 
-export function MonthlyBudget({ budget, month }: { budget: Budget; month: string }) {
+/**
+ * Deux presentations du MEME releve.
+ *
+ * `sheet` : le document entier, ligne a ligne.
+ * `panel` : la version de la colonne laterale, qui reste visible pendant que
+ * la colonne principale se consacre a l'evenement du mois. La repartition et
+ * les totaux sont visibles ; les lignes sont repliees, parce qu'un releve de
+ * quinze lignes ne tient pas dans une colonne collee a l'ecran. Rien n'y est
+ * retire : le detail se deplie sur place.
+ */
+export function MonthlyBudget({
+  budget, month, variant = 'sheet', owner, children,
+}: {
+  budget: Budget
+  month: string
+  variant?: 'sheet' | 'panel'
+  owner?: string
+  children?: ReactNode
+}) {
   const pick = (...groups: BudgetLine['group'][]) =>
     budget.lines.filter((l) => groups.includes(l.group)).sort((a, b) => Math.abs(b.amountCents) - Math.abs(a.amountCents))
 
@@ -72,11 +91,8 @@ export function MonthlyBudget({ budget, month }: { budget: Budget; month: string
   const adjustableWidth = Math.min(100 - engagedWidth, pct(adjustable, resources))
   const leftWidth = Math.max(0, 100 - engagedWidth - adjustableWidth)
 
-  return (
-    <section className="sheet ledger-sheet" aria-labelledby="ledger-title">
-      <p className="sheet__kicker">{month}</p>
-      <h2 id="ledger-title">Relevé du mois</h2>
-
+  const bar = (
+    <>
       {/* Répartition : même traitement visuel pour les trois segments. */}
       <div className={`bar${deficit ? ' bar--over' : ''}`} role="img"
         aria-label={
@@ -93,7 +109,10 @@ export function MonthlyBudget({ budget, month }: { budget: Budget; month: string
         <span><i className="bar__key bar__key--b" />ajustable {pct(adjustable, resources)} %</span>
         <span><i className="bar__key bar__key--c" />disponible {pct(left, resources)} %</span>
       </p>
-
+    </>
+  )
+  const groups = (
+    <>
       {sections.map((s) =>
         s.lines.length === 0 ? null : (
           <div className="ledger-group" key={s.title}>
@@ -115,7 +134,10 @@ export function MonthlyBudget({ budget, month }: { budget: Budget; month: string
           </div>
         ),
       )}
-
+    </>
+  )
+  const slack = (
+    <>
       {/* Même poids typographique que le total engagé, délibérément. */}
       <dl className="ledger-list">
         <div className="ledger-row ledger-row--slack">
@@ -143,6 +165,43 @@ export function MonthlyBudget({ budget, month }: { budget: Budget; month: string
           {' '}{budget.adjustableCents === 0 ? 'personne' : 'le personnage'} peut décaler.
         </p>
       )}
+    </>
+  )
+
+  if (variant === 'panel') {
+    return (
+      // Un repère de page à part entière : hors de <main>, le relevé doit
+      // rester atteignable directement par un lecteur d'écran.
+      <aside className="ledger-panel" aria-labelledby="ledger-title">
+        <p className="sheet__kicker">{month}</p>
+        <h2 id="ledger-title">Relevé{owner ? ` de ${owner}` : ' du mois'}</h2>
+        {bar}
+        {/* Les totaux, au même poids que le reste : aucun n'est un score. */}
+        <dl className="ledger-list ledger-panel__totals">
+          {sections.map((s) => s.lines.length === 0 ? null : (
+            <div className="ledger-row" key={s.title}>
+              <dt>{s.title}</dt>
+              <dd><Amount cents={s.total} nature="fiction" signed compact label={`Total ${s.title}`} /></dd>
+            </div>
+          ))}
+        </dl>
+        {slack}
+        {children}
+        <details className="ledger-panel__detail">
+          <summary>Le détail, ligne par ligne</summary>
+          {groups}
+        </details>
+      </aside>
+    )
+  }
+
+  return (
+    <section className="sheet ledger-sheet" aria-labelledby="ledger-title">
+      <p className="sheet__kicker">{month}</p>
+      <h2 id="ledger-title">Relevé du mois</h2>
+      {bar}
+      {groups}
+      {slack}
     </section>
   )
 }

@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { buildSummary, type KpiAnswer } from '@/core/summary.ts'
-import { lastJudgement } from '@/core/game.ts'
+import { lastJudgement, MONTHS_PER_ACT } from '@/core/game.ts'
 import type { Scale } from '@/core/impact.ts'
 import { characters, reforms } from '@/content/load.ts'
 import { CONSTRAINT_STATEMENTS } from '@/core/casting.ts'
@@ -28,6 +28,9 @@ const Studio = STUDIO_AVAILABLE
   ? lazy(() => import('@/studio/Studio.tsx').then((m) => ({ default: m.Studio })))
   : null
 import { MonthScreen } from './components/MonthScreen.tsx'
+import { MonthlyBudget } from './components/MonthlyBudget.tsx'
+import { MonthTrend } from './components/MonthTrend.tsx'
+import { entryOf } from './monthLog.ts'
 import { ReformVote } from './components/ReformVote.tsx'
 import { ImpactForEach, rotationOrder } from './components/ImpactForEach.tsx'
 import { JudgementScale } from './components/JudgementScale.tsx'
@@ -208,12 +211,31 @@ export function App() {
   }
 
   return (
-    <div className="layout" id="haut">
+    <div className={`layout${step.kind === 'month' ? ' layout--ledger' : ''}`} id="haut">
       <SkipLink />
-      <GameRail
-        state={state} step={step} nameOf={nameOf} allIds={allIds}
-        month={month} monthsDone={game.monthsDone}
-      />
+      {/* Colonne latérale : pendant un mois, le relevé reste sous les yeux
+          AU-DESSUS des actes, et la colonne principale se consacre à
+          l'événement. Le rail vient d'abord dans le DOM — il reste le
+          premier repère pour un lecteur d'écran et, sur mobile, le bandeau
+          collé en haut ; seule la disposition visuelle le place dessous. */}
+      <div className="side">
+        <GameRail
+          state={state} step={step} nameOf={nameOf} allIds={allIds}
+          month={month} monthsDone={game.monthsDone}
+        />
+        {step.kind === 'month' && (
+          <MonthlyBudget
+            budget={budget} month={month} variant="panel"
+            owner={character.identity.firstName}
+          >
+            <MonthTrend
+              past={game.monthLog}
+              current={{ ...entryOf(budget, month), exceptionalCents: null, label: null }}
+              total={MONTHS_PER_ACT[state.act - 1] ?? game.monthLog.length + 1}
+            />
+          </MonthlyBudget>
+        )}
+      </div>
 
       <main className="layout__main" id="contenu" tabIndex={-1}>
       <ScreenTitle>{titleOf(step, state.act, character.identity.firstName)}</ScreenTitle>

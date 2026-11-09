@@ -16,6 +16,7 @@ import { characters, events, optionLookup, reforms, toBudgetLines, toStocks, tra
 import type { CharacterT, LifeEventT, ReformOptionT } from '@/schemas/index.ts'
 import { EMPTY_SETUP, type Setup } from './setup.ts'
 import { FORMAT_VERSION, load, save, type Saved } from './persistence.ts'
+import { entryOf, exceptionalOf, type MonthEntry } from './monthLog.ts'
 
 /**
  * Orchestration d'une partie.
@@ -133,6 +134,9 @@ export function useGame(seed: string, setup: Setup = EMPTY_SETUP) {
   const [wording, setWording] = useState(restored?.cursor.wording ?? '')
   const [usedEvents, setUsedEvents] = useState<readonly string[]>(restored?.cursor.usedEvents ?? [])
   const [reformIndex, setReformIndex] = useState(restored?.cursor.reformIndex ?? 0)
+  // Optionnel dans le curseur : une sauvegarde plus ancienne reprend avec un
+  // historique vide plutôt que d'être écartée.
+  const [monthLog, setMonthLog] = useState<readonly MonthEntry[]>(restored?.cursor.monthLog ?? [])
 
   /**
    * Ordre des reformes, tire une fois au debut de la partie.
@@ -241,6 +245,12 @@ export function useGame(seed: string, setup: Setup = EMPTY_SETUP) {
   const startMonths = () => setStep({ kind: 'month', event: pickEvent() })
 
   const resolveEvent = (event: LifeEventT | null, optionId: string | null) => {
+    // Le relevé tel qu'il était CE mois-ci, avant que le choix ne modifie
+    // les suivants.
+    setMonthLog((log) => [
+      ...log,
+      { ...entryOf(budget, month), exceptionalCents: exceptionalOf(event, optionId), label: event?.descriptiveTitle ?? null },
+    ])
     if (event && optionId) {
       const option = event.options.find((o) => o.id === optionId)
       record({ type: 'resolve_event', eventId: event.id, optionId })
@@ -331,6 +341,7 @@ export function useGame(seed: string, setup: Setup = EMPTY_SETUP) {
     record(...cmds)
 
     setMonthsDone(0)
+    setMonthLog([])
     setRecurring([])
     setOneOff(0)
     setWording('')
@@ -362,15 +373,16 @@ export function useGame(seed: string, setup: Setup = EMPTY_SETUP) {
         usedEvents,
         recurring: recurring.map((r) => ({ code: r.code, amountCents: r.amountCents })),
         oneOffCents: oneOff,
+        monthLog,
         wording,
         draws: drawCounts(random),
       },
     })
-  }, [seed, journal, step, monthsDone, reformIndex, usedEvents, recurring, oneOff, wording, random])
+  }, [seed, journal, step, monthsDone, reformIndex, usedEvents, recurring, oneOff, monthLog, wording, random])
 
   return {
     state, step, character, budget, stocks, lines, month, reform,
-    monthsDone, oneOff, wording, setWording,
+    monthsDone, monthLog, oneOff, wording, setWording,
     restored: restored !== null,
     actions: { toContract, beginGame, startMonths, resolveEvent, vote, answer, answerFor, toImpact, nextAct, consultOthers },
   }

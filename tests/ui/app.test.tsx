@@ -128,7 +128,8 @@ describe('un mois vécu', () => {
     await enterGame(user)
     await user.click(screen.getByRole('button', { name: /Commencer le mois/ }))
 
-    expect(screen.getByText('Relevé du mois')).toBeTruthy()
+    // Le relevé est affiché dans la colonne latérale, au nom du personnage.
+    expect(screen.getByRole('heading', { name: /^Relevé de / })).toBeTruthy()
     // Les options ne sont pas offertes d'emblée.
     expect(screen.queryByRole('button', { name: 'Choisir' })).toBeNull()
     expect(screen.getByRole('button', { name: /Voir les possibilités/ })).toBeTruthy()

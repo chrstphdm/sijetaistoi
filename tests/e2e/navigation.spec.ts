@@ -13,16 +13,21 @@ import { reach, SEED_TEST, settle, type Phase } from './helpers.ts'
  * d'un element fixe et la visibilite reelle n'existent pas sans mise en page.
  */
 
+/*
+ * Ces deux tests ont besoin d'un écran LONG. Ils prenaient l'écran d'un mois,
+ * mais depuis que le relevé vit dans la colonne latérale, un mois tient sans
+ * défilement sur grand écran — c'était le but. L'écran de décision
+ * collective, avec ses cinq options, reste long partout.
+ */
 test('on arrive en haut du nouvel écran, même en venant du bas du précédent', async ({ page }) => {
-  await reach(page, 'month')
+  await reach(page, 'reform')
   await settle(page)
 
-  // On descend jusqu'en bas du relevé avant de choisir.
+  // On descend jusqu'en bas des options avant de décider.
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
   expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(0)
 
-  await page.getByRole('button', { name: /Voir les possibilités/ }).click()
-  await page.getByRole('button', { name: 'Choisir' }).first().click()
+  await page.getByRole('button', { name: 'Décider ceci' }).last().click()
   await settle(page)
 
   expect(await page.evaluate(() => window.scrollY)).toBe(0)
@@ -83,7 +88,7 @@ test('après un changement d’écran, la tabulation continue dans le contenu', 
 })
 
 test('le retour en haut apparaît quand la page est longue, et ramène en haut', async ({ page }) => {
-  await reach(page, 'month')
+  await reach(page, 'reform')
   await settle(page)
 
   const top = page.locator('.back-to-top')
