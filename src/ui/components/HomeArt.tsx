@@ -40,7 +40,7 @@ export function HeroCast() {
 
 /* ------------------------------------------------------------ Pictogrammes */
 
-function Icon({ children }: { readonly children: ReactNode }) {
+export function Icon({ children }: { readonly children: ReactNode }) {
   return (
     <svg
       className="pictogram"

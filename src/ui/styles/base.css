@@ -652,14 +652,7 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
 
 /* Page méthode : un document qu'on lit, pas une infobulle. */
 .layout--single { display: block; }
-.method { max-width: var(--measure-doc); }
-.method__intro { font-size: 19px; }
-.method h2 { margin-top: var(--space-8); font-size: 22px; }
-.method h3 { font-size: 17px; margin-top: var(--space-4); }
-.method ul { max-width: var(--measure-narrative); }
-.method li { margin-bottom: var(--space-3); }
-.method__hypo { border-left: 2px solid var(--rule-hair); padding-left: var(--space-4); margin-bottom: var(--space-6); }
-.method__closing { margin-top: var(--space-8); padding-top: var(--space-4); border-top: 1px solid var(--rule); }
+/* Page méthode : voir « Page méthode » en fin de feuille. */
 
 /* ------------------------------------------------------------------ */
 /* Atelier                                                             */
@@ -1103,6 +1096,20 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
    posé SUR un accent doit alors être sombre, pas clair. L'oublier donnait
    1,98:1 sur le bouton de départ — relevé par axe-core. */
 .hero, .figures, .band--close { --perspective-a: #73c0c6; --perspective-b: #e0a85a; }
+
+/* Ces bandes prennent l'encre pour fond. En thème sombre, l'encre devient
+   CLAIRE : elles s'inversaient en bandes claires, et le bouton de départ y
+   tombait à 1,7:1 — relevé par axe-core sur la page méthode, invisible sur
+   l'accueil dont le test d'accessibilité ne passait pas en sombre. On fige
+   donc leurs jetons sur le thème clair : elles restent sombres partout. */
+.hero, .figures, .band--close {
+  --ink: #1e1b16;
+  --paper: #f4f1ea;
+  --paper-raised: #fbf9f5;
+  --paper-sunk: #e8e3d8;
+  --rule: #a79c85;
+  --rule-strong: #8e8470;
+}
 .hero .home__start,
 .band--close .home__start { color: var(--ink); }
 .hero .home__start:hover,
@@ -1330,3 +1337,236 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
   :root:not([data-theme='light']) .cast__tile { background: oklch(0.3 0.045 var(--seal-hue)); }
 }
 :root[data-theme='dark'] .cast__tile { background: oklch(0.3 0.045 var(--seal-hue)); }
+
+/* ================================================================== */
+/* Page méthode                                                        */
+/* ================================================================== */
+
+/* Même grammaire que l'accueil : bandeau sombre, chiffres en grand,
+   bandes alternées, cartes et schémas. Elle était une seule colonne de
+   puces sur près de 7 000 pixels. */
+
+.hero--compact { min-height: 0; padding-block: clamp(3rem, 8vw, 5.5rem) clamp(2rem, 5vw, 3.5rem); }
+.hero--compact .hero__inner { grid-template-columns: minmax(0, 1fr); }
+.hero--compact .hero__title { font-size: clamp(38px, 6.4vw, 68px); }
+.hero--compact .hero__tagline { font-size: clamp(17px, 2vw, 22px); max-width: 52ch; margin-bottom: 0; }
+.hero__kicker {
+  font: 700 13px/1 system-ui, sans-serif;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--perspective-a);
+  margin-bottom: var(--space-4);
+}
+
+/* ------------------------------------------- Biais : six cartes numérotées */
+
+.biases {
+  list-style: none; padding: 0; margin: 0; counter-reset: biais;
+  display: grid; gap: var(--space-4);
+}
+@media (min-width: 680px) { .biases { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1040px) { .biases { grid-template-columns: repeat(3, 1fr); } }
+.bias {
+  counter-increment: biais;
+  position: relative;
+  padding: var(--space-6) var(--space-6) var(--space-6);
+  background: var(--paper-raised);
+  border: 1px solid var(--rule-hair); border-radius: 14px;
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--ink) 8%, transparent);
+}
+.bias::before {
+  content: counter(biais, decimal-leading-zero);
+  display: block;
+  font: 600 40px/1 Georgia, 'Times New Roman', serif;
+  color: var(--perspective-b);
+  margin-bottom: var(--space-3);
+  font-variant-numeric: lining-nums;
+}
+.bias h3 { font-size: 19px; margin-bottom: var(--space-2); }
+.bias p { font-size: 15px; max-width: none; margin: 0; color: var(--ink-2); }
+
+/* ------------------------------------------- Vérifications : coches */
+
+.checks {
+  list-style: none; padding: 0; margin: 0;
+  display: grid; gap: var(--space-3);
+}
+@media (min-width: 760px) { .checks { grid-template-columns: 1fr 1fr; } }
+.check {
+  display: flex; gap: var(--space-4); align-items: flex-start;
+  padding: var(--space-4);
+  background: var(--paper);
+  border: 1px solid var(--rule-hair); border-radius: 12px;
+}
+.check__mark {
+  flex: 0 0 auto;
+  width: 40px; height: 40px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--tint-a); color: var(--perspective-a);
+}
+.check__mark .pictogram { width: 24px; height: 24px; stroke-width: 3.2; }
+.check p { font-size: 15px; max-width: none; margin: 0; }
+
+/* ------------------------------------------- Règles appliquées : tuiles */
+
+.stats {
+  margin: 0;
+  display: grid; gap: var(--space-4);
+  grid-template-columns: minmax(0, 1fr);
+}
+/* Six tuiles : deux rangées de trois, jamais une orpheline. */
+@media (min-width: 520px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 900px) { .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.stat {
+  display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: var(--space-2);
+  padding: var(--space-4) var(--space-6) var(--space-6);
+  background: var(--paper-raised);
+  border: 1px solid var(--rule-hair); border-top: 4px solid var(--perspective-a);
+  border-radius: 12px;
+}
+.stat--wide { grid-column: 1 / -1; flex-direction: column; }
+.stat--wide dt { order: -1; }
+.stat dt { font: 400 14px/1.4 system-ui, sans-serif; color: var(--ink-2); }
+.stat dd {
+  margin: 0;
+  font: 600 clamp(20px, 2.2vw, 26px)/1.2 Georgia, 'Times New Roman', serif;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+/* Échelle des paliers : quatre crans sur une règle. */
+.stat__scale {
+  position: relative; height: 44px; margin-top: var(--space-4);
+  border-bottom: 3px solid var(--rule);
+}
+.stat__scale span {
+  position: absolute; bottom: -3px; transform: translateX(-50%);
+  display: flex; flex-direction: column-reverse; align-items: center; gap: 4px;
+  font: 600 12px/1 system-ui, sans-serif; color: var(--ink-2);
+}
+.stat__scale i { display: block; width: 3px; height: 18px; background: var(--perspective-a); border-radius: 2px; }
+
+/* ------------------------------------------- Tirage : un entonnoir */
+
+.draw {
+  list-style: none; padding: 0; margin: 0 0 var(--space-4);
+  display: grid; gap: var(--space-6);
+}
+@media (min-width: 900px) { .draw { grid-template-columns: repeat(5, 1fr); gap: var(--space-4); } }
+.draw__step {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--paper);
+  border: 1px solid var(--rule-hair); border-radius: 12px;
+}
+/* Flèche entre deux étapes : vers le bas empilé, vers la droite en ligne. */
+.draw__step:not(:last-child)::after {
+  content: '↓';
+  position: absolute; left: 50%; bottom: calc(-1 * var(--space-6)); transform: translate(-50%, 15%);
+  font: 700 18px/1 system-ui, sans-serif; color: var(--ink-3);
+}
+@media (min-width: 900px) {
+  .draw__step:not(:last-child)::after {
+    content: '→';
+    left: auto; right: calc(-1 * var(--space-4)); bottom: auto; top: 50%;
+    transform: translate(60%, -50%);
+  }
+}
+.draw__step p { font: 400 14px/1.45 system-ui, sans-serif; max-width: none; margin: 0; }
+.draw__seals { display: grid; grid-template-columns: repeat(3, auto); gap: 6px; padding-block: 4px; }
+.draw__icon {
+  width: 56px; height: 56px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--tint-a); color: var(--perspective-a);
+}
+.draw__step--last { border: 2px solid var(--perspective-a); }
+.draw__relax { max-width: 70ch; color: var(--ink-2); }  /* ink-3 sur fond teinté : 4,37:1 */
+
+/* ------------------------------------------- Hypothèses : A face à B */
+
+.hypos { display: grid; gap: var(--space-4); align-items: start; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 860px) { .hypos { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.hypo {
+  padding: var(--space-6);
+  background: var(--paper-raised);
+  border: 1px solid var(--rule-hair); border-radius: 14px;
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--ink) 8%, transparent);
+}
+.hypo__status {
+  display: inline-block;
+  font: 700 11px/1 system-ui, sans-serif; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-2);
+  padding: 5px 8px; border: 1px solid var(--rule); border-radius: 999px;
+  margin-bottom: var(--space-3);
+}
+.hypo h3 { font-size: 18px; margin-bottom: var(--space-4); }
+/* Même pastille pour A et B : aucune lecture n'est mise en avant. */
+.hypo__readings {
+  list-style: none; padding: 0; margin: 0;
+  display: grid; gap: var(--space-2); grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+.hypo__readings li {
+  display: flex; flex-direction: column; gap: var(--space-1);
+  padding: var(--space-3);
+  background: var(--paper-sunk); border-radius: 8px;
+  font: 400 14px/1.4 system-ui, sans-serif;
+  overflow-wrap: anywhere;
+}
+.hypo__readings strong {
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2);
+}
+.hypo__why { margin-top: var(--space-4); border-top: 1px solid var(--rule-hair); }
+.hypo__why > summary {
+  padding-top: var(--space-3); cursor: pointer;
+  font: 600 14px/1.4 system-ui, sans-serif; color: var(--perspective-a);
+}
+.hypo__why p { font-size: 15px; max-width: none; margin: var(--space-3) 0 0; }
+
+/* ------------------------------------------- Chiffres et données : deux cartes */
+
+.duo { display: grid; gap: var(--space-4); grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 860px) { .duo { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.duo__card {
+  padding: var(--space-6);
+  background: var(--paper);
+  border: 1px solid var(--rule-hair); border-radius: 14px;
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--ink) 8%, transparent);
+}
+.duo__icon {
+  width: 64px; height: 64px; border-radius: 50%;
+  display: grid; place-items: center; margin-bottom: var(--space-4);
+  background: var(--tint-a); color: var(--perspective-a);
+}
+.band .duo__card h2 { padding-top: 0; font-size: clamp(22px, 2.6vw, 28px); }
+.band .duo__card h2::before { display: none; }
+.duo__lead { font-size: 18px; font-style: italic; color: var(--ink-2); max-width: none; }
+.duo__card ul { padding-left: 1.1em; margin: 0; }
+.duo__card li { font-size: 15px; margin-bottom: var(--space-3); }
+
+/* ------------------------------------------- Sources : un monogramme */
+
+.sources {
+  list-style: none; padding: 0; margin: 0;
+  display: grid; gap: var(--space-4); grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 760px) { .sources { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1080px) { .sources { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.source {
+  display: flex; gap: var(--space-4); align-items: flex-start;
+  padding: var(--space-4);
+  background: var(--paper-raised);
+  border: 1px solid var(--rule-hair); border-radius: 12px;
+}
+/* Même pastille pour toutes les sources : aucune hiérarchie de crédibilité. */
+.source__org {
+  flex: 0 0 auto;
+  width: 64px; height: 64px; border-radius: 12px;
+  display: grid; place-items: center;
+  background: var(--paper-sunk); color: var(--ink);
+  font: 700 13px/1 system-ui, sans-serif; letter-spacing: 0.04em;
+}
+.source__text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.source__text strong { font-size: 16px; line-height: 1.3; }
+.source__scope { font: 400 14px/1.45 system-ui, sans-serif; color: var(--ink-2); }
+
+/* ------------------------------------------- Clôture */
+
+.method__closing { font-size: clamp(18px, 2vw, 22px); max-width: 52ch; color: var(--paper); margin-bottom: var(--space-6); }

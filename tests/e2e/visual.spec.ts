@@ -32,3 +32,11 @@ for (const { phase, name } of SHOTS) {
     })
   })
 }
+
+// La page méthode ne fait pas partie du parcours : on y entre par l'accueil.
+test('capture methode', async ({ page }, info) => {
+  await page.goto('/')
+  await page.getByRole('button', { name: /Comment ce jeu est construit/ }).click()
+  await settle(page)
+  await page.screenshot({ path: `captures/${info.project.name}-methode.png`, fullPage: true })
+})

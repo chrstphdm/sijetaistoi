@@ -45,3 +45,13 @@ test('les contrastes tiennent aussi en thème sombre', async ({ page }) => {
   const contrast = results.violations.filter((v) => v.id === 'color-contrast')
   expect(contrast, JSON.stringify(contrast, null, 1)).toEqual([])
 })
+
+// Les bandes sombres de l'accueil s'inversaient en thème sombre, et le bouton
+// de départ y tombait à 1,7:1 : aucun test ne passait l'accueil en sombre.
+test('l’accueil reste accessible en thème sombre', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'dark' })
+  await reach(page, 'home')
+  await settle(page)
+  const results = await new AxeBuilder({ page }).withTags(['wcag2aa']).analyze()
+  expect(results.violations, JSON.stringify(results.violations.map((v) => v.id))).toEqual([])
+})
