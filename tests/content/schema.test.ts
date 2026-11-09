@@ -272,7 +272,7 @@ describe('page d’accueil — toute thèse porte son objection', () => {
   })
 
   it('déclare ce que le jeu n’est pas, dont sa propre partialité', () => {
-    const joined = intro.notList.join(' ')
+    const joined = intro.notList.map((n: { body: string }) => n.body).join(' ')
     expect(joined).toContain('pas neutre')
   })
 })

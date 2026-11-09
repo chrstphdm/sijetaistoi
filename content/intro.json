@@ -111,10 +111,26 @@
   ],
   "notTitle": "Ce que ce jeu n'est pas",
   "notList": [
-    "Ce n'est pas un test politique : il ne te situe sur aucun axe et ne te compare à personne.",
-    "Ce n'est pas un simulateur : les montants sont des ordres de grandeur plausibles, pas des prévisions, et le modèle ignore volontairement les comportements et les effets de second tour.",
-    "Ce n'est pas un quiz : aucune réponse n'est comptée juste ou fausse.",
-    "Ce n'est pas neutre pour autant. La page « Comment ce jeu est construit » détaille les six biais que le dispositif ne parvient pas à éviter."
+    {
+      "id": "test",
+      "label": "un test politique",
+      "body": "Ce n'est pas un test politique : il ne te situe sur aucun axe et ne te compare à personne."
+    },
+    {
+      "id": "simulateur",
+      "label": "un simulateur",
+      "body": "Ce n'est pas un simulateur : les montants sont des ordres de grandeur plausibles, pas des prévisions, et le modèle ignore volontairement les comportements et les effets de second tour."
+    },
+    {
+      "id": "quiz",
+      "label": "un quiz",
+      "body": "Ce n'est pas un quiz : aucune réponse n'est comptée juste ou fausse."
+    },
+    {
+      "id": "neutre",
+      "label": "neutre",
+      "body": "Ce n'est pas neutre pour autant. La page « Comment ce jeu est construit » détaille les six biais que le dispositif ne parvient pas à éviter."
+    }
   ],
   "principlesTitle": "Les principes que le jeu met en tension"
 }

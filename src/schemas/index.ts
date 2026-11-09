@@ -100,7 +100,14 @@ export const IntroPage = z.object({
   lookTitle: z.string().min(10),
   look: z.array(z.object({ id: Id, title: z.string().min(5), body: z.string().min(120) })).min(3),
   notTitle: z.string().min(10),
-  notList: z.array(z.string().min(50)).min(3),
+  /**
+   * Chaque entree porte un mot court (affiche en grand, barre) ET la phrase
+   * complete. Le mot seul ne suffit jamais : c'est la phrase qui dit ce que
+   * le jeu n'est pas, et pourquoi.
+   */
+  notList: z
+    .array(z.object({ id: Id, label: z.string().min(3).max(24), body: z.string().min(50) }))
+    .min(3),
   principlesTitle: z.string().min(10),
 })
 

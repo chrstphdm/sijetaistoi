@@ -889,28 +889,9 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
   display: flex; align-items: center;
 }
 
-/* Trame décorative : les six sceaux, en grand, générés. C'est la seule
-   image du site, et elle n'est pas un fichier. aria-hidden, donc elle ne
-   porte rien — c'est à cette condition qu'elle peut s'autoriser des
-   opacités qui ne passeraient aucun contrôle de contraste. */
-.banner { position: absolute; inset: 0; pointer-events: none; }
-.banner__svg { width: 100%; height: 100%; display: block; }
-/* Le dégradé protège la lisibilité du texte à gauche et laisse la trame
-   respirer à droite. La première version la noyait entièrement. */
-.hero::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(
-    100deg,
-    var(--ink) 30%,
-    color-mix(in oklab, var(--ink) 80%, transparent) 52%,
-    color-mix(in oklab, var(--ink) 28%, transparent) 100%
-  );
-}
-
 .hero__inner { position: relative; z-index: 1; max-width: var(--page); margin-inline: auto; width: 100%; }
 .hero__title {
-  font-size: clamp(46px, 11vw, 112px);
+  font-size: clamp(46px, 9vw, 92px);
   line-height: 0.96;
   letter-spacing: -0.02em;
   margin: 0 0 var(--space-6);
@@ -1007,64 +988,73 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
 
 /* ---------------------------------------------------------- Personnages */
 
-/* Même taille de sceau, même structure, même longueur : la page d'accueil
-   est la première impression du casting, y avantager quelqu'un orienterait
-   avant le premier tirage. */
-.cast { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-3); }
-@media (min-width: 620px) { .cast { grid-template-columns: 1fr 1fr; } }
-@media (min-width: 980px) { .cast { grid-template-columns: repeat(3, 1fr); } }
-.cast li {
-  display: flex; align-items: center; gap: var(--space-3);
-  padding: var(--space-4);
-  background: var(--paper); border: 1px solid var(--rule-hair); border-radius: 2px;
-  font-family: system-ui, sans-serif; font-size: 14px;
-}
-.cast span { display: flex; flex-direction: column; min-width: 0; }
-.cast .provenance { margin-top: 2px; }
-
 /* --------------------------------------------------- Principes en tension */
 
-/* Deux principes face à face : c'est la tension entre deux positions
-   également défendables qui fait un désaccord politique.
+/* Deux principes face à face, de part et d'autre d'une balance : c'est la
+   tension entre deux positions également défendables qui fait un désaccord
+   politique, pas un principe pris isolément.
+
+   PARITÉ : les deux principes d'une paire ont exactement le même traitement
+   — même pastille, même encre, même taille. Aucun n'est en accent. Le mot
+   « contre » est écrit, pas suggéré par la seule disposition.
 
    Le détail est replié, parce que quatorze définitions rendaient la page
    interminable sur petit écran. La règle tient : on replie la définition ET
    son objection ENSEMBLE, jamais l'une sans l'autre. */
-.tensions { display: grid; gap: var(--space-2); }
+.tensions { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); align-items: start; }
+@media (min-width: 860px) { .tensions { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
 
 .tension {
   background: var(--paper);
   border: 1px solid var(--rule-hair);
-  border-left: 3px solid var(--perspective-a);
-  border-radius: 2px;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--ink) 8%, transparent);
+  transition: box-shadow 160ms var(--ease-enter), transform 160ms var(--ease-enter);
 }
+.tension:hover { box-shadow: 0 6px 18px color-mix(in oklab, var(--ink) 12%, transparent); }
 .tension > summary {
-  display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2) var(--space-4);
-  padding: var(--space-3) var(--space-4);
+  list-style: none;
+  display: grid; gap: var(--space-3);
+  padding: var(--space-4) var(--space-4) var(--space-3);
   cursor: pointer;
   font-family: system-ui, sans-serif;
-  min-height: 24px;
+  text-align: center;
 }
-.tension > summary::marker { color: var(--ink-3); }
+.tension > summary::-webkit-details-marker { display: none; }
 .tension[open] > summary { border-bottom: 1px solid var(--rule-hair); }
 
 .tension__about {
   font-size: 12px; font-weight: 700;
   letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3);
-  flex: 1 1 14rem;
 }
-.tension__pair { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2); font-size: 16px; }
-
-/* Le mot « contre » est écrit, pas suggéré par la disposition seule. */
+.tension__pair {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center; gap: var(--space-2);
+}
+.tension__pair strong {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(16px, 1.8vw, 19px); line-height: 1.25;
+  padding: var(--space-3) var(--space-2);
+  background: var(--paper-sunk);
+  border-radius: 8px;
+  min-height: 100%; display: grid; place-items: center;
+  /* « proportionnelle » ne tient pas dans une demi-colonne à 400 px. */
+  overflow-wrap: anywhere; hyphens: auto;
+}
 .tension__vs {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
   font-size: 11px; font-weight: 700;
   letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3);
 }
+.tension__vs .pictogram { width: 34px; height: 34px; color: var(--ink-2); }
+.tension__more {
+  font-size: 13px; color: var(--perspective-a); font-weight: 600;
+}
+.tension__more::after { content: ' ▾'; }
+.tension[open] .tension__more::after { content: ' ▴'; }
 
 .tension__row { display: grid; gap: var(--space-4); padding: var(--space-4); }
-@media (min-width: 820px) { .tension__row { grid-template-columns: 1fr 1fr; } }
-.tension__row > article { border-left: 2px solid var(--rule-hair); padding-left: var(--space-4); }
-.tension__row > article:last-child { border-left-color: var(--rule); }
+.tension__row > article { border-left: 2px solid var(--rule); padding-left: var(--space-4); }
 .tension__row h3 { font-size: 16px; margin-bottom: var(--space-2); }
 .tension__row p { font-size: 15px; max-width: none; margin-bottom: 0; }
 
@@ -1076,37 +1066,6 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
   border-left: 3px solid var(--perspective-a);
   margin-top: var(--space-3);
 }
-
-/* ------------------------------------------------------------- Repliés */
-
-/* Même traitement que les principes : ce qui est replié l'est toujours
-   ENTIÈREMENT — une thèse n'est jamais visible sans son objection. */
-.folds { display: grid; gap: var(--space-2); }
-.fold {
-  background: var(--paper-raised);
-  border: 1px solid var(--rule-hair);
-  border-left: 3px solid var(--perspective-a);
-  border-radius: 2px;
-}
-.band--tint .fold { background: var(--paper); }
-.fold > summary {
-  display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-  cursor: pointer; min-height: 24px;
-  font-family: system-ui, sans-serif; font-size: 16px;
-}
-.fold[open] > summary { border-bottom: 1px solid var(--rule-hair); }
-.fold__hint {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--ink-3); margin-inline-start: auto;
-}
-.fold__body { padding: var(--space-4); }
-.fold__body p { font-size: 15px; max-width: 70ch; margin-bottom: 0; }
-
-/* Six personnages sur deux colonnes dès 440 px : empilés, ils ajoutaient
-   1 200 pixels de défilement pour six lignes de texte. */
-@media (min-width: 440px) { .cast { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 439px) { .cast li { padding: var(--space-3); } }
 
 /* ------------------------------------------------------------- Chiffres */
 
@@ -1171,21 +1130,10 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
    voisins ne découpent rien. */
 .band--tint { background: var(--paper-sunk); box-shadow: inset 0 1px 0 var(--rule-hair), inset 0 -1px 0 var(--rule-hair); }
 
-/* Les replis étaient des filets gris sans présence. */
-.fold, .tension {
-  border: 1px solid var(--rule);
-  border-left-width: 4px;
-  transition: background 160ms var(--ease-enter);
-}
-.fold:hover, .tension:hover { background: var(--tint-a); }
-.tension { border-left-color: var(--perspective-b); }
-@media (prefers-reduced-motion: reduce) {
-  .fold, .tension { transition: none; }
-}
 
 /* Les cartes gagnent une ombre discrète : sur un fond papier, un simple
    filet ne les détache pas. */
-.cards > li, .cards > article, .cast li {
+.cards > li, .cards > article {
   box-shadow: 0 1px 2px color-mix(in oklab, var(--ink) 8%, transparent);
 }
 
@@ -1197,3 +1145,188 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
   padding-inline: max(var(--space-6), calc((100% - var(--page)) / 2 + var(--space-6)));
 }
 .band--close .timeline__toggle { color: var(--paper-sunk); border-bottom-color: var(--rule-strong); }
+
+/* ================================================================== */
+/* Accueil — illustrations                                            */
+/* ================================================================== */
+
+/* « Trop austère, pas assez visuel. » La moitié basse de la page n'était
+   qu'une suite de lignes repliées en texte gris. Chaque section porte
+   désormais une image — générée, décorative, aria-hidden, et doublée par
+   le texte qui reste lisible sans elle. */
+
+/* ----------------------------------------- Bandeau : les six, en grand */
+
+.hero__inner { display: grid; gap: var(--space-8); align-items: center; }
+@media (min-width: 900px) {
+  .hero__inner { grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); }
+}
+
+.hero-cast {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.5rem, 1.6vw, 1rem);
+  max-width: 30rem; width: 100%;
+  justify-self: center;
+}
+/* Toutes les tuiles apparaissent ENSEMBLE : une cascade avantagerait la
+   première. Même règle que l'écran d'impact. */
+.hero-cast__tile {
+  aspect-ratio: 1;
+  display: grid; place-items: center; align-content: center; gap: var(--space-2);
+  border-radius: 18px;
+  background: oklch(0.3 0.045 var(--seal-hue));
+  box-shadow: inset 0 0 0 1px oklch(0.42 0.06 var(--seal-hue));
+  animation: tile-in 520ms var(--ease-enter) both;
+}
+.hero-cast__tile:nth-child(even) { transform: translateY(18%); }
+.hero-cast .seal { width: 58%; height: auto; }
+.hero-cast .seal rect { fill: oklch(0.8 0.12 var(--seal-hue)); }
+.hero-cast__tile span {
+  font: 600 clamp(11px, 1.3vw, 14px)/1 system-ui, sans-serif;
+  color: oklch(0.9 0.03 var(--seal-hue));
+  letter-spacing: 0.02em;
+}
+@keyframes tile-in { from { opacity: 0; scale: 0.9; } }
+@media (prefers-reduced-motion: reduce) { .hero-cast__tile { animation: none; } }
+@media (max-width: 899px) {
+  .hero { min-height: 0; }
+  .hero-cast { max-width: 22rem; justify-self: start; padding-bottom: 6%; }
+}
+
+/* ------------------------------------------------------- Les six cartes */
+
+/* Même tuile, même taille de sceau, même structure : la page d'accueil est
+   la première impression du casting, y avantager quelqu'un orienterait
+   avant le premier tirage. La teinte de fond suit la teinte du sceau, à
+   clarté et saturation identiques pour les six. */
+.cast { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-4); }
+@media (min-width: 560px) { .cast { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 960px) { .cast { grid-template-columns: repeat(3, 1fr); } }
+.cast li {
+  display: flex; align-items: center; gap: var(--space-4);
+  padding: var(--space-4);
+  background: var(--paper);
+  border: 1px solid var(--rule-hair); border-radius: 14px;
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--ink) 8%, transparent);
+}
+.cast__tile {
+  flex: 0 0 auto;
+  width: 88px; height: 88px; border-radius: 14px;
+  display: grid; place-items: center;
+  background: oklch(0.93 0.035 var(--seal-hue));
+}
+.cast__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; font-family: system-ui, sans-serif; }
+.cast__text strong { font: 600 21px/1.15 Georgia, 'Times New Roman', serif; }
+.cast__age { font-size: 14px; color: var(--ink-2); }
+.cast .provenance { margin-top: 2px; }
+@media (max-width: 439px) {
+  .cast__tile { width: 68px; height: 68px; }
+  .cast__tile .seal { width: 48px; height: 48px; }
+}
+
+/* ------------------------------------------- Théories : un pictogramme */
+
+.theories {
+  list-style: none; padding: 0; margin: 0;
+  display: grid; gap: var(--space-4); align-items: start;
+}
+@media (min-width: 640px) { .theories { grid-template-columns: 1fr 1fr; } }
+.theory {
+  display: grid; grid-template-columns: auto 1fr; column-gap: var(--space-4);
+  align-items: center;
+  padding: var(--space-6) var(--space-6) var(--space-4);
+  background: var(--paper-raised);
+  border: 1px solid var(--rule-hair); border-radius: 14px;
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--ink) 8%, transparent);
+}
+.theory__icon {
+  width: 64px; height: 64px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--tint-a); color: var(--perspective-a);
+}
+.theory h3 { font-size: clamp(18px, 2vw, 22px); margin: 0; }
+/* Thèse et objection sont repliées ENSEMBLE, jamais l'une sans l'autre. */
+.theory__more { grid-column: 1 / -1; margin-top: var(--space-4); border-top: 1px solid var(--rule-hair); }
+.theory__more > summary {
+  padding-top: var(--space-3);
+  cursor: pointer;
+  font: 600 14px/1.4 system-ui, sans-serif; color: var(--perspective-a);
+}
+.theory__more p { font-size: 15px; max-width: none; margin: var(--space-3) 0 0; }
+
+/* ----------------------------------------------- Allure : trois vignettes */
+
+.looks {
+  list-style: none; padding: 0; margin: 0;
+  display: grid; gap: var(--space-4);
+}
+@media (min-width: 820px) { .looks { grid-template-columns: repeat(3, 1fr); } }
+.look {
+  padding: var(--space-4) var(--space-4) var(--space-6);
+  background: var(--paper-raised);
+  border: 1px solid var(--rule-hair); border-radius: 14px;
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--ink) 8%, transparent);
+}
+.look h3 { font-size: 19px; margin: var(--space-4) var(--space-2) var(--space-2); }
+.look p { font-size: 15px; max-width: none; margin: 0 var(--space-2); }
+.look__art {
+  height: 132px; border-radius: 10px;
+  display: grid; place-items: center;
+  background: var(--paper-sunk);
+}
+
+.art-seals { display: grid; grid-template-columns: repeat(3, auto); gap: 10px 14px; }
+
+.art-doc { width: 150px; height: auto; }
+.art-doc__sheet { fill: var(--paper-raised); stroke: var(--rule); stroke-width: 1; }
+.art-doc__ink { fill: var(--ink-2); }
+.art-doc__soft { fill: var(--rule-hair); }
+.art-doc__rule { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 3; }
+
+.art-accents { display: grid; grid-template-columns: auto auto; gap: 10px; justify-items: center; }
+.art-accents__swatch { width: 52px; height: 52px; border-radius: 12px; }
+.art-accents__swatch--a { background: var(--perspective-a); }
+.art-accents__swatch--b { background: var(--perspective-b); }
+.art-accents__sign {
+  grid-column: 1 / -1;
+  font: 600 15px/1 system-ui, sans-serif; color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.art-accents__sign em { font-style: normal; font-weight: 400; color: var(--ink-2); }
+
+/* ------------------------------------------- Ce que ce jeu n'est pas */
+
+.nots {
+  list-style: none; padding: 0; margin: 0;
+  display: grid; gap: var(--space-4);
+}
+@media (min-width: 640px) { .nots { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1040px) { .nots { grid-template-columns: repeat(4, 1fr); } }
+.not {
+  padding: var(--space-6) var(--space-4);
+  background: var(--paper);
+  border: 1px solid var(--rule-hair); border-radius: 14px;
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--ink) 8%, transparent);
+}
+.not__head { display: block; margin-bottom: var(--space-3); }
+.not__pre {
+  display: block;
+  font: 700 11px/1.4 system-ui, sans-serif;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3);
+}
+/* Le barré est porté par le trait, pas par la couleur. */
+.not__word {
+  display: inline-block;
+  font-size: clamp(24px, 2.6vw, 30px); line-height: 1.15;
+  text-decoration-line: line-through;
+  text-decoration-thickness: 3px;
+  text-decoration-color: var(--perspective-b);
+}
+.not p { font-size: 15px; max-width: none; margin: 0; color: var(--ink-2); }
+
+/* ------------------------------------------------------- Thème sombre */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .cast__tile { background: oklch(0.3 0.045 var(--seal-hue)); }
+}
+:root[data-theme='dark'] .cast__tile { background: oklch(0.3 0.045 var(--seal-hue)); }

@@ -1,8 +1,9 @@
+import type { CSSProperties } from 'react'
 import { bundle, characters } from '@/content/load.ts'
+import { BalanceIcon, HeroCast, LookArt, TheoryIcon } from './HomeArt.tsx'
 import { LoopDiagram } from './LoopDiagram.tsx'
 import { ScaleDemo } from './ScaleDemo.tsx'
-import { Seal } from './Seal.tsx'
-import { SealBanner } from './SealBanner.tsx'
+import { Seal, sealHue } from './Seal.tsx'
 
 /**
  * Accueil et contrat.
@@ -38,14 +39,16 @@ export function HomeScreen({ onStart, onMethod }: {
       {/* Bandeau d'ouverture : le titre, la promesse, et l'action. Rien
           d'autre — on doit pouvoir jouer sans lire une ligne de plus. */}
       <header className="hero">
-        <SealBanner />
         <div className="hero__inner">
-          <h1 className="hero__title">{i.title}</h1>
-          <p className="hero__tagline">{i.tagline}</p>
-          <p className="hero__actions">
-            {start}
-            <span className="hero__note">{i.duration}</span>
-          </p>
+          <div className="hero__text">
+            <h1 className="hero__title">{i.title}</h1>
+            <p className="hero__tagline">{i.tagline}</p>
+            <p className="hero__actions">
+              {start}
+              <span className="hero__note">{i.duration}</span>
+            </p>
+          </div>
+          <HeroCast />
         </div>
       </header>
 
@@ -109,10 +112,16 @@ export function HomeScreen({ onStart, onMethod }: {
           </p>
           <ul className="cast">
             {characters.map((c) => (
-              <li key={c.id}>
-                <Seal id={c.id} allIds={allIds} size={52} />
-                <span>
-                  <strong>{c.identity.firstName}</strong>, {c.identity.age} ans
+              <li
+                key={c.id}
+                style={{ ['--seal-hue' as string]: sealHue(c.id, allIds) } as CSSProperties}
+              >
+                <span className="cast__tile">
+                  <Seal id={c.id} allIds={allIds} size={64} />
+                </span>
+                <span className="cast__text">
+                  <strong>{c.identity.firstName}</strong>
+                  <span className="cast__age">{c.identity.age} ans</span>
                   <span className="provenance">{c.identity.identityLine}</span>
                 </span>
               </li>
@@ -129,23 +138,22 @@ export function HomeScreen({ onStart, onMethod }: {
           {/* Repliées comme les principes, et pour la même raison : la
               page faisait plus de 10 000 pixels sur petit écran. Thèse et
               objection sont repliées ENSEMBLE, jamais l'une sans l'autre. */}
-          <div className="folds">
+          <ul className="theories">
             {i.theories.map((t) => (
-              <details key={t.id} className="fold">
-                <summary>
-                  <strong>{t.title}</strong>
-                  <span className="fold__hint">thèse et objection</span>
-                </summary>
-                <div className="fold__body">
+              <li key={t.id} className="theory">
+                <span className="theory__icon"><TheoryIcon id={t.id} /></span>
+                <h3>{t.title}</h3>
+                <details className="theory__more">
+                  <summary>Thèse et objection</summary>
                   <p>{t.body}</p>
                   <p className="objection">
                     <span className="objection__tag">Ce qu’on lui reproche</span>
                     {t.objection}
                   </p>
-                </div>
-              </details>
+                </details>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
 
         <section className="band band--tint" aria-labelledby="h-principles">
@@ -173,9 +181,10 @@ export function HomeScreen({ onStart, onMethod }: {
                     <span className="tension__about">{t.about}</span>
                     <span className="tension__pair">
                       <strong>{a.label}</strong>
-                      <span className="tension__vs">contre</span>
+                      <span className="tension__vs"><BalanceIcon />contre</span>
                       <strong>{b.label}</strong>
                     </span>
+                    <span className="tension__more">Définitions et objections</span>
                   </summary>
                   <div className="tension__row">
                     {[a, b].map((p) => (
@@ -197,26 +206,32 @@ export function HomeScreen({ onStart, onMethod }: {
 
         <section className="band" aria-labelledby="h-look">
           <h2 id="h-look">{i.lookTitle}</h2>
-          <div className="folds">
+          {/* Dépliées : trois paragraphes courts, qui n'ont pas d'objection
+              à replier avec eux. Chacun a sa vignette, qui montre ce que le
+              texte décrit. */}
+          <ul className="looks">
             {i.look.map((l) => (
-              <details key={l.id} className="fold">
-                <summary>
-                  <strong>{l.title}</strong>
-                </summary>
-                <div className="fold__body">
-                  <p>{l.body}</p>
-                </div>
-              </details>
+              <li key={l.id} className="look">
+                <LookArt id={l.id} />
+                <h3>{l.title}</h3>
+                <p>{l.body}</p>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
 
         <section className="band band--tint" aria-labelledby="h-not">
           <h2 id="h-not">{i.notTitle}</h2>
-          <ul className="cards cards--two">
+          {/* Le mot barré est un repère visuel ; c'est la phrase qui le dit,
+              et c'est elle que lit un lecteur d'écran. */}
+          <ul className="nots">
             {i.notList.map((n) => (
-              <li key={n}>
-                <p>{n}</p>
+              <li key={n.id} className="not">
+                <span className="not__head" aria-hidden="true">
+                  <span className="not__pre">Ce n’est pas</span>
+                  <s className="not__word">{n.label}</s>
+                </span>
+                <p>{n.body}</p>
               </li>
             ))}
           </ul>
