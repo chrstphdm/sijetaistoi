@@ -37,8 +37,19 @@ export const Effect = z
     kind: z.enum(['budget_line', 'public_finance', 'service_level']),
     /** Poste budgétaire touché, pour kind === 'budget_line'. */
     code: Id.optional(),
-    /** Variation mensuelle en euros. Signé : négatif = le ménage paie plus. */
+    /**
+     * Variation mensuelle en euros. Signé : négatif = le ménage paie plus.
+     * Avec `monthlyShare`, c'est la valeur de repère d'un ménage type, et la
+     * part fixe le montant réel.
+     */
     monthlyDelta: z.number().optional(),
+    /**
+     * La variation comme PART d'une ligne du personnage, même signe que
+     * `monthlyDelta`. Une cotisation de 1,2 point ne coûte pas la même chose
+     * sur 390 € et sur 5 100 € : un montant unique faisait payer autant
+     * Yanis que Rachid.
+     */
+    monthlyShare: z.object({ rate: z.number().min(-2).max(2), of: Id }).optional(),
     /** Impact sur les finances publiques, en milliards. Signé. */
     publicBillions: z.number().optional(),
     scope: Scope,

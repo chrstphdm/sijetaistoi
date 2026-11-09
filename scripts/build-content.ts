@@ -154,6 +154,9 @@ for (const r of reforms) {
           complain(file, `options.${o.id}`, msg)
       if (ef.code && !lineCodes.has(ef.code))
         complain(file, `options.${o.id}.effects.${ef.id}.code`, `poste budgétaire inconnu : ${ef.code}`)
+      // Une part sur un poste inconnu vaudrait zéro pour tout le monde, en silence.
+      if (ef.monthlyShare && !lineCodes.has(ef.monthlyShare.of))
+        complain(file, `options.${o.id}.effects.${ef.id}.monthlyShare.of`, `poste inconnu : ${ef.monthlyShare.of}`)
       if (ef.hypothesisId && !hypothesisIds.has(ef.hypothesisId))
         complain(file, `options.${o.id}.effects.${ef.id}.hypothesisId`, `hypothèse inconnue : ${ef.hypothesisId}`)
     }

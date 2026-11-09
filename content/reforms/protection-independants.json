@@ -48,7 +48,7 @@
           "id": "sq-risque",
           "kind": "budget_line",
           "code": "sante",
-          "monthlyDelta": -38,
+          "monthlyDelta": 0,
           "scope": {
             "when": {
               "and": [
@@ -62,8 +62,8 @@
             "description": "Indépendants : prévoyance privée pour compenser l'absence d'indemnisation"
           },
           "horizon": "y1",
-          "uncertainty": "debated",
-          "hypothesisId": "protection-independants"
+          "uncertainty": "established",
+          "note": "Aucun changement : la prévoyance privée qui compense l'absence d'indemnisation est déjà comprise dans leur poste santé. Le statu quo la maintient, il ne l'ajoute pas."
         },
         {
           "id": "statu-quo-autres",
@@ -128,28 +128,32 @@
         {
           "id": "ac-cotis",
           "kind": "budget_line",
-          "code": "impots",
-          "monthlyDelta": -210,
+          "code": "revenu-independant",
+          "monthlyDelta": -150,
           "scope": {
             "when": {
               "and": [
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "self_employed"
+                  "revenu-independant"
                 ]
               ]
             },
-            "description": "Indépendants : cotisations alignées"
+            "description": "Foyers percevant un revenu d'activité indépendante"
           },
           "horizon": "y1",
-          "uncertainty": "established"
+          "uncertainty": "established",
+          "monthlyShare": {
+            "rate": -0.06,
+            "of": "revenu-independant"
+          }
         },
         {
           "id": "ac-prevoyance",
           "kind": "budget_line",
           "code": "sante",
-          "monthlyDelta": 155,
+          "monthlyDelta": 60,
           "scope": {
             "when": {
               "and": [
@@ -164,7 +168,12 @@
           },
           "horizon": "y1",
           "uncertainty": "debated",
-          "hypothesisId": "protection-independants"
+          "hypothesisId": "protection-independants",
+          "monthlyShare": {
+            "rate": 0.3,
+            "of": "sante"
+          },
+          "note": "Part de la prévoyance privée devenue inutile, estimée en proportion de leur poste santé, qui la comprend."
         },
         {
           "id": "ac-recette",
@@ -241,28 +250,32 @@
         {
           "id": "ap-cotis",
           "kind": "budget_line",
-          "code": "impots",
-          "monthlyDelta": -72,
+          "code": "revenu-independant",
+          "monthlyDelta": -50,
           "scope": {
             "when": {
               "and": [
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "self_employed"
+                  "revenu-independant"
                 ]
               ]
             },
-            "description": "Indépendants : cotisation supplémentaire"
+            "description": "Foyers percevant un revenu d'activité indépendante"
           },
           "horizon": "y1",
-          "uncertainty": "established"
+          "uncertainty": "established",
+          "monthlyShare": {
+            "rate": -0.02,
+            "of": "revenu-independant"
+          }
         },
         {
           "id": "ap-prevoyance",
           "kind": "budget_line",
           "code": "sante",
-          "monthlyDelta": 96,
+          "monthlyDelta": 40,
           "scope": {
             "when": {
               "and": [
@@ -277,7 +290,12 @@
           },
           "horizon": "y1",
           "uncertainty": "debated",
-          "hypothesisId": "protection-independants"
+          "hypothesisId": "protection-independants",
+          "monthlyShare": {
+            "rate": 0.2,
+            "of": "sante"
+          },
+          "note": "Part de la prévoyance privée devenue inutile, estimée en proportion de leur poste santé, qui la comprend."
         },
         {
           "id": "ap-recette",
@@ -354,7 +372,7 @@
           "id": "fg-indep",
           "kind": "budget_line",
           "code": "sante",
-          "monthlyDelta": 155,
+          "monthlyDelta": 60,
           "scope": {
             "when": {
               "and": [
@@ -369,13 +387,22 @@
           },
           "horizon": "y1",
           "uncertainty": "debated",
-          "hypothesisId": "protection-independants"
+          "hypothesisId": "protection-independants",
+          "monthlyShare": {
+            "rate": 0.3,
+            "of": "sante"
+          },
+          "note": "Part de la prévoyance privée devenue inutile, estimée en proportion de leur poste santé, qui la comprend."
         },
         {
-          "id": "fg-contribuables",
+          "id": "fg-contribuables-sal",
           "kind": "budget_line",
-          "code": "impots",
-          "monthlyDelta": -26,
+          "code": "salaire-net",
+          "monthlyDelta": -10,
+          "monthlyShare": {
+            "rate": -0.004,
+            "of": "salaire-net"
+          },
           "scope": {
             "when": {
               "and": [
@@ -383,13 +410,75 @@
                   "incomeDecile",
                   "gte",
                   5
+                ],
+                [
+                  "budgetLines",
+                  "contains",
+                  "salaire-net"
                 ]
               ]
             },
-            "description": "Ménages à partir du cinquième décile"
+            "description": "Foyers à partir du cinquième décile percevant un salaire"
           },
           "horizon": "y1",
-          "uncertainty": "established"
+          "uncertainty": "established",
+          "note": "Financement par l'impôt, environ 0,4 % du revenu."
+        },
+        {
+          "id": "fg-contribuables-ind",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": -10,
+          "monthlyShare": {
+            "rate": -0.004,
+            "of": "revenu-independant"
+          },
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  5
+                ],
+                [
+                  "budgetLines",
+                  "contains",
+                  "revenu-independant"
+                ]
+              ]
+            },
+            "description": "Foyers à partir du cinquième décile percevant un revenu indépendant"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Même taux sur le revenu d'activité indépendante."
+        },
+        {
+          "id": "fg-contribuables-ret",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  5
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            },
+            "description": "Retraités à partir du cinquième décile"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Le financement retenu porte sur les revenus d'activité."
         },
         {
           "id": "fg-recette",

@@ -129,12 +129,15 @@
       ],
       "effects": [
         {
-          "id": "tg-tendue-bas",
+          "id": "tg-sans-voiture",
           "kind": "budget_line",
           "code": "transport",
-          "monthlyDelta": 85,
+          "monthlyDelta": 90,
+          "monthlyShare": {
+            "rate": 1.0,
+            "of": "transport"
+          },
           "scope": {
-            "description": "Usagers des réseaux urbains, premiers déciles",
             "when": {
               "and": [
                 [
@@ -143,24 +146,24 @@
                   "tendue"
                 ],
                 [
-                  "incomeDecile",
-                  "lte",
-                  3
+                  "hasCar",
+                  "eq",
+                  false
                 ]
               ]
-            }
+            },
+            "description": "Agglomérations denses, foyers sans voiture"
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Suppression de l'abonnement et des titres, y compris les abonnements scolaires. Le gain est le plus élevé pour les familles qui achètent plusieurs abonnements, ce que le modèle approxime par un montant unique dans la tranche."
+          "note": "Suppression des abonnements et des titres, y compris scolaires : le gain est la dépense de transport elle-même, et ne peut pas la dépasser."
         },
         {
-          "id": "tg-tendue-haut",
+          "id": "tg-avec-voiture",
           "kind": "budget_line",
           "code": "transport",
-          "monthlyDelta": 60,
+          "monthlyDelta": 10,
           "scope": {
-            "description": "Habitants des agglomérations denses, déciles supérieurs",
             "when": {
               "and": [
                 [
@@ -169,17 +172,18 @@
                   "tendue"
                 ],
                 [
-                  "incomeDecile",
-                  "gte",
-                  4
+                  "hasCar",
+                  "eq",
+                  true
                 ]
               ]
-            }
+            },
+            "description": "Agglomérations denses, foyers avec voiture"
           },
           "horizon": "y1",
           "uncertainty": "debated",
           "hypothesisId": "gratuite-frequentation",
-          "note": "Gain affiché pour toute la tranche, alors que deux de ces personnes se déplacent en voiture et n'y gagneraient rien. C'est la limite la plus gênante de ce modèle sur ce sujet : il confond habiter une agglomération et utiliser son réseau."
+          "note": "Gain limité à l'usage occasionnel du réseau, environ 10 € par mois : l'essentiel de leur dépense de transport est la voiture, que la gratuité ne touche pas. Un foyer qui garde une voiture tout en payant des abonnements y gagnerait davantage ; le modèle ne distingue pas ce cas."
         },
         {
           "id": "tg-detendue",
@@ -208,25 +212,29 @@
           "code": "salaire-net",
           "monthlyDelta": -14,
           "scope": {
-            "description": "Trois derniers déciles, salariés : contribution au financement",
+            "description": "Trois derniers déciles : contribution au financement",
             "when": {
               "and": [
                 [
                   "incomeDecile",
                   "gte",
-                  7
+                  8
                 ],
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "employee"
+                  "salaire-net"
                 ]
               ]
             }
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Contribution au remplacement de la recette tarifaire. Elle est due que l'on utilise ou non le réseau, et elle est due aussi par ceux qui vivent hors des agglomérations desservies."
+          "note": "Contribution au remplacement de la recette tarifaire. Elle est due que l'on utilise ou non le réseau, et elle est due aussi par ceux qui vivent hors des agglomérations desservies.",
+          "monthlyShare": {
+            "rate": -0.004,
+            "of": "salaire-net"
+          }
         },
         {
           "id": "tg-payeurs-ind",
@@ -234,32 +242,29 @@
           "code": "revenu-independant",
           "monthlyDelta": -14,
           "scope": {
-            "description": "Trois derniers déciles, indépendants : contribution au financement",
+            "description": "Trois derniers déciles : contribution au financement",
             "when": {
               "and": [
                 [
                   "incomeDecile",
                   "gte",
-                  7
+                  8
                 ],
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "self_employed"
-                ],
-                {
-                  "not": [
-                    "activities",
-                    "contains",
-                    "employee"
-                  ]
-                }
+                  "revenu-independant"
+                ]
               ]
             }
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Même contribution. S'y ajoute, pour un employeur, la hausse du versement mobilité, que le modèle ne chiffre pas séparément."
+          "note": "Même contribution. S'y ajoute, pour un employeur, la hausse du versement mobilité, que le modèle ne chiffre pas séparément.",
+          "monthlyShare": {
+            "rate": -0.004,
+            "of": "revenu-independant"
+          }
         },
         {
           "id": "tg-finances",
@@ -297,14 +302,14 @@
           "id": "tc-jeunes",
           "kind": "budget_line",
           "code": "transport",
-          "monthlyDelta": 70,
+          "monthlyDelta": 60,
           "scope": {
             "description": "Moins de vingt-six ans en agglomération dense",
             "when": {
               "and": [
                 [
                   "age",
-                  "lte",
+                  "lt",
                   26
                 ],
                 [
@@ -317,15 +322,19 @@
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Gratuité attribuée sur un critère d'âge, donc sans démarche de ressources et sans non-recours. C'est le ciblage le plus simple à administrer, et le moins précis : il inclut des jeunes aisés et exclut des trentenaires modestes."
+          "note": "Gratuité attribuée sur un critère d'âge, donc sans démarche de ressources et sans non-recours. C'est le ciblage le plus simple à administrer, et le moins précis : il inclut des jeunes aisés et exclut des trentenaires modestes.",
+          "monthlyShare": {
+            "rate": 1.0,
+            "of": "transport"
+          }
         },
         {
           "id": "tc-modestes",
           "kind": "budget_line",
           "code": "transport",
-          "monthlyDelta": 85,
+          "monthlyDelta": 90,
           "scope": {
-            "description": "Trois premiers déciles en agglomération dense",
+            "description": "Trois premiers déciles en agglomération dense, à partir de vingt-six ans",
             "when": {
               "and": [
                 [
@@ -337,13 +346,22 @@
                   "incomeDecile",
                   "lte",
                   3
+                ],
+                [
+                  "age",
+                  "gte",
+                  26
                 ]
               ]
             }
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Gratuité sous condition de ressources. Elle suppose un dossier et une actualisation, donc elle reproduit le non-recours que la gratuité générale supprimait."
+          "note": "Gratuité sous condition de ressources, pour qui n'en bénéficie pas déjà au titre de l'âge. Elle suppose un dossier et une actualisation, donc elle reproduit le non-recours que la gratuité générale supprimait.",
+          "monthlyShare": {
+            "rate": 1.0,
+            "of": "transport"
+          }
         },
         {
           "id": "tc-autres",
@@ -452,7 +470,7 @@
           "id": "ti-detendue",
           "kind": "budget_line",
           "code": "transport",
-          "monthlyDelta": 45,
+          "monthlyDelta": 25,
           "scope": {
             "description": "Hors agglomérations denses : dessertes nouvelles",
             "when": {
@@ -468,7 +486,11 @@
           "horizon": "y10",
           "uncertainty": "debated",
           "hypothesisId": "gratuite-frequentation",
-          "note": "Gain différé et incertain : il suppose que les dessertes nouvelles soient effectivement réalisées là où ces personnes habitent, et qu'elles correspondent à leurs horaires. C'est la seule option des quatre dont la contrepartie aille aux territoires peu denses, et c'est aussi la plus hypothétique."
+          "note": "Gain différé et incertain : il suppose que les dessertes nouvelles soient effectivement réalisées là où ces personnes habitent, et qu'elles correspondent à leurs horaires. C'est la seule option des quatre dont la contrepartie aille aux territoires peu denses, et c'est aussi la plus hypothétique.",
+          "monthlyShare": {
+            "rate": 0.15,
+            "of": "transport"
+          }
         },
         {
           "id": "ti-tendue-bas",
@@ -528,24 +550,28 @@
           "code": "salaire-net",
           "monthlyDelta": -14,
           "scope": {
-            "description": "Trois derniers déciles, salariés : contribution au financement",
+            "description": "Trois derniers déciles : contribution au financement",
             "when": {
               "and": [
                 [
                   "incomeDecile",
                   "gte",
-                  7
+                  8
                 ],
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "employee"
+                  "salaire-net"
                 ]
               ]
             }
           },
           "horizon": "y1",
-          "uncertainty": "established"
+          "uncertainty": "established",
+          "monthlyShare": {
+            "rate": -0.004,
+            "of": "salaire-net"
+          }
         },
         {
           "id": "ti-payeurs-ind",
@@ -553,31 +579,28 @@
           "code": "revenu-independant",
           "monthlyDelta": -14,
           "scope": {
-            "description": "Trois derniers déciles, indépendants : contribution au financement",
+            "description": "Trois derniers déciles : contribution au financement",
             "when": {
               "and": [
                 [
                   "incomeDecile",
                   "gte",
-                  7
+                  8
                 ],
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "self_employed"
-                ],
-                {
-                  "not": [
-                    "activities",
-                    "contains",
-                    "employee"
-                  ]
-                }
+                  "revenu-independant"
+                ]
               ]
             }
           },
           "horizon": "y1",
-          "uncertainty": "established"
+          "uncertainty": "established",
+          "monthlyShare": {
+            "rate": -0.004,
+            "of": "revenu-independant"
+          }
         },
         {
           "id": "ti-service",

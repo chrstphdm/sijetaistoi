@@ -20,7 +20,7 @@
     {
       "id": "statu-quo",
       "label": "Ne rien changer",
-      "decisionDescription": "Le droit existant est maintenu : les loyers restent fixés librement à la relocation, et indexés chaque année sur l'indice de référence.",
+      "decisionDescription": "Le droit existant est maintenu : en zone tendue, la hausse d'un loyer à la relocation reste limitée à l'indice de référence, et le plafonnement par un loyer de référence ne s'applique que dans les villes qui l'ont déjà adopté.",
       "families": [
         "status_quo"
       ],
@@ -215,7 +215,7 @@
           "id": "lp-tendu-bas",
           "kind": "budget_line",
           "code": "logement",
-          "monthlyDelta": 40,
+          "monthlyDelta": 30,
           "scope": {
             "description": "Locataires du parc privé en zone tendue, premiers déciles",
             "when": {
@@ -241,13 +241,17 @@
           "horizon": "y5",
           "uncertainty": "highly_debated",
           "hypothesisId": "encadrement-loyers-offre",
-          "note": "Gain étalé : l'encadrement n'agit qu'à la relocation ou au renouvellement du bail. Les petits loyers sont souvent déjà sous le plafond, ce qui explique un gain faible — et ce qui fait dire aux opposants que la mesure bénéficie surtout à ceux qui louent grand."
+          "note": "Gain étalé : l'encadrement n'agit qu'à la relocation ou au renouvellement du bail. Les petits loyers sont souvent déjà sous le plafond, ce qui explique un gain faible — et ce qui fait dire aux opposants que la mesure bénéficie surtout à ceux qui louent grand.",
+          "monthlyShare": {
+            "rate": 0.06,
+            "of": "logement"
+          }
         },
         {
           "id": "lp-tendu-haut",
           "kind": "budget_line",
           "code": "logement",
-          "monthlyDelta": 150,
+          "monthlyDelta": 110,
           "scope": {
             "description": "Locataires du parc privé en zone tendue, déciles supérieurs",
             "when": {
@@ -273,7 +277,11 @@
           "horizon": "y5",
           "uncertainty": "highly_debated",
           "hypothesisId": "encadrement-loyers-offre",
-          "note": "Gain plus élevé en euros, parce que l'écart au loyer de référence est plus élevé sur les grands logements. Le montant est appliqué de façon identique dans la tranche, alors qu'il dépend du logement et non du locataire : c'est une approximation du modèle, pas une propriété de la mesure."
+          "note": "Environ 12 % du loyer, à la relocation ou au renouvellement : l'écart au loyer de référence est plus élevé sur les grands logements et les loyers hauts.",
+          "monthlyShare": {
+            "rate": 0.12,
+            "of": "logement"
+          }
         },
         {
           "id": "lp-detendu",
@@ -373,7 +381,7 @@
           "id": "lp-bailleur",
           "kind": "budget_line",
           "code": "revenu-capital",
-          "monthlyDelta": -180,
+          "monthlyDelta": -175,
           "scope": {
             "description": "Bailleurs privés : loyers perçus plafonnés",
             "when": {
@@ -389,7 +397,11 @@
           "horizon": "y5",
           "uncertainty": "highly_debated",
           "hypothesisId": "encadrement-loyers-offre",
-          "note": "Un gain de locataire est une perte de bailleur : l'encadrement ne crée pas de ressource, il en déplace. Le corpus ne contient qu'un bailleur, ce qui reflète la concentration réelle de la détention locative mais ne permet aucune comparaison entre bailleurs — un retraité propriétaire d'un studio et une société foncière subissent la même règle."
+          "note": "Un gain de locataire est une perte de bailleur : l'encadrement ne crée pas de ressource, il en déplace. Le corpus ne contient qu'un bailleur, ce qui reflète la concentration réelle de la détention locative mais ne permet aucune comparaison entre bailleurs — un retraité propriétaire d'un studio et une société foncière subissent la même règle.",
+          "monthlyShare": {
+            "rate": -0.12,
+            "of": "revenu-capital"
+          }
         },
         {
           "id": "lp-finances",
@@ -457,7 +469,7 @@
           "id": "lc-tendu-haut",
           "kind": "budget_line",
           "code": "logement",
-          "monthlyDelta": 85,
+          "monthlyDelta": 60,
           "scope": {
             "description": "Locataires du parc privé en zone tendue, déciles supérieurs",
             "when": {
@@ -483,7 +495,11 @@
           "horizon": "y5",
           "uncertainty": "debated",
           "hypothesisId": "encadrement-loyers-offre",
-          "note": "Gain réduit de moitié par rapport au plafonnement général, parce que le seuil de déclenchement est plus haut."
+          "note": "Gain réduit de moitié par rapport au plafonnement général, parce que le seuil de déclenchement est plus haut.",
+          "monthlyShare": {
+            "rate": 0.06,
+            "of": "logement"
+          }
         },
         {
           "id": "lc-detendu",
@@ -583,7 +599,7 @@
           "id": "lc-bailleur",
           "kind": "budget_line",
           "code": "revenu-capital",
-          "monthlyDelta": -95,
+          "monthlyDelta": -90,
           "scope": {
             "description": "Bailleurs privés : plafond appliqué aux seuls loyers les plus élevés",
             "when": {
@@ -599,7 +615,11 @@
           "horizon": "y5",
           "uncertainty": "debated",
           "hypothesisId": "encadrement-loyers-offre",
-          "note": "Perte réduite, et partiellement compensée par l'avantage fiscal si un logement vacant est remis en location."
+          "note": "Perte réduite, et partiellement compensée par l'avantage fiscal si un logement vacant est remis en location.",
+          "monthlyShare": {
+            "rate": -0.06,
+            "of": "revenu-capital"
+          }
         },
         {
           "id": "lc-finances",
@@ -636,7 +656,7 @@
           "id": "la-social",
           "kind": "budget_line",
           "code": "prestations",
-          "monthlyDelta": 70,
+          "monthlyDelta": 30,
           "scope": {
             "description": "Locataires du parc social : aides revalorisées",
             "when": {
@@ -651,13 +671,17 @@
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Revalorisation de l'aide au logement, perçue en ressource. C'est l'option dont l'effet est le plus immédiat : elle ne dépend d'aucun changement de bail."
+          "note": "Revalorisation de 12 % de la seule aide au logement, estimée à un peu moins d'un tiers de la ligne de prestations : environ 3,5 % de la ligne. C'est l'option dont l'effet est le plus immédiat : elle ne dépend d'aucun changement de bail.",
+          "monthlyShare": {
+            "rate": 0.035,
+            "of": "prestations"
+          }
         },
         {
           "id": "la-prive-modeste",
           "kind": "budget_line",
           "code": "prestations",
-          "monthlyDelta": 55,
+          "monthlyDelta": 20,
           "scope": {
             "description": "Locataires modestes du parc privé : aides revalorisées",
             "when": {
@@ -683,7 +707,12 @@
             }
           },
           "horizon": "y1",
-          "uncertainty": "established"
+          "uncertainty": "established",
+          "monthlyShare": {
+            "rate": 0.035,
+            "of": "prestations"
+          },
+          "note": "Même calcul : 12 % de l'aide au logement, et non de toutes les prestations."
         },
         {
           "id": "la-chomeur",
@@ -785,24 +814,28 @@
           "code": "salaire-net",
           "monthlyDelta": -24,
           "scope": {
-            "description": "Trois derniers déciles, salariés : contribution au financement",
+            "description": "Trois derniers déciles : contribution au financement",
             "when": {
               "and": [
                 [
                   "incomeDecile",
                   "gte",
-                  7
+                  8
                 ],
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "employee"
+                  "salaire-net"
                 ]
               ]
             }
           },
           "horizon": "y1",
-          "uncertainty": "established"
+          "uncertainty": "established",
+          "monthlyShare": {
+            "rate": -0.006,
+            "of": "salaire-net"
+          }
         },
         {
           "id": "la-contrib-indep",
@@ -810,31 +843,28 @@
           "code": "revenu-independant",
           "monthlyDelta": -24,
           "scope": {
-            "description": "Trois derniers déciles, indépendants : contribution au financement",
+            "description": "Trois derniers déciles : contribution au financement",
             "when": {
               "and": [
                 [
                   "incomeDecile",
                   "gte",
-                  7
+                  8
                 ],
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "self_employed"
-                ],
-                {
-                  "not": [
-                    "activities",
-                    "contains",
-                    "employee"
-                  ]
-                }
+                  "revenu-independant"
+                ]
               ]
             }
           },
           "horizon": "y1",
-          "uncertainty": "established"
+          "uncertainty": "established",
+          "monthlyShare": {
+            "rate": -0.006,
+            "of": "revenu-independant"
+          }
         },
         {
           "id": "la-finances",

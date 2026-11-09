@@ -58,7 +58,7 @@
           "id": "te-cout",
           "kind": "budget_line",
           "code": "energie",
-          "monthlyDelta": -14,
+          "monthlyDelta": -12,
           "scope": {
             "when": {
               "and": [
@@ -73,13 +73,18 @@
           },
           "horizon": "y1",
           "uncertainty": "debated",
-          "hypothesisId": "incidence-taxe-energie"
+          "hypothesisId": "incidence-taxe-energie",
+          "monthlyShare": {
+            "rate": -0.055,
+            "of": "energie"
+          },
+          "note": "Environ 5,5 % de la facture d'énergie : 3 Md€ rapportés à la dépense d'énergie domestique. Proportionnelle à la consommation, comme l'annonce l'option."
         },
         {
           "id": "te-cout-indiv",
           "kind": "budget_line",
           "code": "energie",
-          "monthlyDelta": -27,
+          "monthlyDelta": -12,
           "scope": {
             "when": {
               "and": [
@@ -94,29 +99,52 @@
           },
           "horizon": "y1",
           "uncertainty": "debated",
-          "hypothesisId": "incidence-taxe-energie"
+          "hypothesisId": "incidence-taxe-energie",
+          "monthlyShare": {
+            "rate": -0.055,
+            "of": "energie"
+          },
+          "note": "Environ 5,5 % de la facture d'énergie : 3 Md€ rapportés à la dépense d'énergie domestique. Proportionnelle à la consommation, comme l'annonce l'option."
         },
         {
           "id": "te-aide",
           "kind": "budget_line",
           "code": "energie",
-          "monthlyDelta": 31,
+          "monthlyDelta": 40,
           "scope": {
             "when": {
               "and": [
+                {
+                  "or": [
+                    [
+                      "tenure",
+                      "eq",
+                      "owner_outright"
+                    ],
+                    [
+                      "tenure",
+                      "eq",
+                      "owner_with_loan"
+                    ]
+                  ]
+                },
                 [
                   "incomeDecile",
                   "lte",
-                  3
+                  5
                 ]
               ]
             },
-            "description": "Trois premiers déciles : rénovation prise en charge en priorité"
+            "description": "Propriétaires modestes : rénovation prise en charge en priorité"
           },
           "horizon": "y5",
           "uncertainty": "debated",
           "hypothesisId": "incidence-taxe-energie",
-          "note": "Gain de facture après rénovation effective, pour les ménages servis en premier."
+          "note": "Facture d'énergie réduite d'environ 20 % après rénovation effective, pour les propriétaires occupants modestes servis en premier. Un locataire n'en bénéficie que si son bailleur rénove, ce que le modèle ne suppose pas.",
+          "monthlyShare": {
+            "rate": 0.2,
+            "of": "energie"
+          }
         },
         {
           "id": "te-recette",
@@ -151,26 +179,79 @@
           "id": "cp-cout",
           "kind": "budget_line",
           "code": "logement",
-          "monthlyDelta": -38,
+          "monthlyDelta": -15,
           "scope": {
             "when": {
-              "or": [
+              "and": [
+                {
+                  "or": [
+                    [
+                      "tenure",
+                      "eq",
+                      "owner_with_loan"
+                    ],
+                    [
+                      "tenure",
+                      "eq",
+                      "owner_outright"
+                    ]
+                  ]
+                },
                 [
-                  "tenure",
-                  "eq",
-                  "owner_with_loan"
-                ],
-                [
-                  "tenure",
-                  "eq",
-                  "owner_outright"
+                  "incomeDecile",
+                  "lte",
+                  7
                 ]
               ]
             },
-            "description": "Propriétaires"
+            "description": "Propriétaires, biens de valeur modeste ou moyenne"
           },
           "horizon": "y1",
-          "uncertainty": "established"
+          "uncertainty": "established",
+          "monthlyShare": {
+            "rate": -0.04,
+            "of": "logement"
+          },
+          "note": "Environ 15 € par mois en moyenne : 3 Md€ répartis sur les propriétaires occupants. Le modèle ne connaît pas la valeur des biens ; il approche la proportionnalité par le niveau de vie."
+        },
+        {
+          "id": "cp-cout-haut",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": -40,
+          "monthlyShare": {
+            "rate": -0.12,
+            "of": "logement"
+          },
+          "scope": {
+            "when": {
+              "and": [
+                {
+                  "or": [
+                    [
+                      "tenure",
+                      "eq",
+                      "owner_with_loan"
+                    ],
+                    [
+                      "tenure",
+                      "eq",
+                      "owner_outright"
+                    ]
+                  ]
+                },
+                [
+                  "incomeDecile",
+                  "gte",
+                  8
+                ]
+              ]
+            },
+            "description": "Propriétaires, biens de valeur élevée"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Contribution plus élevée sur les biens de plus grande valeur, approchée par le niveau de vie faute de connaître la valeur des biens."
         },
         {
           "id": "cp-locataires",
@@ -195,9 +276,8 @@
             "description": "Locataires"
           },
           "horizon": "y1",
-          "uncertainty": "debated",
-          "hypothesisId": "incidence-taxe-energie",
-          "note": "Effet nul à court terme. Une répercussion sur les loyers à plus long terme est débattue."
+          "uncertainty": "established",
+          "note": "Effet nul à court terme. Une répercussion sur les loyers à plus long terme est débattue, et le modèle ne la chiffre pas."
         },
         {
           "id": "cp-heberge",
@@ -229,6 +309,46 @@
           },
           "horizon": "y1",
           "uncertainty": "established"
+        },
+        {
+          "id": "cp-aide",
+          "kind": "budget_line",
+          "code": "energie",
+          "monthlyDelta": 40,
+          "scope": {
+            "when": {
+              "and": [
+                {
+                  "or": [
+                    [
+                      "tenure",
+                      "eq",
+                      "owner_outright"
+                    ],
+                    [
+                      "tenure",
+                      "eq",
+                      "owner_with_loan"
+                    ]
+                  ]
+                },
+                [
+                  "incomeDecile",
+                  "lte",
+                  5
+                ]
+              ]
+            },
+            "description": "Propriétaires modestes : rénovation prise en charge en priorité"
+          },
+          "horizon": "y5",
+          "uncertainty": "debated",
+          "hypothesisId": "incidence-taxe-energie",
+          "note": "Facture d'énergie réduite d'environ 20 % après rénovation effective, pour les propriétaires occupants modestes servis en premier. Un locataire n'en bénéficie que si son bailleur rénove, ce que le modèle ne suppose pas.",
+          "monthlyShare": {
+            "rate": 0.2,
+            "of": "energie"
+          }
         }
       ],
       "argumentsFor": [
@@ -269,6 +389,46 @@
           },
           "horizon": "y1",
           "uncertainty": "established"
+        },
+        {
+          "id": "pd-aide",
+          "kind": "budget_line",
+          "code": "energie",
+          "monthlyDelta": 40,
+          "scope": {
+            "when": {
+              "and": [
+                {
+                  "or": [
+                    [
+                      "tenure",
+                      "eq",
+                      "owner_outright"
+                    ],
+                    [
+                      "tenure",
+                      "eq",
+                      "owner_with_loan"
+                    ]
+                  ]
+                },
+                [
+                  "incomeDecile",
+                  "lte",
+                  5
+                ]
+              ]
+            },
+            "description": "Propriétaires modestes : rénovation prise en charge en priorité"
+          },
+          "horizon": "y5",
+          "uncertainty": "debated",
+          "hypothesisId": "incidence-taxe-energie",
+          "note": "Facture d'énergie réduite d'environ 20 % après rénovation effective, pour les propriétaires occupants modestes servis en premier. Un locataire n'en bénéficie que si son bailleur rénove, ce que le modèle ne suppose pas.",
+          "monthlyShare": {
+            "rate": 0.2,
+            "of": "energie"
+          }
         }
       ],
       "argumentsFor": [

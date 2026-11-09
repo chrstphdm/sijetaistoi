@@ -247,13 +247,17 @@
           "horizon": "y1",
           "uncertainty": "highly_debated",
           "hypothesisId": "smic-emploi",
-          "note": "Hausse appliquée de façon identique dans la tranche, alors qu'elle dépend du nombre d'heures : un temps partiel de vingt-huit heures gagne environ 90 €, un temps plein environ 130 €. L'incertitude porte sur l'emploi, pas sur le salaire : pour ceux qui conservent leur poste, le gain est certain."
+          "note": "Environ 10 % du salaire net, donc proportionnel aux heures travaillées : un temps partiel gagne moins qu'un temps plein. Une partie du gain est reprise par la baisse de la prime d'activité et des aides au logement, que le modèle ne recalcule pas.",
+          "monthlyShare": {
+            "rate": 0.1,
+            "of": "salaire-net"
+          }
         },
         {
           "id": "hb-au-dessus",
           "kind": "budget_line",
           "code": "salaire-net",
-          "monthlyDelta": 18,
+          "monthlyDelta": 15,
           "scope": {
             "description": "Salariés au-dessus du salaire minimum : diffusion partielle",
             "when": {
@@ -274,13 +278,17 @@
           "horizon": "y5",
           "uncertainty": "highly_debated",
           "hypothesisId": "smic-emploi",
-          "note": "Diffusion aux salaires immédiatement supérieurs, par renégociation des grilles. Son ampleur dépend entièrement des conventions collectives : elle peut être nulle, et l'écart avec le minimum se réduit alors d'autant."
+          "note": "Diffusion aux salaires immédiatement supérieurs, par renégociation des grilles. Son ampleur dépend entièrement des conventions collectives : elle peut être nulle, et l'écart avec le minimum se réduit alors d'autant.",
+          "monthlyShare": {
+            "rate": 0.005,
+            "of": "salaire-net"
+          }
         },
         {
           "id": "hb-employeur",
           "kind": "budget_line",
           "code": "revenu-independant",
-          "monthlyDelta": -390,
+          "monthlyDelta": -360,
           "scope": {
             "description": "Employeurs : masse salariale alourdie",
             "when": {
@@ -301,7 +309,11 @@
           "horizon": "y1",
           "uncertainty": "highly_debated",
           "hypothesisId": "smic-emploi",
-          "note": "Dans une entreprise de trente-quatre personnes dont une partie est rémunérée près du minimum, une hausse de 10 % représente plusieurs milliers d'euros par mois. Le modèle suppose qu'une part en est absorbée par la rémunération du dirigeant ; elle pourrait l'être par les prix, par la marge, ou par l'emploi."
+          "note": "Dans une entreprise de trente-quatre personnes dont une partie est rémunérée près du minimum, une hausse de 10 % représente plusieurs milliers d'euros par mois. Le modèle suppose qu'une part en est absorbée par la rémunération du dirigeant ; elle pourrait l'être par les prix, par la marge, ou par l'emploi.",
+          "monthlyShare": {
+            "rate": -0.05,
+            "of": "revenu-independant"
+          }
         },
         {
           "id": "hb-indep",
@@ -448,7 +460,11 @@
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Gain net immédiat et certain : il ne dépend d'aucune réaction de comportement, puisque le coût du travail ne change pas. C'est le principal avantage de cette option."
+          "note": "Gain net immédiat et certain : il ne dépend d'aucune réaction de comportement, puisque le coût du travail ne change pas. C'est le principal avantage de cette option. Le gain est proportionnel aux heures. Une partie est reprise par la baisse de la prime d'activité, que le modèle ne recalcule pas.",
+          "monthlyShare": {
+            "rate": 0.07,
+            "of": "salaire-net"
+          }
         },
         {
           "id": "hn-au-dessus",
@@ -625,9 +641,9 @@
           "id": "ca-bas-salaires",
           "kind": "budget_line",
           "code": "salaire-net",
-          "monthlyDelta": 45,
+          "monthlyDelta": 40,
           "scope": {
-            "description": "Salariés jusqu'au cinquième décile : minima conventionnels relevés",
+            "description": "Salariés jusqu'au quatrième décile : minima conventionnels relevés",
             "when": {
               "and": [
                 [
@@ -638,7 +654,7 @@
                 [
                   "incomeDecile",
                   "lte",
-                  5
+                  4
                 ]
               ]
             }
@@ -646,7 +662,11 @@
           "horizon": "y5",
           "uncertainty": "highly_debated",
           "hypothesisId": "smic-emploi",
-          "note": "Effet indirect et différé : il passe par la négociation de branche, que la mesure incite mais n'impose pas. Si les branches ne négocient pas, l'effet est nul et seul le retrait des allègements subsiste. C'est le pari de cette option, et il n'est pas garanti."
+          "note": "Effet indirect et différé : il passe par la négociation de branche, que la mesure incite mais n'impose pas. Si les branches ne négocient pas, l'effet est nul et seul le retrait des allègements subsiste. C'est le pari de cette option, et il n'est pas garanti.",
+          "monthlyShare": {
+            "rate": 0.03,
+            "of": "salaire-net"
+          }
         },
         {
           "id": "ca-au-dessus",
@@ -654,7 +674,7 @@
           "code": "salaire-net",
           "monthlyDelta": 0,
           "scope": {
-            "description": "Salariés à partir du sixième décile",
+            "description": "Salariés à partir du cinquième décile",
             "when": {
               "and": [
                 [
@@ -665,7 +685,7 @@
                 [
                   "incomeDecile",
                   "gte",
-                  6
+                  5
                 ]
               ]
             }
@@ -678,7 +698,7 @@
           "id": "ca-employeur",
           "kind": "budget_line",
           "code": "revenu-independant",
-          "monthlyDelta": -210,
+          "monthlyDelta": -215,
           "scope": {
             "description": "Employeurs : allègements conditionnés",
             "when": {
@@ -699,7 +719,11 @@
           "horizon": "y5",
           "uncertainty": "highly_debated",
           "hypothesisId": "smic-emploi",
-          "note": "Perte des allègements tant que la branche n'a pas relevé ses minima, puis coût du relèvement lui-même. L'entreprise subit donc la contrainte sans maîtriser la négociation qui la lève : c'est l'objection la plus sérieuse à cette option."
+          "note": "Perte des allègements tant que la branche n'a pas relevé ses minima, puis coût du relèvement lui-même. L'entreprise subit donc la contrainte sans maîtriser la négociation qui la lève : c'est l'objection la plus sérieuse à cette option.",
+          "monthlyShare": {
+            "rate": -0.03,
+            "of": "revenu-independant"
+          }
         },
         {
           "id": "ca-indep",

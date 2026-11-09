@@ -499,3 +499,46 @@ touche pas, quelle portée l'exclut ; l'écran jetait ce travail. La portée dé
 maintenant reprise telle quelle — « locataires du parc social », « personnes hébergées »,
 « propriétaires occupants » —, et l'écran redevient une carte de qui est dedans et qui
 est dehors.
+
+## 30 — Un montant unique pour tout le monde n'est pas neutre
+
+« 34 € de plus par mois, ce n'est pas trop peu ? »
+
+Ce n'était pas trop peu : c'était le même chiffre pour tout le monde. La révision de loyer
+valait 10 % du loyer de Lucie et 2 % de celui de Rachid, alors que la loi la plafonne en
+pourcentage. Et l'erreur pesait d'abord sur les loyers modestes. L'audit qui a suivi a
+trouvé la même faute dans presque toutes les décisions collectives : une cotisation
+retraite de 42 € qui coûtait 11 % de son salaire à Yanis et 0,8 % à Rachid, une hausse du
+salaire minimum de 110 € versée à un temps partiel de 390 €.
+
+Un montant peut désormais être une **part d'une ligne du relevé** : `share` pour les
+événements, `monthlyShare` pour les décisions. Le montant fixe reste comme valeur de
+repère pour les contrôles de corpus.
+
+**Les lignes sont celles du foyer.** Une cotisation « sur les salaires » vise désormais
+tout foyer qui perçoit un salaire, et non le seul personnage salarié. Avant, le conjoint
+salarié de Thomas échappait aux cotisations et Bérangère, sans salaire, se voyait créer un
+salaire négatif. Le salaire du conjoint de Sophie était codé en revenu indépendant : il
+est rangé avec les salaires.
+
+**Le moteur fabriquait de l'argent.** Un effet sur un poste absent créait ce poste, rangé
+d'après le signe du montant : une baisse d'impôt chez qui n'en paie pas devenait une
+recette, et la gratuité des transports rendait 85 € à Yanis, qui en dépense 35. Chaque
+effet est maintenant ramené dans les bornes du relevé : une baisse de dépense ne dépasse
+pas la dépense, une perte de recette ne dépasse pas la recette.
+
+**`availableIf` n'était lu nulle part.** On proposait à tout le monde d'accélérer le
+remboursement d'un crédit, y compris à qui n'en a pas.
+
+Ont été corrigés au passage :
+- une chaudière à remplacer facturée à des locataires ;
+- un arrêt maladie proposé aux retraités ;
+- une voiture supposée à tout le monde ;
+- la pénibilité appliquée à vingt ans ;
+- un maintien du remboursement des soins compté comme un gain ;
+- « trois derniers déciles » codés sur quatre ;
+- une option d'héritage qui gardait l'argent et supprimait la mensualité.
+
+Le contexte de deux décisions a été corrigé :
+- les loyers ne sont pas « fixés librement à la relocation » en zone tendue ;
+- les loyers perçus ne relèvent pas du prélèvement forfaitaire.

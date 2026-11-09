@@ -32,7 +32,8 @@
         "Le corpus comporte au moins un cinquième d'événements favorables, sinon il raconterait une thèse sur la vie.",
         "Les deux couleurs d'accent ont la même force perceptive, et aucune information n'est portée par la seule couleur.",
         "Le corpus couvre les dix déciles de revenu, les six situations d'activité et les cinq statuts d'occupation du logement. Un trou dans cette couverture fait échouer les tests : le contrôle de portée des réformes vérifie que chaque personnage est atteint par chaque décision, il ne peut pas voir qu'une situation entière manque au corpus.",
-        "Chaque option d'une réforme atteint explicitement les treize personnages, effet nul compris. Un effet nul est un contenu : écrire qu'une situation n'est pas concernée, et pourquoi, est une obligation. Le silence serait traduit à l'écran par « aucune règle ne le concerne », ce qui est une affirmation que personne n'aurait vérifiée."
+        "Chaque option d'une réforme atteint explicitement les treize personnages, effet nul compris. Un effet nul est un contenu : écrire qu'une situation n'est pas concernée, et pourquoi, est une obligation. Le silence serait traduit à l'écran par « aucune règle ne le concerne », ce qui est une affirmation que personne n'aurait vérifiée.",
+        "Les montants se calculent sur la situation de chacun : une cotisation est une part du revenu, une révision de loyer une part du loyer. Et aucun effet ne peut rendre plus qu'une dépense, ni prendre plus qu'un revenu."
       ]
     },
     {

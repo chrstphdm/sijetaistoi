@@ -1,6 +1,9 @@
 import type { CharacterT } from '../schemas/index.ts'
 import type { BudgetLine, Stocks } from '../core/types.ts'
 import { euros } from '../core/money.ts'
+import { LINE_BAG } from '../core/world.ts'
+
+export const LINE_SIGN = (group: BudgetLine['group']): 1 | -1 => SIGN[group]
 
 /**
  * Conversion contenu -> moteur, SANS dependance au paquet compile.
@@ -60,6 +63,13 @@ export function traitsOf(character: CharacterT) {
   return {
     ...character.traits,
     budgetLines: character.budget.lines.filter((l) => l.value.amount !== 0).map((l) => l.code),
+    /*
+     * Montants de base du relevé, signés (recettes positives, dépenses
+     * négatives). Ce n'est pas un attribut interrogeable par une condition :
+     * le moteur s'en sert pour chiffrer une part et pour plafonner un effet.
+     * Voir `activeEffectsFor`.
+     */
+    [LINE_BAG]: Object.fromEntries(toBudgetLines(character).map((l) => [l.code, l.amountCents])),
     incomeDecile: character.identity.incomeDecile,
     age: character.identity.age,
   }

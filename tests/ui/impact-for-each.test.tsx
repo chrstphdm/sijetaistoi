@@ -149,10 +149,13 @@ describe('horizon affiché', () => {
   })
 
   it('ne compte jamais un effet différé dans le montant du mois', () => {
-    // La contribution énergie coûte 14 € par mois dès le premier mois aux
-    // ménages en chauffage collectif, et leur rend 31 € « après rénovation
-    // effective », à cinq ans. Le total affiché était +17 € : un GAIN annoncé
-    // à ceux à qui la mesure coûte d'abord. L'erreur jouait dans un seul sens.
+    // La contribution énergie coûte dès le premier mois et ne rend qu'après
+    // rénovation, à cinq ans. L'écran affichait le TOTAL au présent : un gain
+    // annoncé à ceux à qui la mesure coûte d'abord. L'erreur jouait dans un
+    // seul sens.
+    //
+    // Michèle, propriétaire modeste : 5,5 % de ses 240 € d'énergie tout de
+    // suite (13 €), 20 % de sa facture rendus après rénovation (48 €).
     const world = applyRule(emptyWorld('A'), ruleFor('contribution-energie', 'taxe-energie'))
     render(
       <ImpactForEach
@@ -161,18 +164,18 @@ describe('horizon affiché', () => {
       />,
     )
     const section = screen.getByRole('heading', { name: /vu par chacun/ }).closest('section')!
-    const claire = [...section.querySelectorAll('.impacts > li')]
-      .find((li) => li.querySelector('strong')?.textContent === 'Claire')!
-    const texte = claire.textContent ?? ''
+    const michele = [...section.querySelectorAll('.impacts > li')]
+      .find((li) => li.querySelector('strong')?.textContent === 'Michèle')!
+    const texte = michele.textContent ?? ''
 
-    // 14 € par mois en moins, maintenant.
+    // 13 € par mois en moins, maintenant.
     expect(texte).toMatch(/en moins/)
-    expect(texte).toMatch(/14\u00A0€ par mois/)
-    // 31 € par mois en plus, à partir de la cinquième année, et dit comme tel.
-    expect(texte).toMatch(/À partir de la 5ᵉ année, ▲ \+372\u00A0€ en plus/)
-    expect(texte).toMatch(/31\u00A0€ par mois/)
-    // Et surtout : jamais le total de 17 €, qui mélangeait les deux.
-    expect(texte).not.toMatch(/17\u00A0€ par mois/)
+    expect(texte).toMatch(/13\u00A0€ par mois/)
+    // 48 € par mois en plus, à partir de la cinquième année, et dit comme tel.
+    expect(texte).toMatch(/À partir de la 5ᵉ année, ▲ \+576\u00A0€ en plus/)
+    expect(texte).toMatch(/48\u00A0€ par mois/)
+    // Et surtout : jamais le solde de 35 €, qui mélangeait les deux.
+    expect(texte).not.toMatch(/35\u00A0€ par mois/)
   })
 
   it('ne date rien quand l’effet est immédiat', () => {

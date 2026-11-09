@@ -70,14 +70,40 @@
                 [
                   "incomeDecile",
                   "gte",
-                  4
+                  6
                 ]
               ]
             },
-            "description": "Retraités à partir du quatrième décile"
+            "description": "Retraités à partir du sixième décile"
           },
           "horizon": "y1",
           "uncertainty": "established"
+        },
+        {
+          "id": "csg-modestes",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  5
+                ]
+              ]
+            },
+            "description": "Retraités jusqu'au cinquième décile : sous le seuil"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Les pensions modestes sont exonérées de la hausse, comme l'annonce l'option."
         },
         {
           "id": "csg-aide",
@@ -96,10 +122,10 @@
             },
             "description": "Retraités : prise en charge relevée"
           },
-          "horizon": "y1",
+          "horizon": "y10",
           "uncertainty": "debated",
           "hypothesisId": "indexation-pensions",
-          "note": "Contrepartie en reste à charge évité, qui ne se matérialise qu'en cas de perte d'autonomie."
+          "note": "Reste à charge évité en cas de perte d'autonomie. Ce gain ne se matérialise que si elle survient : il est placé à dix ans, et il est incertain."
         },
         {
           "id": "csg-recette",
@@ -115,14 +141,46 @@
           "id": "csg-proches",
           "kind": "budget_line",
           "code": "impots",
-          "monthlyDelta": 7,
+          "monthlyDelta": 40,
           "scope": {
-            "description": "Tous les ménages : reste à charge évité sur l’aide à un proche"
+            "description": "Ménages qui financent l'aide à un proche : reste à charge réduit",
+            "when": {
+              "and": [
+                [
+                  "budgetLines",
+                  "contains",
+                  "aide-proche"
+                ]
+              ]
+            }
           },
           "horizon": "y1",
           "uncertainty": "debated",
           "hypothesisId": "indexation-pensions",
-          "note": "L'aide à un parent âgé pèse aujourd'hui sur ses enfants, à un âge où ils sont souvent eux-mêmes actifs. Le montant retenu est un ordre de grandeur moyen : il est nul pour qui n'a personne à aider, et bien supérieur pour qui en a."
+          "note": "Environ 10 % de ce que le ménage verse aujourd'hui pour l'aide à un proche, pris en charge par la collectivité.",
+          "monthlyShare": {
+            "rate": 0.1,
+            "of": "aide-proche"
+          }
+        },
+        {
+          "id": "csg-autres",
+          "kind": "budget_line",
+          "code": "sante",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "not": [
+                "budgetLines",
+                "contains",
+                "aide-proche"
+              ]
+            },
+            "description": "Ménages sans aide à un proche à financer"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet direct : ils ne financent pas d'aide à un proche, et ne relèvent pas de la contribution sur les pensions s'ils ne sont pas retraités."
         }
       ],
       "argumentsFor": [
@@ -143,29 +201,54 @@
       ],
       "effects": [
         {
-          "id": "cu-actifs",
+          "id": "cu-salaires",
           "kind": "budget_line",
           "code": "salaire-net",
-          "monthlyDelta": -29,
+          "monthlyDelta": -12,
           "scope": {
             "when": {
-              "or": [
+              "and": [
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "employee"
-                ],
-                [
-                  "activities",
-                  "contains",
-                  "self_employed"
+                  "salaire-net"
                 ]
               ]
             },
-            "description": "Actifs occupés"
+            "description": "Foyers percevant un salaire"
           },
           "horizon": "y1",
-          "uncertainty": "established"
+          "uncertainty": "established",
+          "monthlyShare": {
+            "rate": -0.005,
+            "of": "salaire-net"
+          },
+          "note": "Environ 0,5 % du salaire : 5 Md€ rapportés à l'ensemble des revenus d'activité."
+        },
+        {
+          "id": "cu-independants",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": -15,
+          "monthlyShare": {
+            "rate": -0.005,
+            "of": "revenu-independant"
+          },
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "budgetLines",
+                  "contains",
+                  "revenu-independant"
+                ]
+              ]
+            },
+            "description": "Foyers percevant un revenu d'activité indépendante"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Même taux sur le revenu d'activité indépendante."
         },
         {
           "id": "cu-sans-activite",
@@ -226,9 +309,10 @@
             },
             "description": "Retraités : prise en charge relevée, sans contribution"
           },
-          "horizon": "y1",
+          "horizon": "y10",
           "uncertainty": "debated",
-          "hypothesisId": "indexation-pensions"
+          "hypothesisId": "indexation-pensions",
+          "note": "Reste à charge évité en cas de perte d'autonomie. Ce gain ne se matérialise que si elle survient : il est placé à dix ans, et il est incertain."
         },
         {
           "id": "cu-recette",
@@ -239,6 +323,32 @@
           },
           "horizon": "y1",
           "uncertainty": "established"
+        },
+        {
+          "id": "cu-proches",
+          "kind": "budget_line",
+          "code": "impots",
+          "monthlyDelta": 40,
+          "scope": {
+            "description": "Ménages qui financent l'aide à un proche : reste à charge réduit",
+            "when": {
+              "and": [
+                [
+                  "budgetLines",
+                  "contains",
+                  "aide-proche"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "indexation-pensions",
+          "note": "Environ 10 % de ce que le ménage verse aujourd'hui pour l'aide à un proche, pris en charge par la collectivité.",
+          "monthlyShare": {
+            "rate": 0.1,
+            "of": "aide-proche"
+          }
         }
       ],
       "argumentsFor": [
@@ -266,25 +376,69 @@
           "monthlyDelta": -18,
           "scope": {
             "when": {
-              "or": [
+              "and": [
+                {
+                  "or": [
+                    [
+                      "tenure",
+                      "eq",
+                      "owner_outright"
+                    ],
+                    [
+                      "tenure",
+                      "eq",
+                      "owner_with_loan"
+                    ]
+                  ]
+                },
                 [
-                  "tenure",
-                  "eq",
-                  "owner_outright"
-                ],
-                [
-                  "tenure",
-                  "eq",
-                  "owner_with_loan"
+                  "incomeDecile",
+                  "gte",
+                  8
                 ]
               ]
             },
-            "description": "Propriétaires, effet annualisé sur la transmission attendue"
+            "description": "Propriétaires de patrimoines élevés, effet annualisé sur la transmission attendue"
           },
           "horizon": "y10",
           "uncertainty": "highly_debated",
           "hypothesisId": "indexation-pensions",
           "note": "Chiffrage très incertain : il dépend de la date de transmission, du nombre d'héritiers et du barème retenu. Il est présenté comme un ordre de grandeur annualisé, pas comme une prévision. Les locataires ne sont pas concernés par cette contribution."
+        },
+        {
+          "id": "su-proprietaires-modestes",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                {
+                  "or": [
+                    [
+                      "tenure",
+                      "eq",
+                      "owner_outright"
+                    ],
+                    [
+                      "tenure",
+                      "eq",
+                      "owner_with_loan"
+                    ]
+                  ]
+                },
+                [
+                  "incomeDecile",
+                  "lte",
+                  7
+                ]
+              ]
+            },
+            "description": "Propriétaires sous le seuil"
+          },
+          "horizon": "y10",
+          "uncertainty": "established",
+          "note": "La hausse ne porte que sur les transmissions supérieures au seuil : une résidence principale ordinaire transmise à ses enfants n'est pas concernée."
         },
         {
           "id": "succ-heberge",
@@ -324,9 +478,10 @@
               ]
             }
           },
-          "horizon": "y1",
+          "horizon": "y10",
           "uncertainty": "debated",
-          "hypothesisId": "indexation-pensions"
+          "hypothesisId": "indexation-pensions",
+          "note": "Reste à charge évité en cas de perte d'autonomie. Ce gain ne se matérialise que si elle survient : il est placé à dix ans, et il est incertain."
         },
         {
           "id": "su-recette",
@@ -364,6 +519,32 @@
           "horizon": "y1",
           "uncertainty": "established",
           "note": "La contribution porte sur la transmission d'un patrimoine immobilier : les locataires n'en versent aucune, et n'en reçoivent aucune contrepartie directe."
+        },
+        {
+          "id": "su-proches",
+          "kind": "budget_line",
+          "code": "impots",
+          "monthlyDelta": 40,
+          "scope": {
+            "description": "Ménages qui financent l'aide à un proche : reste à charge réduit",
+            "when": {
+              "and": [
+                [
+                  "budgetLines",
+                  "contains",
+                  "aide-proche"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "indexation-pensions",
+          "note": "Environ 10 % de ce que le ménage verse aujourd'hui pour l'aide à un proche, pris en charge par la collectivité.",
+          "monthlyShare": {
+            "rate": 0.1,
+            "of": "aide-proche"
+          }
         }
       ],
       "argumentsFor": [

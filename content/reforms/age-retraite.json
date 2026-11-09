@@ -163,7 +163,7 @@
     {
       "id": "age-recule",
       "label": "Décaler l'âge de deux ans",
-      "decisionDescription": "L'âge d'ouverture des droits passe de 62 à 64 ans, par paliers. Personne ne paie davantage chaque mois ; chacun travaille deux ans de plus.",
+      "decisionDescription": "L'âge d'ouverture des droits est relevé de deux ans, par paliers. Personne ne paie davantage dans l'immédiat ; chacun travaille deux ans de plus.",
       "families": [
         "public_spending",
         "scope_efficiency"
@@ -259,7 +259,7 @@
           "horizon": "y10",
           "uncertainty": "debated",
           "hypothesisId": "age-depart-effectif",
-          "note": "Deux années de plus entre la fin de ses droits à l'assurance chômage et l'ouverture de sa retraite. Le modèle représente cet écart par la différence entre un minimum social et la pension qu'il aurait perçue à 62 ans. Dans quelle proportion les personnes dans ce cas restent en emploi, basculent au chômage non indemnisé ou à l'invalidité est précisément ce qui est débattu."
+          "note": "Deux années de plus entre la fin de ses droits à l'assurance chômage et l'ouverture de sa retraite. Le modèle représente cet écart par la différence entre un minimum social et la pension qu'il aurait perçue à l’âge actuel. Dans quelle proportion les personnes dans ce cas restent en emploi, basculent au chômage non indemnisé ou à l'invalidité est précisément ce qui est débattu."
         },
         {
           "id": "ar-inactifs",
@@ -288,7 +288,7 @@
           "code": "salaire-net",
           "monthlyDelta": -180,
           "scope": {
-            "description": "Salariés des trois premiers déciles : exposition plus forte à l'usure",
+            "description": "Salariés des trois premiers déciles à moins de dix ans du départ : exposition plus forte à l'usure",
             "when": {
               "and": [
                 [
@@ -300,6 +300,11 @@
                   "incomeDecile",
                   "lte",
                   3
+                ],
+                [
+                  "age",
+                  "gte",
+                  52
                 ]
               ]
             }
@@ -307,7 +312,7 @@
           "horizon": "y10",
           "uncertainty": "debated",
           "hypothesisId": "age-depart-effectif",
-          "note": "Une part de ceux qui exercent les métiers les plus usants n'atteint pas l'âge d'ouverture en emploi et passe par le chômage ou l'invalidité, à un revenu plus faible. Le décile sert ici de substitut à l'exposition réelle, qui dépend du métier et non du revenu : la convention est grossière et elle est assumée comme telle."
+          "note": "Une part de ceux qui exercent les métiers les plus usants n'atteint pas l'âge d'ouverture en emploi et passe par le chômage ou l'invalidité, à un revenu plus faible. Le décile sert ici de substitut à l'exposition réelle, qui dépend du métier et non du revenu : la convention est grossière et elle est assumée comme telle. L'effet ne vaut qu'à l'approche du départ : un salarié de vingt ans n'est pas concerné dans l'horizon de ce modèle. Aucun personnage du corpus n'est dans ce cas aujourd'hui."
         },
         {
           "id": "ar-finances",
@@ -334,7 +339,7 @@
     {
       "id": "duree-cotisation",
       "label": "Allonger la durée de cotisation exigée",
-      "decisionDescription": "L'âge reste à 62 ans, mais le nombre de trimestres exigés pour une pension complète augmente de deux années. Partir à 62 ans reste possible, avec une pension réduite.",
+      "decisionDescription": "L'âge d'ouverture ne bouge pas, mais le nombre de trimestres exigés pour une pension complète augmente de deux années. Partir à l'âge actuel reste possible, avec une pension réduite.",
       "families": [
         "public_spending",
         "scope_efficiency"
@@ -457,20 +462,25 @@
           "id": "dc-entree-tardive",
           "kind": "budget_line",
           "code": "salaire-net",
-          "monthlyDelta": -145,
+          "monthlyDelta": -140,
           "scope": {
-            "description": "Carrières commencées après des études longues",
+            "description": "Carrières commencées après des études longues, à moins de dix ans du départ",
             "when": {
               "and": [
                 [
                   "age",
                   "gte",
-                  35
+                  52
                 ],
                 [
                   "incomeDecile",
                   "gte",
                   6
+                ],
+                [
+                  "budgetLines",
+                  "contains",
+                  "salaire-net"
                 ]
               ]
             }
@@ -478,7 +488,11 @@
           "horizon": "y10",
           "uncertainty": "debated",
           "hypothesisId": "age-depart-effectif",
-          "note": "Une entrée dans la vie active à 23 ou 25 ans repousse d'autant l'atteinte de la durée exigée : la mesure décale le départ effectif de ceux qui ont étudié longtemps, et pas de ceux qui ont commencé à 18 ans. Le décile sert ici de substitut à la durée des études, ce qui est une approximation et non une donnée."
+          "note": "Une entrée dans la vie active à 23 ou 25 ans repousse d'autant l'atteinte de la durée exigée : la mesure décale le départ effectif de ceux qui ont étudié longtemps, et pas de ceux qui ont commencé à 18 ans. Le décile sert ici de substitut à la durée des études, ce qui est une approximation et non une donnée.",
+          "monthlyShare": {
+            "rate": -0.05,
+            "of": "salaire-net"
+          }
         },
         {
           "id": "dc-entree-precoce",
@@ -504,7 +518,7 @@
           },
           "horizon": "y10",
           "uncertainty": "established",
-          "note": "Effet nul, et c'est le propos : qui a commencé à travailler à dix-huit ans aura ses trimestres avant soixante-deux ans. Ce zéro est la raison pour laquelle ce levier est présenté comme plus juste que le décalage de l'âge — et la raison pour laquelle il rapporte moins."
+          "note": "Effet nul, et c'est le propos : qui a commencé à travailler à dix-huit ans aura ses trimestres avant l’âge d’ouverture. Ce zéro est la raison pour laquelle ce levier est présenté comme plus juste que le décalage de l'âge — et la raison pour laquelle il rapporte moins."
         },
         {
           "id": "dc-finances",
@@ -521,7 +535,7 @@
       ],
       "argumentsFor": [
         "Le levier épargne ceux qui ont commencé à travailler tôt, c'est-à-dire ceux dont les carrières sont les plus usantes et l'espérance de vie la plus courte.",
-        "Il maintient la possibilité de partir à soixante-deux ans, et laisse donc un arbitrage individuel entre durée de travail et montant de pension."
+        "Il maintient la possibilité de partir à l’âge actuel, et laisse donc un arbitrage individuel entre durée de travail et montant de pension."
       ],
       "argumentsAgainst": [
         "Partir avec une pension réduite n'est un choix que pour ceux qui peuvent se le permettre : pour les autres, c'est un décalage de l'âge sous un autre nom.",
@@ -540,50 +554,51 @@
           "id": "cr-salaries",
           "kind": "budget_line",
           "code": "salaire-net",
-          "monthlyDelta": -42,
+          "monthlyDelta": -25,
           "scope": {
             "when": {
               "and": [
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "employee"
+                  "salaire-net"
                 ]
               ]
             },
-            "description": "Salariés"
+            "description": "Foyers percevant un salaire"
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Prélèvement supplémentaire sur le salaire net, dès le premier mois. C'est le seul levier des quatre dont l'effet soit visible immédiatement, ce qui explique à la fois qu'il soit le plus impopulaire et le plus honnête quant à son coût."
+          "note": "Environ 1,2 point de cotisation sur le salaire net, dès le premier mois : 10 Md€ rapportés à la masse salariale. Proportionnel au salaire, donc très différent d'un foyer à l'autre en euros.",
+          "monthlyShare": {
+            "rate": -0.012,
+            "of": "salaire-net"
+          }
         },
         {
           "id": "cr-independants",
           "kind": "budget_line",
           "code": "revenu-independant",
-          "monthlyDelta": -78,
+          "monthlyDelta": -60,
           "scope": {
             "when": {
               "and": [
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "self_employed"
-                ],
-                {
-                  "not": [
-                    "activities",
-                    "contains",
-                    "employee"
-                  ]
-                }
+                  "revenu-independant"
+                ]
               ]
             },
-            "description": "Indépendants sans activité salariée"
+            "description": "Foyers percevant un revenu d'activité indépendante"
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Un indépendant supporte la part salariale et la part patronale : la même hausse de taux produit chez lui un prélèvement de près du double."
+          "note": "Environ 2,4 points sur le revenu d'activité indépendante : un indépendant supporte la part salariale et la part patronale, d'où un taux près du double.",
+          "monthlyShare": {
+            "rate": -0.024,
+            "of": "revenu-independant"
+          }
         },
         {
           "id": "cr-retraites",

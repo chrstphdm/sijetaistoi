@@ -58,7 +58,7 @@
           "id": "fi-cout",
           "kind": "budget_line",
           "code": "prestations",
-          "monthlyDelta": -83,
+          "monthlyDelta": -98,
           "scope": {
             "when": {
               "and": [
@@ -73,7 +73,7 @@
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "1 000 € par an, soit environ 83 € par mois."
+          "note": "Un étudiant boursier, exonéré aujourd'hui, passerait de 0 à 1 175 € par an, soit environ 98 € par mois. Un non-boursier verrait 1 000 € de plus par an."
         },
         {
           "id": "fi-encadrement",
@@ -207,7 +207,7 @@
           "id": "fm-aise",
           "kind": "budget_line",
           "code": "enfants",
-          "monthlyDelta": -125,
+          "monthlyDelta": 0,
           "scope": {
             "when": {
               "and": [
@@ -218,11 +218,11 @@
                 ]
               ]
             },
-            "description": "Ménages des deux derniers déciles ayant un enfant étudiant"
+            "description": "Ménages des deux derniers déciles"
           },
           "horizon": "y1",
-          "uncertainty": "debated",
-          "hypothesisId": "renoncement-etudes"
+          "uncertainty": "established",
+          "note": "Effet nul dans ce corpus : aucun de ces ménages n'a d'enfant étudiant. Pour un ménage qui en a un, la hausse serait d'environ 110 € par mois."
         },
         {
           "id": "fm-recette",
@@ -348,14 +348,14 @@
           "id": "dr-indirect",
           "kind": "budget_line",
           "code": "sante",
-          "monthlyDelta": -9,
+          "monthlyDelta": -4,
           "scope": {
             "description": "Tous les ménages, par effet indirect"
           },
           "horizon": "y1",
           "uncertainty": "highly_debated",
           "hypothesisId": "renoncement-etudes",
-          "note": "Effet réparti arbitrairement par le modèle faute de savoir quels budgets seraient réduits. Cette imprécision est une limite importante."
+          "note": "1,4 Md€ répartis sur l'ensemble des ménages : environ 4 € par mois chacun. La répartition est arbitraire faute de savoir quels budgets seraient réduits, et cette imprécision est une limite importante."
         },
         {
           "id": "dr-neutre",

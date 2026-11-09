@@ -33,20 +33,10 @@
         "code": "salaire-net",
         "group": "resource",
         "value": {
-          "amount": 2180,
+          "amount": 3820,
           "unit": "EUR_month",
           "nature": "fiction",
-          "note": "Technicienne principale, quinze ans d'ancienneté"
-        }
-      },
-      {
-        "code": "revenu-independant",
-        "group": "resource",
-        "value": {
-          "amount": 1640,
-          "unit": "EUR_month",
-          "nature": "fiction",
-          "note": "Conjoint, mécanicien salarié à temps plein"
+          "note": "Le sien, et celui de son conjoint, mécanicien salarié à temps plein (1640 €)."
         }
       },
       {

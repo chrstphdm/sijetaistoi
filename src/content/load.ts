@@ -1,6 +1,9 @@
 import bundleJson from '../../content/bundle.json' with { type: 'json' }
 import type { ContentBundleT } from '@/schemas/index.ts'
 export { toBudgetLines, toStocks, traitsOf } from './mapping.ts'
+import { LINE_SIGN } from './mapping.ts'
+import { registerLineSigns } from '../core/world.ts'
+import type { BudgetLine } from '../core/types.ts'
 
 /**
  * Le paquet est valide au BUILD, pas a l'execution.
@@ -11,6 +14,10 @@ export { toBudgetLines, toStocks, traitsOf } from './mapping.ts'
  * donc un paquet present est un paquet valide.
  */
 export const bundle = bundleJson as unknown as ContentBundleT
+
+// Le moteur plafonne chaque effet selon le sens du poste (recette ou
+// dépense) : il l'apprend ici, une fois, du catalogue.
+registerLineSigns(bundle.budgetLines.map((l) => [l.code, LINE_SIGN(l.group as BudgetLine['group'])] as const))
 
 /** Libelle lisible d'un poste, depuis le referentiel partage. */
 export function labelFor(code: string): string {

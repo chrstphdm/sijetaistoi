@@ -3,7 +3,7 @@
   "charterVersion": "1.0",
   "descriptiveTitle": "Imposition des revenus du patrimoine",
   "statedBy": "Le Conseil budgétaire, acteur fictif de ce jeu",
-  "context": "Les revenus du patrimoine — loyers perçus, dividendes, intérêts, plus-values — sont imposés depuis 2018 à un prélèvement forfaitaire unique de 30 %, quel que soit leur montant, là où les revenus du travail suivent un barème progressif pouvant aller jusqu'à 45 %. Le Conseil budgétaire met en discussion quatre traitements : imposer ces revenus au barème, relever le taux forfaitaire, exonérer les petits portefeuilles et imposer plus fortement les grands, ou ne rien changer. Le rendement en jeu est de l'ordre de 6 milliards d'euros par an.",
+  "context": "Les revenus du capital mobilier — dividendes, intérêts, plus-values mobilières — sont imposés depuis 2018 à un prélèvement forfaitaire unique d'environ 30 %, quel que soit leur montant, là où les revenus du travail suivent un barème progressif pouvant aller jusqu'à 45 %. Les loyers perçus, eux, suivent déjà le barème. Le Conseil budgétaire met en discussion quatre traitements : imposer ces revenus au barème, relever le taux forfaitaire, exonérer les petits portefeuilles et imposer plus fortement les grands, ou ne rien changer. Le rendement en jeu est de l'ordre de 6 milliards d'euros par an.",
   "objective": {
     "amount": 6,
     "unit": "EUR_bn",
@@ -304,7 +304,7 @@
           "id": "kb-detenteur",
           "kind": "budget_line",
           "code": "revenu-capital",
-          "monthlyDelta": -480,
+          "monthlyDelta": -175,
           "scope": {
             "description": "Détenteurs de revenus du patrimoine, tranches supérieures",
             "when": {
@@ -320,7 +320,11 @@
           "horizon": "y1",
           "uncertainty": "highly_debated",
           "hypothesisId": "incidence-fiscalite-capital",
-          "note": "Imposition au barème, pour un contribuable dont les autres revenus atteignent déjà la tranche haute. L'ampleur réelle dépend de la réaction : percevoir moins, percevoir plus tard, ou percevoir ailleurs. Les travaux disponibles divergent fortement sur cette réaction."
+          "note": "Imposition au barème, pour un contribuable dont les autres revenus atteignent déjà la tranche haute. L'ampleur réelle dépend de la réaction : percevoir moins, percevoir plus tard, ou percevoir ailleurs. Les travaux disponibles divergent fortement sur cette réaction. Seule la part financière du revenu du patrimoine est concernée : les loyers perçus suivent déjà le barème.",
+          "monthlyShare": {
+            "rate": -0.12,
+            "of": "revenu-capital"
+          }
         },
         {
           "id": "kb-restitution-salaries",
@@ -328,7 +332,7 @@
           "code": "salaire-net",
           "monthlyDelta": 22,
           "scope": {
-            "description": "Salariés jusqu'au sixième décile : restitution du rendement",
+            "description": "Foyers jusqu'au sixième décile percevant un salaire : restitution du rendement",
             "when": {
               "and": [
                 [
@@ -337,9 +341,9 @@
                   6
                 ],
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "employee"
+                  "salaire-net"
                 ]
               ]
             }
@@ -347,13 +351,17 @@
           "horizon": "y1",
           "uncertainty": "debated",
           "hypothesisId": "incidence-fiscalite-capital",
-          "note": "Restitution supposée du rendement sous forme d'allègement sur les revenus d'activité modestes. Cette affectation est une hypothèse du jeu : aucun mécanisme ne lie la recette d'un impôt à une dépense, et l'histoire des affectations annoncées invite à la prudence."
+          "note": "Restitution supposée du rendement sous forme d'allègement sur les revenus d'activité modestes. Cette affectation est une hypothèse du jeu : aucun mécanisme ne lie la recette d'un impôt à une dépense, et l'histoire des affectations annoncées invite à la prudence.",
+          "monthlyShare": {
+            "rate": 0.01,
+            "of": "salaire-net"
+          }
         },
         {
           "id": "kb-restitution-retraites",
           "kind": "budget_line",
           "code": "pension-retraite",
-          "monthlyDelta": 18,
+          "monthlyDelta": 0,
           "scope": {
             "description": "Retraités : restitution du rendement",
             "when": {
@@ -367,9 +375,8 @@
             }
           },
           "horizon": "y1",
-          "uncertainty": "debated",
-          "hypothesisId": "incidence-fiscalite-capital",
-          "note": "Même hypothèse d'affectation. Les retraités modestes sont concernés par la restitution sans l'être par le prélèvement, ce qui est l'un des arguments de cette option."
+          "uncertainty": "established",
+          "note": "La restitution passe par une baisse des prélèvements sur les revenus d'activité : un retraité n'en reçoit rien, ni ne paie davantage faute de revenus du patrimoine."
         },
         {
           "id": "kb-finances",
@@ -518,7 +525,7 @@
           "id": "kt-detenteur",
           "kind": "budget_line",
           "code": "revenu-capital",
-          "monthlyDelta": -190,
+          "monthlyDelta": -70,
           "scope": {
             "description": "Détenteurs de revenus du patrimoine : taux relevé",
             "when": {
@@ -534,7 +541,11 @@
           "horizon": "y1",
           "uncertainty": "debated",
           "hypothesisId": "incidence-fiscalite-capital",
-          "note": "Prélèvement supplémentaire de six points. L'effet est proportionnel au revenu perçu, et donc identique en pourcentage pour un petit et un gros détenteur : c'est ce que ce compromis conserve du dispositif actuel, en bien comme en mal."
+          "note": "Prélèvement supplémentaire de six points. L'effet est proportionnel au revenu perçu, et donc identique en pourcentage pour un petit et un gros détenteur : c'est ce que ce compromis conserve du dispositif actuel, en bien comme en mal. Seule la part financière du revenu du patrimoine est concernée : les loyers perçus suivent déjà le barème.",
+          "monthlyShare": {
+            "rate": -0.05,
+            "of": "revenu-capital"
+          }
         },
         {
           "id": "kt-restitution",
@@ -542,7 +553,7 @@
           "code": "salaire-net",
           "monthlyDelta": 9,
           "scope": {
-            "description": "Salariés des quatre premiers déciles : restitution du rendement",
+            "description": "Foyers des quatre premiers déciles percevant un salaire : restitution du rendement",
             "when": {
               "and": [
                 [
@@ -551,9 +562,9 @@
                   4
                 ],
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "employee"
+                  "salaire-net"
                 ]
               ]
             }
@@ -561,7 +572,11 @@
           "horizon": "y1",
           "uncertainty": "debated",
           "hypothesisId": "incidence-fiscalite-capital",
-          "note": "Restitution supposée, plus étroitement ciblée faute d'un rendement suffisant pour aller plus haut."
+          "note": "Restitution supposée, plus étroitement ciblée faute d'un rendement suffisant pour aller plus haut.",
+          "monthlyShare": {
+            "rate": 0.004,
+            "of": "salaire-net"
+          }
         },
         {
           "id": "kt-finances",
@@ -613,7 +628,7 @@
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Aucun effet direct ni sur le prélèvement, ni sur la restitution : celle-ci est affectée aux prestations sous conditions de ressources, qu'ils ne perçoivent pas."
+          "note": "Aucun effet direct sur le salaire. Les foyers salariés modestes qui perçoivent des prestations sous conditions de ressources reçoivent en revanche la restitution par cette voie."
         },
         {
           "id": "ke-independants",
@@ -710,7 +725,7 @@
           "id": "ke-detenteur",
           "kind": "budget_line",
           "code": "revenu-capital",
-          "monthlyDelta": -520,
+          "monthlyDelta": -200,
           "scope": {
             "description": "Détenteurs au-delà du seuil : barème majoré",
             "when": {
@@ -726,13 +741,17 @@
           "horizon": "y1",
           "uncertainty": "highly_debated",
           "hypothesisId": "incidence-fiscalite-capital",
-          "note": "Imposition plus lourde que dans l'option du barème simple, parce que l'exonération sous le seuil doit être financée par les tranches supérieures. La réaction de comportement attendue est d'autant plus forte."
+          "note": "Imposition plus lourde que dans l'option du barème simple, parce que l'exonération sous le seuil doit être financée par les tranches supérieures. La réaction de comportement attendue est d'autant plus forte. Seule la part financière du revenu du patrimoine est concernée : les loyers perçus suivent déjà le barème.",
+          "monthlyShare": {
+            "rate": -0.14,
+            "of": "revenu-capital"
+          }
         },
         {
           "id": "ke-restitution-prestations",
           "kind": "budget_line",
           "code": "prestations",
-          "monthlyDelta": 46,
+          "monthlyDelta": 30,
           "scope": {
             "description": "Deux premiers déciles : prestations revalorisées",
             "when": {
@@ -748,7 +767,11 @@
           "horizon": "y1",
           "uncertainty": "debated",
           "hypothesisId": "incidence-fiscalite-capital",
-          "note": "Affectation supposée du rendement aux prestations sous conditions de ressources. Cette option est la seule des quatre dont la restitution ne passe pas par le revenu d'activité : elle atteint donc ceux qui n'en ont pas."
+          "note": "Affectation supposée du rendement aux prestations sous conditions de ressources. Cette option est la seule des quatre dont la restitution ne passe pas par le revenu d'activité : elle atteint donc ceux qui n'en ont pas.",
+          "monthlyShare": {
+            "rate": 0.05,
+            "of": "prestations"
+          }
         },
         {
           "id": "ke-finances",

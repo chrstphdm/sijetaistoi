@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { render, screen, cleanup, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { App } from '@/ui/App.tsx'
@@ -531,6 +531,20 @@ describe('projection sur dix ans', () => {
 })
 
 describe('relance : la même question, après l’avoir vécue', () => {
+  /*
+   * GRAINE FIXE. La relance dépend du tirage : avec une graine aléatoire,
+   * ces tests échouaient environ une fois sur vingt-cinq, sur des parties où
+   * aucune règle ne concernait le personnage suivant. Ce n'était pas un défaut
+   * du jeu — « aucune règle ne te concerne » est un cas prévu —, mais un test
+   * qui échoue au hasard finit par ne plus être lu.
+   */
+  beforeEach(() => {
+    window.history.replaceState(null, '', '/?graine=test2345')
+    localStorage.clear()
+    sessionStorage.clear()
+  })
+  afterEach(() => window.history.replaceState(null, '', '/'))
+
   it('repose la question sur la décision dont on vient de voir l’effet', async () => {
     // Sans cela, chaque acte posant une réforme différente, aucune question
     // n'était jamais reposée — et le suivi des changements d'opinion, au

@@ -66,6 +66,7 @@ export type Effect = {
   readonly kind: 'budget_line' | 'public_finance' | 'service_level'
   readonly code?: string | undefined
   readonly monthlyDelta?: number | undefined
+  readonly monthlyShare?: { readonly rate: number; readonly of: string } | undefined
   readonly publicBillions?: number | undefined
   readonly scope: { readonly when?: unknown; readonly description: string }
   readonly horizon: string
@@ -118,6 +119,40 @@ export const inForceNow = (effects: readonly ResolvedEffect[]): readonly Resolve
 export const perceptiblyConcerned = (effects: readonly ResolvedEffect[]): boolean =>
   inForceNow(effects).some((e) => e.deltaCents !== 0)
 
+/** Cle, dans le sac d'attributs, des montants de base du releve (centimes signes). */
+export const LINE_BAG = '__lineAmounts'
+
+/**
+ * Sens de chaque poste du catalogue : +1 pour une recette, -1 pour une
+ * depense. Renseigne au chargement du contenu (et par le build) : le moteur
+ * ne lit pas le contenu lui-meme.
+ */
+const lineSigns = new Map<string, 1 | -1>()
+export function registerLineSigns(entries: Iterable<readonly [string, 1 | -1]>): void {
+  lineSigns.clear()
+  for (const [code, sign] of entries) lineSigns.set(code, sign)
+}
+
+/**
+ * Ramene un effet dans les bornes du releve.
+ *
+ * Une baisse de depense ne peut pas depasser la depense ; une perte de
+ * recette ne peut pas depasser la recette. Sans ce plafond, le moteur
+ * fabriquait de l'argent : la gratuite des transports rendait 85 EUR a
+ * Yanis, qui en depense 35 — soit 50 EUR de revenu fantome —, et une baisse
+ * des « impots » de qui n'en paie pas devenait une recette. Dans l'autre
+ * sens, une cotisation sur un salaire absent creait un salaire negatif.
+ *
+ * Les effets successifs sur un meme poste se cumulent avant le plafond.
+ */
+function bounded(current: number, delta: number, sign: 1 | -1 | undefined): number {
+  if (sign === undefined) return delta
+  const next = current + delta
+  if (sign === 1 && next < 0) return -current
+  if (sign === -1 && next > 0) return -current
+  return delta
+}
+
 /**
  * Effets en vigueur sur un personnage donne.
  *
@@ -132,13 +167,28 @@ export function activeEffectsFor(
   lookup: OptionLookup,
 ): readonly ResolvedEffect[] {
   const out: ResolvedEffect[] = []
+  // Sans montants de base (un test qui construit ses attributs a la main),
+  // ni part ni plafond : le comportement d'avant.
+  const base = traits[LINE_BAG] as Readonly<Record<string, number>> | undefined
+  const running = new Map<string, number>(base ? Object.entries(base) : [])
   for (const rule of rulesInForce(world)) {
     const effects = lookup(rule.reformId, rule.optionId)
     if (!effects) continue
     for (const effect of effects) {
       if (effect.kind !== 'budget_line') continue
       if (effect.scope.when && !evaluate(effect.scope.when as Condition, traits)) continue
-      out.push({ rule, effect, deltaCents: euros(effect.monthlyDelta ?? 0) })
+      const raw =
+        effect.monthlyShare && base
+          ? Math.round(effect.monthlyShare.rate * Math.abs(base[effect.monthlyShare.of] ?? 0))
+          : euros(effect.monthlyDelta ?? 0)
+      if (!base || effect.code === undefined) {
+        out.push({ rule, effect, deltaCents: raw })
+        continue
+      }
+      const current = running.get(effect.code) ?? 0
+      const delta = bounded(current, raw, lineSigns.get(effect.code))
+      running.set(effect.code, current + delta)
+      out.push({ rule, effect, deltaCents: delta })
     }
   }
   return out
@@ -160,6 +210,9 @@ export function applyEffectsToLines(
     const code = effect.code
     if (code === undefined) continue
     const existing = byCode.get(code)
+    // Un effet nul sur un poste absent ne crée rien : il affichait des
+    // lignes « Impôts : 0 € » chez qui n'en paie pas.
+    if (!existing && deltaCents === 0) continue
     if (existing) {
       byCode.set(code, { ...existing, amountCents: existing.amountCents + deltaCents })
     } else {

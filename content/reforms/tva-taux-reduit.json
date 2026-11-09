@@ -28,13 +28,46 @@
           "id": "statu-quo-soins",
           "kind": "budget_line",
           "code": "sante",
-          "monthlyDelta": -22,
+          "monthlyDelta": -11,
           "scope": {
-            "description": "Tous les ménages : reste à charge sur les soins courants"
+            "description": "Ménages hors affection de longue durée : reste à charge sur les soins courants",
+            "when": {
+              "not": [
+                "recognisedDisability",
+                "eq",
+                true
+              ]
+            }
           },
           "horizon": "y1",
           "uncertainty": "debated",
-          "hypothesisId": "incidence-tva"
+          "hypothesisId": "incidence-tva",
+          "monthlyShare": {
+            "rate": -0.07,
+            "of": "sante"
+          },
+          "note": "Environ 7 % du poste santé : 4 Md€ de remboursement en moins, rapportés aux dépenses de soins courants des ménages."
+        },
+        {
+          "id": "statu-quo-ald",
+          "kind": "budget_line",
+          "code": "sante",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "recognisedDisability",
+                  "eq",
+                  true
+                ]
+              ]
+            },
+            "description": "Personnes en affection de longue durée"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Les soins liés à l'affection de longue durée restent pris en charge à 100 % : la baisse du taux de remboursement des soins courants ne les touche pas."
         },
         {
           "id": "sq-prix",
@@ -68,21 +101,20 @@
         {
           "kind": "budget_line",
           "code": "sante",
-          "monthlyDelta": 22,
+          "monthlyDelta": 0,
           "scope": {
             "description": "Tous les ménages : taux de remboursement des soins maintenu"
           },
           "horizon": "y1",
-          "uncertainty": "debated",
-          "hypothesisId": "incidence-tva",
-          "note": "Contrepartie estimée en reste à charge évité. Elle suppose que la recette soit effectivement affectée aux soins, ce qu'aucun mécanisme ne garantit.",
+          "uncertainty": "established",
+          "note": "Le taux de remboursement est maintenu : par rapport à aujourd'hui, rien ne change. C'est le statu quo qui fait baisser le remboursement.",
           "id": "hausse-uniforme-soins"
         },
         {
           "id": "tva-modeste",
           "kind": "budget_line",
           "code": "alimentation",
-          "monthlyDelta": -9,
+          "monthlyDelta": -4,
           "scope": {
             "when": {
               "and": [
@@ -97,13 +129,18 @@
           },
           "horizon": "y1",
           "uncertainty": "debated",
-          "hypothesisId": "incidence-tva"
+          "hypothesisId": "incidence-tva",
+          "monthlyShare": {
+            "rate": -0.01,
+            "of": "alimentation"
+          },
+          "note": "Environ un point de prix sur les dépenses au taux réduit, rapporté au poste alimentation."
         },
         {
           "id": "tva-aise",
           "kind": "budget_line",
           "code": "alimentation",
-          "monthlyDelta": -19,
+          "monthlyDelta": -7,
           "scope": {
             "when": {
               "and": [
@@ -119,7 +156,11 @@
           "horizon": "y1",
           "uncertainty": "debated",
           "hypothesisId": "incidence-tva",
-          "note": "Montant plus élevé en euros, mais plus faible en part du reste à vivre. Changez d'échelle pour le voir."
+          "note": "Environ un point de prix sur les dépenses au taux réduit, rapporté au poste alimentation.",
+          "monthlyShare": {
+            "rate": -0.01,
+            "of": "alimentation"
+          }
         },
         {
           "id": "tva-recette",
@@ -155,21 +196,20 @@
         {
           "kind": "budget_line",
           "code": "sante",
-          "monthlyDelta": 13,
+          "monthlyDelta": 0,
           "scope": {
             "description": "Tous les ménages : taux de remboursement des soins maintenu"
           },
           "horizon": "y1",
-          "uncertainty": "debated",
-          "hypothesisId": "incidence-tva",
-          "note": "Contrepartie estimée en reste à charge évité. Elle suppose que la recette soit effectivement affectée aux soins, ce qu'aucun mécanisme ne garantit.",
+          "uncertainty": "established",
+          "note": "Le taux de remboursement est maintenu : par rapport à aujourd'hui, rien ne change. C'est le statu quo qui fait baisser le remboursement.",
           "id": "hausse-ciblee-soins"
         },
         {
           "id": "tvac-modeste",
           "kind": "budget_line",
           "code": "alimentation",
-          "monthlyDelta": -3,
+          "monthlyDelta": -2,
           "scope": {
             "when": {
               "and": [
@@ -184,13 +224,18 @@
           },
           "horizon": "y1",
           "uncertainty": "debated",
-          "hypothesisId": "incidence-tva"
+          "hypothesisId": "incidence-tva",
+          "monthlyShare": {
+            "rate": -0.004,
+            "of": "alimentation"
+          },
+          "note": "Environ un point de prix sur les dépenses au taux réduit, rapporté au poste alimentation. Les produits de base exonérés pèsent davantage dans les budgets modestes, d'où un taux effectif plus faible."
         },
         {
           "id": "tvac-aise",
           "kind": "budget_line",
           "code": "alimentation",
-          "monthlyDelta": -14,
+          "monthlyDelta": -5,
           "scope": {
             "when": {
               "and": [
@@ -205,7 +250,12 @@
           },
           "horizon": "y1",
           "uncertainty": "debated",
-          "hypothesisId": "incidence-tva"
+          "hypothesisId": "incidence-tva",
+          "monthlyShare": {
+            "rate": -0.007,
+            "of": "alimentation"
+          },
+          "note": "Environ un point de prix sur les dépenses au taux réduit, rapporté au poste alimentation. Les produits de base exonérés pèsent davantage dans les budgets modestes, d'où un taux effectif plus faible."
         },
         {
           "id": "tvac-recette",
@@ -239,7 +289,7 @@
         {
           "kind": "budget_line",
           "code": "sante",
-          "monthlyDelta": 22,
+          "monthlyDelta": 0,
           "scope": {
             "description": "Retraités et indépendants : restes à charge les plus élevés",
             "when": {
@@ -258,16 +308,40 @@
             }
           },
           "horizon": "y1",
-          "uncertainty": "debated",
-          "hypothesisId": "incidence-tva",
-          "note": "Le maintien du remboursement profite d'abord à qui a les restes à charge les plus élevés : retraités et indépendants sans couverture collective. Répartir ce bénéfice est en soi un choix de modélisation.",
+          "uncertainty": "established",
+          "note": "Le taux de remboursement est maintenu : par rapport à aujourd'hui, rien ne change. C'est le statu quo qui fait baisser le remboursement.",
           "id": "impot-revenu-soins"
         },
         {
           "id": "ir-aise",
           "kind": "budget_line",
           "code": "impots",
-          "monthlyDelta": -165,
+          "monthlyDelta": -170,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  10
+                ]
+              ]
+            },
+            "description": "Contribuables de la tranche supérieure"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "monthlyShare": {
+            "rate": -0.07,
+            "of": "impots"
+          },
+          "note": "Relèvement de la tranche marginale la plus haute : seuls les revenus très élevés l'atteignent. Environ 7 % de l'impôt acquitté."
+        },
+        {
+          "id": "ir-intermediaires",
+          "kind": "budget_line",
+          "code": "impots",
+          "monthlyDelta": 0,
           "scope": {
             "when": {
               "and": [
@@ -275,13 +349,19 @@
                   "incomeDecile",
                   "gte",
                   8
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  9
                 ]
               ]
             },
-            "description": "Deux derniers déciles"
+            "description": "Huitième et neuvième déciles : tranche relevée non atteinte"
           },
           "horizon": "y1",
-          "uncertainty": "established"
+          "uncertainty": "established",
+          "note": "Un revenu élevé n'atteint pas pour autant la tranche marginale la plus haute : seule celle-ci est relevée."
         },
         {
           "id": "ir-autres",

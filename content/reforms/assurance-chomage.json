@@ -115,7 +115,7 @@
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Aucun changement : il conserve ses onze mois de droits restants. C'est la seule option des quatre qui ne modifie pas son horizon."
+          "note": "Aucun changement : à cinquante-quatre ans, sa durée maximale est de vingt-deux mois et demi, et il lui reste onze mois de droits. C'est la seule option des quatre qui ne modifie pas son horizon."
         },
         {
           "id": "cq-inactifs",
@@ -177,17 +177,21 @@
             "when": {
               "and": [
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "employee"
+                  "salaire-net"
                 ]
               ]
             },
-            "description": "Salariés"
+            "description": "Foyers percevant un salaire"
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Baisse de cotisation restituée sur le salaire net : dix-huit euros par mois, pour une protection réduite d'un tiers en durée. C'est un échange, et il est présenté comme tel."
+          "note": "Baisse de cotisation restituée sur le salaire net, environ 0,8 % : 4 Md€ rapportés à la masse salariale, pour une protection réduite d'un tiers en durée. C'est un échange, et il est présenté comme tel.",
+          "monthlyShare": {
+            "rate": 0.008,
+            "of": "salaire-net"
+          }
         },
         {
           "id": "cd-independants",
@@ -258,7 +262,7 @@
           "horizon": "y1",
           "uncertainty": "highly_debated",
           "hypothesisId": "duree-indemnisation-retour-emploi",
-          "note": "Ses droits s'arrêteraient dans un mois au lieu de onze. Le modèle représente cet écart par la différence moyenne entre son allocation et le minimum social qui prendrait le relais. À cinquante-quatre ans, la probabilité de retrouver un emploi avant l'échéance est précisément l'objet du débat, et les travaux disponibles ne s'accordent pas."
+          "note": "Ses droits s'arrêteraient dans quatre mois au lieu de onze : à cinquante-quatre ans, sa durée maximale passerait de vingt-deux mois et demi à quinze. Le modèle représente cet écart par la différence moyenne entre son allocation et le minimum social qui prendrait le relais. À cinquante-quatre ans, la probabilité de retrouver un emploi avant l'échéance est précisément l'objet du débat, et les travaux disponibles ne s'accordent pas."
         },
         {
           "id": "cd-inactifs",
@@ -322,17 +326,21 @@
             "when": {
               "and": [
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "employee"
+                  "salaire-net"
                 ]
               ]
             },
-            "description": "Salariés"
+            "description": "Foyers percevant un salaire"
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Restitution plus faible, parce que l'économie l'est aussi. La protection n'est pas raccourcie, elle est amoindrie en cours de route."
+          "note": "Restitution plus faible, parce que l'économie l'est aussi. La protection n'est pas raccourcie, elle est amoindrie en cours de route.",
+          "monthlyShare": {
+            "rate": 0.0035,
+            "of": "salaire-net"
+          }
         },
         {
           "id": "cg-independants",
@@ -459,22 +467,26 @@
           "id": "cc-salaries",
           "kind": "budget_line",
           "code": "salaire-net",
-          "monthlyDelta": -29,
+          "monthlyDelta": -18,
           "scope": {
             "when": {
               "and": [
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "employee"
+                  "salaire-net"
                 ]
               ]
             },
-            "description": "Salariés"
+            "description": "Foyers percevant un salaire"
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Prélèvement rétabli sur le salaire net. Depuis 2018, la part salariale de l'assurance chômage est financée par la contribution sociale généralisée, donc aussi par les retraités et par les revenus du patrimoine : la rétablir revient à faire payer l'assurance par les seuls assurés."
+          "note": "Prélèvement rétabli sur le salaire net, environ 0,8 % : le même montant global que la baisse de l'option précédente, dans l'autre sens. Depuis 2018, la part salariale de l'assurance chômage est financée par la contribution sociale généralisée, donc aussi par les retraités.",
+          "monthlyShare": {
+            "rate": -0.008,
+            "of": "salaire-net"
+          }
         },
         {
           "id": "cc-independants",

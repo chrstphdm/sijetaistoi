@@ -45,6 +45,13 @@
                     "contains",
                     "unemployed"
                   ]
+                },
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "student"
+                  ]
                 }
               ]
             },
@@ -53,6 +60,32 @@
           "horizon": "y1",
           "uncertainty": "established",
           "note": "Aucun changement. Il faut toutefois rappeler ce que le statu quo contient : entre un cinquième et un tiers des droits ne sont pas réclamés, selon les estimations disponibles. Ce non-recours n'est pas un accident du dispositif, il en est un résultat."
+        },
+        {
+          "id": "mq-etudiants",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "student"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  2
+                ]
+              ]
+            },
+            "description": "Étudiants boursiers : ni minimum social, ni prime d'activité"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Une bourse sur critères sociaux et l'aide au logement ne sont pas des minima sociaux, et un étudiant ne perçoit la prime d'activité qu'au-delà d'un niveau de salaire qu'il n'atteint pas ici. Cette décision ne le concerne pas."
         },
         {
           "id": "mq-limite",
@@ -138,13 +171,13 @@
                   4
                 ],
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "employee"
+                  "salaire-net"
                 ]
               ]
             },
-            "description": "Salariés à partir du quatrième décile"
+            "description": "Foyers à partir du quatrième décile percevant un salaire"
           },
           "horizon": "y1",
           "uncertainty": "established",
@@ -164,20 +197,13 @@
                   4
                 ],
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "self_employed"
-                ],
-                {
-                  "not": [
-                    "activities",
-                    "contains",
-                    "employee"
-                  ]
-                }
+                  "revenu-independant"
+                ]
               ]
             },
-            "description": "Indépendants à partir du quatrième décile"
+            "description": "Foyers à partir du quatrième décile percevant un revenu indépendant"
           },
           "horizon": "y1",
           "uncertainty": "established",
@@ -220,6 +246,13 @@
                     "contains",
                     "unemployed"
                   ]
+                },
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "student"
+                  ]
                 }
               ]
             },
@@ -228,6 +261,32 @@
           "horizon": "y1",
           "uncertainty": "established",
           "note": "Effet nul, et c'est l'argument central des partisans : qui travaille déjà remplit la condition sans rien changer. L'effet se concentrerait sur ceux qui ne travaillent pas — que ce corpus ne contient pas."
+        },
+        {
+          "id": "mh-etudiants",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "student"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  2
+                ]
+              ]
+            },
+            "description": "Étudiants boursiers : ni minimum social, ni prime d'activité"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Une bourse sur critères sociaux et l'aide au logement ne sont pas des minima sociaux, et un étudiant ne perçoit la prime d'activité qu'au-delà d'un niveau de salaire qu'il n'atteint pas ici. Cette décision ne le concerne pas."
         },
         {
           "id": "mh-limite",
@@ -314,13 +373,13 @@
                   4
                 ],
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "employee"
+                  "salaire-net"
                 ]
               ]
             },
-            "description": "Salariés à partir du quatrième décile"
+            "description": "Foyers à partir du quatrième décile percevant un salaire"
           },
           "horizon": "y1",
           "uncertainty": "established",
@@ -340,20 +399,13 @@
                   4
                 ],
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "self_employed"
-                ],
-                {
-                  "not": [
-                    "activities",
-                    "contains",
-                    "employee"
-                  ]
-                }
+                  "revenu-independant"
+                ]
               ]
             },
-            "description": "Indépendants à partir du quatrième décile"
+            "description": "Foyers à partir du quatrième décile percevant un revenu indépendant"
           },
           "horizon": "y1",
           "uncertainty": "established",
@@ -414,7 +466,7 @@
           "id": "mb-beneficiaires",
           "kind": "budget_line",
           "code": "prestations",
-          "monthlyDelta": -62,
+          "monthlyDelta": -30,
           "scope": {
             "when": {
               "and": [
@@ -429,6 +481,13 @@
                     "contains",
                     "unemployed"
                   ]
+                },
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "student"
+                  ]
                 }
               ]
             },
@@ -436,13 +495,43 @@
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Baisse appliquée en euros à l'intérieur de la tranche, alors que la mesure est un pourcentage : l'écart réel va de 34 € à 83 € selon le droit perçu. Le modèle écrase cette différence, et c'est l'une de ses limites les plus gênantes ici."
+          "note": "Baisse de 8 % appliquée à la part de minimum social ou de prime d'activité, estimée à la moitié de la ligne de prestations : les allocations familiales et l'aide au logement n'en font pas partie. L'estimation de cette part est une limite du modèle.",
+          "monthlyShare": {
+            "rate": -0.04,
+            "of": "prestations"
+          }
+        },
+        {
+          "id": "mb-etudiants",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "student"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  2
+                ]
+              ]
+            },
+            "description": "Étudiants boursiers : ni minimum social, ni prime d'activité"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Une bourse sur critères sociaux et l'aide au logement ne sont pas des minima sociaux, et un étudiant ne perçoit la prime d'activité qu'au-delà d'un niveau de salaire qu'il n'atteint pas ici. Cette décision ne le concerne pas."
         },
         {
           "id": "mb-limite",
           "kind": "budget_line",
           "code": "prestations",
-          "monthlyDelta": -12,
+          "monthlyDelta": -8,
           "scope": {
             "when": {
               "and": [
@@ -464,7 +553,11 @@
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "La prime d'activité est faible à ce niveau de revenu : 8 % de peu font peu. Ce qui se joue n'est pas le montant, c'est le signal."
+          "note": "La prime d'activité est faible à ce niveau de revenu : 8 % de peu font peu. Ce qui se joue n'est pas le montant, c'est le signal.",
+          "monthlyShare": {
+            "rate": -0.08,
+            "of": "prestations"
+          }
         },
         {
           "id": "mb-chomeurs",
@@ -523,13 +616,13 @@
                   4
                 ],
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "employee"
+                  "salaire-net"
                 ]
               ]
             },
-            "description": "Salariés à partir du quatrième décile"
+            "description": "Foyers à partir du quatrième décile percevant un salaire"
           },
           "horizon": "y1",
           "uncertainty": "established",
@@ -549,20 +642,13 @@
                   4
                 ],
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "self_employed"
-                ],
-                {
-                  "not": [
-                    "activities",
-                    "contains",
-                    "employee"
-                  ]
-                }
+                  "revenu-independant"
+                ]
               ]
             },
-            "description": "Indépendants à partir du quatrième décile"
+            "description": "Foyers à partir du quatrième décile percevant un revenu indépendant"
           },
           "horizon": "y1",
           "uncertainty": "established",
@@ -603,7 +689,7 @@
           "id": "ma-beneficiaires",
           "kind": "budget_line",
           "code": "prestations",
-          "monthlyDelta": 64,
+          "monthlyDelta": 45,
           "scope": {
             "when": {
               "and": [
@@ -618,6 +704,13 @@
                     "contains",
                     "unemployed"
                   ]
+                },
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "student"
+                  ]
                 }
               ]
             },
@@ -626,13 +719,43 @@
           "horizon": "y1",
           "uncertainty": "debated",
           "hypothesisId": "non-recours-minima",
-          "note": "Gain appliqué uniformément à la tranche. Le modèle ne sait pas qui ne réclame pas ses droits : deux personnes de ce corpus réclament déjà tout, et pour elles ce gain n'existerait pas. Le non-recours dépend de la stabilité de la situation et de la familiarité administrative, que le jeu ne représente pas."
+          "note": "Gain estimé à 6 % de la ligne de prestations : le droit non réclamé, versé sans démarche. Le modèle ne sait pas qui ne réclame pas : pour qui réclame déjà tout, ce gain est nul. C'est l'hypothèse la plus fragile de cette option.",
+          "monthlyShare": {
+            "rate": 0.06,
+            "of": "prestations"
+          }
+        },
+        {
+          "id": "ma-etudiants",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "student"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  2
+                ]
+              ]
+            },
+            "description": "Étudiants boursiers : ni minimum social, ni prime d'activité"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Une bourse sur critères sociaux et l'aide au logement ne sont pas des minima sociaux, et un étudiant ne perçoit la prime d'activité qu'au-delà d'un niveau de salaire qu'il n'atteint pas ici. Cette décision ne le concerne pas."
         },
         {
           "id": "ma-limite",
           "kind": "budget_line",
           "code": "prestations",
-          "monthlyDelta": 28,
+          "monthlyDelta": 26,
           "scope": {
             "when": {
               "and": [
@@ -655,7 +778,11 @@
           "horizon": "y1",
           "uncertainty": "debated",
           "hypothesisId": "non-recours-minima",
-          "note": "Un versement automatique supprimerait l'écart entre ce qui est dû et ce qui est perçu sur des revenus irréguliers, qui est ici la principale cause de non-recours : non pas l'ignorance, mais la déclaration trimestrielle oubliée."
+          "note": "Un versement automatique supprimerait l'écart entre ce qui est dû et ce qui est perçu sur des revenus irréguliers, qui est ici la principale cause de non-recours : non pas l'ignorance, mais la déclaration trimestrielle oubliée.",
+          "monthlyShare": {
+            "rate": 0.25,
+            "of": "prestations"
+          }
         },
         {
           "id": "ma-chomeurs",
@@ -703,7 +830,7 @@
           "id": "ma-salaries-aises",
           "kind": "budget_line",
           "code": "salaire-net",
-          "monthlyDelta": -18,
+          "monthlyDelta": -10,
           "scope": {
             "when": {
               "and": [
@@ -713,23 +840,27 @@
                   4
                 ],
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "employee"
+                  "salaire-net"
                 ]
               ]
             },
-            "description": "Salariés à partir du quatrième décile"
+            "description": "Foyers à partir du quatrième décile percevant un salaire"
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Contribution au financement du surcoût, par l'impôt. Ils ne reçoivent rien en retour et paient pour des droits déjà ouverts mais non versés : c'est exactement ce qui rend cette option difficile à défendre, et exactement ce qui la rend juste."
+          "note": "Contribution au financement du surcoût par l'impôt, environ 0,4 % du revenu. Ils ne reçoivent rien en retour et paient pour des droits déjà ouverts mais non versés : c'est exactement ce que les partisans de la mesure jugent normal, et ses adversaires injuste.",
+          "monthlyShare": {
+            "rate": -0.004,
+            "of": "salaire-net"
+          }
         },
         {
           "id": "ma-independants-aises",
           "kind": "budget_line",
           "code": "revenu-independant",
-          "monthlyDelta": -18,
+          "monthlyDelta": -10,
           "scope": {
             "when": {
               "and": [
@@ -739,24 +870,21 @@
                   4
                 ],
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "self_employed"
-                ],
-                {
-                  "not": [
-                    "activities",
-                    "contains",
-                    "employee"
-                  ]
-                }
+                  "revenu-independant"
+                ]
               ]
             },
-            "description": "Indépendants à partir du quatrième décile"
+            "description": "Foyers à partir du quatrième décile percevant un revenu indépendant"
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Même contribution, même absence de contrepartie directe."
+          "note": "Même contribution, même absence de contrepartie directe.",
+          "monthlyShare": {
+            "rate": -0.004,
+            "of": "revenu-independant"
+          }
         },
         {
           "id": "ma-finances",

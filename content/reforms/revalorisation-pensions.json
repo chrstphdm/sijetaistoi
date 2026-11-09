@@ -56,10 +56,15 @@
                   "activities",
                   "contains",
                   "retired"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  3
                 ]
               ]
             },
-            "description": "Retraités : minimum de pension non relevé"
+            "description": "Retraités au minimum de pension : minimum non relevé"
           },
           "horizon": "y1",
           "uncertainty": "debated",
@@ -100,7 +105,7 @@
           "id": "sui-tous",
           "kind": "budget_line",
           "code": "pension-retraite",
-          "monthlyDelta": -17,
+          "monthlyDelta": -15,
           "scope": {
             "when": {
               "and": [
@@ -114,7 +119,11 @@
             "description": "Tous les retraités"
           },
           "horizon": "y1",
-          "uncertainty": "established"
+          "uncertainty": "established",
+          "monthlyShare": {
+            "rate": -0.01,
+            "of": "pension-retraite"
+          }
         },
         {
           "id": "sui-minimum",
@@ -153,17 +162,23 @@
           "uncertainty": "established"
         },
         {
-          "id": "sous-i-actifs",
+          "id": "sous-i-autres",
           "kind": "budget_line",
-          "code": "impots",
-          "monthlyDelta": 9,
+          "code": "salaire-net",
+          "monthlyDelta": 0,
           "scope": {
-            "description": "Actifs : moindre besoin de financement du régime"
+            "when": {
+              "not": [
+                "activities",
+                "contains",
+                "retired"
+              ]
+            },
+            "description": "Actifs et personnes sans pension : non concernés"
           },
           "horizon": "y1",
-          "uncertainty": "debated",
-          "hypothesisId": "indexation-pensions",
-          "note": "6 Md€ non prélevés sur les actifs, rapportés à l'ensemble. La destination réelle de l'économie est débattue."
+          "uncertainty": "established",
+          "note": "Les 6 Md€ dégagés financent le relèvement du minimum de pension : ils ne réduisent aucun prélèvement sur les actifs."
         }
       ],
       "argumentsFor": [
@@ -215,7 +230,7 @@
           "id": "sic-au-dessus",
           "kind": "budget_line",
           "code": "pension-retraite",
-          "monthlyDelta": -44,
+          "monthlyDelta": -30,
           "scope": {
             "when": {
               "and": [
@@ -234,7 +249,11 @@
             "description": "Retraités à partir du quatrième décile"
           },
           "horizon": "y1",
-          "uncertainty": "established"
+          "uncertainty": "established",
+          "monthlyShare": {
+            "rate": -0.02,
+            "of": "pension-retraite"
+          }
         },
         {
           "id": "sic-economie",
@@ -248,17 +267,23 @@
           "hypothesisId": "indexation-pensions"
         },
         {
-          "id": "sous-i-actifs",
+          "id": "sous-i-autres",
           "kind": "budget_line",
-          "code": "impots",
-          "monthlyDelta": 9,
+          "code": "salaire-net",
+          "monthlyDelta": 0,
           "scope": {
-            "description": "Actifs : moindre besoin de financement du régime"
+            "when": {
+              "not": [
+                "activities",
+                "contains",
+                "retired"
+              ]
+            },
+            "description": "Actifs et personnes sans pension : non concernés"
           },
           "horizon": "y1",
-          "uncertainty": "debated",
-          "hypothesisId": "indexation-pensions",
-          "note": "6 Md€ non prélevés sur les actifs, rapportés à l'ensemble. La destination réelle de l'économie est débattue."
+          "uncertainty": "established",
+          "note": "Les 6 Md€ dégagés financent le relèvement du minimum de pension : ils ne réduisent aucun prélèvement sur les actifs."
         }
       ],
       "argumentsFor": [
@@ -305,29 +330,54 @@
           "hypothesisId": "indexation-pensions"
         },
         {
-          "id": "ca-actifs",
+          "id": "ca-salaires",
           "kind": "budget_line",
           "code": "salaire-net",
-          "monthlyDelta": -34,
+          "monthlyDelta": -15,
           "scope": {
             "when": {
-              "or": [
+              "and": [
                 [
-                  "activities",
+                  "budgetLines",
                   "contains",
-                  "employee"
-                ],
-                [
-                  "activities",
-                  "contains",
-                  "self_employed"
+                  "salaire-net"
                 ]
               ]
             },
-            "description": "Actifs occupés"
+            "description": "Foyers percevant un salaire"
           },
           "horizon": "y1",
-          "uncertainty": "established"
+          "uncertainty": "established",
+          "monthlyShare": {
+            "rate": -0.006,
+            "of": "salaire-net"
+          },
+          "note": "Environ 0,6 % : 6 Md€ rapportés à l'ensemble des revenus d'activité."
+        },
+        {
+          "id": "ca-independants",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": -15,
+          "monthlyShare": {
+            "rate": -0.006,
+            "of": "revenu-independant"
+          },
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "budgetLines",
+                  "contains",
+                  "revenu-independant"
+                ]
+              ]
+            },
+            "description": "Foyers percevant un revenu d'activité indépendante"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Même taux sur le revenu d'activité indépendante."
         },
         {
           "id": "ca-ni-actif-ni-retraite",
