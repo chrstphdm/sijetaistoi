@@ -46,7 +46,7 @@ export function CharacterIntro({
         <strong>Ce que tu veux ces prochains mois</strong>&nbsp;: {shortTermGoal.label}.
       </p>
 
-      <button type="button" onClick={onContinue}>
+      <button type="button" className="btn-primary" onClick={onContinue}>
         Commencer le mois
       </button>
     </section>

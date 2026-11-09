@@ -42,6 +42,17 @@
   --space-4: 1rem;
   --space-6: 1.5rem;
   --space-8: 2rem;
+
+  /* Système commun : trois rayons, deux élévations, une cible tactile.
+     Avant, chaque composant choisissait les siens — 2 px dans le jeu,
+     14 px sur l'accueil — et les deux semblaient venir de sites différents. */
+  --radius-s: 8px;
+  --radius-m: 12px;
+  --radius-l: 18px;
+  --shadow-1: 0 1px 2px rgb(30 27 22 / 0.06), 0 1px 3px rgb(30 27 22 / 0.05);
+  --shadow-2: 0 2px 6px rgb(30 27 22 / 0.06), 0 12px 32px rgb(30 27 22 / 0.09);
+  --tap: 44px;
+  --font-ui: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -60,6 +71,8 @@
     --perspective-b: #e0a85a;
     --tint-a: #193033;
     --tint-b: #332616;
+    --shadow-1: 0 1px 2px rgb(0 0 0 / 0.4);
+    --shadow-2: 0 2px 6px rgb(0 0 0 / 0.35), 0 12px 32px rgb(0 0 0 / 0.45);
   }
 }
 
@@ -78,6 +91,8 @@
   --perspective-b: #e0a85a;
   --tint-a: #193033;
   --tint-b: #332616;
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-2: 0 2px 6px rgb(0 0 0 / 0.35), 0 12px 32px rgb(0 0 0 / 0.45);
 }
 
 @media (min-width: 720px) {

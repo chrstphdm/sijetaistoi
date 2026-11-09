@@ -81,7 +81,7 @@ export function MonthScreen({
               <p className="provenance">
                 Prends le temps de regarder le relevé de {firstName} avant de décider.
               </p>
-              <button type="button" onClick={() => setRevealed(true)}>
+              <button type="button" className="btn-primary" onClick={() => setRevealed(true)}>
                 Voir les possibilités
               </button>
             </>
@@ -144,7 +144,7 @@ export function MonthScreen({
         <section className="sheet">
           <p className="sheet__kicker">Ce mois-ci</p>
           <p>Rien de particulier. Le mois passe.</p>
-          <button type="button" onClick={() => onResolve(null)}>
+          <button type="button" className="btn-primary" onClick={() => onResolve(null)}>
             Mois suivant
           </button>
         </section>

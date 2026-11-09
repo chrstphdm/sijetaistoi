@@ -1170,34 +1170,57 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
 }
 
 .hero-cast {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: clamp(0.5rem, 1.6vw, 1rem);
-  max-width: 30rem; width: 100%;
+  position: relative;
+  aspect-ratio: 1;
+  width: 100%; max-width: 30rem;
   justify-self: center;
+}
+/* Un cercle fin relie les tuiles : c'est le corpus, dont on tire trois. */
+.hero-cast::before {
+  content: '';
+  position: absolute; inset: 9%;
+  border: 1px dashed color-mix(in oklab, var(--paper) 22%, transparent);
+  border-radius: 50%;
 }
 /* Toutes les tuiles apparaissent ENSEMBLE : une cascade avantagerait la
    première. Même règle que l'écran d'impact. */
 .hero-cast__tile {
-  aspect-ratio: 1;
-  display: grid; place-items: center; align-content: center; gap: var(--space-2);
-  border-radius: 18px;
+  position: absolute;
+  left: var(--x); top: var(--y);
+  width: 17%; aspect-ratio: 1;
+  translate: -50% -50%;
+  display: grid; place-items: center; align-content: center; gap: 2px;
+  border-radius: 22%;
   background: oklch(0.3 0.045 var(--seal-hue));
-  box-shadow: inset 0 0 0 1px oklch(0.42 0.06 var(--seal-hue));
+  box-shadow: inset 0 0 0 1px oklch(0.42 0.06 var(--seal-hue)), 0 6px 18px rgb(0 0 0 / 0.25);
   animation: tile-in 520ms var(--ease-enter) both;
 }
-.hero-cast__tile:nth-child(even) { transform: translateY(18%); }
-.hero-cast .seal { width: 58%; height: auto; }
+.hero-cast .seal { width: 50%; height: auto; }
 .hero-cast .seal rect { fill: oklch(0.8 0.12 var(--seal-hue)); }
 .hero-cast__tile span {
-  font: 600 clamp(11px, 1.3vw, 14px)/1 system-ui, sans-serif;
+  font: 600 clamp(8px, 0.8vw, 11px)/1 system-ui, sans-serif;
   color: oklch(0.9 0.03 var(--seal-hue));
-  letter-spacing: 0.02em;
+  max-width: 92%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.hero-cast__center {
+  position: absolute; inset: 0;
+  display: grid; place-content: center; text-align: center;
+  margin: 0; max-width: none;
+}
+.hero-cast__center b {
+  font: 600 clamp(56px, 8vw, 96px)/1 Georgia, 'Times New Roman', serif;
+  color: var(--perspective-a);
+}
+.hero-cast__center span {
+  font: 500 clamp(12px, 1.2vw, 15px)/1.3 system-ui, sans-serif;
+  color: var(--paper-sunk); max-width: 12ch; margin-inline: auto;
 }
 @keyframes tile-in { from { opacity: 0; scale: 0.9; } }
 @media (prefers-reduced-motion: reduce) { .hero-cast__tile { animation: none; } }
 @media (max-width: 899px) {
   .hero { min-height: 0; }
-  .hero-cast { max-width: 22rem; justify-self: start; padding-bottom: 6%; }
+  .hero-cast { max-width: 22rem; }
+  .hero-cast__tile span { display: none; }
 }
 
 /* ------------------------------------------------------- Les six cartes */
@@ -1282,7 +1305,8 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
   background: var(--paper-sunk);
 }
 
-.art-seals { display: grid; grid-template-columns: repeat(3, auto); gap: 10px 14px; }
+.art-seals { display: grid; grid-template-columns: repeat(5, auto); gap: 6px 8px; justify-content: center; }
+.art-seals .seal { width: 22px; height: 22px; }
 
 .art-doc { width: 150px; height: auto; }
 .art-doc__sheet { fill: var(--paper-raised); stroke: var(--rule); stroke-width: 1; }
@@ -1779,3 +1803,179 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
    en plus du pourcentage au-delà de 100 et de la phrase en toutes
    lettres. Aucun rouge : ce n'est pas une faute du joueur. */
 .bar--over { border-right: 3px solid var(--rule-strong); }
+
+/* ================================================================== */
+/* Système commun — boutons, surfaces, contrôles, mise en page du jeu  */
+/* ================================================================== */
+
+/* Les écrans de jeu étaient restés dans la langue du premier prototype :
+   rectangles à filet de 2 px, tous les boutons identiques, contrôles natifs
+   bruts. On applique ici des règles éprouvées, et seulement celles-là :
+   - une hiérarchie de boutons (primaire, secondaire, lien) et UNE action
+     primaire par écran ;
+   - des cibles d'au moins 44 px ;
+   - une seule famille de rayons et d'élévations pour tout le site ;
+   - des surfaces séparées par l'ombre et l'espace plutôt que par des
+     filets doublés ;
+   - une colonne de lecture centrée sur la page, et non dans ce qui reste
+     à droite du rail.
+
+   Rien ici ne touche à la parité : toutes les options d'un écran gardent
+   le même bouton, la même surface et la même structure (E5). */
+
+:root { accent-color: var(--perspective-a); }
+
+/* ----------------------------------------------------------- Boutons */
+
+/* Secondaire, par défaut. */
+button {
+  min-height: var(--tap);
+  padding: 0.55rem 1.15rem;
+  font-family: var(--font-ui); font-size: 15px; font-weight: 600; line-height: 1.2;
+  color: var(--ink);
+  background: var(--paper-raised);
+  border: 1.5px solid var(--rule-strong);
+  border-radius: var(--radius-s);
+  transition: background 150ms var(--ease-enter), border-color 150ms var(--ease-enter),
+    box-shadow 150ms var(--ease-enter);
+}
+button:hover { background: var(--tint-a); border-color: var(--perspective-a); }
+button:disabled { opacity: 0.55; cursor: not-allowed; }
+button:disabled:hover { background: var(--paper-raised); border-color: var(--rule-strong); }
+
+/* Primaire : l'action qui fait avancer l'écran. Une seule par écran. */
+.btn-primary, .home__start {
+  color: var(--paper-raised);
+  background: var(--perspective-a);
+  border-color: var(--perspective-a);
+  box-shadow: var(--shadow-1);
+  border-radius: var(--radius-s);
+}
+.btn-primary:hover, .home__start:hover {
+  background: color-mix(in oklab, var(--perspective-a) 82%, var(--ink));
+  border-color: color-mix(in oklab, var(--perspective-a) 82%, var(--ink));
+  color: var(--paper-raised);
+  box-shadow: var(--shadow-2);
+}
+.btn-primary:disabled:hover { background: var(--perspective-a); border-color: var(--perspective-a); }
+.btn-primary { padding-inline: 1.4rem; }
+
+/* Lien : « Voir le détail », identique sur chaque option. Il était en
+   pointillés, ce qui le faisait lire comme désactivé. */
+.option__more {
+  background: transparent; border-color: transparent;
+  color: var(--perspective-a);
+  text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px;
+}
+.option__more:hover { background: var(--tint-a); border-color: transparent; }
+
+.timeline__toggle { font-weight: 400; transition: none; }
+.timeline__toggle:hover { background: none; color: var(--ink); border-bottom-color: var(--ink-2); }
+
+/* ---------------------------------------------------------- Surfaces */
+
+.sheet {
+  border: 1px solid color-mix(in oklab, var(--rule-hair) 75%, transparent);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-1);
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+.sheet__kicker { font-family: var(--font-ui); font-weight: 600; }
+
+.option {
+  border-radius: var(--radius-m);
+  padding: var(--space-6);
+  transition: box-shadow 150ms var(--ease-enter);
+}
+.option:hover { box-shadow: var(--shadow-1); }
+.option h3 { font-size: 20px; }
+
+.proj li { border-radius: var(--radius-m); }
+.proj__caveat { border-radius: 0 var(--radius-s) var(--radius-s) 0; }
+
+/* La grille du bilan débordait de sa carte : trois colonnes imposées par
+   la largeur de l'ÉCRAN, dans une carte large de 62 caractères. Elle se
+   règle désormais sur la place réellement disponible. */
+.proj { grid-template-columns: repeat(auto-fill, minmax(min(100%, 13.5rem), 1fr)); }
+@media (min-width: 620px) { .proj { grid-template-columns: repeat(auto-fill, minmax(min(100%, 13.5rem), 1fr)); } }
+@media (min-width: 1000px) { .proj { grid-template-columns: repeat(auto-fill, minmax(min(100%, 13.5rem), 1fr)); } }
+
+/* ---------------------------------------------------------- Contrôles */
+
+textarea, select, input[type='text'], input[type='search'] {
+  border-radius: var(--radius-s);
+  border: 1.5px solid var(--rule-strong);
+  transition: border-color 150ms var(--ease-enter), box-shadow 150ms var(--ease-enter);
+}
+textarea:focus-visible, select:focus-visible, input:focus-visible {
+  outline: none;
+  border-color: var(--perspective-a);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--perspective-a) 30%, transparent);
+}
+select {
+  font-family: var(--font-ui); font-size: 15px;
+  min-height: var(--tap);
+  padding: 0 0.75rem;
+  color: var(--ink);
+  background-color: var(--paper-raised);
+}
+
+fieldset { border-radius: var(--radius-m); padding: var(--space-4); }
+legend { padding-inline: var(--space-2); font-weight: 600; }
+
+/* Groupe de boutons radio en pastilles : la cible devient toute
+   l'étiquette. Le rond reste visible — l'état sélectionné est porté par le
+   rond coché ET le gras, jamais par la seule couleur de fond. */
+fieldset:has(input[type='radio']) { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+fieldset:has(input[type='radio']) > legend { flex: 0 0 100%; margin-bottom: var(--space-1); }
+fieldset:has(input[type='radio']) > label {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  margin: 0;
+  min-height: var(--tap);
+  padding: 0 1rem 0 0.8rem;
+  border: 1.5px solid var(--rule-hair); border-radius: 999px;
+  background: var(--paper-raised);
+  cursor: pointer;
+  transition: background 150ms var(--ease-enter), border-color 150ms var(--ease-enter);
+}
+fieldset:has(input[type='radio']) > label:hover { border-color: var(--perspective-a); }
+fieldset:has(input[type='radio']) > label:has(input:checked) {
+  background: var(--tint-a); border-color: var(--perspective-a); font-weight: 600;
+}
+fieldset:has(input[type='radio']) > label:has(input:focus-visible) {
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--perspective-a) 30%, transparent);
+}
+
+.scale__btn { border-radius: var(--radius-s); }
+
+/* --------------------------------------------- Mise en page du jeu */
+
+/* Sur mobile, le rail est une barre collée en haut, bord à bord : pas de
+   rayon. En colonne, c'est une carte comme les autres. */
+@media (min-width: 900px) {
+  .rail {
+    border-radius: var(--radius-l);
+    box-shadow: var(--shadow-1);
+    border-color: color-mix(in oklab, var(--rule-hair) 75%, transparent);
+  }
+}
+
+/* Le titre d'écran s'aligne sur les cartes au lieu de courir sous le rail
+   et jusqu'au bord droit. */
+.screen-title {
+  max-width: var(--measure-doc);
+  margin-inline: auto;
+  margin-top: var(--space-8);
+  border-bottom: none;
+  padding-bottom: 0;
+  color: var(--perspective-a);
+}
+
+/* Sur grand écran, une troisième colonne égale au rail : la colonne de
+   lecture est centrée sur la PAGE. Avant, elle l'était dans l'espace
+   laissé à droite du rail, et un vide de 200 px s'ouvrait à droite. */
+@media (min-width: 1180px) {
+  .layout:not(.layout--single) {
+    grid-template-columns: 15rem minmax(0, 1fr) 15rem;
+  }
+}

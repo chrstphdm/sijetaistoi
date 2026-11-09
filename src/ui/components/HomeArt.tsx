@@ -13,7 +13,12 @@ import { Seal, sealHue } from './Seal.tsx'
 const ids = () => characters.map((c) => c.id)
 
 /**
- * Les six personnages, en grand, dans le bandeau d'ouverture.
+ * Tous les personnages du corpus, en anneau, dans le bandeau d'ouverture.
+ *
+ * Un ANNEAU plutot qu'une grille : avec treize personnages, une grille
+ * laisse une tuile orpheline au dernier rang, et un rang est toujours
+ * « premier ». Sur un cercle, chaque place vaut les autres. L'anneau est
+ * decale d'un demi-cran pour qu'aucune tuile ne tienne le sommet.
  *
  * Meme tuile, meme taille, ordre alphabetique, apparition SIMULTANEE : une
  * cascade mettrait le premier en avant, exactement ce que l'ecran d'impact
@@ -22,18 +27,30 @@ const ids = () => characters.map((c) => c.id)
  */
 export function HeroCast() {
   const all = ids()
+  const n = characters.length
   return (
     <div className="hero-cast" aria-hidden="true">
-      {characters.map((c) => (
-        <div
-          key={c.id}
-          className="hero-cast__tile"
-          style={{ ['--seal-hue' as string]: sealHue(c.id, all) } as CSSProperties}
-        >
-          <Seal id={c.id} allIds={all} size={80} />
-          <span>{c.identity.firstName}</span>
-        </div>
-      ))}
+      {characters.map((c, i) => {
+        const a = ((i + 0.5) / n) * 2 * Math.PI - Math.PI / 2
+        return (
+          <div
+            key={c.id}
+            className="hero-cast__tile"
+            style={{
+              ['--seal-hue' as string]: sealHue(c.id, all),
+              ['--x' as string]: `${50 + 41 * Math.cos(a)}%`,
+              ['--y' as string]: `${50 + 41 * Math.sin(a)}%`,
+            } as CSSProperties}
+          >
+            <Seal id={c.id} allIds={all} size={40} />
+            <span>{c.identity.firstName}</span>
+          </div>
+        )
+      })}
+      <p className="hero-cast__center">
+        <b>3</b>
+        <span>tirées au sort parmi {n}</span>
+      </p>
     </div>
   )
 }

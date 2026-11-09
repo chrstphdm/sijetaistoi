@@ -124,7 +124,7 @@ export function SetupScreen({ seed, setup, onCancel }: {
 
       <p>
         <button
-          type="button" disabled={faulty}
+          type="button" className="btn-primary" disabled={faulty}
           onClick={() => { window.location.href = urlForSetup(seed, next) }}
         >
           Commencer cette partie

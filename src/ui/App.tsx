@@ -344,7 +344,7 @@ export function App() {
           <JudgementScale value={judgement} onChange={actions.answer} legend="Ta réponse" />
           {judgement && (
             <p>
-              <button type="button" onClick={actions.toImpact}>
+              <button type="button" className="btn-primary" onClick={actions.toImpact}>
                 Voir ce que cela change pour chacun
               </button>
             </p>
@@ -359,7 +359,7 @@ export function App() {
             onScaleChange={setScale} screenIndex={state.act}
           />
           <section className="sheet">
-            <button type="button" onClick={actions.nextAct}>
+            <button type="button" className="btn-primary" onClick={actions.nextAct}>
               {state.act >= 3 ? 'Voir le bilan' : 'Quelques mois plus tard…'}
             </button>
           </section>
@@ -380,7 +380,7 @@ export function App() {
               décisions du corpus. Une partie n’en présente que trois de chaque.
             </p>
             <p>
-              <button type="button" onClick={startFreshGame}>
+              <button type="button" className="btn-primary" onClick={startFreshGame}>
                 Commencer une nouvelle partie
               </button>
               {' '}

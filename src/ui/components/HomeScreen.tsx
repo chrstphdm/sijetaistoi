@@ -60,7 +60,7 @@ export function HomeScreen({ onStart, onMethod }: {
         <section className="figures" aria-label="Le jeu en chiffres">
           <ul>
             <li><b>3</b><span>personnes incarnées, tirées au sort</span></li>
-            <li><b>6</b><span>situations dans le corpus</span></li>
+            <li><b>{characters.length}</b><span>situations dans le corpus</span></li>
             <li><b>4</b><span>façons de mesurer un même montant</span></li>
             <li><b>20</b><span>minutes environ</span></li>
             <li className="figures--zero"><b>0</b><span>score, classement ou étiquette</span></li>
