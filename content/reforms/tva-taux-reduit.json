@@ -241,12 +241,26 @@
           "code": "sante",
           "monthlyDelta": 22,
           "scope": {
-            "description": "Tous les ménages : taux de remboursement des soins maintenu"
+            "description": "Retraités et indépendants : restes à charge les plus élevés",
+            "when": {
+              "or": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ]
+              ]
+            }
           },
           "horizon": "y1",
           "uncertainty": "debated",
           "hypothesisId": "incidence-tva",
-          "note": "Contrepartie estimée en reste à charge évité. Elle suppose que la recette soit effectivement affectée aux soins, ce qu'aucun mécanisme ne garantit.",
+          "note": "Le maintien du remboursement profite d'abord à qui a les restes à charge les plus élevés : retraités et indépendants sans couverture collective. Répartir ce bénéfice est en soi un choix de modélisation.",
           "id": "impot-revenu-soins"
         },
         {
@@ -300,6 +314,32 @@
           "horizon": "y1",
           "uncertainty": "debated",
           "hypothesisId": "incidence-tva"
+        },
+        {
+          "id": "ir-sans-effet",
+          "kind": "budget_line",
+          "code": "impots",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  7
+                ]
+              ]
+            },
+            "description": "Salariés jusqu’au septième décile : non concernés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Ni contribuables de la tranche relevée, ni titulaires des restes à charge les plus élevés."
         }
       ],
       "argumentsFor": [

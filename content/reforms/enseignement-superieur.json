@@ -107,6 +107,56 @@
           "horizon": "y1",
           "uncertainty": "debated",
           "hypothesisId": "renoncement-etudes"
+        },
+        {
+          "id": "fi-contribuables",
+          "kind": "budget_line",
+          "code": "impots",
+          "monthlyDelta": 4,
+          "scope": {
+            "description": "Ménages imposables : dépense publique évitée",
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  5
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "renoncement-etudes",
+          "note": "1,4 Md€ rapportés à l'ensemble des ménages, soit environ 47 € par an chacun. Qui bénéficie réellement d'une économie publique est débattu : elle peut réduire un prélèvement, financer autre chose, ou réduire la dette. L'économie est ici supposée réduire un prélèvement sur les ménages imposables ; elle pourrait tout aussi bien financer autre chose."
+        },
+        {
+          "id": "fi-non-concernes",
+          "kind": "budget_line",
+          "code": "impots",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "lte",
+                  4
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "student"
+                  ]
+                }
+              ]
+            },
+            "description": "Quatre premiers déciles sans étudiant : non concernés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Ni étudiants aux frais relevés, ni ménages imposables bénéficiant de l'économie : cette mesure ne change rien pour eux la première année."
         }
       ],
       "argumentsFor": [
@@ -184,6 +234,75 @@
           "horizon": "y1",
           "uncertainty": "debated",
           "hypothesisId": "renoncement-etudes"
+        },
+        {
+          "id": "fm-contribuables",
+          "kind": "budget_line",
+          "code": "impots",
+          "monthlyDelta": 2,
+          "scope": {
+            "description": "Ménages imposables : dépense publique évitée",
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  5
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "renoncement-etudes",
+          "note": "0,6 Md€ rapportés à l'ensemble des ménages. Même incertitude sur la destination réelle de l'économie. L'économie est ici supposée réduire un prélèvement sur les ménages imposables ; elle pourrait tout aussi bien financer autre chose."
+        },
+        {
+          "id": "fm-hors-seuil",
+          "kind": "budget_line",
+          "code": "impots",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "lte",
+                  4
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "student"
+                ]
+              ]
+            },
+            "description": "Étudiants des quatre premiers déciles : frais inchangés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Le barème modulé les exonère : ils paient le même montant qu'aujourd'hui."
+        },
+        {
+          "id": "fm-sans-etudiant",
+          "kind": "budget_line",
+          "code": "impots",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "lte",
+                  4
+                ]
+              ]
+            },
+            "description": "Quatre premiers déciles : non concernés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Ni étudiants aux frais relevés, ni ménages imposables bénéficiant de l'économie."
         }
       ],
       "argumentsFor": [

@@ -73,10 +73,49 @@ export function formatDays(days: number): string {
   return `${number(days, 1)} jour${days >= 2 ? 's' : ''}`
 }
 
+/* ------------------------------------------------------------------ */
+/* Horizon                                                             */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Un effet recurrent, annonce a l'annee ET au mois.
+ *
+ * L'annuel vient en tete parce qu'il frappe davantage : 204 EUR se percoit,
+ * 17 EUR passe inapercu. C'est le meme fait.
+ *
+ * AVERTISSEMENT METHODOLOGIQUE, et il compte : choisir l'horizon est un
+ * choix de cadrage, de meme nature que choisir le denominateur. Annualiser
+ * multiplie tout par douze — les couts comme les gains — donc le traitement
+ * reste symetrique et n'avantage aucun camp, mais l'ensemble du sujet
+ * parait plus lourd.
+ *
+ * Les deux horizons sont donc donnes ensemble, comme le jeu donne quatre
+ * denominateurs plutot que d'en imposer un. Le mois reste present parce que
+ * c'est l'unite dans laquelle une contrainte budgetaire SE VIT : un loyer se
+ * paie au mois, un reste a vivre se compte au mois.
+ *
+ * Les parts en pourcentage ne changent pas : un rapport est invariant par
+ * changement d'horizon. Annualiser ne deforme donc aucune comparaison.
+ */
+export function formatRecurring(monthlyCents: number): string {
+  const perYear = Math.round(Math.abs(monthlyCents) * 12 / 100)
+  const perMonth = Math.round(Math.abs(monthlyCents) / 100)
+  const group = (n: number) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '\u202F')
+  return `${group(perYear)}\u00A0€ par an, soit ${group(perMonth)}\u00A0€ par mois`
+}
+
+/** Montant annuel seul, pour les listes ou la phrase complete ne tient pas. */
+export function formatPerYear(monthlyCents: number): string {
+  const perYear = Math.round(Math.abs(monthlyCents) * 12 / 100)
+  return `${String(perYear).replace(/\B(?=(\d{3})+(?!\d))/g, '\u202F')}\u00A0€ par an`
+}
+
 /** Formate une grandeur de comparabilite selon l'echelle choisie. */
 export function formatMetric(scale: Scale, metrics: Readonly<Record<Scale, number>>): string {
   const v = metrics[scale]
-  if (scale === 'euros') return `${Math.round(v)} €`
+  // L'echelle « euros » d'un effet recurrent s'annonce a l'annee : c'est
+  // la meme grandeur, mais elle se percoit.
+  if (scale === 'euros') return formatPerYear(v * 100)
   if (scale === 'days') return formatDays(v)
   return formatShare(v)
 }

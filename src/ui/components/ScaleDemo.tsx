@@ -55,9 +55,9 @@ export function ScaleDemo() {
   return (
     <div className="demo">
       <p>
-        Imaginons un prélèvement de <strong>100 € par mois</strong>, le même pour tout
-        le monde. Voici qui il touche le plus — et change de mesure pour voir le
-        classement se recomposer.
+        Imaginons un prélèvement de <strong>1 200 € par an</strong>, soit 100 € par mois,
+        le même pour tout le monde. Voici qui il touche le plus — et change de mesure
+        pour voir le classement se recomposer.
       </p>
 
       <fieldset className="demo__scales">

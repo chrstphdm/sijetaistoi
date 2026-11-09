@@ -1,6 +1,6 @@
 import { computeMonthlyBudget } from '@/core/budget.ts'
 import { comparabilityMetrics, absorptionRegime, type Scale } from '@/core/impact.ts'
-import { formatMetric, regimeSentence } from '@/core/phrasing.ts'
+import { formatMetric, formatRecurring, regimeSentence } from '@/core/phrasing.ts'
 import { activeEffectsFor, applyEffectsToLines, type WorldState } from '@/core/world.ts'
 import { motionFor } from '@/motion/table.ts'
 import { optionLookup, toBudgetLines, toStocks } from '@/content/load.ts'
@@ -97,9 +97,12 @@ export function ImpactForEach({ characters, world, scale, onScaleChange, screenI
                 <>aucun effet sur son budget courant.</>
               ) : (
                 <>
-                  <Amount cents={delta} nature="hypothesis" signed label={c.identity.firstName} />
-                  {' par mois, soit '}
-                  {formatMetric(scale, comparabilityMetrics(delta, before))}
+                  {/* L'annuel en tête : 204 € se perçoit, 17 € passe inaperçu.
+                      C'est le même fait, et les deux sont donnés. */}
+                  <Amount cents={delta * 12} nature="hypothesis" signed label={c.identity.firstName} />
+                  {' par an, soit '}
+                  {formatRecurring(delta).split(', soit ')[1]}
+                  {scale !== 'euros' && <> — {formatMetric(scale, comparabilityMetrics(delta, before))}</>}
                   {'. Cette somme '}
                   {regimeSentence(absorptionRegime(delta, before, toStocks(c)), delta)}.
                 </>

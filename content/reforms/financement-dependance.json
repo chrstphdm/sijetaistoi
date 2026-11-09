@@ -4,21 +4,38 @@
   "descriptiveTitle": "Financement de l'aide à l'autonomie",
   "statedBy": "Le Conseil budgétaire, acteur fictif de ce jeu",
   "context": "Le nombre de personnes ayant besoin d'une aide quotidienne augmente avec l'allongement de la vie. Le Conseil budgétaire chiffre à 5 milliards d'euros par an le coût d'un relèvement du niveau de prise en charge, et demande sur qui le faire porter.",
-  "objective": { "amount": 5, "unit": "EUR_bn", "nature": "fiction", "note": "Montant posé par un acteur fictif du jeu. Il ne décrit aucune nécessité constatée." },
-  "contextSourceIds": ["drees-salaires-soin"],
+  "objective": {
+    "amount": 5,
+    "unit": "EUR_bn",
+    "nature": "fiction",
+    "note": "Montant posé par un acteur fictif du jeu. Il ne décrit aucune nécessité constatée."
+  },
+  "contextSourceIds": [
+    "drees-salaires-soin"
+  ],
   "modelLimitations": "Ce modèle ne chiffre ni la valeur de l'aide apportée aujourd'hui gratuitement par les proches, ni l'effet d'une meilleure prise en charge sur les hospitalisations évitées, ni les créations d'emplois du secteur. Il mesure un transfert monétaire de première année, et rien d'autre.",
-
   "options": [
     {
       "id": "statu-quo",
       "label": "Ne rien changer",
       "decisionDescription": "Le niveau de prise en charge reste inchangé. Le reste à charge continue d'être assumé par les personnes concernées et par leurs proches.",
-      "families": ["status_quo"],
+      "families": [
+        "status_quo"
+      ],
       "isStatusQuo": true,
       "effects": [
-        { "id": "sq", "kind": "budget_line", "code": "sante", "monthlyDelta": 0,
-          "scope": { "description": "Tous les ménages" }, "horizon": "y1", "uncertainty": "established",
-          "note": "Aucun transfert monétaire. L'aide apportée par les proches n'est pas chiffrée par ce modèle, ce qui ne veut pas dire qu'elle est gratuite." }
+        {
+          "id": "sq",
+          "kind": "budget_line",
+          "code": "sante",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Tous les ménages"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun transfert monétaire. L'aide apportée par les proches n'est pas chiffrée par ce modèle, ce qui ne veut pas dire qu'elle est gratuite."
+        }
       ],
       "argumentsFor": [
         "Aucun ménage ne voit ses prélèvements augmenter, dans un contexte où beaucoup déclarent déjà une contrainte forte.",
@@ -33,17 +50,80 @@
       "id": "csg-retraites",
       "label": "Relever la contribution sociale sur les pensions les plus élevées",
       "decisionDescription": "Les pensions supérieures à un seuil contribuent davantage. Les pensions modestes sont exonérées.",
-      "families": ["levies"],
+      "families": [
+        "levies"
+      ],
       "effects": [
-        { "id": "csg-haut", "kind": "budget_line", "code": "prestations", "monthlyDelta": -42,
-          "scope": { "when": { "and": [["activities", "contains", "retired"], ["incomeDecile", "gte", 4]] }, "description": "Retraités à partir du quatrième décile" },
-          "horizon": "y1", "uncertainty": "established" },
-        { "id": "csg-aide", "kind": "budget_line", "code": "sante", "monthlyDelta": 35,
-          "scope": { "when": { "and": [["activities", "contains", "retired"]] }, "description": "Retraités : prise en charge relevée" },
-          "horizon": "y1", "uncertainty": "debated", "hypothesisId": "indexation-pensions",
-          "note": "Contrepartie en reste à charge évité, qui ne se matérialise qu'en cas de perte d'autonomie." },
-        { "id": "csg-recette", "kind": "public_finance", "publicBillions": 5,
-          "scope": { "description": "Finances publiques" }, "horizon": "y1", "uncertainty": "established" }
+        {
+          "id": "csg-haut",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": -42,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ],
+                [
+                  "incomeDecile",
+                  "gte",
+                  4
+                ]
+              ]
+            },
+            "description": "Retraités à partir du quatrième décile"
+          },
+          "horizon": "y1",
+          "uncertainty": "established"
+        },
+        {
+          "id": "csg-aide",
+          "kind": "budget_line",
+          "code": "sante",
+          "monthlyDelta": 35,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            },
+            "description": "Retraités : prise en charge relevée"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "indexation-pensions",
+          "note": "Contrepartie en reste à charge évité, qui ne se matérialise qu'en cas de perte d'autonomie."
+        },
+        {
+          "id": "csg-recette",
+          "kind": "public_finance",
+          "publicBillions": 5,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "established"
+        },
+        {
+          "id": "csg-proches",
+          "kind": "budget_line",
+          "code": "impots",
+          "monthlyDelta": 7,
+          "scope": {
+            "description": "Tous les ménages : reste à charge évité sur l’aide à un proche"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "indexation-pensions",
+          "note": "L'aide à un parent âgé pèse aujourd'hui sur ses enfants, à un âge où ils sont souvent eux-mêmes actifs. Le montant retenu est un ordre de grandeur moyen : il est nul pour qui n'a personne à aider, et bien supérieur pour qui en a."
+        }
       ],
       "argumentsFor": [
         "Les retraités sont les premiers bénéficiaires du dispositif financé, ce qui rapproche la contribution de l'usage.",
@@ -58,16 +138,66 @@
       "id": "cotisation-universelle",
       "label": "Une cotisation prélevée sur tous les revenus d'activité",
       "decisionDescription": "Une cotisation nouvelle est prélevée sur l'ensemble des revenus d'activité, salariés et indépendants.",
-      "families": ["levies"],
+      "families": [
+        "levies"
+      ],
       "effects": [
-        { "id": "cu-actifs", "kind": "budget_line", "code": "salaire-net", "monthlyDelta": -29,
-          "scope": { "when": { "or": [["activities", "contains", "employee"], ["activities", "contains", "self_employed"]] }, "description": "Actifs occupés" },
-          "horizon": "y1", "uncertainty": "established" },
-        { "id": "cu-retraites", "kind": "budget_line", "code": "sante", "monthlyDelta": 35,
-          "scope": { "when": { "and": [["activities", "contains", "retired"]] }, "description": "Retraités : prise en charge relevée, sans contribution" },
-          "horizon": "y1", "uncertainty": "debated", "hypothesisId": "indexation-pensions" },
-        { "id": "cu-recette", "kind": "public_finance", "publicBillions": 5,
-          "scope": { "description": "Finances publiques" }, "horizon": "y1", "uncertainty": "established" }
+        {
+          "id": "cu-actifs",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": -29,
+          "scope": {
+            "when": {
+              "or": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ]
+              ]
+            },
+            "description": "Actifs occupés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established"
+        },
+        {
+          "id": "cu-retraites",
+          "kind": "budget_line",
+          "code": "sante",
+          "monthlyDelta": 35,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            },
+            "description": "Retraités : prise en charge relevée, sans contribution"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "indexation-pensions"
+        },
+        {
+          "id": "cu-recette",
+          "kind": "public_finance",
+          "publicBillions": 5,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "established"
+        }
       ],
       "argumentsFor": [
         "Chacun peut être concerné par la perte d'autonomie, la sienne ou celle d'un proche : l'assiette large correspond au risque couvert.",
@@ -82,17 +212,96 @@
       "id": "succession",
       "label": "Relever les droits de succession sur les patrimoines élevés",
       "decisionDescription": "Les transmissions supérieures à un seuil sont davantage taxées. Le produit finance l'aide à l'autonomie.",
-      "families": ["levies", "scope_efficiency"],
+      "families": [
+        "levies",
+        "scope_efficiency"
+      ],
       "effects": [
-        { "id": "su-proprietaires", "kind": "budget_line", "code": "logement", "monthlyDelta": -18,
-          "scope": { "when": { "or": [["tenure", "eq", "owner_outright"], ["tenure", "eq", "owner_with_loan"]] }, "description": "Propriétaires, effet annualisé sur la transmission attendue" },
-          "horizon": "y10", "uncertainty": "highly_debated", "hypothesisId": "indexation-pensions",
-          "note": "Chiffrage très incertain : il dépend de la date de transmission, du nombre d'héritiers et du barème retenu. Il est présenté comme un ordre de grandeur annualisé, pas comme une prévision." },
-        { "id": "su-aide", "kind": "budget_line", "code": "sante", "monthlyDelta": 35,
-          "scope": { "description": "Ménages concernés par une perte d'autonomie" },
-          "horizon": "y1", "uncertainty": "debated", "hypothesisId": "indexation-pensions" },
-        { "id": "su-recette", "kind": "public_finance", "publicBillions": 5,
-          "scope": { "description": "Finances publiques" }, "horizon": "y1", "uncertainty": "debated", "hypothesisId": "indexation-pensions" }
+        {
+          "id": "su-proprietaires",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": -18,
+          "scope": {
+            "when": {
+              "or": [
+                [
+                  "tenure",
+                  "eq",
+                  "owner_outright"
+                ],
+                [
+                  "tenure",
+                  "eq",
+                  "owner_with_loan"
+                ]
+              ]
+            },
+            "description": "Propriétaires, effet annualisé sur la transmission attendue"
+          },
+          "horizon": "y10",
+          "uncertainty": "highly_debated",
+          "hypothesisId": "indexation-pensions",
+          "note": "Chiffrage très incertain : il dépend de la date de transmission, du nombre d'héritiers et du barème retenu. Il est présenté comme un ordre de grandeur annualisé, pas comme une prévision. Les locataires ne sont pas concernés par cette contribution."
+        },
+        {
+          "id": "su-aide",
+          "kind": "budget_line",
+          "code": "sante",
+          "monthlyDelta": 35,
+          "scope": {
+            "description": "Retraités : prise en charge relevée",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "indexation-pensions"
+        },
+        {
+          "id": "su-recette",
+          "kind": "public_finance",
+          "publicBillions": 5,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "indexation-pensions"
+        },
+        {
+          "id": "su-locataires",
+          "kind": "budget_line",
+          "code": "impots",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "or": [
+                [
+                  "tenure",
+                  "eq",
+                  "tenant_private"
+                ],
+                [
+                  "tenure",
+                  "eq",
+                  "tenant_social"
+                ]
+              ]
+            },
+            "description": "Locataires : aucune contribution"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "La contribution porte sur la transmission d'un patrimoine immobilier : les locataires n'en versent aucune, et n'en reçoivent aucune contrepartie directe."
+        }
       ],
       "argumentsFor": [
         "Le prélèvement intervient au moment où le patrimoine se transmet, sans peser sur la trésorerie de personne de son vivant.",
@@ -107,11 +316,20 @@
       "id": "contester-cadrage",
       "label": "Je conteste la façon dont la question est posée",
       "decisionDescription": "Le joueur refuse le cadrage : la question n'est pas de savoir qui paie cinq milliards, mais pourquoi l'aide apportée aujourd'hui par les proches n'apparaît dans aucun budget.",
-      "families": ["challenge_framing"],
+      "families": [
+        "challenge_framing"
+      ],
       "effects": [
-        { "id": "cc", "kind": "service_level",
-          "scope": { "description": "Aucun effet budgétaire modélisé" }, "horizon": "y1", "uncertainty": "established",
-          "note": "Contester le cadrage ne produit aucun effet chiffré dans ce modèle. Cette absence est une limite du jeu, pas un jugement sur la pertinence de la contestation." }
+        {
+          "id": "cc",
+          "kind": "service_level",
+          "scope": {
+            "description": "Aucun effet budgétaire modélisé"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Contester le cadrage ne produit aucun effet chiffré dans ce modèle. Cette absence est une limite du jeu, pas un jugement sur la pertinence de la contestation."
+        }
       ],
       "argumentsFor": [
         "Compter uniquement ce qui transite par un budget public rend invisible un travail considérable effectué gratuitement.",

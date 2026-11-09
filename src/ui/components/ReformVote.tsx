@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { ReformT, ReformOptionT } from '@/schemas/index.ts'
 import { ScopeBand, ScopeMark } from './ScopeBand.tsx'
+import { formatRecurring } from '@/core/phrasing.ts'
 
 /**
  * L'ecran de vote.
@@ -44,9 +45,11 @@ function oneLiner(option: ReformOptionT): string {
   if (budget.length === 0) return 'Aucun effet chiffré sur le budget des ménages.'
   const part = (list: typeof budget) =>
     list.map((e) => e.scope.description.toLowerCase()).join(', ')
+  const worst = Math.min(...budget.map((e) => e.monthlyDelta ?? 0))
+  const scale = worst < 0 ? ` Jusqu’à ${formatRecurring(worst * 100).split(',')[0]}.` : ''
   if (losers.length && winners.length)
-    return `Coûte à : ${part(losers)}. Profite à : ${part(winners)}.`
-  if (losers.length) return `Coûte à : ${part(losers)}.`
+    return `Coûte à : ${part(losers)}. Profite à : ${part(winners)}.${scale}`
+  if (losers.length) return `Coûte à : ${part(losers)}.${scale}`
   return `Profite à : ${part(winners)}.`
 }
 
@@ -104,7 +107,7 @@ export function ReformVote({ reform, order, who, onVote }: Props) {
                             <>
                               {' : '}
                               {e.monthlyDelta > 0 ? '+' : '−'}
-                              {Math.abs(e.monthlyDelta)} €/mois
+                              {formatRecurring(e.monthlyDelta * 100)}
                             </>
                           )}
                           {e.publicBillions !== undefined && e.publicBillions !== 0 && (

@@ -199,3 +199,63 @@ désormais une graine. Deux passages successifs ne présentaient plus les mêmes
 personnages, ce qui faisait échouer le test de la lecture muette — lui compare deux
 rendus de la MÊME partie. Les tests de variété, eux, ouvrent volontairement sans
 graine et vérifient que les six personnages apparaissent bien en ouverture.
+
+## 19 — Les effets récurrents s'annoncent à l'année, et aussi au mois
+
+Demande du porteur du projet : « au lieu de ça coûte 17 € par mois, ça lui coûte
+200 € par an. C'est la même chose mais la somme étant plus grande ça a plus
+d'impact. »
+
+C'est juste : 204 € se perçoit, 17 € passe inaperçu.
+
+Mais **choisir l'horizon est un choix de cadrage, de même nature que choisir le
+dénominateur**. Annualiser multiplie tout par douze — les coûts comme les gains —
+donc le traitement reste symétrique et n'avantage aucun camp, mais l'ensemble du
+sujet paraît plus lourd. Or le jeu expose déjà quatre dénominateurs précisément
+parce qu'aucun n'est neutre.
+
+Les deux horizons sont donc donnés **ensemble**, l'annuel en tête comme demandé. Le
+mois reste présent parce que c'est l'unité dans laquelle une contrainte budgétaire SE
+VIT : un loyer se paie au mois, un reste à vivre se compte au mois.
+
+Deux garde-fous vérifiés par test : un gain est annualisé exactement comme une perte ;
+et les parts en pourcentage sont inchangées, puisqu'un rapport est invariant par
+changement d'horizon — annualiser ne déforme donc aucune comparaison.
+
+Ce qui n'est PAS annualisé : le relevé mensuel, qui est un document daté, et les
+événements ponctuels. Une chaudière à 1 800 € ne coûte pas 21 600 € par an.
+
+## 20 — Contraste et couverture : ce qu'une réforme doit faire apparaître
+
+Une capture de l'écran « le choix vu par chacun » a montré **cinq personnages sur six
+affichant « aucun effet »**. Un écran de comparaison qui ne compare rien ne produit
+aucun déclic, c'est-à-dire rien du tout.
+
+Mon test censé l'empêcher comptait les *descriptions de portée*, pas les personnages
+réellement atteints : une réforme visant les seuls retraités avait bien trois
+descriptions distinctes tout en ne touchant qu'une personne sur six.
+
+Deux contrôles le remplacent, et leur répartition compte.
+
+**La couverture, option par option.** Chaque personnage doit être atteint par un
+effet, même nul. C'est la règle posée dès l'étape 7 — « un effet nul est un CONTENU,
+pas une absence de contenu ». Une réforme peut légitimement ne concerner que les
+indépendants ; ce qu'elle ne peut pas faire, c'est laisser les autres dans un silence
+que l'interface traduit par « aucune règle ne le concerne ».
+
+**Le contraste, au niveau de la réforme.** Une option peut légitimement ne rien coûter
+à personne la première année — le statu quo, le financement par l'emprunt — et c'est
+même une information importante. Le contraste se joue ENTRE les options : au moins
+l'une doit toucher plusieurs personnes, et toutes ne doivent pas produire la même
+répartition.
+
+J'avais d'abord exigé que *chaque option* touche trois personnages. C'était un
+mauvais contrôle : il forçait à inventer des effets là où il n'y en a pas, soit
+exactement la fabrication de conséquences que le projet s'interdit.
+
+Les neuf manquements relevés étaient réels, et leur correction a amélioré le fond :
+plusieurs réformes ne modélisaient que le côté bénéficiaire et jamais le côté
+financement. Nommer qui paie est pourtant l'objet même du jeu. Les contreparties
+ajoutées sont ciblées — une économie publique est supposée alléger les ménages
+imposables, pas tout le monde indistinctement — et chacune porte la mention que cette
+répartition est elle-même une hypothèse.

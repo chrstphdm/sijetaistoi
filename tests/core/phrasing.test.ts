@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { REGIME } from '@/core/impact.ts'
-import { formatDays, formatMetric, formatShare, regimeSentence } from '@/core/phrasing.ts'
+import {
+  formatDays, formatMetric, formatPerYear, formatRecurring, formatShare, regimeSentence,
+} from '@/core/phrasing.ts'
 
 describe('phrases d’impact', () => {
   it('ne décrit jamais un gain comme un coût', () => {
@@ -55,9 +57,35 @@ describe('formats français', () => {
 
   it('formate chaque échelle dans son unité', () => {
     const m = { euros: 100, income: 0.023, slack: 0.31, days: 3.2 }
-    expect(formatMetric('euros', m)).toBe('100 €')
+    // L'échelle « euros » d'un effet récurrent s'annonce à l'année.
+    expect(formatMetric('euros', m)).toBe('1 200 € par an')
     expect(formatMetric('income', m)).toBe('2,3 %')
     expect(formatMetric('slack', m)).toBe('31,0 %')
     expect(formatMetric('days', m)).toBe('3,2 jours')
+  })
+})
+
+describe('horizon annuel', () => {
+  it('annonce l’année en tête, puis le mois', () => {
+    // 204 € se perçoit, 17 € passe inaperçu. C'est le même fait.
+    expect(formatRecurring(1700)).toBe('204 € par an, soit 17 € par mois')
+  })
+
+  it('traite un gain exactement comme une perte', () => {
+    // Annualiser multiplie tout par douze, gains compris : le traitement
+    // reste symétrique et n'avantage aucun camp.
+    expect(formatRecurring(-2700)).toBe(formatRecurring(2700))
+  })
+
+  it('groupe les milliers à la française', () => {
+    expect(formatPerYear(20000)).toBe('2 400 € par an')
+  })
+
+  it('laisse les parts inchangées : un rapport ne dépend pas de l’horizon', () => {
+    // C'est ce qui garantit qu'annualiser ne déforme aucune comparaison.
+    const m = { euros: 17, income: 0.012, slack: 0.051, days: 0.5 }
+    expect(formatMetric('income', m)).toBe('1,2 %')
+    expect(formatMetric('slack', m)).toBe('5,1 %')
+    expect(formatMetric('euros', m)).toBe('204 € par an')
   })
 })

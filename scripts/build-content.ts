@@ -18,7 +18,7 @@ import { Source, Hypothesis, BudgetLineRef } from '../src/schemas/referentials.t
 import { Character } from '../src/schemas/character.ts'
 import { LifeEvent } from '../src/schemas/event.ts'
 import { Reform } from '../src/schemas/reform.ts'
-import { validateCondition, type Condition } from '../src/core/conditions.ts'
+import { evaluate, validateCondition, type Condition } from '../src/core/conditions.ts'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 const CONTENT = join(ROOT, 'content')
@@ -138,6 +138,91 @@ for (const r of reforms) {
       if (ef.hypothesisId && !hypothesisIds.has(ef.hypothesisId))
         complain(file, `options.${o.id}.effects.${ef.id}.hypothesisId`, `hypothèse inconnue : ${ef.hypothesisId}`)
     }
+  }
+}
+
+/*
+ * PORTEE REELLE D'UNE REFORME.
+ *
+ * Une reforme doit toucher plusieurs personnages du corpus, sinon l'ecran
+ * « le choix vu par chacun » affiche cinq fois « aucun effet » et ne compare
+ * rien — donc ne produit aucun declic, c'est-a-dire rien du tout.
+ *
+ * Le controle precedent comptait les DESCRIPTIONS de portee, pas les
+ * personnages atteints : une reforme visant les seuls retraites avait bien
+ * trois descriptions distinctes tout en ne touchant qu'une personne sur six.
+ * Releve sur une capture d'ecran, pas par un test.
+ */
+/** Options devant presenter un contraste entre elles, au niveau de la reforme. */
+const MIN_AFFECTED = 2
+
+for (const r of reforms) {
+  const file = `reforms/${r.id}.json`
+
+  const reachedBy = (ef: { scope: { when?: unknown } }) =>
+    characters.filter((c) =>
+      !ef.scope.when ||
+      evaluate(ef.scope.when as Condition, { ...c.traits, incomeDecile: c.identity.incomeDecile }),
+    )
+
+  /*
+   * COUVERTURE, option par option.
+   *
+   * Chaque personnage doit etre atteint par un effet, meme nul. C'est la
+   * regle posee des l'etape 7 : « un effet nul est un CONTENU, pas une
+   * absence de contenu ».
+   *
+   * Une reforme peut legitimement ne concerner que les independants. Ce
+   * qu'elle ne peut pas faire, c'est laisser les autres dans un silence que
+   * l'interface traduit par « aucune regle ne le concerne » : l'auteur doit
+   * ecrire qu'ils ne sont pas concernes, et pourquoi.
+   */
+  for (const o of r.options) {
+    const lignes = o.effects.filter((e) => e.kind === 'budget_line')
+    if (lignes.length === 0) continue
+
+    const covered = new Set(lignes.flatMap((ef) => reachedBy(ef).map((c) => c.id)))
+    const silent = characters.map((c) => c.id).filter((id) => !covered.has(id))
+    if (silent.length > 0) {
+      complain(
+        file,
+        `options.${o.id}`,
+        `laisse ${silent.join(', ')} sans aucun effet déclaré. Un effet nul est un CONTENU : ` +
+          `ajouter un effet de portée explicite à monthlyDelta 0, avec une note disant ` +
+          `pourquoi ces situations ne sont pas concernées.`,
+      )
+    }
+  }
+
+  /*
+   * CONTRASTE, au niveau de la REFORME et non de chaque option.
+   *
+   * Une option peut legitimement ne rien couter a personne la premiere
+   * annee — le statu quo, le financement par l'emprunt — et c'est meme une
+   * information importante. Le contraste se joue ENTRE les options : il
+   * faut qu'au moins l'une d'elles touche plusieurs personnes, et que
+   * toutes ne produisent pas la meme repartition.
+   */
+  const distributions = new Set<string>()
+  let bestReach = 0
+  for (const o of r.options) {
+    const affected = new Set<string>()
+    for (const ef of o.effects) {
+      if (ef.kind !== 'budget_line' || !ef.monthlyDelta) continue
+      for (const c of reachedBy(ef)) affected.add(c.id)
+    }
+    bestReach = Math.max(bestReach, affected.size)
+    distributions.add([...affected].sort().join(','))
+  }
+
+  if (bestReach < MIN_AFFECTED) {
+    complain(file, 'options',
+      `aucune option ne touche plus de ${bestReach} personnage(s) : il n'y a rien à comparer.`)
+  }
+  if (distributions.size < 3) {
+    complain(file, 'options',
+      `seulement ${distributions.size} répartition(s) distincte(s) entre les options : ` +
+        `le choix ne change pas qui est touché, donc ne fait rien apparaître.`)
   }
 }
 

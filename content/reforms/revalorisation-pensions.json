@@ -4,24 +4,80 @@
   "descriptiveTitle": "Revalorisation annuelle des pensions",
   "statedBy": "Le Conseil budgétaire, acteur fictif de ce jeu",
   "context": "Les pensions sont revalorisées chaque année selon une règle d'indexation. Le Conseil budgétaire propose de moduler cette revalorisation pour dégager 6 milliards d'euros, affectés au financement des pensions les plus faibles. Il demande comment répartir l'effort.",
-  "objective": { "amount": 6, "unit": "EUR_bn", "nature": "fiction", "note": "Montant posé par un acteur fictif du jeu. Il ne décrit aucune nécessité constatée." },
-  "contextSourceIds": ["insee-niveaux-de-vie"],
+  "objective": {
+    "amount": 6,
+    "unit": "EUR_bn",
+    "nature": "fiction",
+    "note": "Montant posé par un acteur fictif du jeu. Il ne décrit aucune nécessité constatée."
+  },
+  "contextSourceIds": [
+    "insee-niveaux-de-vie"
+  ],
   "modelLimitations": "Ce modèle calcule un écart de première année. Son effet cumulé dépend entièrement de ce qui se passe ensuite — un rattrapage ultérieur l'annule, son absence le rend permanent — et ce point est contesté. Le modèle ignore aussi les comportements d'épargne et les transferts entre générations au sein des familles.",
-
   "options": [
     {
       "id": "statu-quo",
       "label": "Ne rien changer",
       "decisionDescription": "Toutes les pensions sont revalorisées selon la règle actuelle. Les 6 Md€ ne sont pas dégagés et le minimum de pension reste à son niveau.",
-      "families": ["status_quo"],
+      "families": [
+        "status_quo"
+      ],
       "isStatusQuo": true,
       "effects": [
-        { "id": "sq-retraites", "kind": "budget_line", "code": "prestations", "monthlyDelta": 0,
-          "scope": { "when": { "and": [["activities", "contains", "retired"]] }, "description": "Retraités : revalorisation maintenue" },
-          "horizon": "y1", "uncertainty": "established" },
-        { "id": "sq-minimum", "kind": "budget_line", "code": "prestations", "monthlyDelta": -31,
-          "scope": { "when": { "and": [["activities", "contains", "retired"], ["incomeDecile", "lte", 3]] }, "description": "Retraités des trois premiers déciles : minimum non relevé" },
-          "horizon": "y1", "uncertainty": "debated", "hypothesisId": "indexation-pensions" }
+        {
+          "id": "sq-retraites",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            },
+            "description": "Retraités : revalorisation maintenue"
+          },
+          "horizon": "y1",
+          "uncertainty": "established"
+        },
+        {
+          "id": "sq-minimum",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": -31,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            },
+            "description": "Retraités : minimum de pension non relevé"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "indexation-pensions"
+        },
+        {
+          "id": "sq-actifs",
+          "kind": "budget_line",
+          "code": "impots",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Actifs : cotisations inchangées"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "indexation-pensions",
+          "note": "Aucune variation de cotisation. Les effets de long terme d'un déséquilibre non corrigé ne sont pas modélisés ici."
+        }
       ],
       "argumentsFor": [
         "Une pension résulte de cotisations versées sous des règles connues : en modifier l'indexation revient à changer le contrat après coup.",
@@ -36,16 +92,79 @@
       "id": "sous-indexation-uniforme",
       "label": "Revaloriser toutes les pensions d'un point de moins",
       "decisionDescription": "La revalorisation est réduite d'un point pour toutes les pensions, sans exception. Le produit relève le minimum de pension.",
-      "families": ["public_spending"],
+      "families": [
+        "public_spending"
+      ],
       "effects": [
-        { "id": "sui-tous", "kind": "budget_line", "code": "prestations", "monthlyDelta": -17,
-          "scope": { "when": { "and": [["activities", "contains", "retired"]] }, "description": "Tous les retraités" },
-          "horizon": "y1", "uncertainty": "established" },
-        { "id": "sui-minimum", "kind": "budget_line", "code": "prestations", "monthlyDelta": 48,
-          "scope": { "when": { "and": [["activities", "contains", "retired"], ["incomeDecile", "lte", 3]] }, "description": "Retraités des trois premiers déciles : minimum relevé" },
-          "horizon": "y1", "uncertainty": "debated", "hypothesisId": "indexation-pensions" },
-        { "id": "sui-economie", "kind": "public_finance", "publicBillions": 6,
-          "scope": { "description": "Finances publiques" }, "horizon": "y1", "uncertainty": "established" }
+        {
+          "id": "sui-tous",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": -17,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            },
+            "description": "Tous les retraités"
+          },
+          "horizon": "y1",
+          "uncertainty": "established"
+        },
+        {
+          "id": "sui-minimum",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 48,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  3
+                ]
+              ]
+            },
+            "description": "Retraités des trois premiers déciles : minimum relevé"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "indexation-pensions"
+        },
+        {
+          "id": "sui-economie",
+          "kind": "public_finance",
+          "publicBillions": 6,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "established"
+        },
+        {
+          "id": "sous-i-actifs",
+          "kind": "budget_line",
+          "code": "impots",
+          "monthlyDelta": 9,
+          "scope": {
+            "description": "Actifs : moindre besoin de financement du régime"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "indexation-pensions",
+          "note": "6 Md€ non prélevés sur les actifs, rapportés à l'ensemble. La destination réelle de l'économie est débattue."
+        }
       ],
       "argumentsFor": [
         "L'effort est réparti sur l'ensemble des pensions, ce qui évite d'avoir à fixer un seuil toujours contestable.",
@@ -60,17 +179,87 @@
       "id": "sous-indexation-ciblee",
       "label": "Ne sous-indexer qu'au-dessus d'un seuil",
       "decisionDescription": "Les pensions inférieures au seuil sont revalorisées normalement ; au-dessus, la revalorisation est réduite de deux points.",
-      "families": ["public_spending", "scope_efficiency"],
+      "families": [
+        "public_spending",
+        "scope_efficiency"
+      ],
       "isCompromise": true,
       "effects": [
-        { "id": "sic-modestes", "kind": "budget_line", "code": "prestations", "monthlyDelta": 48,
-          "scope": { "when": { "and": [["activities", "contains", "retired"], ["incomeDecile", "lte", 3]] }, "description": "Retraités des trois premiers déciles" },
-          "horizon": "y1", "uncertainty": "debated", "hypothesisId": "indexation-pensions" },
-        { "id": "sic-au-dessus", "kind": "budget_line", "code": "prestations", "monthlyDelta": -44,
-          "scope": { "when": { "and": [["activities", "contains", "retired"], ["incomeDecile", "gte", 4]] }, "description": "Retraités à partir du quatrième décile" },
-          "horizon": "y1", "uncertainty": "established" },
-        { "id": "sic-economie", "kind": "public_finance", "publicBillions": 6,
-          "scope": { "description": "Finances publiques" }, "horizon": "y1", "uncertainty": "debated", "hypothesisId": "indexation-pensions" }
+        {
+          "id": "sic-modestes",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 48,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  3
+                ]
+              ]
+            },
+            "description": "Retraités des trois premiers déciles"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "indexation-pensions"
+        },
+        {
+          "id": "sic-au-dessus",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": -44,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ],
+                [
+                  "incomeDecile",
+                  "gte",
+                  4
+                ]
+              ]
+            },
+            "description": "Retraités à partir du quatrième décile"
+          },
+          "horizon": "y1",
+          "uncertainty": "established"
+        },
+        {
+          "id": "sic-economie",
+          "kind": "public_finance",
+          "publicBillions": 6,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "indexation-pensions"
+        },
+        {
+          "id": "sous-i-actifs",
+          "kind": "budget_line",
+          "code": "impots",
+          "monthlyDelta": 9,
+          "scope": {
+            "description": "Actifs : moindre besoin de financement du régime"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "indexation-pensions",
+          "note": "6 Md€ non prélevés sur les actifs, rapportés à l'ensemble. La destination réelle de l'économie est débattue."
+        }
       ],
       "argumentsFor": [
         "L'effort porte sur les pensions qui peuvent l'absorber, et les plus faibles sont intégralement préservées.",
@@ -85,16 +274,97 @@
       "id": "cotisation-actifs",
       "label": "Prendre la même somme sur les cotisations des actifs",
       "decisionDescription": "Les pensions sont toutes revalorisées normalement, et les 6 Md€ sont prélevés sur les cotisations retraite des actifs.",
-      "families": ["levies"],
+      "families": [
+        "levies"
+      ],
       "effects": [
-        { "id": "ca-retraites", "kind": "budget_line", "code": "prestations", "monthlyDelta": 48,
-          "scope": { "when": { "and": [["activities", "contains", "retired"], ["incomeDecile", "lte", 3]] }, "description": "Retraités des trois premiers déciles : minimum relevé" },
-          "horizon": "y1", "uncertainty": "debated", "hypothesisId": "indexation-pensions" },
-        { "id": "ca-actifs", "kind": "budget_line", "code": "salaire-net", "monthlyDelta": -34,
-          "scope": { "when": { "or": [["activities", "contains", "employee"], ["activities", "contains", "self_employed"]] }, "description": "Actifs occupés" },
-          "horizon": "y1", "uncertainty": "established" },
-        { "id": "ca-recette", "kind": "public_finance", "publicBillions": 6,
-          "scope": { "description": "Finances publiques" }, "horizon": "y1", "uncertainty": "established" }
+        {
+          "id": "ca-retraites",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 48,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  3
+                ]
+              ]
+            },
+            "description": "Retraités des trois premiers déciles : minimum relevé"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "indexation-pensions"
+        },
+        {
+          "id": "ca-actifs",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": -34,
+          "scope": {
+            "when": {
+              "or": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ]
+              ]
+            },
+            "description": "Actifs occupés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established"
+        },
+        {
+          "id": "ca-recette",
+          "kind": "public_finance",
+          "publicBillions": 6,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "established"
+        },
+        {
+          "id": "ca-pensions-moyennes",
+          "kind": "budget_line",
+          "code": "impots",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ],
+                [
+                  "incomeDecile",
+                  "gte",
+                  4
+                ]
+              ]
+            },
+            "description": "Retraités à partir du quatrième décile : revalorisation normale"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Leur pension est revalorisée selon la règle habituelle, et le relèvement du minimum ne les concerne pas : ils sont au-dessus du seuil."
+        }
       ],
       "argumentsFor": [
         "Le système repose sur la solidarité entre générations : faire porter l'ajustement sur les actifs en respecte le principe.",
@@ -109,11 +379,20 @@
       "id": "contester-cadrage",
       "label": "Je conteste la façon dont la question est posée",
       "decisionDescription": "Le joueur refuse le cadrage : opposer les retraités entre eux, ou les retraités aux actifs, suppose que l'enveloppe soit fixe et que personne d'autre ne puisse contribuer.",
-      "families": ["challenge_framing"],
+      "families": [
+        "challenge_framing"
+      ],
       "effects": [
-        { "id": "cc", "kind": "service_level",
-          "scope": { "description": "Aucun effet budgétaire modélisé" }, "horizon": "y1", "uncertainty": "established",
-          "note": "Contester le cadrage ne produit aucun effet chiffré dans ce modèle. Cette absence est une limite du jeu, pas un jugement sur la pertinence de la contestation." }
+        {
+          "id": "cc",
+          "kind": "service_level",
+          "scope": {
+            "description": "Aucun effet budgétaire modélisé"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Contester le cadrage ne produit aucun effet chiffré dans ce modèle. Cette absence est une limite du jeu, pas un jugement sur la pertinence de la contestation."
+        }
       ],
       "argumentsFor": [
         "Les revenus du patrimoine ne figurent dans aucune des options, alors qu'ils représentent une part importante des ressources des ménages âgés aisés.",
