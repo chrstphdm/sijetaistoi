@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { reach } from './helpers.ts'
+import { reach, startClean } from './helpers.ts'
 
 /**
  * Le site ne doit RIEN charger ni RIEN envoyer vers l'exterieur.
@@ -80,6 +80,9 @@ test('deux parties successives ne sont pas identiques', async ({ page }) => {
 
 test('une graine donnée rejoue exactement la même partie', async ({ page }) => {
   const openWithSeed = async () => {
+    // Partie neuve a chaque fois : sans cela on REPRENDRAIT la precedente,
+    // ce qui est le comportement voulu mais ne teste pas la rejouabilite.
+    await startClean(page)
     await page.goto('/?graine=abcd2345')
     await page.getByRole('button', { name: 'Commencer' }).first().click()
     await page.getByRole('button', { name: /je commence/i }).click()

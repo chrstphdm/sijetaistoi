@@ -1611,3 +1611,171 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
   background: var(--paper-sunk);
   max-width: none;
 }
+
+/* ------------------------------------------------------------------ */
+/* Option hors de portée                                               */
+/* ------------------------------------------------------------------ */
+/* Elle reste affichée : c'est la contrainte qu'il s'agit de rendre
+   sensible, pas une option à escamoter.
+
+   Trois canaux redondants, comme partout ailleurs pour le signe : le fond
+   creusé, le libellé barré, et la mention « Hors de portée » en toutes
+   lettres. Aucun rouge, aucune croix : ce n'est ni une erreur du joueur ni
+   un échec, c'est l'état du compte. */
+.option--impossible {
+  background: var(--paper-sunk);
+  border-style: dashed;
+}
+.option--impossible h3 {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  color: var(--ink-3);
+}
+.option__barred {
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
+  margin: var(--space-2) 0 var(--space-1);
+}
+
+/* ------------------------------------------------------------------ */
+/* Navigation : évitement, retour en haut, préparation                 */
+/* ------------------------------------------------------------------ */
+
+/* Lien d'évitement : hors de l'écran tant qu'il n'a pas le focus.
+   Surtout pas `display: none` ni `visibility: hidden`, qui le retirent de
+   l'ordre de tabulation et le rendent donc inutile. */
+.skip-link {
+  position: absolute;
+  left: var(--space-4);
+  top: -4rem;
+  z-index: 50;
+  padding: var(--space-3) var(--space-4);
+  background: var(--paper-raised);
+  color: var(--ink);
+  border: 1px solid var(--rule-strong);
+  border-radius: 2px;
+  font-family: system-ui, sans-serif;
+  font-size: 15px;
+  text-decoration: none;
+  transition: top 120ms var(--ease-enter);
+}
+.skip-link:focus-visible { top: var(--space-4); }
+
+/* Le conteneur de contenu reçoit le focus au changement d'écran. Il ne
+   doit pas s'entourer d'un liseré : le focus est ici programmatique, il
+   sert au lecteur d'écran, pas à signaler une cible cliquable. */
+.layout__main:focus { outline: none; }
+
+.back-to-top {
+  position: fixed;
+  right: var(--space-4);
+  bottom: var(--space-4);
+  z-index: 40;
+  padding: var(--space-3) var(--space-4);
+  background: var(--paper-raised);
+  color: var(--ink);
+  border: 1px solid var(--rule-strong);
+  border-radius: 2px;
+  font-family: system-ui, sans-serif;
+  font-size: 14px;
+  text-decoration: none;
+  box-shadow: 0 1px 6px rgb(0 0 0 / 0.14);
+  /* Invisible ET insensible au pointeur tant qu'il n'est pas utile : sans
+     `pointer-events`, il resterait cliquable alors qu'on ne le voit pas. */
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(var(--space-2));
+  transition: opacity 160ms var(--ease-enter), transform 160ms var(--ease-enter);
+}
+.back-to-top--visible { opacity: 1; pointer-events: auto; transform: none; }
+.back-to-top:hover { background: var(--paper-sunk); }
+
+@media (prefers-reduced-motion: reduce) {
+  .skip-link, .back-to-top { transition: none; }
+  .back-to-top { transform: none; }
+}
+
+/* Écran de préparation : une ligne par acte, libellé puis menu. */
+.setup { margin: var(--space-4) 0; }
+.setup__row {
+  display: grid;
+  grid-template-columns: 6rem 1fr;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--rule-hair);
+}
+.setup__row dt { font-family: system-ui, sans-serif; font-size: 14px; color: var(--ink-2); }
+.setup__row dd { margin: 0; }
+.setup__row select { width: 100%; max-width: 100%; }
+@media (max-width: 540px) {
+  .setup__row { grid-template-columns: 1fr; gap: var(--space-1); }
+}
+
+/* ------------------------------------------------------------------ */
+/* Conservation de la partie                                           */
+/* ------------------------------------------------------------------ */
+.keep {
+  border: 1px solid var(--rule-hair);
+  border-radius: 2px;
+  padding: var(--space-4);
+  margin: var(--space-6) 0;
+  background: var(--paper-raised);
+}
+.keep legend {
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
+  padding: 0 var(--space-2);
+}
+/* Case et libellé alignés sur leur première ligne : avec `center`, un
+   libellé de trois lignes place la case à mi-hauteur, loin du texte
+   auquel elle se rapporte. */
+.keep__choice {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-3);
+  align-items: start;
+  font-family: system-ui, sans-serif;
+  font-size: 15px;
+  cursor: pointer;
+}
+.keep__choice input { margin-top: 0.2em; width: 1.1rem; height: 1.1rem; }
+
+/* ------------------------------------------------------------------ */
+/* Titre d'écran                                                       */
+/* ------------------------------------------------------------------ */
+/* Discret par construction : il situe, il ne proclame pas. Le poids
+   visuel reste sur le contenu de l'écran — le relevé, la décision — et
+   non sur une étiquette de navigation.
+
+   Pas de liseré au focus : il le reçoit par le script à chaque changement
+   d'écran, pour que le lecteur d'écran annonce où l'on arrive. Un cadre
+   apparaissant à chaque navigation serait un faux signal de cible. */
+.screen-title {
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  margin: 0 0 var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--rule-hair);
+  max-width: none;
+}
+.screen-title:focus { outline: none; }
+
+/* Les anciens h1 d'écran, devenus h2, gardent leur allure. */
+.intro__name { font-size: clamp(26px, 4vw, 34px); line-height: 1.15; }
+
+/* Relevé en déficit : les dépenses engagées dépassent ce qui entre.
+   Le cadre le signale par un trait épais à droite — un troisième canal,
+   en plus du pourcentage au-delà de 100 et de la phrase en toutes
+   lettres. Aucun rouge : ce n'est pas une faute du joueur. */
+.bar--over { border-right: 3px solid var(--rule-strong); }

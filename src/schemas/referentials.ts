@@ -39,6 +39,17 @@ export const Hypothesis = z.object({
   question: z.string().min(10),
   status: z.enum(['consensual', 'debated', 'highly_debated']),
   whyDebated: z.string().min(20),
+  /**
+   * Qui applique l'hypothese.
+   *
+   * `content` : elle calibre une ligne de budget, et un poste doit la citer.
+   * `engine` : elle est appliquee par le moteur — le seuil de tresorerie qui
+   * decide si « payer en une fois » est possible, par exemple. Aucun fichier
+   * de contenu ne la cite alors, et le controle des references orphelines ne
+   * doit pas la signaler : elle est publiee sur la page methode, a cote de la
+   * regle qu'elle gouverne.
+   */
+  appliedBy: z.enum(['content', 'engine']).default('content'),
   readings: z
     .array(
       z.object({

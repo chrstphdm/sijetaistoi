@@ -64,6 +64,15 @@ export type Draw = {
   readonly applied: readonly ConstraintId[]
   readonly relaxed: readonly ConstraintId[]
   readonly uniform: boolean
+  /**
+   * Vrai quand le personnage a ete IMPOSE et non tire.
+   *
+   * Sans ce drapeau, une partie preparee a la main depuis l'ecran de
+   * preparation ferait mentir la page methode, qui affirme que le premier
+   * personnage est tire au hasard parmi les six. Le registre de bas de page
+   * lit ce drapeau et change d'enonce en consequence.
+   */
+  readonly imposed?: boolean
 }
 
 const FILTERS: Record<
@@ -81,6 +90,19 @@ export function castFirst(pool: readonly CastingProfile[], stream: Stream): Draw
   const picked = stream.pick(ids)
   if (picked === undefined) throw new Error('aucun personnage disponible')
   return { picked, pool: ids, eligible: ids, applied: [], relaxed: [], uniform: true }
+}
+
+/**
+ * Personnage IMPOSE, depuis l'ecran de preparation.
+ *
+ * Aucun aleatoire n'est consomme : c'est voulu. Si cette fonction tirait dans
+ * un flux, le simple fait d'ouvrir l'ecran de preparation decalerait la suite
+ * de la partie, et deux parties de meme graine ne seraient plus identiques.
+ */
+export function castChosen(picked: string, pool: readonly CastingProfile[]): Draw {
+  const ids = pool.map((c) => c.id)
+  if (!ids.includes(picked)) throw new Error(`personnage inconnu : ${picked}`)
+  return { picked, pool: ids, eligible: [picked], applied: [], relaxed: [], uniform: false, imposed: true }
 }
 
 export function castNext(

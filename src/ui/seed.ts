@@ -1,3 +1,5 @@
+import { clear } from './persistence.ts'
+
 /**
  * La graine d'une partie.
  *
@@ -14,7 +16,9 @@
  * contrepartie concrete de la promesse de transparence du tirage.
  */
 
-const PARAM = 'graine'
+/** Nom du parametre d'adresse portant la graine. Partage avec setup.ts. */
+export const SEED_PARAM = 'graine'
+const PARAM = SEED_PARAM
 
 /** Graine courte, lisible, sans ambiguite a l'oral (ni 0/O ni 1/l). */
 const ALPHABET = '23456789abcdefghjkmnpqrstuvwxyz'
@@ -42,7 +46,28 @@ export function urlForSeed(seed: string): string {
   return url.toString()
 }
 
-/** Ouvre une partie neuve : nouvelle graine, et l'adresse la reflète. */
+/**
+ * Ouvre une partie neuve : nouvelle graine, et l'adresse la reflète.
+ *
+ * La partie precedente est EFFACEE, pas seulement ignoree. Elle le serait de
+ * toute facon au chargement, puisque la graine ne correspondrait plus — mais
+ * elle resterait ecrite dans le stockage de l'appareil avec les jugements
+ * politiques du joueur. Rien ne justifie de les y laisser.
+ */
 export function startFreshGame(): void {
+  clear()
   window.location.href = urlForSeed(makeSeed())
+}
+
+/**
+ * Rejoue la MEME partie depuis le debut.
+ *
+ * Sans cela, la sauvegarde rendrait la graine inutilisable pour ce a quoi
+ * elle sert : verifier qu'une partie n'etait pas arrangee suppose de pouvoir
+ * la rejouer, et rouvrir l'adresse la reprend desormais la ou on l'avait
+ * laissee.
+ */
+export function replaySameSeed(): void {
+  clear()
+  window.location.reload()
 }

@@ -4,18 +4,72 @@
   "descriptiveTitle": "Un arrêt de travail de trois semaines",
   "valence": "negative",
   "intensity": 3,
-  "dramaticFunction": ["CHOC"],
-  "eligibility": { "and": [["householdSize", "gte", 1]] },
+  "dramaticFunction": [
+    "CHOC"
+  ],
+  "eligibility": {
+    "and": [
+      [
+        "householdSize",
+        "gte",
+        1
+      ]
+    ]
+  },
   "probability": "uniform",
-  "cost": { "amount": 980, "unit": "EUR", "nature": "fiction", "range": [320, 2400], "note": "Perte nette très variable selon le statut : indemnisation, délai de carence, maintien de salaire." },
+  "cost": {
+    "amount": 980,
+    "unit": "EUR",
+    "nature": "fiction",
+    "range": [
+      320,
+      2400
+    ],
+    "note": "Perte nette très variable selon le statut : indemnisation, délai de carence, maintien de salaire."
+  },
   "text": "Trois semaines d'arrêt après une chute. Selon le statut, le revenu du mois baisse de quelques dizaines d'euros ou s'effondre.",
   "options": [
-    { "id": "respecter", "label": "Respecter l'arrêt", "effects": [{ "type": "one_off", "amount": 980 }] },
-    { "id": "reprendre-tot", "label": "Reprendre au bout d'une semaine", "effects": [{ "type": "one_off", "amount": 330 }], "narrativeTrace": "reprise-anticipee" },
-    { "id": "amenager", "label": "Travailler à distance autant que possible", "effects": [{ "type": "one_off", "amount": 540 }] }
+    {
+      "id": "respecter",
+      "label": "Respecter l'arrêt",
+      "effects": [
+        {
+          "type": "one_off",
+          "amount": 980,
+          "settlement": "income_loss"
+        }
+      ]
+    },
+    {
+      "id": "reprendre-tot",
+      "label": "Reprendre au bout d'une semaine",
+      "effects": [
+        {
+          "type": "one_off",
+          "amount": 330,
+          "settlement": "income_loss"
+        }
+      ],
+      "narrativeTrace": "reprise-anticipee"
+    },
+    {
+      "id": "amenager",
+      "label": "Travailler à distance autant que possible",
+      "effects": [
+        {
+          "type": "one_off",
+          "amount": 540,
+          "settlement": "income_loss"
+        }
+      ]
+    }
   ],
   "microQuestion": {
     "text": "Est-il normal que le même arrêt coûte très différemment selon le statut ?",
-    "principlesInTension": ["egalite-de-traitement", "besoin", "contribution-proportionnelle"]
+    "principlesInTension": [
+      "egalite-de-traitement",
+      "besoin",
+      "contribution-proportionnelle"
+    ]
   }
 }

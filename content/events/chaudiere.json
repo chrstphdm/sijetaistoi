@@ -35,7 +35,8 @@
       "effects": [
         {
           "type": "one_off",
-          "amount": 1800
+          "amount": 1800,
+          "settlement": "payment"
         }
       ]
     },

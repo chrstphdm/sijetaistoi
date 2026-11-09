@@ -26,7 +26,9 @@ export function CharacterIntro({
       <div className="intro__head">
         <Seal id={character.id} allIds={allIds} size={64}
           label={`Motif de ${identity.firstName}`} />
-        <h1 id="intro-title">Tu es {identity.firstName}.</h1>
+        {/* h2 et non h1 : le titre de l’écran est posé une seule fois,
+            par App. Deux h1 sur une page, c’est aucun. */}
+        <h2 id="intro-title" className="intro__name">Tu es {identity.firstName}.</h2>
       </div>
       <p>
         {identity.age} ans, {identity.identityLine}.

@@ -84,3 +84,28 @@ export type RandomSource = Readonly<Record<StreamName, Stream>>
 export function createRandom(seed: string): RandomSource {
   return Object.fromEntries(STREAMS.map((n) => [n, makeStream(seed, n)])) as RandomSource
 }
+
+/** Nombre de tirages consommes par chaque flux. */
+export type DrawCounts = Partial<Record<StreamName, number>>
+
+export const drawCounts = (random: RandomSource): DrawCounts =>
+  Object.fromEntries(STREAMS.map((n) => [n, random[n].draws])) as DrawCounts
+
+/**
+ * Avance les flux jusqu'a une position deja atteinte.
+ *
+ * C'est ce qui rend une partie RECHARGEE identique a une partie ininterrompue.
+ * Sans cela, relire une sauvegarde repartirait de flux neufs : le personnage
+ * tire a l'acte suivant ne serait pas celui qu'une partie non interrompue
+ * aurait donne, et la promesse « meme graine, meme partie » tomberait des le
+ * premier rechargement — sans que rien ne le signale.
+ *
+ * Avancer est exact parce que mulberry32 est un generateur a etat unique : la
+ * n-ieme valeur ne depend que de n et de la graine.
+ */
+export function advance(random: RandomSource, counts: DrawCounts): void {
+  for (const name of STREAMS) {
+    const target = counts[name] ?? 0
+    for (let i = random[name].draws; i < target; i++) random[name].next()
+  }
+}

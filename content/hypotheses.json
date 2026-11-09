@@ -194,5 +194,34 @@
         ]
       }
     ]
+  },
+  {
+    "id": "liquidite-mobilisable",
+    "question": "Quelle part de son épargne un ménage mobilise-t-il réellement pour une dépense imprévue, et jusqu'où accepte-t-il le découvert ?",
+    "status": "debated",
+    "whyDebated": "Le jeu doit décider si « payer en une fois » est possible. Il retient une règle mécanique : la trésorerie mobilisable sous sept jours, découvert autorisé compris. C'est une convention, pas une mesure : le comportement réel dépend de l'aversion au découvert, du coût des agios, de l'existence d'un proche à qui demander, et de la possibilité de négocier un délai avec le créancier — dont aucun n'est modélisé.",
+    "readings": [
+      {
+        "id": "A",
+        "mechanismLabel": "Le découvert autorisé est mobilisable comme le reste",
+        "parameters": {
+          "overdraftUsable": 1
+        },
+        "sourceIds": [
+          "insee-budget-des-familles"
+        ]
+      },
+      {
+        "id": "B",
+        "mechanismLabel": "Le découvert n'est pas mobilisé pour une dépense prévisible",
+        "parameters": {
+          "overdraftUsable": 0
+        },
+        "sourceIds": [
+          "insee-budget-des-familles"
+        ]
+      }
+    ],
+    "appliedBy": "engine"
   }
 ]

@@ -15,7 +15,26 @@ const EventOption = z.object({
   label: z.string().min(3),
   effects: z.array(
     z.discriminatedUnion('type', [
-      z.object({ type: z.literal('one_off'), amount: z.number() }),
+      z.object({
+        type: z.literal('one_off'),
+        amount: z.number(),
+        /**
+         * Une somme a sortir tout de suite, ou un flux du mois qui change ?
+         *
+         * Les deux etaient confondus, et c'etait une erreur de modele, pas
+         * une imprecision de redaction. Une chaudiere a 1 800 EUR doit etre
+         * REGLEE : il faut disposer de la somme. Un arret de travail a
+         * 980 EUR est un revenu qui n'arrive pas : on ne peut pas « ne pas
+         * avoir les moyens » de perdre un revenu, on le subit.
+         *
+         * Seul `payment` est soumis a la tresorerie disponible. Le champ est
+         * facultatif ici parce qu'un encaissement (montant negatif) n'a pas a
+         * le porter, mais le build exige qu'il soit declare des que le
+         * montant est positif : un defaut silencieux est exactement ce qui a
+         * produit l'erreur.
+         */
+        settlement: z.enum(['payment', 'income_loss']).optional(),
+      }),
       z.object({ type: z.literal('spread'), amount: z.number(), months: z.number().int().min(2) }),
       z.object({ type: z.literal('recurring'), amount: z.number(), code: Id }),
       z.object({ type: z.literal('none') }),

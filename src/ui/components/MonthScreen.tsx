@@ -5,6 +5,7 @@ import { absorptionRegime } from '@/core/impact.ts'
 import { regimeSentence } from '@/core/phrasing.ts'
 import type { Stocks } from '@/core/types.ts'
 import { euros } from '@/core/money.ts'
+import { optionAvailability } from '@/core/availability.ts'
 import { motionFor } from '@/motion/table.ts'
 import { Amount } from './Amount.tsx'
 import { MonthlyBudget } from './MonthlyBudget.tsx'
@@ -89,18 +90,41 @@ export function MonthScreen({
               <p>
                 Cette somme {regimeSentence(absorptionRegime(signedCost, budget, stocks), signedCost)}.
               </p>
+              {/* La disponibilite de chaque option est calculee, pas decorative.
+                  Une option impossible reste affichee, barree, avec son motif
+                  chiffre : c'est la contrainte qu'il s'agit de faire ressentir,
+                  pas une option a escamoter. Voir src/core/availability.ts. */}
               <ol className="options">
-                {event.options.map((o) => (
-                  <li key={o.id}>
-                    <article className="option option--personal">
-                      <ScopeMark scope="personal" who={firstName} />
-                      <h3>{o.label}</h3>
-                      <button type="button" onClick={() => onResolve(o.id)}>
-                        Choisir
-                      </button>
-                    </article>
-                  </li>
-                ))}
+                {event.options.map((o) => {
+                  const a = optionAvailability(o.effects, budget, stocks, firstName)
+                  return (
+                    <li key={o.id}>
+                      <article
+                        className={`option option--personal${
+                          a.kind === 'impossible' ? ' option--impossible' : ''
+                        }`}
+                      >
+                        <ScopeMark scope="personal" who={firstName} />
+                        <h3>{o.label}</h3>
+                        {a.kind === 'impossible' ? (
+                          <>
+                            <p className="option__barred">Hors de portée</p>
+                            <p className="provenance">{a.reason}</p>
+                          </>
+                        ) : (
+                          <>
+                            {a.kind === 'strained' && (
+                              <p className="provenance">{a.reason}</p>
+                            )}
+                            <button type="button" onClick={() => onResolve(o.id)}>
+                              Choisir
+                            </button>
+                          </>
+                        )}
+                      </article>
+                    </li>
+                  )
+                })}
               </ol>
 
               {unavailable.length > 0 && (

@@ -44,17 +44,49 @@ export function MonthlyBudget({ budget, month }: { budget: Budget; month: string
   const adjustable = Math.abs(budget.adjustableCents)
   const left = Math.max(0, budget.savingsCapacityCents)
 
+  /*
+   * LE CAS DU DEFICIT, qui etait mal rendu deux fois.
+   *
+   * Chez Claire, 1 730 EUR entrent et 1 855 EUR sont deja engages : le reste a
+   * vivre vaut −125 EUR.
+   *
+   *  1. Le solde s'affichait « 125 € », sans signe : `formatEuros` rend la
+   *     valeur absolue et le signe n'etait ajoute que pour un flux. L'ecran
+   *     affirmait donc qu'il RESTE 125 EUR a quelqu'un a qui il en MANQUE 125.
+   *     C'est exactement l'affirmation fausse que la charte interdit, et elle
+   *     jouait dans le sens de l'adoucissement des situations les plus dures.
+   *
+   *  2. La barre additionnait 107 %, 4 % et 0 % et debordait de son cadre.
+   *
+   * Les deux ont ete releves sur une CAPTURE D'ECRAN. Aucun test de DOM ne
+   * pouvait les voir : l'element existait, son texte etait « 125 € », et la
+   * somme des largeurs n'est pas une assertion que l'on pense a ecrire.
+   */
+  const deficit = budget.slackCents < 0
+
+  // Largeurs bornees : la part engagee ne peut pas depasser le cadre, et les
+  // deux autres se partagent ce qui subsiste. Les POURCENTAGES annonces,
+  // eux, restent calcules sur ce qui entre : « 107 % de ce qui entre est deja
+  // engage » est vrai, et c'est l'information la plus parlante de l'ecran.
+  const engagedWidth = Math.min(100, pct(engaged, resources))
+  const adjustableWidth = Math.min(100 - engagedWidth, pct(adjustable, resources))
+  const leftWidth = Math.max(0, 100 - engagedWidth - adjustableWidth)
+
   return (
     <section className="sheet ledger-sheet" aria-labelledby="ledger-title">
       <p className="sheet__kicker">{month}</p>
       <h2 id="ledger-title">Relevé du mois</h2>
 
       {/* Répartition : même traitement visuel pour les trois segments. */}
-      <div className="bar" role="img"
-        aria-label={`Sur ${Math.round(resources / 100)} € qui entrent : ${pct(engaged, resources)} % déjà engagés, ${pct(adjustable, resources)} % prévus mais ajustables, ${pct(left, resources)} % disponibles.`}>
-        <span className="bar__seg bar__seg--a" style={{ width: `${pct(engaged, resources)}%` }} />
-        <span className="bar__seg bar__seg--b" style={{ width: `${pct(adjustable, resources)}%` }} />
-        <span className="bar__seg bar__seg--c" style={{ width: `${pct(left, resources)}%` }} />
+      <div className={`bar${deficit ? ' bar--over' : ''}`} role="img"
+        aria-label={
+          `Sur ${Math.round(resources / 100)} € qui entrent : ${pct(engaged, resources)} % déjà engagés, ` +
+          `${pct(adjustable, resources)} % prévus mais ajustables, ${pct(left, resources)} % disponibles.` +
+          (deficit ? ` Les dépenses déjà engagées dépassent ce qui entre.` : '')
+        }>
+        <span className="bar__seg bar__seg--a" style={{ width: `${engagedWidth}%` }} />
+        <span className="bar__seg bar__seg--b" style={{ width: `${adjustableWidth}%` }} />
+        <span className="bar__seg bar__seg--c" style={{ width: `${leftWidth}%` }} />
       </div>
       <p className="bar__legend">
         <span><i className="bar__key bar__key--a" />déjà engagé {pct(engaged, resources)} %</span>
@@ -87,14 +119,30 @@ export function MonthlyBudget({ budget, month }: { budget: Budget; month: string
       {/* Même poids typographique que le total engagé, délibérément. */}
       <dl className="ledger-list">
         <div className="ledger-row ledger-row--slack">
-          <dt>Il reste, une fois l’engagé payé</dt>
-          <dd><Amount cents={budget.slackCents} nature="fiction" label="Reste à vivre" /></dd>
+          {/* « Il manque » et non « il reste » : un solde négatif annoncé
+              comme un reste est une affirmation fausse, et elle adoucit
+              précisément les situations les plus dures. */}
+          <dt>{deficit ? 'Il manque, une fois l’engagé payé' : 'Il reste, une fois l’engagé payé'}</dt>
+          <dd>
+            <Amount
+              cents={budget.slackCents} nature="fiction" signed={deficit} compact
+              label={deficit ? 'Il manque' : 'Reste à vivre'}
+            />
+          </dd>
         </div>
       </dl>
-      <p className="provenance">
-        Sur ce montant, {Math.round(adjustable / 100)} € sont déjà prévus pour des dépenses que
-        {' '}{budget.adjustableCents === 0 ? 'personne' : 'le personnage'} peut décaler.
-      </p>
+      {deficit ? (
+        <p className="provenance">
+          Ce qui est déjà engagé dépasse ce qui entre&nbsp;: le mois ne se boucle pas sans
+          toucher à {Math.round(adjustable / 100)} € de dépenses ajustables, puiser dans
+          l’épargne, ou passer à découvert.
+        </p>
+      ) : (
+        <p className="provenance">
+          Sur ce montant, {Math.round(adjustable / 100)} € sont déjà prévus pour des dépenses que
+          {' '}{budget.adjustableCents === 0 ? 'personne' : 'le personnage'} peut décaler.
+        </p>
+      )}
     </section>
   )
 }

@@ -32,8 +32,32 @@ export type Phase =
  */
 export const SEED_TEST = 'test2345'
 
+/**
+ * Repart d'une partie neuve, sauvegarde comprise.
+ *
+ * Depuis qu'une partie est conservee localement, rouvrir la meme adresse
+ * REPREND la partie au lieu de la recommencer — c'est le comportement voulu,
+ * mais un test qui veut un parcours neuf doit le dire.
+ *
+ * Surtout pas `addInitScript` : il s'execute a CHAQUE navigation, donc aussi
+ * au rechargement. Les tests de sauvegarde effacaient ainsi eux-memes ce
+ * qu'ils venaient verifier, et echouaient en accusant le code.
+ */
+export async function startClean(page: Page) {
+  await page.goto('/')
+  await page.evaluate(() => {
+    try {
+      window.sessionStorage.clear()
+      window.localStorage.clear()
+    } catch {
+      /* stockage indisponible : il n'y a rien a effacer */
+    }
+  })
+}
+
 /** Avance jusqu'à une phase donnée du parcours. */
 export async function reach(page: Page, phase: Phase) {
+  await startClean(page)
   await page.goto(`/?graine=${SEED_TEST}`)
   if (phase === 'home') return
 

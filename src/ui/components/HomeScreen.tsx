@@ -1,5 +1,6 @@
-import type { CSSProperties } from 'react'
+import { useState, type CSSProperties } from 'react'
 import { bundle, characters } from '@/content/load.ts'
+import { durability, setDurability } from '../persistence.ts'
 import { BalanceIcon, HeroCast, LookArt, TheoryIcon } from './HomeArt.tsx'
 import { LoopDiagram } from './LoopDiagram.tsx'
 import { ScaleDemo } from './ScaleDemo.tsx'
@@ -255,6 +256,7 @@ export function ContractScreen({ onStart, hypothesisSet }: {
   readonly hypothesisSet: string
 }) {
   const i = bundle.intro
+  const [keep, setKeep] = useState(() => durability() === 'device')
   return (
     <article className="sheet home" aria-labelledby="contract-title">
       <h1 id="contract-title">{i.contractTitle}</h1>
@@ -273,6 +275,33 @@ export function ContractScreen({ onStart, hypothesisSet }: {
         Cette partie utilise le jeu d’hypothèses «&nbsp;{hypothesisSet}&nbsp;», tiré au sort.
         Les points où les travaux disponibles ne convergent pas sont signalés à mesure.
       </p>
+
+      {/* OU VIT LA PARTIE, dit avant de commencer et non enfoui dans une
+          mention légale. Les jugements du joueur sur des questions politiques
+          sont des opinions politiques : des données sensibles. Le défaut est
+          donc le plus prudent — l'onglet — et la conservation durable est un
+          choix explicite. Voir src/ui/persistence.ts. */}
+      <fieldset className="keep">
+        <legend>Cette partie et toi</legend>
+        <p className="provenance">
+          Ce que tu réponds reste sur cet appareil&nbsp;: le jeu n’envoie rien, à personne.
+          Par défaut, ta partie vit le temps de cet onglet — tu peux recharger la page sans
+          rien perdre, et tout disparaît quand tu le fermes.
+        </p>
+        <label className="keep__choice">
+          <input
+            type="checkbox" checked={keep}
+            onChange={(e) => { setKeep(e.target.checked); setDurability(e.target.checked ? 'device' : 'session') }}
+          />
+          <span>
+            Garder cette partie sur cet appareil pour la reprendre plus tard.
+            <span className="provenance">
+              {' '}À éviter sur un ordinateur partagé&nbsp;: la personne suivante pourrait lire
+              ce que tu as répondu.
+            </span>
+          </span>
+        </label>
+      </fieldset>
 
       <p className="home__actions">
         <button type="button" className="home__start" onClick={onStart}>

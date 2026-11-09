@@ -1,16 +1,18 @@
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { computeMonthlyBudget } from '@/core/budget.ts'
-import { castFirst, castNext, type CastingProfile } from '@/core/casting.ts'
+import { castChosen, castFirst, castNext, type CastingProfile } from '@/core/casting.ts'
 import { selectCallback, type CallbackCandidate, type Selection } from '@/core/callback.ts'
 import { evaluate, type Condition } from '@/core/conditions.ts'
 import { apply, initialState, MONTHS_PER_ACT, ACT_COUNT, type Command, type GameState } from '@/core/game.ts'
 import { euros, formatEuros, type Cents } from '@/core/money.ts'
 import type { Judgement } from '@/core/opinion.ts'
-import { createRandom } from '@/core/rng.ts'
+import { advance, createRandom, drawCounts } from '@/core/rng.ts'
 import { activeEffectsFor, applyEffectsToLines, rulesInForce, type Rule } from '@/core/world.ts'
 import type { BudgetLine } from '@/core/types.ts'
 import { characters, events, optionLookup, reforms, toBudgetLines, toStocks } from '@/content/load.ts'
 import type { CharacterT, LifeEventT, ReformOptionT } from '@/schemas/index.ts'
+import { EMPTY_SETUP, type Setup } from './setup.ts'
+import { FORMAT_VERSION, load, save, type Saved } from './persistence.ts'
 
 /**
  * Orchestration d'une partie.
@@ -39,31 +41,97 @@ export type Step =
 
 const traitsOf = (c: CharacterT) => ({ ...c.traits, incomeDecile: c.identity.incomeDecile })
 
+const CONTENT_VERSION = '0.1.0'
+
+/**
+ * Etape, sous une forme stockable.
+ *
+ * L'etape elle-meme porte un evenement complet et une selection de rappel ;
+ * on n'en conserve que ce qui ne se recalcule pas, pour que relire une
+ * sauvegarde ne depende jamais d'un objet de contenu fige dans le stockage.
+ */
+type StepSnapshot =
+  | { readonly kind: 'month'; readonly eventId: string | null }
+  | { readonly kind: 'callback'; readonly selection: Selection }
+  | { readonly kind: Exclude<Step['kind'], 'month' | 'callback'> }
+
+const snapshotStep = (step: Step): StepSnapshot =>
+  step.kind === 'month'
+    ? { kind: 'month', eventId: step.event?.id ?? null }
+    : step.kind === 'callback'
+      ? { kind: 'callback', selection: step.selection }
+      : { kind: step.kind }
+
+const restoreStep = (snap: StepSnapshot): Step => {
+  if (snap.kind === 'month')
+    return { kind: 'month', event: events.find((e) => e.id === snap.eventId) ?? null }
+  if (snap.kind === 'callback') return { kind: 'callback', selection: snap.selection }
+  return { kind: snap.kind }
+}
+
 /** Effets recurrents accumules par les choix d'evenements. */
 type Recurring = { readonly code: string; readonly amountCents: Cents }
 
-export function useGame(seed: string) {
-  const random = useMemo(() => createRandom(seed), [seed])
-  const monthIndex = useRef(0)
+export function useGame(seed: string, setup: Setup = EMPTY_SETUP) {
+  /**
+   * Partie sauvegardee, relue UNE FOIS au montage.
+   *
+   * Ecartee si elle porte une autre graine : l'adresse fait foi, sans quoi
+   * ouvrir un lien partage rouvrirait la partie precedente a la place.
+   */
+  const restored = useMemo<Saved<StepSnapshot> | null>(() => {
+    if (typeof window === 'undefined') return null
+    const found = load<StepSnapshot>(CONTENT_VERSION)
+    return found && found.seed === seed ? found : null
+  }, [seed])
+
+  const random = useMemo(() => {
+    const r = createRandom(seed)
+    // Replacer les flux la ou ils en etaient : voir `advance` dans rng.ts.
+    // Sans cela une partie rechargee divergerait de la meme partie jouee
+    // d'une traite, en silence.
+    if (restored) advance(r, restored.cursor.draws)
+    return r
+  }, [seed, restored])
+
+  const monthIndex = useRef(restored?.cursor.monthIndex ?? 0)
+
+  const profiles = useMemo(
+    () =>
+      characters.map((c) => ({
+        id: c.id,
+        incomeDecile: c.identity.incomeDecile,
+        concernedByRule: true,
+      })),
+    [],
+  )
 
   const [journal, setJournal] = useState<readonly Command[]>(() => {
-    const draw = castFirst(
-      characters.map((c) => ({ id: c.id, incomeDecile: c.identity.incomeDecile, concernedByRule: true })),
-      random.characters,
-    )
+    if (restored) return restored.journal
+    /*
+     * Une place preparee est IMPOSEE, les autres restent tirees.
+     *
+     * `castChosen` ne consomme aucun aleatoire, de sorte qu'imposer le
+     * premier personnage ne decale pas le reste de la partie : a graine
+     * egale, les evenements du mois restent les memes.
+     */
+    const first = setup.characterIds[0]
+    const draw = first ? castChosen(first, profiles) : castFirst(profiles, random.characters)
     return [
       { type: 'start', seed, contentVersion: '0.1.0', hypothesisSetId: 'sensibilite-faible' },
       { type: 'cast', draw },
     ]
   })
 
-  const [step, setStep] = useState<Step>({ kind: 'home' })
-  const [monthsDone, setMonthsDone] = useState(0)
-  const [recurring, setRecurring] = useState<readonly Recurring[]>([])
-  const [oneOff, setOneOff] = useState<Cents>(0)
-  const [wording, setWording] = useState('')
-  const [usedEvents, setUsedEvents] = useState<readonly string[]>([])
-  const [reformIndex, setReformIndex] = useState(0)
+  const [step, setStep] = useState<Step>(() =>
+    restored ? restoreStep(restored.cursor.step) : { kind: 'home' },
+  )
+  const [monthsDone, setMonthsDone] = useState(restored?.cursor.monthsDone ?? 0)
+  const [recurring, setRecurring] = useState<readonly Recurring[]>(restored?.cursor.recurring ?? [])
+  const [oneOff, setOneOff] = useState<Cents>(restored?.cursor.oneOffCents ?? 0)
+  const [wording, setWording] = useState(restored?.cursor.wording ?? '')
+  const [usedEvents, setUsedEvents] = useState<readonly string[]>(restored?.cursor.usedEvents ?? [])
+  const [reformIndex, setReformIndex] = useState(restored?.cursor.reformIndex ?? 0)
 
   /**
    * Ordre des reformes, tire une fois au debut de la partie.
@@ -73,7 +141,20 @@ export function useGame(seed: string) {
    * vues. Le tirage passe par le flux `events`, qui porte deja ce qui
    * survient dans le monde.
    */
-  const reformOrder = useMemo(() => random.events.shuffle(reforms), [random])
+  const reformOrder = useMemo(() => {
+    const drawn = random.events.shuffle(reforms)
+    if (setup.reformIds.length === 0) return drawn
+    /*
+     * Les decisions imposees passent devant, dans l'ordre demande ; le
+     * tirage fournit les suivantes, en retirant celles deja placees pour ne
+     * pas reposer deux fois la meme question.
+     */
+    const chosen = setup.reformIds
+      .map((id) => reforms.find((r) => r.id === id))
+      .filter((r): r is NonNullable<typeof r> => r !== undefined)
+    const taken = new Set(chosen.map((r) => r.id))
+    return [...chosen, ...drawn.filter((r) => !taken.has(r.id))]
+  }, [random, setup.reformIds])
 
   const state: GameState = useMemo(
     () => journal.reduce(apply, initialState(seed, '0.1.0', 'sensibilite-faible')),
@@ -221,13 +302,20 @@ export function useGame(seed: string) {
       return
     }
     const played = state.castHistory.map((d) => d.picked)
-    const profiles: CastingProfile[] = characters.map((c) => ({
+    const pool: CastingProfile[] = characters.map((c) => ({
       id: c.id,
       incomeDecile: c.identity.incomeDecile,
       concernedByRule:
         activeEffectsFor(state.world, traitsOf(c), optionLookup).length > 0,
     }))
-    const draw = castNext(profiles, played, character.identity.incomeDecile, random.characters)
+    // La place preparee de cet acte, s'il y en a une et si elle n'a pas
+    // deja ete jouee : imposer deux fois le meme personnage n'aurait pas
+    // de sens, et le tirage normal reprend la main.
+    const imposed = setup.characterIds[state.act]
+    const draw =
+      imposed !== undefined && !played.includes(imposed)
+        ? castChosen(imposed, pool)
+        : castNext(pool, played, character.identity.incomeDecile, random.characters)
     const target = characters.find((c) => c.id === draw.picked)!
     const selection = buildCallback(target)
 
@@ -246,9 +334,38 @@ export function useGame(seed: string) {
 
   const consultOthers = () => record({ type: 'open_other_characters' })
 
+  /**
+   * Sauvegarde a chaque changement notable, et jamais depuis l'accueil.
+   *
+   * Ecrire des l'accueil enregistrerait une partie que personne n'a commencee,
+   * et la proposerait a la reprise au prochain chargement.
+   */
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    if (step.kind === 'home' || step.kind === 'contract') return
+    save({
+      format: FORMAT_VERSION,
+      seed,
+      contentVersion: CONTENT_VERSION,
+      journal,
+      cursor: {
+        step: snapshotStep(step),
+        monthsDone,
+        monthIndex: monthIndex.current,
+        reformIndex,
+        usedEvents,
+        recurring: recurring.map((r) => ({ code: r.code, amountCents: r.amountCents })),
+        oneOffCents: oneOff,
+        wording,
+        draws: drawCounts(random),
+      },
+    })
+  }, [seed, journal, step, monthsDone, reformIndex, usedEvents, recurring, oneOff, wording, random])
+
   return {
     state, step, character, budget, stocks, lines, month, reform,
     monthsDone, oneOff, wording, setWording,
+    restored: restored !== null,
     actions: { toContract, beginGame, startMonths, resolveEvent, vote, answer, answerFor, toImpact, nextAct, consultOthers },
   }
 }

@@ -4,6 +4,14 @@ import { render, screen, cleanup, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { App } from '@/ui/App.tsx'
 
+/*
+ * jsdom n'implemente pas `window.scrollTo` : il journalise « Not implemented »
+ * a chaque appel. Le remplacer par une fonction vide garde la sortie de test
+ * lisible — un bruit permanent finit par masquer une vraie erreur.
+ */
+window.scrollTo = () => {}
+
+
 afterEach(cleanup)
 
 type User = ReturnType<typeof userEvent.setup>
@@ -81,14 +89,17 @@ describe('accueil et contrat', () => {
     await user.click(screen.getAllByRole('button', { name: 'Commencer' })[0]!)
     expect(screen.queryByText(/^Tu es /)).toBeNull()
     await user.click(screen.getByRole('button', { name: /je commence/i }))
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toMatch(/Tu es \w+/)
+    // Le `h1` nomme désormais l'ÉCRAN, et « Tu es … » est un `h2` : quatre
+    // écrans de jeu sur neuf n'avaient aucun h1, donc rien ne nommait la page.
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toMatch(/^Acte 1 — \w+/)
+    expect(screen.getByRole('heading', { level: 2, name: /Tu es \w+/ })).toBeTruthy()
   })
 
   it('présente le personnage par des détails non économiques avant tout chiffre', async () => {
     const user = userEvent.setup()
     render(<App />)
     await enterGame(user)
-    const intro = screen.getByRole('heading', { level: 1 }).closest('section')!
+    const intro = screen.getByRole('heading', { level: 2, name: /Tu es \w+/ }).closest('section')!
     expect(intro.textContent).toMatch(/Tu es \w+/)
     expect(screen.queryByText('Relevé du mois')).toBeNull()
   })

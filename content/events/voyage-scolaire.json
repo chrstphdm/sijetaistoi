@@ -39,7 +39,8 @@
       "effects": [
         {
           "type": "one_off",
-          "amount": 280
+          "amount": 280,
+          "settlement": "payment"
         }
       ]
     },
@@ -60,7 +61,8 @@
       "effects": [
         {
           "type": "one_off",
-          "amount": 110
+          "amount": 110,
+          "settlement": "payment"
         }
       ],
       "narrativeTrace": "recours-fonds-social"

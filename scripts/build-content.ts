@@ -19,6 +19,9 @@ import { Character } from '../src/schemas/character.ts'
 import { LifeEvent } from '../src/schemas/event.ts'
 import { Reform } from '../src/schemas/reform.ts'
 import { evaluate, validateCondition, type Condition } from '../src/core/conditions.ts'
+import { computeMonthlyBudget } from '../src/core/budget.ts'
+import { hasChoosableOption } from '../src/core/availability.ts'
+import { toBudgetLines, toStocks, traitsOf } from '../src/content/mapping.ts'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 const CONTENT = join(ROOT, 'content')
@@ -226,6 +229,56 @@ for (const r of reforms) {
   }
 }
 
+/*
+ * TOUT DECAISSEMENT POSITIF DOIT DECLARER SA NATURE.
+ *
+ * Sans ce controle, omettre `settlement` fait silencieusement retomber
+ * l'option dans « flux du mois », donc hors de toute contrainte de
+ * tresorerie : une chaudiere a 1 800 EUR redeviendrait payable comptant par
+ * qui n'a rien. Le defaut silencieux est precisement ce qui a produit
+ * l'erreur d'origine ; il est interdit.
+ */
+for (const e of events) {
+  for (const o of e.options) {
+    for (const f of o.effects) {
+      if (f.type === 'one_off' && f.amount > 0 && f.settlement === undefined) {
+        complain(
+          `events/${e.id}.json`,
+          `options.${o.id}`,
+          `montant ponctuel de ${f.amount} € sans \`settlement\` : préciser « payment » ` +
+            `(une somme à régler, soumise à la trésorerie disponible) ou « income_loss » ` +
+            `(un revenu qui n'arrive pas, qui est subi et non financé).`,
+        )
+      }
+    }
+  }
+}
+
+/*
+ * AUCUN MOIS SANS ISSUE.
+ *
+ * Depuis que la disponibilite des options est calculee sur la tresorerie
+ * (src/core/availability.ts), un evenement dont toutes les options exigent un
+ * decaissement immediat enfermerait les personnages les moins liquides dans un
+ * ecran sans bouton. Le controle est fait ici, pour chaque couple
+ * personnage/evenement reellement possible, et non suppose a la lecture.
+ */
+for (const e of events) {
+  for (const c of characters) {
+    if (!evaluate(e.eligibility as Condition, traitsOf(c))) continue
+
+    if (!hasChoosableOption(e.options, computeMonthlyBudget(toBudgetLines(c)), toStocks(c))) {
+      complain(
+        `events/${e.id}.json`,
+        'options',
+        `aucune option n'est à la portée de ${c.identity.firstName} : toutes exigent un ` +
+          `décaissement immédiat qu'il ou elle ne peut pas régler. Ajouter un étalement, ` +
+          `un report ou un renoncement, sans quoi le mois n'a pas d'issue.`,
+      )
+    }
+  }
+}
+
 // Les sources et hypotheses orphelines ne sont pas une erreur, mais un
 // signal : du contenu a peut-etre ete supprime sans nettoyer son appui.
 const used = new Set<string>()
@@ -249,7 +302,12 @@ for (const r of reforms) {
 for (const h of hypotheses) {
   for (const r of h.readings) r.sourceIds.forEach((s) => used.add(s))
 }
-const orphans = [...sourceIds, ...hypothesisIds].filter((id) => !used.has(id))
+// Une hypothese appliquee par le MOTEUR n'est citee par aucun fichier de
+// contenu : c'est son mode normal, pas un oubli.
+const engineApplied = new Set(hypotheses.filter((h) => h.appliedBy === 'engine').map((h) => h.id))
+const orphans = [...sourceIds, ...hypothesisIds].filter(
+  (id) => !used.has(id) && !engineApplied.has(id),
+)
 
 // ---------------------------------------------------------------- sortie
 if (problems.length > 0) {

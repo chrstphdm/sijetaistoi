@@ -29,7 +29,7 @@ export function SummaryScreen({
     <>
       <section className="sheet" aria-labelledby="summary-title">
         <p className="sheet__kicker">Fin de partie</p>
-        <h1 id="summary-title">Ce que tu as décidé</h1>
+        <h2 id="summary-title" className="intro__name">Ce que tu as décidé</h2>
 
         {/* 1 — les décisions, avec la phrase du joueur */}
         <ol>

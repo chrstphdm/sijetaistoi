@@ -2,6 +2,7 @@ import { bundle } from '@/content/load.ts'
 import { CONSTRAINT_STATEMENTS, RELAXATION_ORDER } from '@/core/casting.ts'
 import { MOTION_SPEC_VERSION, THRESHOLDS, DENOMINATOR_FLOOR_CENTS } from '@/motion/intensity.ts'
 import { MOTION_TABLE } from '@/motion/table.ts'
+import { AVAILABILITY_STATEMENTS } from '@/core/availability.ts'
 import { unfavourableCap } from '@/core/callback.ts'
 import { MIN_OBSERVATIONS } from '@/core/summary.ts'
 import { Icon } from './HomeArt.tsx'
@@ -194,6 +195,25 @@ export function MethodScreen({ onBack }: { readonly onBack?: () => void }) {
               </dd>
             </div>
           </dl>
+        </section>
+
+        <section className="band" aria-labelledby="m-tresorerie">
+          <h2 id="m-tresorerie">Ce qu’un personnage peut matériellement choisir</h2>
+          <p className="lead">
+            Toutes les options ne sont pas ouvertes à tout le monde. Payer une réparation en une
+            fois suppose d’avoir la somme&nbsp;: la même panne n’est donc pas la même panne selon
+            le compte en banque. Les règles ci-dessous sont lues dans le programme.
+          </p>
+          <ul className="details">
+            {AVAILABILITY_STATEMENTS.map((r) => (
+              <li key={r}>{r}</li>
+            ))}
+          </ul>
+          <p className="provenance">
+            Ces seuils sont une hypothèse de modèle, pas une donnée sourcée. Ils ont été ajoutés
+            après avoir constaté que l’option «&nbsp;payer en une fois&nbsp;» était proposée à un
+            personnage disposant de 180&nbsp;€ pour une dépense de 750&nbsp;€.
+          </p>
         </section>
 
         <section className="band band--tint" aria-labelledby="m-tirage">

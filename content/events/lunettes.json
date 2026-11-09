@@ -4,18 +4,68 @@
   "descriptiveTitle": "Des lunettes à remplacer",
   "valence": "negative",
   "intensity": 1,
-  "dramaticFunction": ["TRAINE"],
-  "eligibility": { "and": [["householdSize", "gte", 1]] },
+  "dramaticFunction": [
+    "TRAINE"
+  ],
+  "eligibility": {
+    "and": [
+      [
+        "householdSize",
+        "gte",
+        1
+      ]
+    ]
+  },
   "probability": "uniform",
-  "cost": { "amount": 190, "unit": "EUR", "nature": "fiction", "range": [95, 340] },
+  "cost": {
+    "amount": 190,
+    "unit": "EUR",
+    "nature": "fiction",
+    "range": [
+      95,
+      340
+    ]
+  },
   "text": "L'ordonnance a changé. Avec le remboursement de base et la mutuelle, il reste 190 € à régler, ou 0 € en choisissant une monture du panier sans reste à charge.",
   "options": [
-    { "id": "monture-libre", "label": "Prendre la monture choisie", "effects": [{ "type": "one_off", "amount": 190 }] },
-    { "id": "panier-zero", "label": "Prendre une monture sans reste à charge", "effects": [{ "type": "none" }], "narrativeTrace": "panier-zero" },
-    { "id": "reporter", "label": "Reporter de quelques mois", "effects": [{ "type": "none" }], "narrativeTrace": "report-soin" }
+    {
+      "id": "monture-libre",
+      "label": "Prendre la monture choisie",
+      "effects": [
+        {
+          "type": "one_off",
+          "amount": 190,
+          "settlement": "payment"
+        }
+      ]
+    },
+    {
+      "id": "panier-zero",
+      "label": "Prendre une monture sans reste à charge",
+      "effects": [
+        {
+          "type": "none"
+        }
+      ],
+      "narrativeTrace": "panier-zero"
+    },
+    {
+      "id": "reporter",
+      "label": "Reporter de quelques mois",
+      "effects": [
+        {
+          "type": "none"
+        }
+      ],
+      "narrativeTrace": "report-soin"
+    }
   ],
   "microQuestion": {
     "text": "Un dispositif « sans reste à charge » qui limite le choix est-il un progrès ?",
-    "principlesInTension": ["besoin", "egalite-de-traitement", "liberte-de-choix"]
+    "principlesInTension": [
+      "besoin",
+      "egalite-de-traitement",
+      "liberte-de-choix"
+    ]
   }
 }
