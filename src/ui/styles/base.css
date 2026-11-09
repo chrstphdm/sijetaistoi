@@ -753,49 +753,6 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
   font-variant-numeric: tabular-nums;
 }
 
-/* Page d'accueil : un document qui se lit, avec le bouton de départ
-   répété en haut et en bas. Rien n'oblige à lire avant de jouer. */
-.home h2 { margin-top: var(--space-8); font-size: 22px; }
-.home h3 { font-size: 17px; margin-bottom: var(--space-1); }
-.home__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); }
-
-.home__cards { list-style: none; padding: 0; counter-reset: carte; }
-.home__cards li {
-  counter-increment: carte;
-  border-left: 3px solid var(--rule-hair);
-  padding-left: var(--space-4);
-  margin-bottom: var(--space-4);
-}
-.home__cards h3::before {
-  content: counter(carte) '. ';
-  color: var(--ink-3); font-variant-numeric: tabular-nums;
-}
-
-.home__theory { margin-bottom: var(--space-6); }
-
-/* L'objection n'est ni en plus petit, ni en plus pâle, ni repliée : elle a
-   le même poids que ce qu'elle conteste. L'afficher moins visiblement
-   reviendrait à recommander la thèse. */
-.home__objection {
-  display: block;
-  margin-top: var(--space-2);
-  padding-left: var(--space-4);
-  border-left: 2px dashed var(--rule);
-}
-.home__objection-tag {
-  display: block;
-  font-family: system-ui, sans-serif; font-size: 12px; font-weight: 700;
-  letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3);
-  margin-bottom: var(--space-1);
-}
-
-.home__principles { margin: var(--space-4) 0; }
-.home__principles > div {
-  padding: var(--space-3) 0;
-  border-bottom: 1px solid var(--rule-hair);
-}
-.home__principles dt { font-weight: 600; margin-bottom: var(--space-1); }
-.home__principles dd { margin: 0; max-width: var(--measure-narrative); }
 
 /* ------------------------------------------------------------------ */
 /* Schéma de la boucle                                                 */
@@ -805,7 +762,7 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
    le thème. L'équivalent textuel en légende dit exactement la même chose —
    un schéma ne porte jamais seul une information. */
 .loop { margin: var(--space-6) 0; }
-.loop__svg { width: 100%; max-width: 380px; height: auto; display: block; margin-inline: auto; }
+.loop__svg { width: 100%; max-width: 520px; height: auto; display: block; margin-inline: auto; overflow: visible; }
 .loop__ring { fill: none; stroke: var(--rule); stroke-width: 1.5; stroke-dasharray: 3 5; }
 .loop__arrow { fill: none; stroke: var(--perspective-a); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .loop__disc { fill: var(--perspective-a); }
@@ -819,11 +776,12 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
 }
 
 /* Sous 560 px le cercle devient illisible : seule la liste subsiste. */
-@media (max-width: 560px) { .loop__svg { display: none; } }
+/* Sous 520 px le cercle devient illisible : seule la liste subsiste. */
+@media (max-width: 520px) { .loop__svg { display: none; } }
 
 .loop__list { font-family: system-ui, sans-serif; font-size: 15px; margin-top: var(--space-4); }
 .loop__list li { margin-bottom: var(--space-1); }
-@media (min-width: 561px) {
+@media (min-width: 521px) {
   /* Au-delà, la liste reste pour les lecteurs d'écran mais s'efface. */
   .loop__list { font-size: 14px; color: var(--ink-2); }
 }
@@ -883,17 +841,244 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
   .demo__bars .seal { display: none; }
 }
 
-/* Galerie des six personnages : même taille de sceau, même structure de
-   ligne, même longueur de description pour chacun. La page d'accueil est
-   la première impression du casting — y avantager quelqu'un orienterait
-   avant même le premier tirage. */
-.cast { list-style: none; padding: 0; display: grid; gap: var(--space-3); }
+
+/* ================================================================== */
+/* Page d'accueil                                                      */
+/* ================================================================== */
+
+/* Elle emploie toute la largeur, contrairement au jeu : ici on présente,
+   on ne fait pas lire une situation. Seuls les blocs de prose restent à
+   une mesure lisible — une ligne de 1 200 px ne se lit pas. */
+.page { --page: 72rem; }
+.page__body { padding-bottom: var(--space-8); }
+
+.band {
+  max-width: var(--page);
+  margin-inline: auto;
+  padding: var(--space-8) var(--space-6);
+}
+/* Bandes alternées : elles découpent une page longue en étapes au lieu
+   d'un seul défilement continu.
+
+   Le fond occupe toute la largeur, mais le contenu reste calé à gauche
+   comme dans les bandes claires. La première version centrait chaque
+   enfant direct, ce qui faisait flotter les paragraphes d'introduction
+   au milieu de la page — visible seulement sur une capture. */
+.band--tint {
+  background: var(--paper-sunk);
+  max-width: none;
+  padding-inline: max(var(--space-6), calc((100% - var(--page)) / 2 + var(--space-6)));
+}
+.band--close { padding-block: var(--space-8); }
+
+.band h2 { font-size: clamp(24px, 3.2vw, 34px); margin-bottom: var(--space-3); }
+.lead { font-size: 17px; color: var(--ink-2); max-width: 60ch; margin-bottom: var(--space-6); }
+.prose { max-width: 62ch; }
+.plain { max-width: 62ch; font-size: 17px; }
+.plain li { margin-bottom: var(--space-3); }
+
+/* ---------------------------------------------------- Bandeau d'ouverture */
+
+.hero {
+  background: var(--ink);
+  color: var(--paper);
+  padding: clamp(var(--space-8), 9vw, 7rem) var(--space-6);
+}
+.hero__inner { max-width: var(--page); margin-inline: auto; }
+.hero__title {
+  font-size: clamp(40px, 8vw, 86px);
+  line-height: 1.02;
+  margin: 0 0 var(--space-4);
+  color: var(--paper);
+}
+.hero__tagline {
+  font-size: clamp(18px, 2.4vw, 26px);
+  line-height: 1.45;
+  max-width: 34ch;
+  color: var(--paper-sunk);
+  margin-bottom: var(--space-6);
+}
+.hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); max-width: none; }
+.hero__note { font-family: system-ui, sans-serif; font-size: 14px; color: var(--rule); }
+
+.home__start {
+  font-family: system-ui, sans-serif;
+  font-size: 18px; font-weight: 600;
+  padding: var(--space-3) var(--space-8);
+  /* Papier sur accent : 6,62:1. L'encre sombre sur ce même accent ne donne
+     que 2,46:1 — relevé par axe-core, pas à l'œil. */
+  background: var(--perspective-a);
+  color: var(--paper-raised);
+  border: 2px solid var(--perspective-a);
+  border-radius: 2px;
+}
+.home__start:hover {
+  background: var(--ink); border-color: var(--ink); color: var(--paper);
+}
+
+/* ------------------------------------------------------ Citation en grand */
+
+.pull {
+  margin: 0 0 var(--space-6);
+  padding-left: var(--space-6);
+  border-left: 4px solid var(--perspective-a);
+  font-size: clamp(22px, 3.4vw, 36px);
+  line-height: 1.3;
+  max-width: 24ch;
+  font-style: italic;
+}
+.pull cite {
+  display: block;
+  margin-top: var(--space-4);
+  font: 400 14px/1.5 system-ui, sans-serif;
+  font-style: normal;
+  color: var(--ink-3);
+  max-width: 40ch;
+}
+
+/* ------------------------------------------------------------ Grilles */
+
+.split { display: grid; gap: var(--space-6); align-items: start; }
+@media (min-width: 900px) { .split { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+
+.cards { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-4); }
+@media (min-width: 760px) { .cards--two { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 760px) { .cards--three { grid-template-columns: repeat(3, 1fr); } }
+
+.cards > li, .cards > article {
+  background: var(--paper-raised);
+  border: 1px solid var(--rule-hair);
+  border-top: 3px solid var(--perspective-a);
+  border-radius: 2px;
+  padding: var(--space-4);
+}
+.band--tint .cards > li, .band--tint .cards > article { background: var(--paper); }
+.cards h3 { font-size: 17px; margin-bottom: var(--space-2); }
+.cards p { font-size: 15px; max-width: none; margin-bottom: 0; }
+
+.cards--numbered { counter-reset: carte; }
+.cards--numbered > li { counter-increment: carte; }
+.cards--numbered h3::before {
+  content: counter(carte);
+  display: inline-grid; place-items: center;
+  width: 1.6em; height: 1.6em; margin-inline-end: var(--space-2);
+  background: var(--perspective-a); color: var(--paper-raised);
+  border-radius: 50%; font-size: 0.8em; font-variant-numeric: tabular-nums;
+}
+
+/* L'objection n'est ni plus petite, ni plus pâle, ni repliée : l'afficher
+   plus discrètement reviendrait à recommander la thèse. */
+.objection {
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px dashed var(--rule);
+}
+.objection__tag {
+  display: block;
+  font-family: system-ui, sans-serif; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3);
+  margin-bottom: var(--space-1);
+}
+
+/* ---------------------------------------------------------- Personnages */
+
+/* Même taille de sceau, même structure, même longueur : la page d'accueil
+   est la première impression du casting, y avantager quelqu'un orienterait
+   avant le premier tirage. */
+.cast { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-3); }
 @media (min-width: 620px) { .cast { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 980px) { .cast { grid-template-columns: repeat(3, 1fr); } }
 .cast li {
   display: flex; align-items: center; gap: var(--space-3);
-  padding: var(--space-3);
-  border: 1px solid var(--rule-hair); border-radius: 2px;
+  padding: var(--space-4);
+  background: var(--paper); border: 1px solid var(--rule-hair); border-radius: 2px;
   font-family: system-ui, sans-serif; font-size: 14px;
 }
 .cast span { display: flex; flex-direction: column; min-width: 0; }
 .cast .provenance { margin-top: 2px; }
+
+/* --------------------------------------------------- Principes en tension */
+
+/* Deux principes face à face : c'est la tension entre deux positions
+   également défendables qui fait un désaccord politique.
+
+   Le détail est replié, parce que quatorze définitions rendaient la page
+   interminable sur petit écran. La règle tient : on replie la définition ET
+   son objection ENSEMBLE, jamais l'une sans l'autre. */
+.tensions { display: grid; gap: var(--space-2); }
+
+.tension {
+  background: var(--paper);
+  border: 1px solid var(--rule-hair);
+  border-left: 3px solid var(--perspective-a);
+  border-radius: 2px;
+}
+.tension > summary {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+  font-family: system-ui, sans-serif;
+  min-height: 24px;
+}
+.tension > summary::marker { color: var(--ink-3); }
+.tension[open] > summary { border-bottom: 1px solid var(--rule-hair); }
+
+.tension__about {
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3);
+  flex: 1 1 14rem;
+}
+.tension__pair { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2); font-size: 16px; }
+
+/* Le mot « contre » est écrit, pas suggéré par la disposition seule. */
+.tension__vs {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3);
+}
+
+.tension__row { display: grid; gap: var(--space-4); padding: var(--space-4); }
+@media (min-width: 820px) { .tension__row { grid-template-columns: 1fr 1fr; } }
+.tension__row > article { border-left: 2px solid var(--rule-hair); padding-left: var(--space-4); }
+.tension__row > article:last-child { border-left-color: var(--rule); }
+.tension__row h3 { font-size: 16px; margin-bottom: var(--space-2); }
+.tension__row p { font-size: 15px; max-width: none; margin-bottom: 0; }
+
+.demo__hint { font-family: system-ui, sans-serif; font-size: 14px; color: var(--ink-2); }
+.demo__turn {
+  font-family: system-ui, sans-serif; font-size: 15px;
+  padding: var(--space-3) var(--space-4);
+  background: var(--tint-a);
+  border-left: 3px solid var(--perspective-a);
+  margin-top: var(--space-3);
+}
+
+/* ------------------------------------------------------------- Repliés */
+
+/* Même traitement que les principes : ce qui est replié l'est toujours
+   ENTIÈREMENT — une thèse n'est jamais visible sans son objection. */
+.folds { display: grid; gap: var(--space-2); }
+.fold {
+  background: var(--paper-raised);
+  border: 1px solid var(--rule-hair);
+  border-left: 3px solid var(--perspective-a);
+  border-radius: 2px;
+}
+.band--tint .fold { background: var(--paper); }
+.fold > summary {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer; min-height: 24px;
+  font-family: system-ui, sans-serif; font-size: 16px;
+}
+.fold[open] > summary { border-bottom: 1px solid var(--rule-hair); }
+.fold__hint {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink-3); margin-inline-start: auto;
+}
+.fold__body { padding: var(--space-4); }
+.fold__body p { font-size: 15px; max-width: 70ch; margin-bottom: 0; }
+
+/* Six personnages sur deux colonnes dès 440 px : empilés, ils ajoutaient
+   1 200 pixels de défilement pour six lignes de texte. */
+@media (min-width: 440px) { .cast { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 439px) { .cast li { padding: var(--space-3); } }

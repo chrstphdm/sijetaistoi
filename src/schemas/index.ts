@@ -115,7 +115,14 @@ export const ContentBundle = z.object({
   reforms: z.array(Reform),
   method: MethodPage,
   intro: IntroPage,
-  principles: z.object({ note: z.string().min(40), principles: z.array(Principle).min(10) }),
+  principles: z.object({
+    note: z.string().min(40),
+    principles: z.array(Principle).min(10),
+    /** Les principes vont par paires opposees : c'est la tension qui compte. */
+    tensions: z
+      .array(z.object({ a: Id, b: Id, about: z.string().min(10) }))
+      .min(5),
+  }),
 })
 
 export type ContentBundleT = z.infer<typeof ContentBundle>

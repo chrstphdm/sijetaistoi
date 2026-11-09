@@ -23,141 +23,201 @@ export function HomeScreen({ onStart, onMethod }: {
 }) {
   const i = bundle.intro
   const principles = bundle.principles.principles
+  const byId = new Map(principles.map((p) => [p.id, p]))
+  const allIds = characters.map((c) => c.id)
+
+  const start = (
+    <button type="button" className="home__start" onClick={onStart}>
+      {i.startLabel}
+    </button>
+  )
 
   return (
-    <article className="sheet home">
-      <h1 className="home__title">{i.title}</h1>
-      <p className="home__tagline">{i.tagline}</p>
+    <div className="page">
+      {/* Bandeau d'ouverture : le titre, la promesse, et l'action. Rien
+          d'autre — on doit pouvoir jouer sans lire une ligne de plus. */}
+      <header className="hero">
+        <div className="hero__inner">
+          <h1 className="hero__title">{i.title}</h1>
+          <p className="hero__tagline">{i.tagline}</p>
+          <p className="hero__actions">
+            {start}
+            <span className="hero__note">{i.duration}</span>
+          </p>
+        </div>
+      </header>
 
-      {i.pitch.map((p) => (
-        <p key={p}>{p}</p>
-      ))}
-
-      {/* Le bouton est répété : en haut pour qui veut jouer tout de suite,
-          en bas pour qui a lu la page. Rien n'oblige à lire. */}
-      <p className="home__actions">
-        <button type="button" className="home__start" onClick={onStart}>
-          {i.startLabel}
-        </button>
-        <span className="provenance">{i.duration}</span>
-      </p>
-
-      <section aria-labelledby="h-goal">
-        <h2 id="h-goal">{i.goalTitle}</h2>
-        {i.goal.map((p) => (
-          <p key={p}>{p}</p>
-        ))}
-      </section>
-
-      <section aria-labelledby="h-rules">
-        <h2 id="h-rules">{i.rulesTitle}</h2>
-        <LoopDiagram />
-        <ol className="home__cards">
-          {i.rules.map((r) => (
-            <li key={r.id}>
-              <h3>{r.title}</h3>
-              <p>{r.body}</p>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      {/* Chaque théorie porte son objection, et le schéma l'exige. Une
-          théorie présentée sans ce qu'on lui reproche serait recommandée,
-          pas expliquée — et le jeu se réclamerait d'une doctrine. */}
-      <section aria-labelledby="h-cast">
-        <h2 id="h-cast">Les six personnes que tu peux incarner</h2>
-        <p className="provenance">
-          Tu en incarnes trois par partie, tirées au sort. Chacune est représentée par
-          un motif abstrait plutôt que par un visage — un portrait de « mère
-          célibataire » serait une caricature en puissance. Les six motifs ont
-          exactement la même densité.
-        </p>
-        <ul className="cast">
-          {characters.map((c) => (
-            <li key={c.id}>
-              <Seal id={c.id} allIds={characters.map((x) => x.id)} size={44} />
-              <span>
-                <strong>{c.identity.firstName}</strong>, {c.identity.age} ans
-                <span className="provenance">{c.identity.identityLine}</span>
-              </span>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section aria-labelledby="h-demo">
-        <h2 id="h-demo">Essaie tout de suite&nbsp;: la même somme, quatre mesures</h2>
-        <ScaleDemo />
-      </section>
-
-      <section aria-labelledby="h-theory">
-        <h2 id="h-theory">{i.theoryTitle}</h2>
-        <p className="provenance">{i.theoryLead}</p>
-        {i.theories.map((t) => (
-          <div key={t.id} className="home__theory">
-            <h3>{t.title}</h3>
-            <p>{t.body}</p>
-            <p className="home__objection">
-              <span className="home__objection-tag">Ce qu’on lui reproche</span>
-              {t.objection}
-            </p>
+      <main className="page__body">
+        {/* Le critère de réussite, en grand : c'est la seule promesse du jeu. */}
+        <section className="band">
+          <blockquote className="pull">
+            Je n’avais pas réalisé qu’une décision que je trouvais évidente pouvait
+            être vécue comme ça par quelqu’un d’autre.
+            <cite>Le seul objectif de ce jeu, et le seul critère de sa réussite.</cite>
+          </blockquote>
+          <div className="prose">
+            {i.goal.slice(1).map((p) => (
+              <p key={p}>{p}</p>
+            ))}
           </div>
-        ))}
-      </section>
+        </section>
 
-      <section aria-labelledby="h-principles">
-        <h2 id="h-principles">{i.principlesTitle}</h2>
-        <p className="provenance">{bundle.principles.note}</p>
-        <dl className="home__principles">
-          {principles.map((p) => (
-            <div key={p.id}>
-              <dt>{p.label}</dt>
-              <dd>
-                {p.definition}
-                <span className="home__objection">
-                  <span className="home__objection-tag">Ce qu’on lui reproche</span>
-                  {p.objection}
+        <section className="band band--tint" aria-labelledby="h-rules">
+          <h2 id="h-rules">{i.rulesTitle}</h2>
+          <div className="split">
+            <LoopDiagram />
+            <ol className="cards cards--numbered">
+              {i.rules.map((r) => (
+                <li key={r.id}>
+                  <h3>{r.title}</h3>
+                  <p>{r.body}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        <section className="band" aria-labelledby="h-demo">
+          <h2 id="h-demo">La même somme, quatre façons de la mesurer</h2>
+          <p className="lead">
+            C’est l’idée centrale du jeu, et tu peux l’essayer tout de suite.
+          </p>
+          <ScaleDemo />
+        </section>
+
+        <section className="band band--tint" aria-labelledby="h-cast">
+          <h2 id="h-cast">Les six personnes que tu peux incarner</h2>
+          <p className="lead">
+            Tu en incarnes trois par partie, tirées au sort. Chacune est représentée
+            par un motif abstrait plutôt que par un visage — un portrait de «&nbsp;mère
+            célibataire&nbsp;» serait une caricature en puissance. Les six motifs ont
+            exactement la même densité.
+          </p>
+          <ul className="cast">
+            {characters.map((c) => (
+              <li key={c.id}>
+                <Seal id={c.id} allIds={allIds} size={52} />
+                <span>
+                  <strong>{c.identity.firstName}</strong>, {c.identity.age} ans
+                  <span className="provenance">{c.identity.identityLine}</span>
                 </span>
-              </dd>
-            </div>
-          ))}
-        </dl>
-      </section>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-      <section aria-labelledby="h-look">
-        <h2 id="h-look">{i.lookTitle}</h2>
-        <ol className="home__cards">
-          {i.look.map((l) => (
-            <li key={l.id}>
-              <h3>{l.title}</h3>
-              <p>{l.body}</p>
-            </li>
-          ))}
-        </ol>
-      </section>
+        {/* Chaque thèse porte son objection, au même format et au même
+            poids visuel. L'afficher plus discrètement reviendrait à
+            recommander la thèse. */}
+        <section className="band" aria-labelledby="h-theory">
+          <h2 id="h-theory">{i.theoryTitle}</h2>
+          <p className="lead">{i.theoryLead}</p>
+          {/* Repliées comme les principes, et pour la même raison : la
+              page faisait plus de 10 000 pixels sur petit écran. Thèse et
+              objection sont repliées ENSEMBLE, jamais l'une sans l'autre. */}
+          <div className="folds">
+            {i.theories.map((t) => (
+              <details key={t.id} className="fold">
+                <summary>
+                  <strong>{t.title}</strong>
+                  <span className="fold__hint">thèse et objection</span>
+                </summary>
+                <div className="fold__body">
+                  <p>{t.body}</p>
+                  <p className="objection">
+                    <span className="objection__tag">Ce qu’on lui reproche</span>
+                    {t.objection}
+                  </p>
+                </div>
+              </details>
+            ))}
+          </div>
+        </section>
 
-      <section aria-labelledby="h-not">
-        <h2 id="h-not">{i.notTitle}</h2>
-        <ul>
-          {i.notList.map((n) => (
-            <li key={n}>{n}</li>
-          ))}
-        </ul>
-      </section>
+        <section className="band band--tint" aria-labelledby="h-principles">
+          <h2 id="h-principles">{i.principlesTitle}</h2>
+          <p className="lead">{bundle.principles.note}</p>
 
-      <p className="home__actions">
-        <button type="button" className="home__start" onClick={onStart}>
-          {i.startLabel}
-        </button>
-      </p>
+          {/* En paires opposées : c'est la tension entre deux principes
+              également défendables qui fait un désaccord politique, pas un
+              principe pris isolément.
 
-      <p>
-        <button type="button" className="timeline__toggle" onClick={onMethod}>
-          {i.methodLabel}
-        </button>
-      </p>
-    </article>
+              Les détails sont repliés, parce que quatorze définitions
+              rendaient la page interminable sur petit écran — plus de
+              13 000 pixels de haut, mesurés. La règle est préservée : on
+              replie la définition ET son objection ENSEMBLE, jamais l'une
+              sans l'autre. Ce qui reste visible, le nom des deux principes
+              et ce qui les oppose, est l'information qui compte ici. */}
+          <div className="tensions">
+            {bundle.principles.tensions.map((t) => {
+              const a = byId.get(t.a)
+              const b = byId.get(t.b)
+              if (!a || !b) return null
+              return (
+                <details key={`${t.a}-${t.b}`} className="tension">
+                  <summary>
+                    <span className="tension__about">{t.about}</span>
+                    <span className="tension__pair">
+                      <strong>{a.label}</strong>
+                      <span className="tension__vs">contre</span>
+                      <strong>{b.label}</strong>
+                    </span>
+                  </summary>
+                  <div className="tension__row">
+                    {[a, b].map((p) => (
+                      <article key={p.id}>
+                        <h3>{p.label}</h3>
+                        <p>{p.definition}</p>
+                        <p className="objection">
+                          <span className="objection__tag">Ce qu’on lui reproche</span>
+                          {p.objection}
+                        </p>
+                      </article>
+                    ))}
+                  </div>
+                </details>
+              )
+            })}
+          </div>
+        </section>
+
+        <section className="band" aria-labelledby="h-look">
+          <h2 id="h-look">{i.lookTitle}</h2>
+          <div className="folds">
+            {i.look.map((l) => (
+              <details key={l.id} className="fold">
+                <summary>
+                  <strong>{l.title}</strong>
+                </summary>
+                <div className="fold__body">
+                  <p>{l.body}</p>
+                </div>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <section className="band band--tint" aria-labelledby="h-not">
+          <h2 id="h-not">{i.notTitle}</h2>
+          <ul className="cards cards--two">
+            {i.notList.map((n) => (
+              <li key={n}>
+                <p>{n}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="band band--close">
+          <p className="hero__actions">
+            {start}
+            <button type="button" className="timeline__toggle" onClick={onMethod}>
+              {i.methodLabel}
+            </button>
+          </p>
+        </section>
+      </main>
+    </div>
   )
 }
 

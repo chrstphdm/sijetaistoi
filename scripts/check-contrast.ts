@@ -59,6 +59,9 @@ const PAIRS: readonly Pair[] = [
   { fg: 'ink', bg: 'tint-a', min: 4.5, what: 'texte sur aplat A' },
   { fg: 'ink', bg: 'tint-b', min: 4.5, what: 'texte sur aplat B' },
   { fg: 'paper-raised', bg: 'perspective-a', min: 4.5, what: 'marqueur collectif (texte inversé)' },
+  { fg: 'paper-raised', bg: 'perspective-a', min: 4.5, what: 'bouton de départ' },
+  { fg: 'paper', bg: 'ink', min: 4.5, what: 'bandeau d’ouverture' },
+  { fg: 'paper-sunk', bg: 'ink', min: 4.5, what: 'accroche du bandeau' },
   { fg: 'rule-strong', bg: 'paper', min: 3, what: 'bordure de composant' },
 ]
 

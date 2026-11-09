@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import type { MonthlyBudget as Budget } from '@/core/types.ts'
 import type { LifeEventT } from '@/schemas/index.ts'
-import { absorptionRegime, REGIME } from '@/core/impact.ts'
+import { absorptionRegime } from '@/core/impact.ts'
+import { regimeSentence } from '@/core/phrasing.ts'
 import type { Stocks } from '@/core/types.ts'
 import { euros } from '@/core/money.ts'
 import { motionFor } from '@/motion/table.ts'
@@ -21,14 +22,6 @@ import { ScopeBand, ScopeMark } from './ScopeBand.tsx'
  * Le precedent SPENT a echoue mesurablement pour avoir laisse croire que la
  * situation se resout en faisant de meilleurs choix.
  */
-
-const REGIME_SENTENCE: Record<number, string> = {
-  [REGIME.IMPERCEPTIBLE]: 'ne change rien à ce mois-ci',
-  [REGIME.ABSORBED]: 'est couvert par ce qui est disponible',
-  [REGIME.ADJUSTABLE_TRADEOFF]: 'oblige à renoncer à des dépenses non contraintes',
-  [REGIME.CONSTRAINED_TRADEOFF]: 'oblige à toucher à des dépenses contraintes',
-  [REGIME.SHORTFALL]: 'ne peut pas être couvert ce mois-ci',
-}
 
 export function MonthScreen({
   budget, stocks, month, event, firstName, unavailable, onResolve,
@@ -94,7 +87,7 @@ export function MonthScreen({
           ) : (
             <>
               <p>
-                Cette somme {REGIME_SENTENCE[absorptionRegime(signedCost, budget, stocks)]}.
+                Cette somme {regimeSentence(absorptionRegime(signedCost, budget, stocks), signedCost)}.
               </p>
               <ol className="options">
                 {event.options.map((o) => (

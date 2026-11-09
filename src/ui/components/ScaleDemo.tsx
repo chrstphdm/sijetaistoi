@@ -3,6 +3,7 @@ import { computeMonthlyBudget } from '@/core/budget.ts'
 import { comparabilityMetrics, type Scale } from '@/core/impact.ts'
 import { characters, toBudgetLines } from '@/content/load.ts'
 import { euros } from '@/core/money.ts'
+import { formatMetric } from '@/core/phrasing.ts'
 import { Seal } from './Seal.tsx'
 
 /**
@@ -37,22 +38,13 @@ const SCALES: readonly { id: Scale; label: string; hint: string }[] = [
 /** Prélèvement forfaitaire : identique pour tous, en euros. */
 const LEVY = euros(-100)
 
-const format = (scale: Scale, v: number) =>
-  scale === 'euros' ? `${Math.round(v)} €`
-  : scale === 'days' ? `${v.toFixed(1)} j`
-  : `${(v * 100).toFixed(1)} %`
-
 export function ScaleDemo() {
   const [scale, setScale] = useState<Scale>('euros')
 
   const rows = characters
     .map((c) => {
-      const budget = computeMonthlyBudget(toBudgetLines(c))
-      return {
-        id: c.id,
-        name: c.identity.firstName,
-        value: comparabilityMetrics(LEVY, budget)[scale],
-      }
+      const metrics = comparabilityMetrics(LEVY, computeMonthlyBudget(toBudgetLines(c)))
+      return { id: c.id, name: c.identity.firstName, metrics, value: metrics[scale] }
     })
     .sort((a, b) => b.value - a.value)
 
@@ -83,7 +75,7 @@ export function ScaleDemo() {
         ))}
       </fieldset>
 
-      <p className="provenance">
+      <p className="demo__hint">
         Mesuré {current.label} — autrement dit&nbsp;: {current.hint}.
       </p>
 
@@ -101,10 +93,19 @@ export function ScaleDemo() {
                 style={{ width: `${max > 0 ? (r.value / max) * 100 : 0}%` }}
               />
             </span>
-            <span className="demo__value">{format(scale, r.value)}</span>
+            <span className="demo__value">{formatMetric(scale, r.metrics)}</span>
           </li>
         ))}
       </ol>
+
+      {/* En euros les six barres sont identiques, ce qui n'est pas un
+          défaut d'affichage mais le point de départ du raisonnement. Le
+          dire évite que l'écran paraisse cassé. */}
+      <p className="demo__turn">
+        {scale === 'euros'
+          ? 'Le même montant pour chacun. Mais est-ce le même effort ? Change de mesure.'
+          : 'Le prélèvement n’a pas bougé. Seule la façon de le mesurer a changé.'}
+      </p>
 
       <p className="demo__point">
         Aucune de ces quatre mesures n’est neutre. Choisir le dénominateur, c’est déjà

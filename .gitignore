@@ -8,3 +8,5 @@ content/bundle.json
 # Playwright
 test-results/
 playwright-report/
+
+captures/

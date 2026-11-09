@@ -85,5 +85,42 @@
       "definition": "Une règle qu'on ne comprend pas ne peut pas être discutée, ni contestée, ni même réclamée. La simplicité est une condition de la justice, pas un confort administratif.",
       "objection": "Une règle simple est nécessairement grossière : elle ignore des situations particulières que seule une règle complexe saurait traiter correctement."
     }
+  ],
+  "tensions": [
+    {
+      "a": "besoin",
+      "b": "merite",
+      "about": "Ce qui justifie qu’on reçoive"
+    },
+    {
+      "a": "egalite-de-traitement",
+      "b": "equite",
+      "about": "Ce qu’est traiter également"
+    },
+    {
+      "a": "solidarite",
+      "b": "responsabilite-individuelle",
+      "about": "Qui porte un risque"
+    },
+    {
+      "a": "contribution-proportionnelle",
+      "b": "contribution-progressive",
+      "about": "Ce qu’est une part juste"
+    },
+    {
+      "a": "universalite",
+      "b": "reciprocite",
+      "about": "Ce qu’un droit suppose en retour"
+    },
+    {
+      "a": "securite-economique",
+      "b": "liberte-de-choix",
+      "about": "Protéger ou laisser faire"
+    },
+    {
+      "a": "soutenabilite",
+      "b": "transparence",
+      "about": "Ce qu’une bonne règle doit être"
+    }
   ]
 }

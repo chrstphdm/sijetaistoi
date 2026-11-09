@@ -31,12 +31,24 @@ export default defineConfig({
     {
       name: 'bureau',
       use: { ...devices['Desktop Chrome'], baseURL: PREVIEW },
-      testIgnore: /studio\.spec\.ts/,
+      testIgnore: /studio\.spec\.ts|visual\.spec\.ts/,
     },
     {
       name: 'mobile',
       use: { ...devices['Pixel 5'], baseURL: PREVIEW },
-      testIgnore: /studio\.spec\.ts/,
+      testIgnore: /studio\.spec\.ts|visual\.spec\.ts/,
+    },
+    // Captures à regarder, pas des assertions : un test de DOM ne voit pas
+    // qu'un schéma déborde de la page.
+    {
+      name: 'vue-large',
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 900 }, baseURL: PREVIEW },
+      testMatch: /visual\.spec\.ts/,
+    },
+    {
+      name: 'vue-etroite',
+      use: { ...devices['Pixel 5'], baseURL: PREVIEW },
+      testMatch: /visual\.spec\.ts/,
     },
     {
       name: 'atelier',

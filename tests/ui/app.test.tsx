@@ -401,7 +401,7 @@ describe('page d’accueil visuelle', () => {
   it('laisse essayer le sélecteur d’échelle avant de commencer', async () => {
     const user = userEvent.setup()
     render(<App />)
-    const demo = screen.getByRole('heading', { name: /quatre mesures/ }).closest('section')!
+    const demo = screen.getByRole('heading', { name: /quatre façons de la mesurer/ }).closest('section')!
 
     const order = () => [...demo.querySelectorAll('.demo__name')].map((n) => n.textContent)
     const enEuros = order()
@@ -417,7 +417,7 @@ describe('page d’accueil visuelle', () => {
   it('ne présente aucune échelle comme la bonne', async () => {
     const user = userEvent.setup()
     render(<App />)
-    const demo = screen.getByRole('heading', { name: /quatre mesures/ }).closest('section')!
+    const demo = screen.getByRole('heading', { name: /quatre façons de la mesurer/ }).closest('section')!
 
     // Une seule est active à la fois, et le texte dit que le choix est une position.
     const pressed = [...demo.querySelectorAll('[aria-pressed="true"]')]
