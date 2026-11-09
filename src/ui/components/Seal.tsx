@@ -64,7 +64,29 @@ export function sealCells(id: string): readonly SealCell[] {
   return cells
 }
 
-/** Teinte attribuee par rang alphabetique, jamais par situation. */
+/**
+ * Teinte attribuee par rang alphabetique, jamais par situation.
+ *
+ * ATTENTION : cette teinte est DECORATIVE. Elle ne porte jamais l'identite
+ * d'un personnage a elle seule, et ne doit jamais le faire.
+ *
+ * Raison, etablie en passant la palette au validateur : six teintes a
+ * LUMINANCE EGALE ne peuvent pas etre separees en vision deuteranope. L'axe
+ * rouge-vert s'effondre, et l'egalite de luminance supprime justement
+ * l'indice qui resterait. Monter le chroma n'y change rien — mesure a
+ * 0,9 puis 1,1 de delta E, tres en dessous du seuil de 8.
+ *
+ * Les deux regles sont donc mathematiquement incompatibles :
+ *   - parite : meme luminance et meme chroma pour tous, sinon un
+ *     personnage parait plus present qu'un autre ;
+ *   - separation : des luminances differentes, sinon un daltonien ne
+ *     distingue pas les teintes.
+ *
+ * La parite l'emporte, parce qu'elle protege du biais ; et la separation
+ * est assuree autrement : le MOTIF differe d'un personnage a l'autre, et
+ * son PRENOM est toujours ecrit a cote. La couleur n'ajoute qu'un confort
+ * de reperage pour ceux qui la voient.
+ */
 export function sealHue(id: string, allIds: readonly string[]): number {
   const rank = [...allIds].sort().indexOf(id)
   const n = Math.max(1, allIds.length)

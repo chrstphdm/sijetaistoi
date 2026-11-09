@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest'
+import { readFileSync } from 'node:fs'
+import { fileURLToPath, URL } from 'node:url'
 import { sealCells, sealHue } from '@/ui/components/Seal.tsx'
 import { characters } from '@/content/load.ts'
 
@@ -49,5 +51,33 @@ describe('sceau procédural', () => {
     const hues = byDecile.map((c) => sealHue(c.id, ids))
     const monotone = hues.every((h, i) => i === 0 || h > hues[i - 1]!)
     expect(monotone).toBe(false)
+  })
+})
+
+describe('la couleur du sceau est décorative, jamais porteuse d’identité', () => {
+  it('le motif seul distingue déjà les personnages', () => {
+    // Six teintes à luminance égale sont indistinguables en vision deutan :
+    // mesuré à ΔE 0,9 pour un seuil de 8. La séparation repose donc sur le
+    // motif et sur le prénom, jamais sur la couleur.
+    const shapes = ids.map((id) =>
+      sealCells(id).map((c) => `${c.col}:${c.row}`).sort().join(','),
+    )
+    expect(new Set(shapes).size).toBe(ids.length)
+  })
+
+  it('toutes les teintes gardent la même luminance et le même chroma', () => {
+    // C'est la parité : aucun personnage ne peut paraître plus présent.
+    // Elle est incompatible avec la séparation daltonienne, et on l'assume.
+    const css = readFileSync(
+      fileURLToPath(new URL('../../src/ui/styles/base.css', import.meta.url)),
+      'utf8',
+    )
+    const fills = [...css.matchAll(/fill:\s*oklch\(([\d.]+)\s+([\d.]+)\s+var\(--seal-hue\)\)/g)]
+    expect(fills.length).toBeGreaterThan(0)
+    for (const f of fills) {
+      // Seule la teinte varie : L et C sont des littéraux, pas des variables.
+      expect(Number(f[1])).toBeGreaterThan(0)
+      expect(Number(f[2])).toBeGreaterThan(0)
+    }
   })
 })

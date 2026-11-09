@@ -149,3 +149,29 @@ entier : vérifié, ni le code de l'Atelier ni Zod ne sont envoyés au visiteur.
 Conséquence sur les tests : l'Atelier est désormais testé sur le serveur de
 développement, et un test vérifie qu'il est bien **absent** du build de production.
 Tester l'Atelier sur le build vérifierait quelque chose qui n'est pas livré.
+
+## 17 — La couleur des sceaux est décorative, par nécessité mathématique
+
+En rendant la page d'accueil plus visuelle, la palette des six sceaux a été passée au
+validateur plutôt qu'appréciée à l'œil. Résultat : **échec sur la séparation en vision
+deutéranope**, delta E de 0,9 là où le seuil est de 8. Monter le chroma de 0,10 à 0,17
+ne change rien.
+
+La cause est structurelle. Six teintes à **luminance égale** ne peuvent pas être
+séparées en vision deutan : l'axe rouge-vert s'effondre, et l'égalité de luminance
+supprime justement l'indice qui resterait.
+
+Deux règles du projet sont donc mathématiquement incompatibles :
+
+- **parité** — même luminance et même chroma pour tous, sinon un personnage paraît
+  plus présent qu'un autre ;
+- **séparation** — des luminances différentes, sinon une partie des joueurs ne
+  distingue pas les teintes.
+
+La parité l'emporte, parce qu'elle protège d'un biais que le joueur ne peut pas
+corriger. La séparation est assurée autrement : le **motif** du sceau diffère d'un
+personnage à l'autre, et son **prénom** est toujours écrit à côté. La couleur n'ajoute
+qu'un confort de repérage.
+
+Conséquence écrite dans le code et vérifiée par test : la couleur d'un sceau ne porte
+jamais l'identité à elle seule, nulle part.

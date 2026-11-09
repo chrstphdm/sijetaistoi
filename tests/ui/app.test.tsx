@@ -376,3 +376,65 @@ describe('page méthode', () => {
     expect(screen.getAllByRole('button', { name: 'Commencer' }).length).toBeGreaterThan(0)
   })
 })
+
+describe('page d’accueil visuelle', () => {
+  it('montre la boucle en schéma ET en texte', async () => {
+    render(<App />)
+    // Un schéma ne porte jamais seul une information : la liste dit la même
+    // chose, et c'est elle que lit un lecteur d'écran sur petit écran.
+    const figure = document.querySelector('figure.loop')!
+    expect(figure).toBeTruthy()
+    expect(figure.querySelector('svg')?.getAttribute('aria-label')).toContain('cinq temps')
+    expect(figure.querySelectorAll('.loop__list li')).toHaveLength(5)
+  })
+
+  it('présente les six personnages avec un sceau de densité identique', () => {
+    render(<App />)
+    const cast = screen.getByRole('heading', { name: /six personnes/ }).closest('section')!
+    const seals = cast.querySelectorAll('.seal')
+    expect(seals).toHaveLength(6)
+    // Même nombre de cases pour chacun : aucun ne paraît plus présent.
+    const counts = [...seals].map((s) => s.querySelectorAll('rect').length)
+    expect(new Set(counts).size).toBe(1)
+  })
+
+  it('laisse essayer le sélecteur d’échelle avant de commencer', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    const demo = screen.getByRole('heading', { name: /quatre mesures/ }).closest('section')!
+
+    const order = () => [...demo.querySelectorAll('.demo__name')].map((n) => n.textContent)
+    const enEuros = order()
+
+    await user.click(within(demo).getByRole('button', { name: 'en % du reste à vivre' }))
+    const enReste = order()
+
+    // C'est tout le propos : la même somme, un classement différent.
+    expect(enReste).not.toEqual(enEuros)
+    expect(new Set(enReste)).toEqual(new Set(enEuros))
+  })
+
+  it('ne présente aucune échelle comme la bonne', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    const demo = screen.getByRole('heading', { name: /quatre mesures/ }).closest('section')!
+
+    // Une seule est active à la fois, et le texte dit que le choix est une position.
+    const pressed = [...demo.querySelectorAll('[aria-pressed="true"]')]
+    expect(pressed).toHaveLength(1)
+    expect(demo.textContent).toContain('Choisir le dénominateur, c’est déjà choisir ce qui compte')
+
+    await user.click(within(demo).getByRole('button', { name: 'en jours de dépenses' }))
+    expect(demo.querySelectorAll('[aria-pressed="true"]')).toHaveLength(1)
+  })
+
+  it('les barres emploient une seule couleur, l’identité étant portée par le nom', () => {
+    render(<App />)
+    const fills = [...document.querySelectorAll('.demo__fill')]
+    expect(fills.length).toBe(6)
+    // Une seule série : les barres comparent une grandeur, pas des identités.
+    const classes = new Set(fills.map((f) => f.className))
+    expect(classes.size).toBe(1)
+    expect(document.querySelectorAll('.demo__name')).toHaveLength(6)
+  })
+})

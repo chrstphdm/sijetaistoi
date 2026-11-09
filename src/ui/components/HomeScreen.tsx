@@ -1,4 +1,7 @@
-import { bundle } from '@/content/load.ts'
+import { bundle, characters } from '@/content/load.ts'
+import { LoopDiagram } from './LoopDiagram.tsx'
+import { ScaleDemo } from './ScaleDemo.tsx'
+import { Seal } from './Seal.tsx'
 
 /**
  * Accueil et contrat.
@@ -48,6 +51,7 @@ export function HomeScreen({ onStart, onMethod }: {
 
       <section aria-labelledby="h-rules">
         <h2 id="h-rules">{i.rulesTitle}</h2>
+        <LoopDiagram />
         <ol className="home__cards">
           {i.rules.map((r) => (
             <li key={r.id}>
@@ -61,6 +65,32 @@ export function HomeScreen({ onStart, onMethod }: {
       {/* Chaque théorie porte son objection, et le schéma l'exige. Une
           théorie présentée sans ce qu'on lui reproche serait recommandée,
           pas expliquée — et le jeu se réclamerait d'une doctrine. */}
+      <section aria-labelledby="h-cast">
+        <h2 id="h-cast">Les six personnes que tu peux incarner</h2>
+        <p className="provenance">
+          Tu en incarnes trois par partie, tirées au sort. Chacune est représentée par
+          un motif abstrait plutôt que par un visage — un portrait de « mère
+          célibataire » serait une caricature en puissance. Les six motifs ont
+          exactement la même densité.
+        </p>
+        <ul className="cast">
+          {characters.map((c) => (
+            <li key={c.id}>
+              <Seal id={c.id} allIds={characters.map((x) => x.id)} size={44} />
+              <span>
+                <strong>{c.identity.firstName}</strong>, {c.identity.age} ans
+                <span className="provenance">{c.identity.identityLine}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section aria-labelledby="h-demo">
+        <h2 id="h-demo">Essaie tout de suite&nbsp;: la même somme, quatre mesures</h2>
+        <ScaleDemo />
+      </section>
+
       <section aria-labelledby="h-theory">
         <h2 id="h-theory">{i.theoryTitle}</h2>
         <p className="provenance">{i.theoryLead}</p>
