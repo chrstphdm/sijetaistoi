@@ -52,5 +52,104 @@
     "url": "https://www.insee.fr/fr/statistiques/serie/010752747",
     "vintage": "2024",
     "scope": "Revenus des indépendants et dirigeants de TPE, dont artisanat du bâtiment."
+  },
+  {
+    "id": "unedic-allocations",
+    "name": "Les allocations d'assurance chômage",
+    "organisation": "Unédic",
+    "affiliation": "public_institution",
+    "url": "https://www.unedic.org/",
+    "vintage": "2025",
+    "scope": "Montants, durées et conditions d'indemnisation de l'assurance chômage."
+  },
+  {
+    "id": "drees-minima-sociaux",
+    "name": "Minima sociaux et prestations sociales",
+    "organisation": "DREES",
+    "affiliation": "public_institution",
+    "url": "https://drees.solidarites-sante.gouv.fr/",
+    "vintage": "2025",
+    "scope": "Montants et bénéficiaires du RSA, de l'allocation aux adultes handicapés et des pensions d'invalidité."
+  },
+  {
+    "id": "ancols-loyers-sociaux",
+    "name": "Le parc locatif social",
+    "organisation": "ANCOLS",
+    "affiliation": "public_institution",
+    "url": "https://www.ancols.fr/",
+    "vintage": "2025",
+    "scope": "Niveaux de loyer et de charges dans le parc locatif social, par zone."
+  },
+  {
+    "id": "olap-loyers-idf",
+    "name": "Observatoire des loyers de l'agglomération parisienne",
+    "organisation": "OLAP",
+    "affiliation": "public_institution",
+    "url": "https://www.observatoire-des-loyers.fr/",
+    "vintage": "2026",
+    "scope": "Niveaux de loyer du parc privé en Île-de-France, par commune et par type de logement."
+  },
+  {
+    "id": "dares-contrats-courts",
+    "name": "Intérim, contrats courts et temps partiel",
+    "organisation": "DARES",
+    "affiliation": "public_institution",
+    "url": "https://dares.travail-emploi.gouv.fr/",
+    "vintage": "2025",
+    "scope": "Volume d'heures, rémunérations et durée des missions d'intérim ; temps partiel subi."
+  },
+  {
+    "id": "insee-patrimoine",
+    "name": "Histoire de vie et patrimoine des ménages",
+    "organisation": "INSEE",
+    "affiliation": "statistics_body",
+    "url": "https://www.insee.fr/",
+    "vintage": "2024",
+    "scope": "Distribution du patrimoine net et des revenus du patrimoine par décile."
+  },
+  {
+    "id": "cor-retraites",
+    "name": "Rapport annuel du Conseil d'orientation des retraites",
+    "organisation": "COR",
+    "affiliation": "public_institution",
+    "url": "https://www.cor-retraites.fr/",
+    "vintage": "2025",
+    "scope": "Âge de départ, durée de cotisation, projections financières du système de retraite."
+  },
+  {
+    "id": "drees-aidants",
+    "name": "Les proches aidants",
+    "organisation": "DREES",
+    "affiliation": "public_institution",
+    "url": "https://drees.solidarites-sante.gouv.fr/",
+    "vintage": "2025",
+    "scope": "Nombre de proches aidants, restes à charge en établissement, participation financière des familles."
+  },
+  {
+    "id": "cpo-capital",
+    "name": "Rapports du Conseil des prélèvements obligatoires",
+    "organisation": "Conseil des prélèvements obligatoires",
+    "affiliation": "public_institution",
+    "url": "https://www.ccomptes.fr/fr/conseil-des-prelevements-obligatoires",
+    "vintage": "2025",
+    "scope": "Imposition des revenus et du patrimoine des ménages, rendement et comportements."
+  },
+  {
+    "id": "groupe-experts-smic",
+    "name": "Rapport du groupe d'experts sur le salaire minimum",
+    "organisation": "Groupe d'experts SMIC",
+    "affiliation": "academic",
+    "url": "https://www.strategie.gouv.fr/",
+    "vintage": "2025",
+    "scope": "Niveau du salaire minimum, effets sur l'emploi et sur la distribution des salaires."
+  },
+  {
+    "id": "gart-transports",
+    "name": "Transport public urbain : chiffres et financement",
+    "organisation": "GART",
+    "affiliation": "professional_body",
+    "url": "https://www.gart.org/",
+    "vintage": "2025",
+    "scope": "Fréquentation, tarification et financement des réseaux de transport public urbain."
   }
 ]

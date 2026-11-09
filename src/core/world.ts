@@ -84,6 +84,41 @@ export type ResolvedEffect = {
 export type OptionLookup = (reformId: string, optionId: string) => readonly Effect[] | undefined
 
 /**
+ * Effets DEJA EN VIGUEUR, par opposition a ceux qui le seront.
+ *
+ * Un effet d'horizon `y5` ne modifie pas le mois en cours. Tant que tout le
+ * corpus portait l'horizon `y1`, la distinction ne se voyait pas ; elle est
+ * devenue fausse le jour ou des mesures a effet differe sont entrees dans le
+ * contenu — un plafonnement de loyer n'agit qu'a la relocation, un decalage
+ * de l'age de depart n'agit pas avant dix ans. Le releve mensuel les
+ * affichait comme acquis.
+ *
+ * Le filtre n'est pas un defaut applique partout : l'ecran de comparaison
+ * montre bien les effets differes, mais en disant a partir de quand.
+ */
+export const startsAtYear = (horizon: string): number =>
+  horizon === 'y10' ? 10 : horizon === 'y5' ? 5 : 1
+
+export const inForceNow = (effects: readonly ResolvedEffect[]): readonly ResolvedEffect[] =>
+  effects.filter((e) => startsAtYear(e.effect.horizon) <= 1)
+
+/**
+ * Le personnage est-il concerne DE FACON PERCEPTIBLE par une regle en vigueur ?
+ *
+ * C'est l'enonce exact de la contrainte de casting publiee au joueur. Il etait
+ * implemente par « au moins un effet le vise », ce qui a cesse de vouloir dire
+ * quelque chose : le controle de couverture du build oblige chaque option a
+ * atteindre tout le monde, effet nul compris. Cinquante-deux options sur
+ * soixante-cinq atteignent ainsi les treize personnages, et la contrainte
+ * etait donc vraie pour chacun — donc ne selectionnait personne, tout en
+ * restant affichee dans le registre comme si elle agissait.
+ *
+ * « Perceptible » veut dire : son budget mensuel change, maintenant.
+ */
+export const perceptiblyConcerned = (effects: readonly ResolvedEffect[]): boolean =>
+  inForceNow(effects).some((e) => e.deltaCents !== 0)
+
+/**
  * Effets en vigueur sur un personnage donne.
  *
  * Un effet dont la portee ne couvre pas le personnage n'est pas ignore en

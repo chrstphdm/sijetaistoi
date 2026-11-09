@@ -87,14 +87,24 @@
                   "activities",
                   "contains",
                   "retired"
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
                 ]
               ]
             },
-            "description": "Salariés, étudiants et retraités : régime inchangé"
+            "description": "Salariés, étudiants, retraités, demandeurs d'emploi et personnes sans activité : régime inchangé"
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Les salariés, étudiants et retraités relèvent d'un autre régime : leur protection et leurs cotisations sont inchangées. Cette réforme ne les concerne pas."
+          "note": "Les salariés, étudiants et retraités relèvent d'un autre régime : leur protection et leurs cotisations sont inchangées. Cette réforme ne les concerne pas. Les demandeurs d'emploi et les personnes sans activité ne relèvent d'aucun des deux régimes : la question ne se pose pas pour eux, et elle ne se posera que s'ils reprennent une activité."
         }
       ],
       "argumentsFor": [
@@ -189,14 +199,24 @@
                   "activities",
                   "contains",
                   "retired"
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
                 ]
               ]
             },
-            "description": "Salariés, étudiants et retraités : régime inchangé"
+            "description": "Salariés, étudiants, retraités, demandeurs d'emploi et personnes sans activité : régime inchangé"
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Salariés, étudiants et retraités ne sont pas concernés : l'alignement se fait SUR leur régime, qui ne change pas."
+          "note": "Salariés, étudiants et retraités ne sont pas concernés : l'alignement se fait SUR leur régime, qui ne change pas. Les demandeurs d'emploi et les personnes sans activité sont hors du champ : l'alignement porte sur des cotisations qu'ils ne versent pas."
         }
       ],
       "argumentsFor": [
@@ -292,14 +312,24 @@
                   "activities",
                   "contains",
                   "retired"
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
                 ]
               ]
             },
-            "description": "Salariés, étudiants et retraités : régime inchangé"
+            "description": "Salariés, étudiants, retraités, demandeurs d'emploi et personnes sans activité : régime inchangé"
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Salariés, étudiants et retraités ne sont pas concernés : leur indemnisation des arrêts courts existe déjà et n'est pas modifiée."
+          "note": "Salariés, étudiants et retraités ne sont pas concernés : leur indemnisation des arrêts courts existe déjà et n'est pas modifiée. Les demandeurs d'emploi et les personnes sans activité sont hors du champ, pour la même raison."
         }
       ],
       "argumentsFor": [

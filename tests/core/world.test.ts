@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import {
   applyRule, activeEffectsFor, applyEffectsToLines, emptyWorld,
-  publicFinanceImpact, rulesInForce, type Effect, type Rule, type WorldState,
+  inForceNow, perceptiblyConcerned, publicFinanceImpact, rulesInForce, startsAtYear,
+  type Effect, type Rule, type WorldState,
 } from '@/core/world.ts'
 import { computeMonthlyBudget } from '@/core/budget.ts'
 import { euros } from '@/core/money.ts'
@@ -137,5 +138,90 @@ describe('application au budget', () => {
     const before = computeMonthlyBudget(base)
     const after = computeMonthlyBudget(applyEffectsToLines(base, activeEffectsFor(w, collectif, lookup)))
     expect(before.slackCents - after.slackCents).toBe(euros(14))
+  })
+})
+
+/**
+ * HORIZON : ce qui s'applique maintenant, et ce qui s'appliquera.
+ *
+ * Tant que tout le corpus portait l'horizon `y1`, rien ne distinguait les
+ * deux. Des mesures a effet differe — un plafonnement de loyer qui n'agit
+ * qu'a la relocation, un decalage de l'age de depart qui n'agit pas avant dix
+ * ans — ont rendu la confusion fausse : le releve mensuel les affichait comme
+ * acquises.
+ */
+describe('horizon d’un effet', () => {
+  const differes: Record<string, Effect[]> = {
+    'mixte': [
+      { id: 'maintenant', kind: 'budget_line', code: 'energie', monthlyDelta: -20,
+        scope: { description: 'tous' }, horizon: 'y1', uncertainty: 'established' },
+      { id: 'plus-tard', kind: 'budget_line', code: 'logement', monthlyDelta: 150,
+        scope: { description: 'tous' }, horizon: 'y5', uncertainty: 'established' },
+      { id: 'bien-plus-tard', kind: 'budget_line', code: 'logement', monthlyDelta: 40,
+        scope: { description: 'tous' }, horizon: 'y10', uncertainty: 'established' },
+    ],
+    'tout-differe': [
+      { id: 'seul', kind: 'budget_line', code: 'logement', monthlyDelta: 150,
+        scope: { description: 'tous' }, horizon: 'y5', uncertainty: 'established' },
+    ],
+    'nul-partout': [
+      { id: 'zero', kind: 'budget_line', code: 'logement', monthlyDelta: 0,
+        scope: { description: 'propriétaires occupants' }, horizon: 'y1', uncertainty: 'established' },
+    ],
+  }
+  const lk = (_r: string, o: string) => differes[o]
+  const qui = { heating: 'collective', activities: ['employee'], incomeDecile: 4 }
+  const monde = (optionId: string) => applyRule(emptyWorld('x'), rule({ optionId }))
+  const ligne = (code: string, group: BudgetLine['group'], amount: number): BudgetLine => ({
+    code, group, amountCents: amount,
+    value: { amount: Math.abs(amount) / 100, unit: 'EUR_month', nature: 'fiction' },
+  })
+
+  it('date le début de chaque horizon', () => {
+    expect(startsAtYear('month')).toBe(1)
+    expect(startsAtYear('y1')).toBe(1)
+    expect(startsAtYear('y5')).toBe(5)
+    expect(startsAtYear('y10')).toBe(10)
+  })
+
+  it('ne retient dans le mois en cours que ce qui s’y applique', () => {
+    const tous = activeEffectsFor(monde('mixte'), qui, lk)
+    expect(tous).toHaveLength(3)
+    const now = inForceNow(tous)
+    expect(now.map((e) => e.effect.id)).toEqual(['maintenant'])
+  })
+
+  it('un effet entièrement différé ne change pas le budget du mois', () => {
+    const effets = activeEffectsFor(monde('tout-differe'), qui, lk)
+    const lignes = [
+      ligne('salaire-net', 'resource', euros(2000)),
+      ligne('logement', 'constrained', euros(-700)),
+    ]
+    const maintenant = computeMonthlyBudget(applyEffectsToLines(lignes, inForceNow(effets)))
+    const plusTard = computeMonthlyBudget(applyEffectsToLines(lignes, effets))
+    expect(maintenant.slackCents).toBe(computeMonthlyBudget(lignes).slackCents)
+    expect(plusTard.slackCents).not.toBe(maintenant.slackCents)
+  })
+
+  /*
+   * CONTRAINTE DE CASTING PUBLIEE.
+   *
+   * « Le tirage privilégie un personnage qu'une règle déjà décidée concerne
+   * de façon perceptible » est affiché au joueur dans le registre. Elle etait
+   * implementee par « au moins un effet le vise », ce qui est vrai de tout le
+   * monde depuis que le controle de couverture du build oblige chaque option
+   * a atteindre les treize personnages, effet nul compris : cinquante-deux
+   * options sur soixante-cinq les atteignent toutes. La contrainte ne
+   * selectionnait donc plus personne, tout en restant affichee.
+   */
+  it('« concerné de façon perceptible » exige que le budget bouge, maintenant', () => {
+    // Atteint par un effet déclaré, mais nul : non concerné perceptiblement.
+    expect(perceptiblyConcerned(activeEffectsFor(monde('nul-partout'), qui, lk))).toBe(false)
+    // Atteint par un effet réel, mais à cinq ans : pas encore perceptible.
+    expect(perceptiblyConcerned(activeEffectsFor(monde('tout-differe'), qui, lk))).toBe(false)
+    // Atteint par un effet réel et immédiat.
+    expect(perceptiblyConcerned(activeEffectsFor(monde('mixte'), qui, lk))).toBe(true)
+    // Aucune règle ne le vise : pas concerné non plus.
+    expect(perceptiblyConcerned([])).toBe(false)
   })
 })

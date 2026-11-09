@@ -22,7 +22,9 @@
     "heating": "collective",
     "householdSize": 2,
     "childCount": 1,
-    "hasSchoolAgedChild": true
+    "hasSchoolAgedChild": true,
+    "housingZone": "detendue",
+    "recognisedDisability": false
   },
   "budget": {
     "lines": [

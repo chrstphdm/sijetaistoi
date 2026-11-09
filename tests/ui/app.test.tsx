@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { render, screen, cleanup, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { App } from '@/ui/App.tsx'
+import { characters } from '@/content/load.ts'
 
 /*
  * jsdom n'implemente pas `window.scrollTo` : il journalise « Not implemented »
@@ -399,14 +400,24 @@ describe('page d’accueil visuelle', () => {
     expect(figure.querySelectorAll('.loop__list li')).toHaveLength(5)
   })
 
-  it('présente les six personnages avec un sceau de densité identique', () => {
+  it('présente tout le corpus avec un sceau de densité identique', () => {
     render(<App />)
-    const cast = screen.getByRole('heading', { name: /six personnes/ }).closest('section')!
+    const cast = screen.getByRole('heading', { name: /personnes que tu peux incarner/ }).closest('section')!
     const seals = cast.querySelectorAll('.seal')
-    expect(seals).toHaveLength(6)
+    // Comparé au CORPUS, jamais à un nombre écrit en dur : la galerie montre
+    // tout le monde, et ajouter un personnage sans l'y faire figurer serait
+    // un corpus déclaré plus large qu'il n'est montré.
+    expect(seals).toHaveLength(characters.length)
     // Même nombre de cases pour chacun : aucun ne paraît plus présent.
     const counts = [...seals].map((s) => s.querySelectorAll('rect').length)
     expect(new Set(counts).size).toBe(1)
+    // Et des motifs tous différents : la couleur ne pouvant pas porter
+    // l'identité en vision daltonienne, c'est le motif qui la porte. Deux
+    // sceaux identiques la supprimeraient.
+    const motifs = [...seals].map((s) =>
+      [...s.querySelectorAll('rect')].map((r) => `${r.getAttribute('x')},${r.getAttribute('y')}`).join('|'),
+    )
+    expect(new Set(motifs).size).toBe(characters.length)
   })
 
   it('laisse essayer le sélecteur d’échelle avant de commencer', async () => {
@@ -442,11 +453,11 @@ describe('page d’accueil visuelle', () => {
   it('les barres emploient une seule couleur, l’identité étant portée par le nom', () => {
     render(<App />)
     const fills = [...document.querySelectorAll('.demo__fill')]
-    expect(fills.length).toBe(6)
+    expect(fills.length).toBe(characters.length)
     // Une seule série : les barres comparent une grandeur, pas des identités.
     const classes = new Set(fills.map((f) => f.className))
     expect(classes.size).toBe(1)
-    expect(document.querySelectorAll('.demo__name')).toHaveLength(6)
+    expect(document.querySelectorAll('.demo__name')).toHaveLength(characters.length)
   })
 })
 
@@ -461,17 +472,17 @@ describe('projection sur dix ans', () => {
     await user.click(screen.getByRole('button', { name: /Voir le bilan/ }))
   }
 
-  it('montre une courbe par personnage, jamais six superposées', async () => {
-    // Les six teintes ont volontairement la même luminance : elles ne
-    // peuvent pas porter l'identité en vision daltonienne. Petits
-    // multiples, donc, chacun portant un nom écrit.
+  it('montre une courbe par personnage, jamais toutes superposées', async () => {
+    // Les teintes ont volontairement la même luminance : elles ne peuvent
+    // pas porter l'identité en vision daltonienne. Petits multiples, donc,
+    // chacun portant un nom écrit.
     const user = userEvent.setup()
     render(<App />)
     await playFullGame(user)
 
     const proj = screen.getByRole('heading', { name: /sur dix ans/ }).closest('section')!
-    expect(proj.querySelectorAll('.proj__chart')).toHaveLength(6)
-    expect(proj.querySelectorAll('.proj > li')).toHaveLength(6)
+    expect(proj.querySelectorAll('.proj__chart')).toHaveLength(characters.length)
+    expect(proj.querySelectorAll('.proj > li')).toHaveLength(characters.length)
   })
 
   it('emploie une seule couleur de courbe et une échelle commune', async () => {

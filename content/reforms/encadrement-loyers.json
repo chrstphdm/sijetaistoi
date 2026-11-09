@@ -1,0 +1,890 @@
+{
+  "id": "encadrement-loyers",
+  "charterVersion": "1.0",
+  "descriptiveTitle": "Encadrement des loyers en zone tendue",
+  "statedBy": "Le Conseil du logement, acteur fictif de ce jeu",
+  "context": "Le Conseil du logement constate que les loyers du parc privé ont progressé plus vite que les revenus dans les agglomérations classées en zone tendue, et propose de plafonner les loyers par référence à un loyer médian, avec sanction au-delà. Trois autres directions sont examinées : un plafonnement assorti d'une incitation à remettre des logements en location, une revalorisation des aides au logement plutôt qu'un plafond, ou le maintien du droit existant. Aucune somme n'est à trouver : il s'agit de fixer une règle, et deux des options coûtent de l'argent public plutôt qu'elles n'en rapportent.",
+  "objective": {
+    "amount": 0,
+    "unit": "EUR_bn",
+    "nature": "fiction",
+    "note": "Objectif budgétaire nul, et c'est délibéré. Cette décision ne cherche pas à lever une somme : elle fixe une règle. Les réformes posées sous la forme « il manque tant de milliards, où les trouver » constituent un cadrage parmi d'autres, et celle-ci montre qu'une décision majeure peut n'avoir aucun montant à son origine."
+  },
+  "contextSourceIds": [
+    "anil-loyers",
+    "olap-loyers-idf",
+    "ancols-loyers-sociaux"
+  ],
+  "modelLimitations": "Ce modèle applique une variation de loyer identique à l'intérieur d'une tranche de revenu, alors que l'écart au loyer de référence dépend du logement et non du locataire : un plafonnement rapporterait bien davantage à un locataire payant 1 780 € qu'à un autre payant 420 €, et ces montants sont ici écrasés. Il ne représente ni la durée — l'encadrement n'agit qu'au changement de locataire ou au renouvellement du bail, donc très progressivement —, ni le report vers la location meublée et la vente, ni l'effet sur la construction neuve, ni le nombre de logements sociaux, qui est pourtant le paramètre décisif pour les locataires du parc social. Le corpus ne contient qu'un seul bailleur, ce qui est cohérent avec la concentration réelle de la détention locative mais interdit toute comparaison entre bailleurs.",
+  "options": [
+    {
+      "id": "statu-quo",
+      "label": "Ne rien changer",
+      "decisionDescription": "Le droit existant est maintenu : les loyers restent fixés librement à la relocation, et indexés chaque année sur l'indice de référence.",
+      "families": [
+        "status_quo"
+      ],
+      "isStatusQuo": true,
+      "effects": [
+        {
+          "id": "lq-tendu-bas",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Locataires du parc privé en zone tendue, premiers déciles",
+            "when": {
+              "and": [
+                [
+                  "tenure",
+                  "eq",
+                  "tenant_private"
+                ],
+                [
+                  "housingZone",
+                  "eq",
+                  "tendue"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  5
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun changement de règle. Le statu quo comporte toutefois une mécanique : l'indexation annuelle sur l'indice de référence des loyers, qui s'applique quoi qu'il arrive. Le jeu ne la projette pas, et affiche donc un zéro là où un loyer continue de monter."
+        },
+        {
+          "id": "lq-tendu-haut",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Locataires du parc privé en zone tendue, déciles supérieurs",
+            "when": {
+              "and": [
+                [
+                  "tenure",
+                  "eq",
+                  "tenant_private"
+                ],
+                [
+                  "housingZone",
+                  "eq",
+                  "tendue"
+                ],
+                [
+                  "incomeDecile",
+                  "gte",
+                  6
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun changement de règle. C'est dans cette situation que l'écart entre revenu et coût du logement est le plus visible : un revenu du huitième décile peut s'accompagner d'un patrimoine nul et d'un loyer qui absorbe plus du tiers des ressources."
+        },
+        {
+          "id": "lq-detendu",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Locataires du parc privé hors zone tendue",
+            "when": {
+              "and": [
+                [
+                  "tenure",
+                  "eq",
+                  "tenant_private"
+                ],
+                [
+                  "housingZone",
+                  "eq",
+                  "detendue"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Hors du périmètre : l'encadrement ne s'applique qu'en zone tendue. Le périmètre lui-même a été redéfini plusieurs fois, et il est une décision politique autant qu'un constat de marché. Un loyer de 540 € dans l'Aisne n'est pas encadré, un loyer de 540 € à Montreuil le serait."
+        },
+        {
+          "id": "lq-social",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Locataires du parc social",
+            "when": {
+              "and": [
+                [
+                  "tenure",
+                  "eq",
+                  "tenant_social"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Les loyers du parc social sont déjà administrés : cette décision ne les touche pas. Ce qui compte pour eux est le nombre de logements sociaux disponibles, que la mesure n'aborde pas — et que son effet sur l'offre privée peut rendre plus ou moins nécessaire."
+        },
+        {
+          "id": "lq-heberge",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Personnes hébergées",
+            "when": {
+              "and": [
+                [
+                  "tenure",
+                  "eq",
+                  "housed"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun bail : ni encadrement, ni aide au logement, ni recours. Son coût de logement est fixé par un accord familial, qui n'entre dans aucune statistique et dans aucune politique publique."
+        },
+        {
+          "id": "lq-proprio",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Propriétaires occupants",
+            "when": {
+              "or": [
+                [
+                  "tenure",
+                  "eq",
+                  "owner_with_loan"
+                ],
+                [
+                  "tenure",
+                  "eq",
+                  "owner_outright"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet sur le budget mensuel d'un propriétaire occupant. La mesure modifie en revanche la valeur de ce qu'il détient, ce que ce jeu ne représente pas : il ne suit que des flux mensuels, et le patrimoine est précisément ce qui n'en est pas un."
+        },
+        {
+          "id": "lq-finances",
+          "kind": "public_finance",
+          "publicBillions": 0,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun coût budgétaire direct. C'est l'un des arguments en faveur du statu quo, et l'une des raisons pour lesquelles les options alternatives sont difficiles à comparer entre elles."
+        }
+      ],
+      "argumentsFor": [
+        "Un plafond de loyer décourage la remise en location et l'entretien, et les travaux disponibles observent effectivement un report vers le meublé et la vente là où il s'applique.",
+        "Le niveau des loyers résulte d'une pénurie de logements : agir sur le prix sans agir sur le nombre déplace le problème vers les files d'attente et les dossiers de garantie."
+      ],
+      "argumentsAgainst": [
+        "L'indexation annuelle continue de s'appliquer : ne rien faire n'est pas un gel, c'est une hausse automatique dont personne n'a jamais délibéré.",
+        "Le coût du logement est le premier poste de dépense contrainte des ménages modestes et il est le moins compressible : laisser faire revient à laisser se creuser l'écart le plus structurant de tous."
+      ]
+    },
+    {
+      "id": "plafonnement",
+      "label": "Plafonner les loyers en zone tendue",
+      "decisionDescription": "Le loyer d'un logement mis en location ne peut dépasser de plus de 20 % le loyer médian de son quartier et de sa catégorie. Un dépassement est sanctionné après mise en demeure.",
+      "families": [
+        "scope_efficiency"
+      ],
+      "effects": [
+        {
+          "id": "lp-tendu-bas",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": 40,
+          "scope": {
+            "description": "Locataires du parc privé en zone tendue, premiers déciles",
+            "when": {
+              "and": [
+                [
+                  "tenure",
+                  "eq",
+                  "tenant_private"
+                ],
+                [
+                  "housingZone",
+                  "eq",
+                  "tendue"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  5
+                ]
+              ]
+            }
+          },
+          "horizon": "y5",
+          "uncertainty": "highly_debated",
+          "hypothesisId": "encadrement-loyers-offre",
+          "note": "Gain étalé : l'encadrement n'agit qu'à la relocation ou au renouvellement du bail. Les petits loyers sont souvent déjà sous le plafond, ce qui explique un gain faible — et ce qui fait dire aux opposants que la mesure bénéficie surtout à ceux qui louent grand."
+        },
+        {
+          "id": "lp-tendu-haut",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": 150,
+          "scope": {
+            "description": "Locataires du parc privé en zone tendue, déciles supérieurs",
+            "when": {
+              "and": [
+                [
+                  "tenure",
+                  "eq",
+                  "tenant_private"
+                ],
+                [
+                  "housingZone",
+                  "eq",
+                  "tendue"
+                ],
+                [
+                  "incomeDecile",
+                  "gte",
+                  6
+                ]
+              ]
+            }
+          },
+          "horizon": "y5",
+          "uncertainty": "highly_debated",
+          "hypothesisId": "encadrement-loyers-offre",
+          "note": "Gain plus élevé en euros, parce que l'écart au loyer de référence est plus élevé sur les grands logements. Le montant est appliqué de façon identique dans la tranche, alors qu'il dépend du logement et non du locataire : c'est une approximation du modèle, pas une propriété de la mesure."
+        },
+        {
+          "id": "lp-detendu",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Locataires du parc privé hors zone tendue",
+            "when": {
+              "and": [
+                [
+                  "tenure",
+                  "eq",
+                  "tenant_private"
+                ],
+                [
+                  "housingZone",
+                  "eq",
+                  "detendue"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Hors du périmètre : l'encadrement ne s'applique qu'en zone tendue. Le périmètre lui-même a été redéfini plusieurs fois, et il est une décision politique autant qu'un constat de marché. Un loyer de 540 € dans l'Aisne n'est pas encadré, un loyer de 540 € à Montreuil le serait."
+        },
+        {
+          "id": "lp-social",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Locataires du parc social",
+            "when": {
+              "and": [
+                [
+                  "tenure",
+                  "eq",
+                  "tenant_social"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Les loyers du parc social sont déjà administrés : cette décision ne les touche pas. Ce qui compte pour eux est le nombre de logements sociaux disponibles, que la mesure n'aborde pas — et que son effet sur l'offre privée peut rendre plus ou moins nécessaire."
+        },
+        {
+          "id": "lp-heberge",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Personnes hébergées",
+            "when": {
+              "and": [
+                [
+                  "tenure",
+                  "eq",
+                  "housed"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun bail : ni encadrement, ni aide au logement, ni recours. Son coût de logement est fixé par un accord familial, qui n'entre dans aucune statistique et dans aucune politique publique."
+        },
+        {
+          "id": "lp-proprio",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Propriétaires occupants",
+            "when": {
+              "or": [
+                [
+                  "tenure",
+                  "eq",
+                  "owner_with_loan"
+                ],
+                [
+                  "tenure",
+                  "eq",
+                  "owner_outright"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet sur le budget mensuel d'un propriétaire occupant. La mesure modifie en revanche la valeur de ce qu'il détient, ce que ce jeu ne représente pas : il ne suit que des flux mensuels, et le patrimoine est précisément ce qui n'en est pas un."
+        },
+        {
+          "id": "lp-bailleur",
+          "kind": "budget_line",
+          "code": "revenu-capital",
+          "monthlyDelta": -180,
+          "scope": {
+            "description": "Bailleurs privés : loyers perçus plafonnés",
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  10
+                ]
+              ]
+            }
+          },
+          "horizon": "y5",
+          "uncertainty": "highly_debated",
+          "hypothesisId": "encadrement-loyers-offre",
+          "note": "Un gain de locataire est une perte de bailleur : l'encadrement ne crée pas de ressource, il en déplace. Le corpus ne contient qu'un bailleur, ce qui reflète la concentration réelle de la détention locative mais ne permet aucune comparaison entre bailleurs — un retraité propriétaire d'un studio et une société foncière subissent la même règle."
+        },
+        {
+          "id": "lp-finances",
+          "kind": "public_finance",
+          "publicBillions": -0.2,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Coût de l'observation des loyers et du contrôle, à la charge des collectivités et de l'État. Faible, mais non nul : une règle sans contrôle ne produit pas d'effet, ce que les premiers dispositifs d'encadrement ont montré."
+        }
+      ],
+      "argumentsFor": [
+        "Le loyer est la dépense contrainte la plus lourde et la moins compressible : le plafonner agit là où aucune autre politique n'agit à court terme.",
+        "Le plafond est fixé par référence au marché local lui-même, et non à un montant administré : il écrête les loyers les plus éloignés de la médiane sans fixer les prix."
+      ],
+      "argumentsAgainst": [
+        "Les travaux disponibles observent un report vers la location meublée, la vente et les locations de courte durée, c'est-à-dire une réduction de l'offre louée à l'année.",
+        "L'effet ne joue qu'à la relocation : il avantage ceux qui déménagent et laisse inchangés ceux qui restent, c'est-à-dire souvent les plus modestes."
+      ]
+    },
+    {
+      "id": "plafonnement-cible",
+      "label": "Plafonner les loyers les plus élevés seulement",
+      "decisionDescription": "Le plafond ne vise que les logements dont le loyer dépasse de plus de 40 % la médiane, et s'accompagne d'un avantage fiscal pour la remise en location d'un logement vacant.",
+      "families": [
+        "scope_efficiency",
+        "public_spending"
+      ],
+      "isCompromise": true,
+      "effects": [
+        {
+          "id": "lc-tendu-bas",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Locataires du parc privé en zone tendue, premiers déciles",
+            "when": {
+              "and": [
+                [
+                  "tenure",
+                  "eq",
+                  "tenant_private"
+                ],
+                [
+                  "housingZone",
+                  "eq",
+                  "tendue"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  5
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Effet nul : les petits loyers sont presque tous en dessous du seuil retenu. C'est le prix du compromis — il protège l'offre en ne touchant qu'aux loyers les plus éloignés de la médiane, et il ne change donc rien pour une partie de ceux au nom desquels il est proposé."
+        },
+        {
+          "id": "lc-tendu-haut",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": 85,
+          "scope": {
+            "description": "Locataires du parc privé en zone tendue, déciles supérieurs",
+            "when": {
+              "and": [
+                [
+                  "tenure",
+                  "eq",
+                  "tenant_private"
+                ],
+                [
+                  "housingZone",
+                  "eq",
+                  "tendue"
+                ],
+                [
+                  "incomeDecile",
+                  "gte",
+                  6
+                ]
+              ]
+            }
+          },
+          "horizon": "y5",
+          "uncertainty": "debated",
+          "hypothesisId": "encadrement-loyers-offre",
+          "note": "Gain réduit de moitié par rapport au plafonnement général, parce que le seuil de déclenchement est plus haut."
+        },
+        {
+          "id": "lc-detendu",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Locataires du parc privé hors zone tendue",
+            "when": {
+              "and": [
+                [
+                  "tenure",
+                  "eq",
+                  "tenant_private"
+                ],
+                [
+                  "housingZone",
+                  "eq",
+                  "detendue"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Hors du périmètre : l'encadrement ne s'applique qu'en zone tendue. Le périmètre lui-même a été redéfini plusieurs fois, et il est une décision politique autant qu'un constat de marché. Un loyer de 540 € dans l'Aisne n'est pas encadré, un loyer de 540 € à Montreuil le serait."
+        },
+        {
+          "id": "lc-social",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Locataires du parc social",
+            "when": {
+              "and": [
+                [
+                  "tenure",
+                  "eq",
+                  "tenant_social"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Les loyers du parc social sont déjà administrés : cette décision ne les touche pas. Ce qui compte pour eux est le nombre de logements sociaux disponibles, que la mesure n'aborde pas — et que son effet sur l'offre privée peut rendre plus ou moins nécessaire."
+        },
+        {
+          "id": "lc-heberge",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Personnes hébergées",
+            "when": {
+              "and": [
+                [
+                  "tenure",
+                  "eq",
+                  "housed"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun bail : ni encadrement, ni aide au logement, ni recours. Son coût de logement est fixé par un accord familial, qui n'entre dans aucune statistique et dans aucune politique publique."
+        },
+        {
+          "id": "lc-proprio",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Propriétaires occupants",
+            "when": {
+              "or": [
+                [
+                  "tenure",
+                  "eq",
+                  "owner_with_loan"
+                ],
+                [
+                  "tenure",
+                  "eq",
+                  "owner_outright"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet sur le budget mensuel d'un propriétaire occupant. La mesure modifie en revanche la valeur de ce qu'il détient, ce que ce jeu ne représente pas : il ne suit que des flux mensuels, et le patrimoine est précisément ce qui n'en est pas un."
+        },
+        {
+          "id": "lc-bailleur",
+          "kind": "budget_line",
+          "code": "revenu-capital",
+          "monthlyDelta": -95,
+          "scope": {
+            "description": "Bailleurs privés : plafond appliqué aux seuls loyers les plus élevés",
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  10
+                ]
+              ]
+            }
+          },
+          "horizon": "y5",
+          "uncertainty": "debated",
+          "hypothesisId": "encadrement-loyers-offre",
+          "note": "Perte réduite, et partiellement compensée par l'avantage fiscal si un logement vacant est remis en location."
+        },
+        {
+          "id": "lc-finances",
+          "kind": "public_finance",
+          "publicBillions": -1.4,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "encadrement-loyers-offre",
+          "note": "Coût de l'avantage fiscal. Son efficacité dépend du nombre de logements effectivement remis en location plutôt que de logements déjà loués qui en bénéficieraient sans rien changer : c'est l'effet d'aubaine, et il est difficile à mesurer avant coup."
+        }
+      ],
+      "argumentsFor": [
+        "Il écrête les loyers les plus éloignés du marché sans toucher au gros du parc, ce qui limite le risque de retrait de l'offre.",
+        "L'incitation à remettre en location agit sur le nombre de logements, qui est la cause du problème, et non seulement sur son symptôme."
+      ],
+      "argumentsAgainst": [
+        "Il ne change rien pour une grande partie des locataires modestes, dont le loyer est déjà sous le seuil : la mesure porte leur nom sans les atteindre.",
+        "Un avantage fiscal sur la remise en location bénéficie en partie à des bailleurs qui auraient loué de toute façon, et son coût est certain là où son effet ne l'est pas."
+      ]
+    },
+    {
+      "id": "aide-logement",
+      "label": "Revaloriser les aides au logement plutôt que plafonner",
+      "decisionDescription": "Aucun plafond. Les aides personnelles au logement sont revalorisées de 12 %, financées par un prélèvement sur les ménages des trois derniers déciles.",
+      "families": [
+        "public_spending",
+        "levies"
+      ],
+      "effects": [
+        {
+          "id": "la-social",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 70,
+          "scope": {
+            "description": "Locataires du parc social : aides revalorisées",
+            "when": {
+              "and": [
+                [
+                  "tenure",
+                  "eq",
+                  "tenant_social"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Revalorisation de l'aide au logement, perçue en ressource. C'est l'option dont l'effet est le plus immédiat : elle ne dépend d'aucun changement de bail."
+        },
+        {
+          "id": "la-prive-modeste",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 55,
+          "scope": {
+            "description": "Locataires modestes du parc privé : aides revalorisées",
+            "when": {
+              "and": [
+                [
+                  "tenure",
+                  "eq",
+                  "tenant_private"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  3
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "unemployed"
+                  ]
+                }
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established"
+        },
+        {
+          "id": "la-chomeur",
+          "kind": "budget_line",
+          "code": "allocation-chomage",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Demandeur d'emploi indemnisé seul : au-dessus des plafonds",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Une personne seule sans enfant percevant 1 310 € par mois n'a pratiquement pas de droit à l'aide au logement : la revalorisation d'un droit nul reste nulle. Les plafonds de ressources sont ici plus déterminants que le taux de revalorisation, et la mesure n'y touche pas."
+        },
+        {
+          "id": "la-prive-aise",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Locataires du parc privé au-dessus des plafonds de ressources",
+            "when": {
+              "and": [
+                [
+                  "tenure",
+                  "eq",
+                  "tenant_private"
+                ],
+                [
+                  "incomeDecile",
+                  "gte",
+                  4
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Au-dessus des plafonds : aucune aide aujourd'hui, aucune revalorisation demain. Un locataire du huitième décile paie le plein loyer sans aide et contribue au financement de la mesure."
+        },
+        {
+          "id": "la-heberge",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Personnes hébergées",
+            "when": {
+              "and": [
+                [
+                  "tenure",
+                  "eq",
+                  "housed"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun bail : ni encadrement, ni aide au logement, ni recours. Son coût de logement est fixé par un accord familial, qui n'entre dans aucune statistique et dans aucune politique publique."
+        },
+        {
+          "id": "la-proprio",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Propriétaires occupants",
+            "when": {
+              "or": [
+                [
+                  "tenure",
+                  "eq",
+                  "owner_with_loan"
+                ],
+                [
+                  "tenure",
+                  "eq",
+                  "owner_outright"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet : les aides au logement pour l'accession ont été supprimées pour les nouveaux entrants. Un propriétaire occupant ne reçoit rien et, au-dessus du septième décile, contribue au financement."
+        },
+        {
+          "id": "la-contrib-salaries",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": -24,
+          "scope": {
+            "description": "Trois derniers déciles, salariés : contribution au financement",
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  7
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established"
+        },
+        {
+          "id": "la-contrib-indep",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": -24,
+          "scope": {
+            "description": "Trois derniers déciles, indépendants : contribution au financement",
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  7
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "employee"
+                  ]
+                }
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established"
+        },
+        {
+          "id": "la-finances",
+          "kind": "public_finance",
+          "publicBillions": -2.2,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "highly_debated",
+          "hypothesisId": "encadrement-loyers-offre",
+          "note": "Coût de la revalorisation, financé par le prélèvement. Le rendement net dépend de la part de l'aide qui est captée par une hausse des loyers : plusieurs travaux estiment cette captation à une fraction importante de l'aide, et c'est l'objection la plus sérieuse à cette option."
+        }
+      ],
+      "argumentsFor": [
+        "L'effet est immédiat et certain pour les bénéficiaires, là où un plafonnement n'agit qu'au fil des changements de bail, sur plusieurs années.",
+        "L'aide est modulée selon les ressources, alors qu'un plafond de loyer bénéficie autant à un locataire aisé qu'à un locataire modeste occupant le même logement."
+      ],
+      "argumentsAgainst": [
+        "Une part de l'aide au logement est captée par une hausse des loyers : solvabiliser la demande dans un marché en pénurie en alimente le prix.",
+        "Les plafonds de ressources excluent des locataires dont le taux d'effort est pourtant très élevé, et la revalorisation d'un droit nul reste nulle."
+      ]
+    },
+    {
+      "id": "contester-cadrage",
+      "label": "Je conteste la façon dont la question est posée",
+      "decisionDescription": "Le joueur refuse le cadrage : la question n'est pas de savoir comment répartir un parc insuffisant, mais pourquoi on n'en construit pas assez et qui décide de ne pas le faire.",
+      "families": [
+        "challenge_framing"
+      ],
+      "effects": [
+        {
+          "id": "la-contestation",
+          "kind": "service_level",
+          "scope": {
+            "description": "Aucun effet budgétaire modélisé"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Contester le cadrage ne produit aucun effet chiffré dans ce modèle. Cette absence est une limite du jeu, pas un jugement sur la pertinence de la contestation."
+        }
+      ],
+      "argumentsFor": [
+        "Les quatre options partagent un présupposé : le nombre de logements est une donnée. Il résulte pourtant de décisions d'urbanisme, de financement du logement social et de fiscalité foncière.",
+        "Aucune n'aborde le nombre de logements sociaux, qui est le seul paramètre déterminant pour les locataires du parc social — soit près d'un ménage sur six."
+      ],
+      "argumentsAgainst": [
+        "Les baux se signent chaque mois aux prix du marché : refuser le cadrage ne suspend pas les relocations en cours.",
+        "Construire produit ses effets en cinq à dix ans ; la question du loyer payé le mois prochain se pose quand même, et quelqu'un y répondra."
+      ]
+    }
+  ]
+}

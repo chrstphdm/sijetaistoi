@@ -1,0 +1,209 @@
+{
+  "id": "rachid",
+  "charterVersion": "1.0",
+  "fictional": true,
+  "fictionNote": "Personnage fictif. Situation construite pour être plausible au regard des ordres de grandeur publics sur les loyers du parc privé en première couronne parisienne, les salaires de l'ingénierie informatique et les restes à charge de garde et de périscolaire. Ne correspond à aucune personne réelle.",
+  "identity": {
+    "firstName": "Rachid",
+    "age": 39,
+    "identityLine": "ingénieur informatique, en couple, deux enfants de 4 et 7 ans, locataire à Montreuil",
+    "incomeDecile": 8,
+    "calibrationSourceIds": [
+      "olap-loyers-idf",
+      "cnaf-cout-garde",
+      "insee-niveaux-de-vie"
+    ]
+  },
+  "traits": {
+    "activities": [
+      "employee"
+    ],
+    "tenure": "tenant_private",
+    "heating": "collective",
+    "householdSize": 4,
+    "childCount": 2,
+    "hasSchoolAgedChild": true,
+    "housingZone": "tendue",
+    "recognisedDisability": false
+  },
+  "budget": {
+    "lines": [
+      {
+        "code": "salaire-net",
+        "group": "resource",
+        "value": {
+          "amount": 5100,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Deux salaires agrégés : 3 250 € pour lui en société de services, 1 850 € pour sa conjointe professeure des écoles. Le jeu ne sait pas encore distinguer deux revenus dans un même ménage, et une mesure qui ne toucherait que l'un des deux est donc mal représentée ici."
+        }
+      },
+      {
+        "code": "prestations",
+        "group": "resource",
+        "value": {
+          "amount": 140,
+          "unit": "EUR_month",
+          "nature": "hypothesis",
+          "hypothesisId": "prestations-calibrage",
+          "note": "Allocations familiales pour deux enfants, sans aide au logement : leurs ressources dépassent les plafonds."
+        }
+      },
+      {
+        "code": "logement",
+        "group": "constrained",
+        "value": {
+          "amount": 1780,
+          "unit": "EUR_month",
+          "nature": "fact",
+          "sourceId": "olap-loyers-idf",
+          "note": "T4 du parc privé, charges comprises. C'est le poste qui explique l'essentiel de l'écart entre leur revenu et ce qu'ils en ressentent."
+        }
+      },
+      {
+        "code": "energie",
+        "group": "constrained",
+        "value": {
+          "amount": 145,
+          "unit": "EUR_month",
+          "nature": "extrapolation"
+        }
+      },
+      {
+        "code": "alimentation",
+        "group": "constrained",
+        "value": {
+          "amount": 760,
+          "unit": "EUR_month",
+          "nature": "hypothesis",
+          "hypothesisId": "socle-alimentaire"
+        }
+      },
+      {
+        "code": "transport",
+        "group": "constrained",
+        "value": {
+          "amount": 265,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Deux passes Navigo, plus une voiture conservée pour les week-ends et les trajets vers la famille."
+        }
+      },
+      {
+        "code": "enfants",
+        "group": "constrained",
+        "value": {
+          "amount": 490,
+          "unit": "EUR_month",
+          "nature": "fact",
+          "sourceId": "cnaf-cout-garde",
+          "note": "Cantine pour l'aîné, périscolaire et centre de loisirs pour les deux, après déduction des aides."
+        }
+      },
+      {
+        "code": "sante",
+        "group": "constrained",
+        "value": {
+          "amount": 180,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      },
+      {
+        "code": "impots",
+        "group": "levy",
+        "value": {
+          "amount": 620,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      },
+      {
+        "code": "loisirs",
+        "group": "adjustable",
+        "value": {
+          "amount": 320,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      },
+      {
+        "code": "habillement",
+        "group": "adjustable",
+        "value": {
+          "amount": 160,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      }
+    ]
+  },
+  "stocks": {
+    "liquid7d": 2900,
+    "liquid60d": 6500,
+    "authorisedOverdraft": 2000,
+    "netWealth": 21000,
+    "precautionFloorMonths": 2
+  },
+  "parity": {
+    "strength": "Il est le seul de son équipe à savoir reprendre le code d'un système que plus personne n'a écrit : on ne le remplace pas en six semaines, et la direction le sait.",
+    "vulnerability": "Tout son patrimoine tient sur un livret. Il n'a rien acheté, et chaque année d'attente éloigne un peu plus l'apport du prix.",
+    "aspirations": [
+      "Acheter, enfin, même plus loin, même plus petit",
+      "Que les enfants gardent l'école où ils sont, et les copains qui vont avec"
+    ],
+    "concerns": [
+      "Que son client unique internalise la prestation, comme il l'a annoncé deux fois",
+      "Que le propriétaire vende l'appartement, ce qu'il a le droit de faire"
+    ],
+    "nonMonetaryConstraint": "Un bail de trois ans et un propriétaire qui peut reprendre le logement pour y habiter : son adresse, l'école de ses enfants et son trajet ne dépendent pas de lui.",
+    "nonMonetaryAdvantage": "Un métier recherché : il a reçu trois propositions en deux ans sans en avoir cherché aucune, et il n'a jamais eu peur de perdre son poste.",
+    "opinionAgainstOwnInterest": "Il est contre l'encadrement des loyers, dont il serait pourtant le premier bénéficiaire : « si on bloque le prix, on ne construira pas, et ce sont nos enfants qui chercheront »."
+  },
+  "shortTermGoal": {
+    "label": "Porter l'apport à 30 000 € d'ici la fin de l'année",
+    "amount": 30000,
+    "deadline": "2027-12"
+  },
+  "embodiedDetails": [
+    "Il fait les devoirs de l'aîné sur la table de la cuisine, en même temps que la vaisselle sèche.",
+    "Il a une liste d'annonces immobilières enregistrée depuis quatre ans, qu'il ne regarde plus que le dimanche.",
+    "Il joue du oud, mal, et seulement quand les enfants sont couchés."
+  ],
+  "unavailableOptions": [
+    {
+      "option": "acheter",
+      "reason": "Un apport de 90 000 € serait nécessaire pour un bien équivalent dans la commune : il en a 21 000, et l'écart grandit."
+    },
+    {
+      "option": "demenager-moins-cher",
+      "reason": "Les deux enfants sont scolarisés ici et sa conjointe est affectée dans une école de la commune : un déménagement supposerait une mutation qu'elle n'obtiendra pas avant trois ans."
+    }
+  ],
+  "equivalenceRefs": [
+    {
+      "code": "logement",
+      "monthlyAmount": 1780,
+      "narrativeLabel": "son loyer"
+    },
+    {
+      "code": "enfants",
+      "monthlyAmount": 490,
+      "narrativeLabel": "la cantine et le périscolaire des deux enfants"
+    },
+    {
+      "code": "alimentation",
+      "monthlyAmount": 760,
+      "narrativeLabel": "l'alimentation du mois pour quatre"
+    },
+    {
+      "code": "loisirs",
+      "monthlyAmount": 320,
+      "narrativeLabel": "leur budget loisirs du mois"
+    }
+  ],
+  "narrative": {
+    "story": "Rachid est arrivé à Montreuil pour six mois, le temps d'une mission, il y a quatorze ans. Le T4 a été trouvé grâce à un collègue qui partait, à un prix qui semblait déjà élevé et qui paraît aujourd'hui une aubaine. Sa conjointe et lui gagnent ensemble plus de cinq mille euros par mois, ce qui les place parmi les vingt pour cent les mieux payés du pays, et ils n'ont pas de patrimoine. Les deux faits sont vrais en même temps, et c'est la chose la plus difficile à faire entendre autour d'eux : à sa famille, qui le croit riche, comme à ses collègues propriétaires, qui le croient imprévoyant."
+  },
+  "lineOverrides": []
+}

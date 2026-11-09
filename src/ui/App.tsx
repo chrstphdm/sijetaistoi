@@ -41,6 +41,7 @@ import { SetupScreen } from './components/SetupScreen.tsx'
 import { useScreenChange } from './navigation.ts'
 import { BackToTop, ScreenTitle, SkipLink } from './components/Navigation.tsx'
 import type { Step } from './useGame.ts'
+import { spellCount } from './words.ts'
 
 /**
  * Titre de chaque ecran, pour l'onglet et pour le lecteur d'ecran.
@@ -374,8 +375,9 @@ export function App() {
           <section className="sheet" aria-labelledby="again-title">
             <h2 id="again-title">Rejouer</h2>
             <p>
-              Une autre partie tire d’autres personnages et d’autres décisions parmi les six
-              de chaque. Le corpus en contient plus qu’une partie n’en présente.
+              Une autre partie tire d’autres personnages et d’autres décisions parmi les{' '}
+              {spellCount(characters.length)} personnages et les {spellCount(reforms.length)}{' '}
+              décisions du corpus. Une partie n’en présente que trois de chaque.
             </p>
             <p>
               <button type="button" onClick={startFreshGame}>

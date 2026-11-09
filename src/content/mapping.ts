@@ -47,7 +47,19 @@ export function toStocks(character: CharacterT): Stocks {
   }
 }
 
-/** Traits tels que l'evaluateur de conditions les attend. */
+/**
+ * Traits tels que l'evaluateur de conditions les attend.
+ *
+ * Cette fonction est la SEULE construction autorisee du sac d'attributs.
+ * Elle a longtemps ete recopiee a l'identique dans quatre composants ; le
+ * jour ou l'age est devenu interrogeable, trois de ces copies ont continue a
+ * ne pas le fournir, et une condition d'age s'y evaluait silencieusement a
+ * faux. Les copies ont ete supprimees.
+ */
 export function traitsOf(character: CharacterT) {
-  return { ...character.traits, incomeDecile: character.identity.incomeDecile }
+  return {
+    ...character.traits,
+    incomeDecile: character.identity.incomeDecile,
+    age: character.identity.age,
+  }
 }

@@ -3,55 +3,160 @@
   "charterVersion": "1.0",
   "fictional": true,
   "fictionNote": "Personnage fictif. Situation construite pour être plausible au regard des ordres de grandeur publics sur les salaires de la fonction publique territoriale et les mensualités d'accession. Ne correspond à aucune personne réelle.",
-
   "identity": {
     "firstName": "Sophie",
     "age": 41,
     "identityLine": "technicienne territoriale, en couple, deux enfants, accédante à la propriété près de Nancy",
     "incomeDecile": 5,
-    "calibrationSourceIds": ["insee-niveaux-de-vie", "anil-loyers", "cnaf-cout-garde"]
+    "calibrationSourceIds": [
+      "insee-niveaux-de-vie",
+      "anil-loyers",
+      "cnaf-cout-garde"
+    ]
   },
-
   "traits": {
-    "activities": ["employee"],
+    "activities": [
+      "employee"
+    ],
     "tenure": "owner_with_loan",
     "heating": "individual",
     "householdSize": 4,
     "childCount": 2,
-    "hasSchoolAgedChild": true
+    "hasSchoolAgedChild": true,
+    "housingZone": "detendue",
+    "recognisedDisability": false
   },
-
   "budget": {
     "lines": [
-      { "code": "salaire-net", "group": "resource",
-        "value": { "amount": 2180, "unit": "EUR_month", "nature": "fiction", "note": "Technicienne principale, quinze ans d'ancienneté" } },
-      { "code": "revenu-independant", "group": "resource",
-        "value": { "amount": 1640, "unit": "EUR_month", "nature": "fiction", "note": "Conjoint, mécanicien salarié à temps plein" } },
-      { "code": "prestations", "group": "resource",
-        "value": { "amount": 150, "unit": "EUR_month", "nature": "hypothesis", "hypothesisId": "prestations-calibrage" } },
-      { "code": "logement", "group": "constrained",
-        "value": { "amount": 310, "unit": "EUR_month", "nature": "fiction", "note": "Taxe foncière, assurance et charges de copropriété" } },
-      { "code": "energie", "group": "constrained",
-        "value": { "amount": 195, "unit": "EUR_month", "nature": "extrapolation" } },
-      { "code": "alimentation", "group": "constrained",
-        "value": { "amount": 720, "unit": "EUR_month", "nature": "hypothesis", "hypothesisId": "socle-alimentaire" } },
-      { "code": "transport", "group": "constrained",
-        "value": { "amount": 290, "unit": "EUR_month", "nature": "fiction", "note": "Deux voitures, trente kilomètres de trajet chacun" } },
-      { "code": "enfants", "group": "constrained",
-        "value": { "amount": 265, "unit": "EUR_month", "nature": "fact", "sourceId": "cnaf-cout-garde", "note": "Cantine, périscolaire, activités" } },
-      { "code": "sante", "group": "constrained",
-        "value": { "amount": 140, "unit": "EUR_month", "nature": "fiction" } },
-      { "code": "credit-immo", "group": "credit",
-        "value": { "amount": 870, "unit": "EUR_month", "nature": "fiction", "note": "Dix-sept annuités restantes" } },
-      { "code": "credit-conso", "group": "credit",
-        "value": { "amount": 190, "unit": "EUR_month", "nature": "fiction", "note": "Voiture achetée l'an dernier" } },
-      { "code": "loisirs", "group": "adjustable",
-        "value": { "amount": 180, "unit": "EUR_month", "nature": "fiction" } },
-      { "code": "habillement", "group": "adjustable",
-        "value": { "amount": 110, "unit": "EUR_month", "nature": "fiction" } }
+      {
+        "code": "salaire-net",
+        "group": "resource",
+        "value": {
+          "amount": 2180,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Technicienne principale, quinze ans d'ancienneté"
+        }
+      },
+      {
+        "code": "revenu-independant",
+        "group": "resource",
+        "value": {
+          "amount": 1640,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Conjoint, mécanicien salarié à temps plein"
+        }
+      },
+      {
+        "code": "prestations",
+        "group": "resource",
+        "value": {
+          "amount": 150,
+          "unit": "EUR_month",
+          "nature": "hypothesis",
+          "hypothesisId": "prestations-calibrage"
+        }
+      },
+      {
+        "code": "logement",
+        "group": "constrained",
+        "value": {
+          "amount": 310,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Taxe foncière, assurance et charges de copropriété"
+        }
+      },
+      {
+        "code": "energie",
+        "group": "constrained",
+        "value": {
+          "amount": 195,
+          "unit": "EUR_month",
+          "nature": "extrapolation"
+        }
+      },
+      {
+        "code": "alimentation",
+        "group": "constrained",
+        "value": {
+          "amount": 720,
+          "unit": "EUR_month",
+          "nature": "hypothesis",
+          "hypothesisId": "socle-alimentaire"
+        }
+      },
+      {
+        "code": "transport",
+        "group": "constrained",
+        "value": {
+          "amount": 290,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Deux voitures, trente kilomètres de trajet chacun"
+        }
+      },
+      {
+        "code": "enfants",
+        "group": "constrained",
+        "value": {
+          "amount": 265,
+          "unit": "EUR_month",
+          "nature": "fact",
+          "sourceId": "cnaf-cout-garde",
+          "note": "Cantine, périscolaire, activités"
+        }
+      },
+      {
+        "code": "sante",
+        "group": "constrained",
+        "value": {
+          "amount": 140,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      },
+      {
+        "code": "credit-immo",
+        "group": "credit",
+        "value": {
+          "amount": 870,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Dix-sept annuités restantes"
+        }
+      },
+      {
+        "code": "credit-conso",
+        "group": "credit",
+        "value": {
+          "amount": 190,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Voiture achetée l'an dernier"
+        }
+      },
+      {
+        "code": "loisirs",
+        "group": "adjustable",
+        "value": {
+          "amount": 180,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      },
+      {
+        "code": "habillement",
+        "group": "adjustable",
+        "value": {
+          "amount": 110,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      }
     ]
   },
-
   "stocks": {
     "liquid7d": 1900,
     "liquid60d": 4300,
@@ -59,7 +164,6 @@
     "netWealth": 62000,
     "precautionFloorMonths": 1
   },
-
   "parity": {
     "strength": "Deux salaires stables, un emploi public qui ne disparaîtra pas, et un crédit à taux fixe négocié avant la remontée.",
     "vulnerability": "Deux mille euros de côté et mille soixante euros de mensualités : une panne de voiture et un appareil dentaire la même année effacent toute la réserve.",
@@ -75,37 +179,56 @@
     "nonMonetaryAdvantage": "Un statut qui garantit l'emploi et une progression lisible à l'ancienneté, quoi qu'il arrive à la collectivité.",
     "opinionAgainstOwnInterest": "Elle est favorable à ce que les aides soient réservées aux plus modestes : « on n'est pas riches, mais on s'en sort, et ce n'est pas à nous que ça doit aller en priorité »."
   },
-
   "shortTermGoal": {
     "label": "Remettre 2 000 € de côté avant la rentrée de septembre",
     "amount": 2000,
     "deadline": "2027-09"
   },
-
   "embodiedDetails": [
     "Elle écoute la radio locale dans la voiture, toujours la même station.",
     "Le cadet refuse de manger à la cantine le jeudi, et personne ne sait pourquoi.",
     "Elle fait ses comptes le dernier dimanche du mois, sur un carnet à spirale."
   ],
-
   "unavailableOptions": [
-    { "option": "renegocier-credit", "reason": "Le taux fixe obtenu en 2016 est inférieur à tout ce qui se pratique aujourd'hui." },
-    { "option": "demander-aide-sociale", "reason": "Le revenu du ménage dépasse tous les plafonds, y compris de peu." }
+    {
+      "option": "renegocier-credit",
+      "reason": "Le taux fixe obtenu en 2016 est inférieur à tout ce qui se pratique aujourd'hui."
+    },
+    {
+      "option": "demander-aide-sociale",
+      "reason": "Le revenu du ménage dépasse tous les plafonds, y compris de peu."
+    }
   ],
-
   "equivalenceRefs": [
-    { "code": "alimentation", "monthlyAmount": 720, "narrativeLabel": "l'alimentation du mois" },
-    { "code": "loisirs", "monthlyAmount": 180, "narrativeLabel": "le budget loisirs du mois" },
-    { "code": "transport", "monthlyAmount": 290, "narrativeLabel": "les trajets du mois" },
-    { "code": "projet", "monthlyAmount": 230, "narrativeLabel": "ce qu'ils mettent de côté pour la rentrée" }
+    {
+      "code": "alimentation",
+      "monthlyAmount": 720,
+      "narrativeLabel": "l'alimentation du mois"
+    },
+    {
+      "code": "loisirs",
+      "monthlyAmount": 180,
+      "narrativeLabel": "le budget loisirs du mois"
+    },
+    {
+      "code": "transport",
+      "monthlyAmount": 290,
+      "narrativeLabel": "les trajets du mois"
+    },
+    {
+      "code": "projet",
+      "monthlyAmount": 230,
+      "narrativeLabel": "ce qu'ils mettent de côté pour la rentrée"
+    }
   ],
-
   "narrative": {
     "story": "Sophie est entrée à la mairie comme agent technique en 2011, puis a passé le concours de technicienne quatre ans plus tard. Elle s'occupe des bâtiments scolaires de la commune, ce qui veut dire des chaudières en panne et des devis de peinture. Ils ont acheté en 2016, au moment où c'était encore possible, une maison qui demandait des travaux qu'ils n'ont jamais finis. Elle dit qu'ils sont au milieu, ni à plaindre ni à envier, et que c'est précisément la place dont personne ne parle jamais."
   },
-
   "lineOverrides": [
-    { "code": "transport", "constrained": true,
-      "justification": "Trente kilomètres de trajet quotidien pour chacun, sans desserte en transport en commun compatible avec les horaires de service." }
+    {
+      "code": "transport",
+      "constrained": true,
+      "justification": "Trente kilomètres de trajet quotidien pour chacun, sans desserte en transport en commun compatible avec les horaires de service."
+    }
   ]
 }

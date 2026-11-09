@@ -1,0 +1,701 @@
+{
+  "id": "age-retraite",
+  "charterVersion": "1.0",
+  "descriptiveTitle": "Âge d'ouverture des droits à la retraite",
+  "statedBy": "Le Conseil budgétaire, acteur fictif de ce jeu",
+  "context": "Le Conseil budgétaire constate que les réserves du système de retraite s'épuisent au cours de la prochaine décennie, et propose de décaler de deux ans l'âge d'ouverture des droits. Un décalage de cette ampleur est présenté comme rapportant environ 10 milliards d'euros par an à l'horizon 2035. Trois autres leviers produisent un rendement comparable : allonger la durée de cotisation exigée, relever le taux de cotisation, ou ne rien faire et laisser l'ajustement se produire sur le niveau des pensions.",
+  "objective": {
+    "amount": 10,
+    "unit": "EUR_bn",
+    "nature": "fiction",
+    "note": "Montant posé par un acteur fictif du jeu, à l'horizon 2035. Il ne décrit aucune nécessité constatée, et le besoin lui-même dépend d'hypothèses de croissance et d'emploi sur lesquelles les projections publiques divergent."
+  },
+  "contextSourceIds": [
+    "cor-retraites",
+    "insee-niveaux-de-vie"
+  ],
+  "modelLimitations": "Ce modèle ne sait pas représenter ce qui est en jeu ici. Un décalage de l'âge ne change presque aucun budget mensuel aujourd'hui : il change le nombre d'années de vie passées au travail, et cela ne se chiffre pas en euros par mois. Le jeu affiche donc beaucoup d'effets nuls, et ces zéros sont trompeurs. Il ne modélise pas non plus l'usure professionnelle, l'écart d'espérance de vie en bonne santé entre métiers — plusieurs années —, la probabilité de ne pas atteindre l'âge en emploi, ni l'effet sur l'emploi des seniors. Le décile de revenu y sert de substitut grossier à l'exposition aux métiers pénibles, ce qui est une convention de modélisation, pas une donnée.",
+  "options": [
+    {
+      "id": "statu-quo",
+      "label": "Ne rien changer",
+      "decisionDescription": "L'âge d'ouverture des droits reste inchangé. Les 10 Md€ ne sont pas trouvés ici, et le Conseil annonce que l'ajustement se fera alors sur l'indexation des pensions.",
+      "families": [
+        "status_quo"
+      ],
+      "isStatusQuo": true,
+      "effects": [
+        {
+          "id": "sq-salaries",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ]
+              ]
+            },
+            "description": "Salariés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun changement aujourd'hui. La question de savoir qui paiera l'écart reste ouverte, et ce sont les mêmes personnes qui la trancheront plus tard, plus âgées."
+        },
+        {
+          "id": "sq-independants",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "employee"
+                  ]
+                }
+              ]
+            },
+            "description": "Indépendants sans activité salariée"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun changement aujourd'hui, pour la même raison."
+        },
+        {
+          "id": "sq-retraites",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": -58,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            },
+            "description": "Retraités"
+          },
+          "horizon": "y10",
+          "uncertainty": "debated",
+          "hypothesisId": "indexation-pensions",
+          "note": "Contrepartie énoncée par le Conseil budgétaire, et non constatée : si les réserves s'épuisent sans décision, l'ajustement passe par la revalorisation annuelle. Que cet enchaînement se produise effectivement est une anticipation politique, pas un mécanisme."
+        },
+        {
+          "id": "sq-chomeurs",
+          "kind": "budget_line",
+          "code": "allocation-chomage",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ]
+              ]
+            },
+            "description": "Demandeurs d'emploi indemnisés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun changement aujourd'hui. L'âge auquel ses droits à la retraite s'ouvriront reste celui qu'il connaît."
+        },
+        {
+          "id": "sq-inactifs",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ]
+              ]
+            },
+            "description": "Personnes sans activité"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun changement aujourd'hui. Sa pension d'invalidité se convertira en pension de retraite à l'âge actuel."
+        },
+        {
+          "id": "sq-finances",
+          "kind": "public_finance",
+          "publicBillions": -10,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y10",
+          "uncertainty": "debated",
+          "hypothesisId": "indexation-pensions",
+          "note": "Besoin non couvert, au sens du cadrage posé par le Conseil."
+        }
+      ],
+      "argumentsFor": [
+        "L'espérance de vie en bonne santé varie de plusieurs années selon le métier exercé : un âge identique pour tous ne produit pas une durée de retraite identique pour tous.",
+        "Les projections de besoin reposent sur des hypothèses de croissance et d'emploi qui ont été révisées plusieurs fois, et dans les deux sens : agir sur la foi d'une projection engage pour quarante ans."
+      ],
+      "argumentsAgainst": [
+        "Laisser l'ajustement se faire sur l'indexation revient à le faire porter entièrement sur les retraités en place, sans que personne ne l'ait décidé explicitement.",
+        "Un ajustement différé est un ajustement plus brutal : plus l'écart s'accumule, moins il reste de leviers progressifs pour le résorber."
+      ]
+    },
+    {
+      "id": "age-recule",
+      "label": "Décaler l'âge de deux ans",
+      "decisionDescription": "L'âge d'ouverture des droits passe de 62 à 64 ans, par paliers. Personne ne paie davantage chaque mois ; chacun travaille deux ans de plus.",
+      "families": [
+        "public_spending",
+        "scope_efficiency"
+      ],
+      "effects": [
+        {
+          "id": "ar-salaries",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ]
+              ]
+            },
+            "description": "Salariés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Le budget mensuel ne change pas. Ce que la mesure prend n'est pas de l'argent : ce sont deux années, et le jeu ne sait pas les afficher."
+        },
+        {
+          "id": "ar-independants",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "employee"
+                  ]
+                }
+              ]
+            },
+            "description": "Indépendants sans activité salariée"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Le budget mensuel ne change pas. Un indépendant décide plus librement du moment où il s'arrête, et l'âge légal pèse donc différemment sur lui — ce que ce modèle ne représente pas."
+        },
+        {
+          "id": "ar-retraites",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            },
+            "description": "Retraités"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Les pensions déjà liquidées ne sont pas touchées : la mesure ne concerne que les générations qui n'ont pas encore liquidé. C'est l'une des raisons pour lesquelles elle est jugée tantôt protectrice, tantôt injuste."
+        },
+        {
+          "id": "ar-chomeurs",
+          "kind": "budget_line",
+          "code": "allocation-chomage",
+          "monthlyDelta": -600,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ]
+              ]
+            },
+            "description": "Demandeurs d'emploi indemnisés"
+          },
+          "horizon": "y10",
+          "uncertainty": "debated",
+          "hypothesisId": "age-depart-effectif",
+          "note": "Deux années de plus entre la fin de ses droits à l'assurance chômage et l'ouverture de sa retraite. Le modèle représente cet écart par la différence entre un minimum social et la pension qu'il aurait perçue à 62 ans. Dans quelle proportion les personnes dans ce cas restent en emploi, basculent au chômage non indemnisé ou à l'invalidité est précisément ce qui est débattu."
+        },
+        {
+          "id": "ar-inactifs",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ]
+              ]
+            },
+            "description": "Personnes sans activité"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Une pension d'invalidité se convertit en pension de retraite à l'âge d'ouverture des droits. Décaler cet âge prolonge d'autant la période d'invalidité, à un montant qui n'est pas le même. Le modèle ne chiffre pas cet écart."
+        },
+        {
+          "id": "ar-penibilite",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": -180,
+          "scope": {
+            "description": "Salariés des trois premiers déciles : exposition plus forte à l'usure",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  3
+                ]
+              ]
+            }
+          },
+          "horizon": "y10",
+          "uncertainty": "debated",
+          "hypothesisId": "age-depart-effectif",
+          "note": "Une part de ceux qui exercent les métiers les plus usants n'atteint pas l'âge d'ouverture en emploi et passe par le chômage ou l'invalidité, à un revenu plus faible. Le décile sert ici de substitut à l'exposition réelle, qui dépend du métier et non du revenu : la convention est grossière et elle est assumée comme telle."
+        },
+        {
+          "id": "ar-finances",
+          "kind": "public_finance",
+          "publicBillions": 10,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y10",
+          "uncertainty": "debated",
+          "hypothesisId": "age-depart-effectif",
+          "note": "Le rendement net dépend de la part des personnes qui, décalage ou non, ne sont plus en emploi à cet âge : ce qui est économisé sur les pensions est en partie dépensé ailleurs."
+        }
+      ],
+      "argumentsFor": [
+        "C'est le levier dont le rendement est le plus prévisible : il ne dépend ni du comportement des cotisants, ni du rendement d'un prélèvement.",
+        "L'allongement de l'espérance de vie depuis la fixation de l'âge actuel est un fait, et aucun autre paramètre du système n'a été ajusté pour en tenir compte."
+      ],
+      "argumentsAgainst": [
+        "L'espérance de vie en bonne santé diffère de plusieurs années entre un ouvrier et un cadre : le même décalage retire une part très inégale de la retraite effectivement vécue.",
+        "Une partie de ceux qui attendent l'âge ne sont déjà plus en emploi : pour eux la mesure n'ajoute pas deux ans de travail, mais deux ans de chômage ou d'invalidité."
+      ]
+    },
+    {
+      "id": "duree-cotisation",
+      "label": "Allonger la durée de cotisation exigée",
+      "decisionDescription": "L'âge reste à 62 ans, mais le nombre de trimestres exigés pour une pension complète augmente de deux années. Partir à 62 ans reste possible, avec une pension réduite.",
+      "families": [
+        "public_spending",
+        "scope_efficiency"
+      ],
+      "isCompromise": true,
+      "effects": [
+        {
+          "id": "dc-salaries",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ]
+              ]
+            },
+            "description": "Salariés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Un salarié entré tôt dans la vie active atteint la durée exigée avant l'âge : pour lui, allonger les trimestres ne change rien tant que l'âge ne bouge pas. C'est l'argument central des partisans de ce levier."
+        },
+        {
+          "id": "dc-independants",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "employee"
+                  ]
+                }
+              ]
+            },
+            "description": "Indépendants sans activité salariée"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Même logique : ce qui compte est l'âge d'entrée dans l'activité, pas le statut."
+        },
+        {
+          "id": "dc-retraites",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            },
+            "description": "Retraités"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Les pensions déjà liquidées ne sont pas touchées."
+        },
+        {
+          "id": "dc-chomeurs",
+          "kind": "budget_line",
+          "code": "allocation-chomage",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ]
+              ]
+            },
+            "description": "Demandeurs d'emploi indemnisés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Les périodes de chômage indemnisé valident des trimestres, mais à un rythme et dans une limite qui ne sont pas ceux du travail : allonger la durée exigée pèse donc plus lourd sur une carrière interrompue que sur une carrière continue."
+        },
+        {
+          "id": "dc-inactifs",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ]
+              ]
+            },
+            "description": "Personnes sans activité"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Les périodes d'invalidité valident des trimestres selon des règles distinctes. Le jeu ne les modélise pas, et cette absence est importante : c'est exactement là que se joue l'effet de la mesure pour elle."
+        },
+        {
+          "id": "dc-entree-tardive",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": -145,
+          "scope": {
+            "description": "Carrières commencées après des études longues",
+            "when": {
+              "and": [
+                [
+                  "age",
+                  "gte",
+                  35
+                ],
+                [
+                  "incomeDecile",
+                  "gte",
+                  6
+                ]
+              ]
+            }
+          },
+          "horizon": "y10",
+          "uncertainty": "debated",
+          "hypothesisId": "age-depart-effectif",
+          "note": "Une entrée dans la vie active à 23 ou 25 ans repousse d'autant l'atteinte de la durée exigée : la mesure décale le départ effectif de ceux qui ont étudié longtemps, et pas de ceux qui ont commencé à 18 ans. Le décile sert ici de substitut à la durée des études, ce qui est une approximation et non une donnée."
+        },
+        {
+          "id": "dc-entree-precoce",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Carrières commencées tôt : durée atteinte avant l'âge",
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "lte",
+                  5
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ]
+              ]
+            }
+          },
+          "horizon": "y10",
+          "uncertainty": "established",
+          "note": "Effet nul, et c'est le propos : qui a commencé à travailler à dix-huit ans aura ses trimestres avant soixante-deux ans. Ce zéro est la raison pour laquelle ce levier est présenté comme plus juste que le décalage de l'âge — et la raison pour laquelle il rapporte moins."
+        },
+        {
+          "id": "dc-finances",
+          "kind": "public_finance",
+          "publicBillions": 7,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y10",
+          "uncertainty": "debated",
+          "hypothesisId": "age-depart-effectif",
+          "note": "Rendement inférieur au décalage de l'âge, parce qu'une partie des assurés atteint la durée exigée avant l'âge et n'est donc pas concernée."
+        }
+      ],
+      "argumentsFor": [
+        "Le levier épargne ceux qui ont commencé à travailler tôt, c'est-à-dire ceux dont les carrières sont les plus usantes et l'espérance de vie la plus courte.",
+        "Il maintient la possibilité de partir à soixante-deux ans, et laisse donc un arbitrage individuel entre durée de travail et montant de pension."
+      ],
+      "argumentsAgainst": [
+        "Partir avec une pension réduite n'est un choix que pour ceux qui peuvent se le permettre : pour les autres, c'est un décalage de l'âge sous un autre nom.",
+        "Les carrières interrompues — maternité, chômage, invalidité, temps partiel subi — valident moins de trimestres, et sont donc pénalisées deux fois."
+      ]
+    },
+    {
+      "id": "cotisation-relevee",
+      "label": "Relever le taux de cotisation",
+      "decisionDescription": "Ni l'âge ni la durée ne changent. Le taux de cotisation retraite est relevé, et l'effet est immédiat sur le revenu de ceux qui travaillent.",
+      "families": [
+        "levies"
+      ],
+      "effects": [
+        {
+          "id": "cr-salaries",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": -42,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ]
+              ]
+            },
+            "description": "Salariés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Prélèvement supplémentaire sur le salaire net, dès le premier mois. C'est le seul levier des quatre dont l'effet soit visible immédiatement, ce qui explique à la fois qu'il soit le plus impopulaire et le plus honnête quant à son coût."
+        },
+        {
+          "id": "cr-independants",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": -78,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "employee"
+                  ]
+                }
+              ]
+            },
+            "description": "Indépendants sans activité salariée"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Un indépendant supporte la part salariale et la part patronale : la même hausse de taux produit chez lui un prélèvement de près du double."
+        },
+        {
+          "id": "cr-retraites",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            },
+            "description": "Retraités"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Les retraités ne cotisent pas pour la retraite : c'est le sens même de cette option, et c'est ce qu'on lui reproche ou ce qu'on lui accorde."
+        },
+        {
+          "id": "cr-chomeurs",
+          "kind": "budget_line",
+          "code": "allocation-chomage",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ]
+              ]
+            },
+            "description": "Demandeurs d'emploi indemnisés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun prélèvement sur l'allocation chômage au titre de la retraite dans ce modèle : les périodes indemnisées valident des trimestres sans cotisation salariale."
+        },
+        {
+          "id": "cr-inactifs",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ]
+              ]
+            },
+            "description": "Personnes sans activité"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun prélèvement : il n'y a pas de revenu d'activité sur lequel l'asseoir."
+        },
+        {
+          "id": "cr-finances",
+          "kind": "public_finance",
+          "publicBillions": 10,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Rendement immédiat et prévisible, à la différence des leviers d'âge ou de durée dont l'effet s'étale sur dix à quinze ans."
+        }
+      ],
+      "argumentsFor": [
+        "C'est le seul levier qui dise son coût tout de suite, et qui le fasse peser sur ceux qui décident plutôt que sur ceux qui subiront la décision dans vingt ans.",
+        "Le taux de cotisation retraite a été relevé plusieurs fois par le passé sans effet mesurable sur l'emploi, ce qui n'est pas vrai de tous les prélèvements."
+      ],
+      "argumentsAgainst": [
+        "Faire porter l'ajustement sur les seuls actifs, dans un pays où leur nombre par retraité diminue, revient à relever le taux de nouveau dans dix ans.",
+        "Une hausse du coût du travail peut peser sur l'emploi ou sur les salaires nets futurs, et l'ampleur de cet effet est discutée."
+      ]
+    },
+    {
+      "id": "contester-cadrage",
+      "label": "Je conteste la façon dont la question est posée",
+      "decisionDescription": "Le joueur refuse le cadrage : la question posée n'est pas de savoir comment équilibrer un système, mais ce que l'on attend d'une vie de travail et de ce qui vient après.",
+      "families": [
+        "challenge_framing"
+      ],
+      "effects": [
+        {
+          "id": "ar-contestation",
+          "kind": "service_level",
+          "scope": {
+            "description": "Aucun effet budgétaire modélisé"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Contester le cadrage ne produit aucun effet chiffré dans ce modèle. Cette absence est une limite du jeu, pas un jugement sur la pertinence de la contestation."
+        }
+      ],
+      "argumentsFor": [
+        "Réduire la retraite à un problème d'équilibre financier évacue la question de ce à quoi sert une vie de travail, et du moment où elle doit s'arrêter.",
+        "Les quatre leviers proposés tiennent tous le nombre d'emplois, la productivité et l'âge d'entrée dans l'activité pour des données : aucun ne se discute, alors que chacun est un choix de politique publique."
+      ],
+      "argumentsAgainst": [
+        "Les réserves du système s'épuisent effectivement à un horizon connu : refuser le cadrage ne repousse pas l'échéance.",
+        "Ne pas choisir parmi ces leviers revient à laisser agir celui qui joue par défaut, c'est-à-dire l'indexation des pensions."
+      ]
+    }
+  ]
+}

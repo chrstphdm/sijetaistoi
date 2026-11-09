@@ -37,8 +37,16 @@ export type ConstraintId = 'not_already_played' | 'concerned_by_a_rule' | 'socia
  */
 export const CONSTRAINT_STATEMENTS: Readonly<Record<ConstraintId, string>> = {
   not_already_played: 'Un personnage déjà incarné n’est pas retiré.',
+  /*
+   * « DE FACON PERCEPTIBLE » veut dire quelque chose de precis, et l'enonce
+   * doit le dire : son budget mensuel change, des maintenant. Formule
+   * autrement, l'enonce etait vrai de tout le monde — le controle de
+   * couverture du build oblige chaque option a atteindre les treize
+   * personnages, effet nul compris — et la contrainte ne selectionnait donc
+   * personne tout en restant affichee comme si elle agissait.
+   */
   concerned_by_a_rule:
-    'À partir du deuxième acte, le tirage privilégie un personnage qu’une règle déjà décidée concerne de façon perceptible.',
+    'À partir du deuxième acte, le tirage privilégie un personnage dont le budget mensuel est déjà modifié par une règle décidée. Être visé par une règle sans que rien ne change, ou pas avant cinq ans, ne compte pas.',
   social_distance:
     'Le tirage privilégie un personnage dont le niveau de vie s’écarte d’au moins trois déciles du précédent.',
 }

@@ -1,0 +1,620 @@
+{
+  "id": "assurance-chomage",
+  "charterVersion": "1.0",
+  "descriptiveTitle": "Durée et financement de l'assurance chômage",
+  "statedBy": "Le Conseil budgétaire, acteur fictif de ce jeu",
+  "context": "Le Conseil budgétaire propose de ramener la durée maximale d'indemnisation de dix-huit à douze mois, et de restituer l'économie sous forme de baisse de cotisation. Il met en regard trois autres directions : rendre l'allocation dégressive après six mois, rétablir une cotisation salariale d'assurance chômage supprimée en 2018, ou ne rien changer. L'écart en jeu est d'environ 4 milliards d'euros par an.",
+  "objective": {
+    "amount": 4,
+    "unit": "EUR_bn",
+    "nature": "fiction",
+    "note": "Montant posé par un acteur fictif du jeu. Le régime d'assurance chômage est financé par des cotisations et de l'impôt, et sa situation financière varie fortement avec la conjoncture : un besoin constaté une année ne l'est pas la suivante."
+  },
+  "contextSourceIds": [
+    "unedic-allocations",
+    "dares-contrats-courts"
+  ],
+  "modelLimitations": "Ce modèle représente la situation d'une seule personne indemnisée, à onze mois de la fin de ses droits et à cinquante-quatre ans. Les effets d'une réduction de durée dépendent massivement de l'âge, du métier et du marché local, qu'il ne distingue pas. Il ne modélise ni la reprise d'emploi — donc ni le gain éventuel d'un retour plus rapide, ni la perte de salaire qui l'accompagne parfois —, ni l'effet d'une baisse de cotisation sur l'embauche, ni la part des allocataires qui n'atteignent jamais la durée maximale, qui est pourtant majoritaire.",
+  "options": [
+    {
+      "id": "statu-quo",
+      "label": "Ne rien changer",
+      "decisionDescription": "La durée, le niveau et le financement restent en l'état. Le déficit du régime est reporté sur sa dette, qui est garantie par l'État.",
+      "families": [
+        "status_quo",
+        "debt_financing"
+      ],
+      "isStatusQuo": true,
+      "effects": [
+        {
+          "id": "cq-salaries",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ]
+              ]
+            },
+            "description": "Salariés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun changement de cotisation ni de droits. La protection reste celle qu'ils connaissent, et le déficit reste porté par la dette du régime."
+        },
+        {
+          "id": "cq-independants",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "employee"
+                  ]
+                }
+              ]
+            },
+            "description": "Indépendants sans activité salariée"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Les indépendants ne sont pas couverts par l'assurance chômage : ils ne cotisent pas et, s'ils cessent leur activité, ils ne perçoivent rien — hors un dispositif d'allocation des travailleurs indépendants dont les conditions excluent la plupart des situations. Cette asymétrie est peu connue et elle vaut pour les quatre options."
+        },
+        {
+          "id": "cq-retraites",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            },
+            "description": "Retraités"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Non concernée : elle ne cotise plus et n'ouvrira plus de droits."
+        },
+        {
+          "id": "cq-chomeurs",
+          "kind": "budget_line",
+          "code": "allocation-chomage",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ]
+              ]
+            },
+            "description": "Demandeurs d'emploi indemnisés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun changement : il conserve ses onze mois de droits restants. C'est la seule option des quatre qui ne modifie pas son horizon."
+        },
+        {
+          "id": "cq-inactifs",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ]
+              ]
+            },
+            "description": "Personnes sans activité"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Non concernée : une pension d'invalidité n'ouvre pas de droits à l'assurance chômage, et n'en consomme pas."
+        },
+        {
+          "id": "cq-finances",
+          "kind": "public_finance",
+          "publicBillions": -4,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Besoin reporté sur la dette du régime, garantie par l'État. Cette dette a été remboursée en totalité à deux reprises depuis 2000, et elle a aussi atteint des niveaux inédits : reporter n'est ni manifestement soutenable, ni manifestement insoutenable."
+        }
+      ],
+      "argumentsFor": [
+        "Le régime est contracyclique par construction : son déficit se creuse quand le chômage monte et se résorbe quand il baisse, et le corriger au mauvais moment du cycle aggrave la récession.",
+        "La durée d'indemnisation a déjà été réduite deux fois depuis 2019 sans que les effets de ces réductions aient été évalués de façon concluante."
+      ],
+      "argumentsAgainst": [
+        "Une dette garantie par l'État est une dette publique : la présenter comme celle d'un régime autonome revient à ne pas la compter.",
+        "Ne rien changer maintient un financement où les contrats courts coûtent au régime beaucoup plus qu'ils ne lui rapportent, sans que personne l'ait décidé ainsi."
+      ]
+    },
+    {
+      "id": "duree-reduite",
+      "label": "Ramener la durée maximale à douze mois",
+      "decisionDescription": "La durée maximale d'indemnisation passe de dix-huit à douze mois, et l'économie est restituée sous forme de baisse de la cotisation d'assurance chômage.",
+      "families": [
+        "public_spending",
+        "levies"
+      ],
+      "effects": [
+        {
+          "id": "cd-salaries",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 18,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ]
+              ]
+            },
+            "description": "Salariés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Baisse de cotisation restituée sur le salaire net : dix-huit euros par mois, pour une protection réduite d'un tiers en durée. C'est un échange, et il est présenté comme tel."
+        },
+        {
+          "id": "cd-independants",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "employee"
+                  ]
+                }
+              ]
+            },
+            "description": "Indépendants sans activité salariée"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Les indépendants ne sont pas couverts par l'assurance chômage : ils ne cotisent pas et, s'ils cessent leur activité, ils ne perçoivent rien — hors un dispositif d'allocation des travailleurs indépendants dont les conditions excluent la plupart des situations. Cette asymétrie est peu connue et elle vaut pour les quatre options. Ils ne bénéficient donc ni de la baisse de cotisation, ni de la protection réduite."
+        },
+        {
+          "id": "cd-retraites",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            },
+            "description": "Retraités"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Non concernée."
+        },
+        {
+          "id": "cd-chomeurs",
+          "kind": "budget_line",
+          "code": "allocation-chomage",
+          "monthlyDelta": -660,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ]
+              ]
+            },
+            "description": "Demandeurs d'emploi indemnisés"
+          },
+          "horizon": "y1",
+          "uncertainty": "highly_debated",
+          "hypothesisId": "duree-indemnisation-retour-emploi",
+          "note": "Ses droits s'arrêteraient dans un mois au lieu de onze. Le modèle représente cet écart par la différence moyenne entre son allocation et le minimum social qui prendrait le relais. À cinquante-quatre ans, la probabilité de retrouver un emploi avant l'échéance est précisément l'objet du débat, et les travaux disponibles ne s'accordent pas."
+        },
+        {
+          "id": "cd-inactifs",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ]
+              ]
+            },
+            "description": "Personnes sans activité"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Non concernée directement. Une personne en invalidité qui reprendrait un emploi puis le perdrait relèverait de ces règles-là : le modèle ne représente pas ce chemin."
+        },
+        {
+          "id": "cd-finances",
+          "kind": "public_finance",
+          "publicBillions": 4,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "duree-indemnisation-retour-emploi",
+          "note": "Économie brute sur les allocations, restituée en baisse de cotisation. Le rendement net dépend du nombre de personnes qui basculent vers un minimum social, dépense qui n'est pas portée par le même budget mais qui existe."
+        }
+      ],
+      "argumentsFor": [
+        "Une durée plus courte accélère la reprise d'emploi dans la plupart des travaux disponibles, et la restitution en baisse de cotisation bénéficie à tous ceux qui travaillent.",
+        "Douze mois restent supérieurs à ce que prévoient la majorité des régimes européens comparables, pour un taux de remplacement qui reste parmi les plus élevés."
+      ],
+      "argumentsAgainst": [
+        "La reprise plus rapide se fait en partie au prix d'un emploi moins bien payé ou plus court, ce que la mesure du seul retour à l'emploi ne montre pas.",
+        "L'effet se concentre sur les seniors et sur les bassins d'emploi dégradés, pour qui la durée n'est pas un paramètre de motivation mais un délai de recherche effectif."
+      ]
+    },
+    {
+      "id": "degressivite",
+      "label": "Rendre l'allocation dégressive après six mois",
+      "decisionDescription": "La durée ne change pas, mais l'allocation baisse de 30 % à partir du septième mois. L'économie, plus faible, est restituée en partie.",
+      "families": [
+        "public_spending",
+        "levies"
+      ],
+      "isCompromise": true,
+      "effects": [
+        {
+          "id": "cg-salaries",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 8,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ]
+              ]
+            },
+            "description": "Salariés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Restitution plus faible, parce que l'économie l'est aussi. La protection n'est pas raccourcie, elle est amoindrie en cours de route."
+        },
+        {
+          "id": "cg-independants",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "employee"
+                  ]
+                }
+              ]
+            },
+            "description": "Indépendants sans activité salariée"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Les indépendants ne sont pas couverts par l'assurance chômage : ils ne cotisent pas et, s'ils cessent leur activité, ils ne perçoivent rien — hors un dispositif d'allocation des travailleurs indépendants dont les conditions excluent la plupart des situations. Cette asymétrie est peu connue et elle vaut pour les quatre options."
+        },
+        {
+          "id": "cg-retraites",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            },
+            "description": "Retraités"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Non concernée."
+        },
+        {
+          "id": "cg-chomeurs",
+          "kind": "budget_line",
+          "code": "allocation-chomage",
+          "monthlyDelta": -390,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ]
+              ]
+            },
+            "description": "Demandeurs d'emploi indemnisés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Il est au onzième mois : la dégressivité s'appliquerait immédiatement et sans préavis sur un budget déjà en déficit de 180 € par mois. L'effet est certain dans son principe et son ampleur dépend du taux retenu."
+        },
+        {
+          "id": "cg-inactifs",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ]
+              ]
+            },
+            "description": "Personnes sans activité"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Non concernée."
+        },
+        {
+          "id": "cg-finances",
+          "kind": "public_finance",
+          "publicBillions": 1.8,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "duree-indemnisation-retour-emploi",
+          "note": "Rendement inférieur de plus de moitié à la réduction de durée : la dégressivité ne touche que les allocataires qui dépassent six mois, soit une minorité d'entre eux."
+        }
+      ],
+      "argumentsFor": [
+        "La baisse est progressive plutôt que brutale : elle laisse un revenu, là où la fin des droits n'en laisse aucun.",
+        "Elle vise les indemnisations longues sans toucher aux courtes, qui concernent la majorité des allocataires et relèvent souvent d'une transition entre deux contrats."
+      ],
+      "argumentsAgainst": [
+        "Elle frappe exactement au moment où la recherche d'emploi coûte le plus cher et rapporte le moins, c'est-à-dire après l'épuisement des pistes immédiates.",
+        "Son rendement budgétaire est faible pour un effet redouté important : le rapport entre les deux est le plus défavorable des trois leviers."
+      ]
+    },
+    {
+      "id": "cotisation-salariale",
+      "label": "Rétablir une cotisation salariale",
+      "decisionDescription": "Ni la durée ni le niveau ne changent. La cotisation salariale d'assurance chômage, supprimée en 2018 et remplacée par de l'impôt, est rétablie.",
+      "families": [
+        "levies"
+      ],
+      "effects": [
+        {
+          "id": "cc-salaries",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": -29,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ]
+              ]
+            },
+            "description": "Salariés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Prélèvement rétabli sur le salaire net. Depuis 2018, la part salariale de l'assurance chômage est financée par la contribution sociale généralisée, donc aussi par les retraités et par les revenus du patrimoine : la rétablir revient à faire payer l'assurance par les seuls assurés."
+        },
+        {
+          "id": "cc-independants",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "employee"
+                  ]
+                }
+              ]
+            },
+            "description": "Indépendants sans activité salariée"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Les indépendants ne sont pas couverts par l'assurance chômage : ils ne cotisent pas et, s'ils cessent leur activité, ils ne perçoivent rien — hors un dispositif d'allocation des travailleurs indépendants dont les conditions excluent la plupart des situations. Cette asymétrie est peu connue et elle vaut pour les quatre options. Ils contribuent en revanche au financement actuel par la contribution sociale généralisée, pour une couverture dont ils ne bénéficient pas."
+        },
+        {
+          "id": "cc-retraites",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            },
+            "description": "Retraités"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Rétablir la cotisation salariale allégerait d'autant la part financée par la contribution sociale généralisée, que les retraités acquittent. L'effet est favorable et le modèle ne le chiffre pas, faute de savoir comment la substitution serait calibrée."
+        },
+        {
+          "id": "cc-chomeurs",
+          "kind": "budget_line",
+          "code": "allocation-chomage",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ]
+              ]
+            },
+            "description": "Demandeurs d'emploi indemnisés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun changement pour lui : ni sa durée, ni son allocation. C'est la seule option qui finance le régime sans toucher à ce qu'il perçoit."
+        },
+        {
+          "id": "cc-inactifs",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ]
+              ]
+            },
+            "description": "Personnes sans activité"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Même remarque : sa pension supporte la contribution sociale généralisée à taux réduit, et un transfert vers la cotisation l'en allégerait marginalement."
+        },
+        {
+          "id": "cc-finances",
+          "kind": "public_finance",
+          "publicBillions": 4,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Rendement immédiat et prévisible : l'assiette salariale est large et connue. Le transfert inverse, en 2018, avait le même rendement en sens opposé."
+        }
+      ],
+      "argumentsFor": [
+        "Une assurance financée par ceux qu'elle assure rend le lien entre cotisation et droit explicite, et rend plus difficile de réduire les droits sans réduire la cotisation.",
+        "Le financement actuel par la contribution sociale généralisée fait payer les retraités et les revenus du patrimoine pour une protection dont ils ne bénéficient pas."
+      ],
+      "argumentsAgainst": [
+        "Une cotisation salariale réduit le salaire net au premier euro, y compris au salaire minimum, là où l'impôt tient compte du niveau de revenu.",
+        "Le lien entre cotisation et droit est en grande partie une fiction : les règles d'indemnisation sont fixées par la négociation et par l'État, et pas par ce que chacun a versé."
+      ]
+    },
+    {
+      "id": "contester-cadrage",
+      "label": "Je conteste la façon dont la question est posée",
+      "decisionDescription": "Le joueur refuse le cadrage : la question n'est pas de savoir combien de temps indemniser, mais pourquoi il y a des emplois courts en nombre croissant et ce qui les produit.",
+      "families": [
+        "challenge_framing"
+      ],
+      "effects": [
+        {
+          "id": "cc-contestation",
+          "kind": "service_level",
+          "scope": {
+            "description": "Aucun effet budgétaire modélisé"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Contester le cadrage ne produit aucun effet chiffré dans ce modèle. Cette absence est une limite du jeu, pas un jugement sur la pertinence de la contestation."
+        }
+      ],
+      "argumentsFor": [
+        "Débattre de la durée d'indemnisation tient pour acquis le volume et la forme des emplois disponibles, qui sont pourtant le produit de décisions — fiscales, réglementaires, industrielles.",
+        "Trois des quatre options font porter l'ajustement sur les personnes indemnisées ou sur les salariés : aucune ne touche à ce qui fait entrer les gens dans le régime."
+      ],
+      "argumentsAgainst": [
+        "Les règles s'appliquent dès le mois prochain à des personnes dont les droits courent : refuser le cadrage ne suspend pas le calendrier.",
+        "Le lien entre les règles d'indemnisation et le recours aux contrats courts existe dans les deux sens, et le dénoncer d'un seul côté est aussi un cadrage."
+      ]
+    }
+  ]
+}

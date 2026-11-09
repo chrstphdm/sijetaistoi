@@ -47,6 +47,17 @@ const Traits = z.object({
   householdSize: z.number().int().min(1).max(12),
   childCount: z.number().int().min(0).max(10),
   hasSchoolAgedChild: z.boolean(),
+  /**
+   * Zonage reglementaire du logement. Declare explicitement, sans valeur par
+   * defaut : un defaut aurait affirme en silence que telle ville n'est pas en
+   * zone tendue, ce qui est faux pour Lyon comme pour Nantes.
+   */
+  housingZone: z.enum(['tendue', 'detendue']),
+  /**
+   * Handicap ou invalidite reconnus par un organisme. Defaut `false` : son
+   * absence est le cas general, et l'ecrire partout n'aurait rien ajoute.
+   */
+  recognisedDisability: z.boolean().default(false),
 })
 
 const Stocks = z.object({

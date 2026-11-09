@@ -1,0 +1,197 @@
+{
+  "id": "berangere",
+  "charterVersion": "1.0",
+  "fictional": true,
+  "fictionNote": "Personnage fictif. Situation construite pour être plausible au regard des ordres de grandeur publics sur les rémunérations de dirigeants de petites entreprises du bâtiment et sur la concentration des revenus du patrimoine dans le dernier décile. Ne correspond à aucune personne réelle.",
+  "identity": {
+    "firstName": "Bérangère",
+    "age": 58,
+    "identityLine": "dirigeante d'une entreprise de second œuvre de 34 salariés, mariée, propriétaire à Bordeaux",
+    "incomeDecile": 10,
+    "calibrationSourceIds": [
+      "insee-artisanat-revenus",
+      "insee-patrimoine"
+    ]
+  },
+  "traits": {
+    "activities": [
+      "self_employed"
+    ],
+    "tenure": "owner_outright",
+    "heating": "individual",
+    "householdSize": 2,
+    "childCount": 0,
+    "hasSchoolAgedChild": false,
+    "housingZone": "tendue",
+    "recognisedDisability": false
+  },
+  "budget": {
+    "lines": [
+      {
+        "code": "revenu-independant",
+        "group": "resource",
+        "value": {
+          "amount": 7200,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Rémunération de gérance, nette. Elle ne s'est pas versée de dividende depuis trois exercices, pour laisser la trésorerie dans l'entreprise."
+        }
+      },
+      {
+        "code": "revenu-capital",
+        "group": "resource",
+        "value": {
+          "amount": 1450,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Loyers de deux appartements et intérêts, nets de prélèvement forfaitaire unique. Ce revenu ne dépend ni de son temps ni de sa santé, et c'est ce qui le distingue de l'autre."
+        }
+      },
+      {
+        "code": "logement",
+        "group": "constrained",
+        "value": {
+          "amount": 310,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Maison acquise et remboursée : il ne reste que la taxe foncière et l'entretien, lissés sur l'année. Un patrimoine immobilier détenu sans crédit fait presque disparaître ce poste, et c'est l'un des écarts les plus massifs du corpus."
+        }
+      },
+      {
+        "code": "energie",
+        "group": "constrained",
+        "value": {
+          "amount": 290,
+          "unit": "EUR_month",
+          "nature": "extrapolation"
+        }
+      },
+      {
+        "code": "alimentation",
+        "group": "constrained",
+        "value": {
+          "amount": 680,
+          "unit": "EUR_month",
+          "nature": "hypothesis",
+          "hypothesisId": "socle-alimentaire"
+        }
+      },
+      {
+        "code": "transport",
+        "group": "constrained",
+        "value": {
+          "amount": 420,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Véhicule personnel et déplacements de chantier non refacturés."
+        }
+      },
+      {
+        "code": "sante",
+        "group": "constrained",
+        "value": {
+          "amount": 340,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Contrat de prévoyance et complémentaire de dirigeant, plus des dépassements d'honoraires réguliers."
+        }
+      },
+      {
+        "code": "impots",
+        "group": "levy",
+        "value": {
+          "amount": 2450,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Impôt sur le revenu et prélèvements sociaux, y compris sur les revenus du patrimoine."
+        }
+      },
+      {
+        "code": "loisirs",
+        "group": "adjustable",
+        "value": {
+          "amount": 780,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      },
+      {
+        "code": "habillement",
+        "group": "adjustable",
+        "value": {
+          "amount": 290,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      }
+    ]
+  },
+  "stocks": {
+    "liquid7d": 18000,
+    "liquid60d": 46000,
+    "authorisedOverdraft": 5000,
+    "netWealth": 1350000,
+    "precautionFloorMonths": 3
+  },
+  "parity": {
+    "strength": "Elle a traversé 2009 et 2020 sans licencier personne : trente-quatre salariés savent qu'elle ne le fera pas la première, et cela se paie en fidélité.",
+    "vulnerability": "La maison est hypothéquée en garantie du prêt de l'entreprise. Deux chantiers impayés et ce n'est plus l'entreprise qui est en jeu, c'est l'endroit où elle dort.",
+    "aspirations": [
+      "Transmettre l'entreprise à son chef d'atelier plutôt qu'à un fonds d'investissement",
+      "Arrêter avant soixante-cinq ans, ce qu'elle annonce depuis dix ans"
+    ],
+    "concerns": [
+      "Que le donneur d'ordre principal règle à cent vingt jours, comme l'an dernier",
+      "Que ses deux fils n'aient jamais eu à se demander si c'était possible"
+    ],
+    "nonMonetaryConstraint": "Une caution personnelle sur le découvert de l'entreprise, qui court jusqu'en 2029 : son patrimoine privé et celui de la société ne se séparent pas, quoi qu'en dise le statut juridique.",
+    "nonMonetaryAdvantage": "Un capital qui produit mille quatre cent cinquante euros par mois sans qu'elle y touche : un revenu qui ne dépend ni de sa santé, ni de son temps, ni de la commande.",
+    "opinionAgainstOwnInterest": "Elle est favorable à ce que les revenus du capital soient imposés au même barème que ceux du travail, ce qui lui coûterait directement : « je ne vois pas au nom de quoi l'argent que je gagne en dormant serait moins taxé que celui que gagnent mes compagnons »."
+  },
+  "shortTermGoal": {
+    "label": "Mettre 20 000 € de côté pour racheter les parts de son associé sortant",
+    "amount": 20000,
+    "deadline": "2027-06"
+  },
+  "embodiedDetails": [
+    "Elle passe sur les chantiers le vendredi en fin de matinée, jamais annoncée, et jamais pour contrôler.",
+    "Elle tutoie tout le monde dans l'entreprise sauf le comptable, qu'elle vouvoie depuis vingt ans sans savoir pourquoi.",
+    "Elle garde dans son bureau la première facture qu'elle a émise, encadrée, de 1 840 francs."
+  ],
+  "unavailableOptions": [
+    {
+      "option": "arreter-activite",
+      "reason": "La caution personnelle court jusqu'au remboursement du prêt de l'entreprise, en 2029 : elle ne peut pas s'arrêter avant sans la faire lever par la banque."
+    },
+    {
+      "option": "vendre-immobilier",
+      "reason": "Les deux appartements sont donnés en garantie à la banque, en second rang, derrière le prêt de l'entreprise : leur vente supposerait l'accord du prêteur."
+    }
+  ],
+  "equivalenceRefs": [
+    {
+      "code": "alimentation",
+      "monthlyAmount": 680,
+      "narrativeLabel": "l'alimentation du mois pour deux"
+    },
+    {
+      "code": "loisirs",
+      "monthlyAmount": 780,
+      "narrativeLabel": "son budget loisirs du mois"
+    },
+    {
+      "code": "revenu-capital",
+      "monthlyAmount": 1450,
+      "narrativeLabel": "ce que lui rapporte son patrimoine chaque mois"
+    },
+    {
+      "code": "impots",
+      "monthlyAmount": 2450,
+      "narrativeLabel": "ce qu'elle verse en impôts et prélèvements"
+    }
+  ],
+  "narrative": {
+    "story": "Bérangère a repris l'entreprise de plâtrerie de son père à trente-deux ans, avec sept salariés et un carnet de commandes de quatre mois. Elle en a trente-quatre aujourd'hui, un atelier de menuiserie ajouté en 2011, et une dette bancaire qu'elle a renégociée trois fois. Elle se verse une rémunération de dirigeante que son expert-comptable juge basse et que ses compagnons jugent élevée, et les deux ont raison selon le point de comparaison. Elle a acheté deux appartements à Bordeaux au début des années 2000, par prudence, quand personne ne parlait encore du prix du mètre carré bordelais ; ce choix-là lui rapporte aujourd'hui plus que n'importe quelle décision de gestion qu'elle ait prise depuis, et elle le dit sans détour."
+  },
+  "lineOverrides": []
+}

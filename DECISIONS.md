@@ -379,3 +379,123 @@ partie tirée n'aurait plus de sens.
 Dividende imprévu : la porte de service rend testables deux choses qui dépendaient
 jusque-là du tirage — l'option hors de portée, qui ne se voit que chez un personnage
 peu liquide, et le mois en déficit.
+
+## 26 — Le corpus porté à treize situations et treize décisions
+
+Demandé ainsi : « il nous faut TOUT les personnages et les plus grandes réformes qui
+opposent les programmes politiques des différents partis pour la présidentielle 2027 ».
+
+**Lecture retenue, validée avant d'écrire une ligne.** La demande désigne un *critère de
+sélection des sujets* — ceux sur lesquels le débat est réellement divisé — et non une
+consigne de nommer les partis et de leur attribuer des mesures. La seconde lecture est
+celle que l'auteur avait lui-même écartée (« on écarte l'idée des programmes 2027 »),
+et c'est la seule qui pose problème : à cinq mois du scrutin, la fenêtre de l'article
+L. 52-1 du code électoral est ouverte. Aucun parti, aucun candidat, aucun programme
+n'est nommé nulle part. Ce refus a un coût, et il est désormais écrit sur la page
+méthode : le joueur ne peut pas savoir qui propose quoi, et doit donc juger la mesure
+plutôt que son auteur. C'est une position, pas une neutralité.
+
+**Sept situations ajoutées**, choisies sur la liste des manques que la page méthode
+déclarait déjà : Nadia (temps partiel subi, trois enfants, parc social, Seine-Saint-Denis),
+Lucie (invalidité reconnue, parc social), Patrick (sans emploi, onze mois de droits
+restants, en déficit mensuel structurel), Malik (intérim, hébergé chez sa mère),
+Hélène (cadre dont le salaire est absorbé par l'Ehpad d'un parent et les études d'un
+fils), Rachid (huitième décile, locataire en première couronne, patrimoine nul),
+Bérangère (dernier décile, revenus du patrimoine, caution personnelle sur le prêt de
+son entreprise).
+
+Le corpus couvre désormais les **dix déciles**, les **six situations d'activité** et les
+**cinq statuts d'occupation**. Un test le vérifie, parce que le contrôle de couverture
+du build ne le pouvait pas : il vérifie que chaque personnage est atteint par chaque
+décision, jamais qu'une situation entière manque au corpus.
+
+**Sept décisions ajoutées** : âge de la retraite, conditions d'accès aux minima sociaux,
+durée et financement de l'assurance chômage, encadrement des loyers, imposition des
+revenus du patrimoine, niveau du salaire minimum, tarification des transports urbains.
+Deux d'entre elles — l'encadrement des loyers et le salaire minimum — sont les
+**premières décisions du jeu qui ne cherchent aucune somme** : leur objectif budgétaire
+est nul, et c'est écrit dans le contenu. Onze réformes sur treize restent cadrées en
+« somme à trouver », ce que la page méthode dit maintenant en chiffres.
+
+**Quatre postes budgétaires** ont été créés plutôt que réutilisés : pension de retraite
+(distincte des prestations — une pension est la contrepartie de cotisations, une
+prestation est attribuée sous conditions, et une réforme peut toucher l'une sans
+l'autre), allocation chômage, revenus du patrimoine, aide à un proche. Sans eux, une
+mesure sur l'assurance chômage aurait dû prélever sur la ligne « prestations », qui
+porte aussi les allocations familiales : un mécanisme inventé.
+
+**Trois attributs** ont été ouverts au vocabulaire fermé des conditions, chacun parce
+qu'une mesure ne s'écrit pas sans lui : `age` (un décalage de l'âge de départ),
+`housingZone` (l'encadrement des loyers, dont le zonage est le critère juridique), et
+`recognisedDisability` (un minimum social versé à ce titre n'obéit pas aux mêmes règles
+que celui versé à un actif).
+
+**Deux partitions du corpus** se sont dégagées en écrivant ces effets nuls, et elles
+valent d'être notées plutôt que redécouvertes. *Par statut* — salariés, indépendants sans
+activité salariée, retraités, demandeurs d'emploi, personnes sans activité — pour toute
+mesure assise sur un revenu : cinq groupes disjoints qui couvrent les treize, chacun
+associé au poste de ressource que ses membres possèdent réellement. *Par éligibilité* —
+deux premiers déciles, troisième décile, demandeurs d'emploi, retraités, salariés et
+indépendants au-dessus du quatrième — pour toute mesure sous conditions de ressources.
+Le dernier point est celui qui coûte : un effet nul posé sur un poste que le personnage
+n'a pas est déclaré et invisible, soit le pire des deux mondes. Le script qui a servi à
+produire ces portées n'est pas versionné — rien ne le vérifierait, et un générateur en
+désaccord avec le schéma serait un piège ; le contrôle de couverture du build, lui, est
+exécuté à chaque compilation.
+
+Le contrôle de couverture a trouvé sept silences à l'ajout des nouveaux personnages :
+une contribution assise sur la propriété ne disait rien de la personne hébergée, une
+cotisation « universelle » assise sur l'activité ne disait rien de qui n'en a pas. Les
+sept sont désormais des effets nuls explicites, chacun avec son motif.
+
+## 27 — « Concerné de façon perceptible » ne sélectionnait plus personne
+
+Le registre affiche au joueur : « le tirage privilégie un personnage qu'une règle déjà
+décidée concerne de façon perceptible ». Le moteur l'implémentait par « au moins un
+effet le vise ».
+
+Or le contrôle de couverture oblige chaque option à atteindre tout le corpus, effet nul
+compris : **cinquante-deux options sur soixante-cinq** atteignent les treize personnages.
+La contrainte était donc vraie de chacun — donc ne filtrait rien — tout en restant
+affichée comme si elle agissait. Une règle que le moteur n'applique pas n'a pas le droit
+d'être publiée.
+
+« Perceptible » veut dire : son budget mensuel change, maintenant. L'énoncé public a été
+précisé dans les mêmes termes.
+
+## 28 — Un effet à cinq ans n'est pas un effet d'aujourd'hui
+
+Trouvé par un test écrit pour autre chose.
+
+La contribution énergie coûte 14 € par mois dès le premier mois aux ménages en chauffage
+collectif, et leur rend 31 € « après rénovation effective » — effet déclaré à l'horizon
+`y5`, avec sa note, depuis l'étape 7. Le moteur ne lisait `horizon` nulle part en dehors
+de la projection à dix ans : le relevé mensuel, le rappel et l'écran de comparaison
+additionnaient tout au présent. Claire voyait donc **un gain de 17 € par mois** pour une
+mesure qui lui coûte 14 € maintenant et ne lui rendra rien avant cinq ans.
+
+L'erreur jouait dans un seul sens : elle faisait passer un prélèvement pour un gain,
+auprès des ménages à qui il coûte d'abord.
+
+`inForceNow` filtre désormais sur l'année de début, à chaque endroit qui parle du
+présent. L'écran de comparaison garde les effets différés — ils sont l'effet de la
+décision, les cacher serait l'erreur inverse — mais sur une ligne séparée et datée.
+
+Le corpus d'origine portait l'horizon `y1` presque partout, ce qui rendait la confusion
+invisible. Les sept réformes ajoutées utilisent `y5` et `y10` pour des mesures dont
+c'est la nature même — un plafonnement de loyer n'agit qu'à la relocation, un décalage
+de l'âge de départ pas avant une décennie —, et le défaut est devenu visible.
+
+## 29 — « Aucun effet » sans dire pourquoi
+
+Relevé sur une capture d'écran : avec treize situations, l'écran « le choix vu par
+chacun » affichait neuf fois la phrase « aucun effet sur son budget courant » et rien
+d'autre. Une comparaison faite de neuf phrases identiques ne compare rien.
+
+Ce n'était pas une erreur de calcul : les effets nuls sont la réponse exacte pour une
+mesure qui ne concerne qu'une partie du corpus. C'était une perte de contenu. Le
+contrôle de couverture oblige l'auteur à écrire, pour chaque personne qu'une option ne
+touche pas, quelle portée l'exclut ; l'écran jetait ce travail. La portée déclarée est
+maintenant reprise telle quelle — « locataires du parc social », « personnes hébergées »,
+« propriétaires occupants » —, et l'écran redevient une carte de qui est dedans et qui
+est dehors.

@@ -1,0 +1,219 @@
+{
+  "id": "nadia",
+  "charterVersion": "1.0",
+  "fictional": true,
+  "fictionNote": "Personnage fictif. Situation construite pour être plausible au regard des ordres de grandeur publics sur les loyers du parc social en Seine-Saint-Denis, les rémunérations du nettoyage en temps partiel et les restes à charge de restauration scolaire. Ne correspond à aucune personne réelle.",
+  "identity": {
+    "firstName": "Nadia",
+    "age": 41,
+    "identityLine": "agent d'entretien à temps partiel, trois enfants, locataire du parc social à Bobigny",
+    "incomeDecile": 1,
+    "calibrationSourceIds": [
+      "ancols-loyers-sociaux",
+      "dares-contrats-courts",
+      "cnaf-cout-garde",
+      "olap-loyers-idf"
+    ]
+  },
+  "traits": {
+    "activities": [
+      "employee"
+    ],
+    "tenure": "tenant_social",
+    "heating": "collective",
+    "householdSize": 4,
+    "childCount": 3,
+    "hasSchoolAgedChild": true,
+    "housingZone": "tendue",
+    "recognisedDisability": false
+  },
+  "budget": {
+    "lines": [
+      {
+        "code": "salaire-net",
+        "group": "resource",
+        "value": {
+          "amount": 1180,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Vingt-huit heures par semaine en deux vacations, avec ancienneté et majorations de dimanche. Le temps partiel n'est pas choisi : le prestataire ne propose pas d'horaire continu."
+        }
+      },
+      {
+        "code": "prestations",
+        "group": "resource",
+        "value": {
+          "amount": 790,
+          "unit": "EUR_month",
+          "nature": "hypothesis",
+          "hypothesisId": "prestations-calibrage",
+          "note": "Allocations familiales pour trois enfants, complément familial et aide au logement, agrégés."
+        }
+      },
+      {
+        "code": "logement",
+        "group": "constrained",
+        "value": {
+          "amount": 410,
+          "unit": "EUR_month",
+          "nature": "fact",
+          "sourceId": "ancols-loyers-sociaux",
+          "note": "T4 du parc social, charges comprises. L'aide au logement est comptée en ressource, pas déduite ici."
+        }
+      },
+      {
+        "code": "energie",
+        "group": "constrained",
+        "value": {
+          "amount": 110,
+          "unit": "EUR_month",
+          "nature": "extrapolation",
+          "note": "Chauffage collectif inclus dans les charges ; ce poste ne couvre que l'électricité et l'eau chaude."
+        }
+      },
+      {
+        "code": "alimentation",
+        "group": "constrained",
+        "value": {
+          "amount": 680,
+          "unit": "EUR_month",
+          "nature": "hypothesis",
+          "hypothesisId": "socle-alimentaire"
+        }
+      },
+      {
+        "code": "transport",
+        "group": "constrained",
+        "value": {
+          "amount": 115,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Un passe Navigo pour elle, deux abonnements scolaires pour les aînés."
+        }
+      },
+      {
+        "code": "enfants",
+        "group": "constrained",
+        "value": {
+          "amount": 180,
+          "unit": "EUR_month",
+          "nature": "fact",
+          "sourceId": "cnaf-cout-garde",
+          "note": "Restauration scolaire pour trois, et accueil du soir pour le plus jeune."
+        }
+      },
+      {
+        "code": "sante",
+        "group": "constrained",
+        "value": {
+          "amount": 55,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      },
+      {
+        "code": "credit-conso",
+        "group": "credit",
+        "value": {
+          "amount": 95,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Crédit renouvelable ouvert pour remplacer le lave-linge. Onze mensualités restantes, au taux maximal."
+        }
+      },
+      {
+        "code": "loisirs",
+        "group": "adjustable",
+        "value": {
+          "amount": 35,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      },
+      {
+        "code": "habillement",
+        "group": "adjustable",
+        "value": {
+          "amount": 70,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Trois enfants dont deux adolescents : ce poste est le premier à être coupé et le plus difficile à tenir coupé."
+        }
+      }
+    ]
+  },
+  "stocks": {
+    "liquid7d": 95,
+    "liquid60d": 95,
+    "authorisedOverdraft": 0,
+    "netWealth": 120,
+    "precautionFloorMonths": 0
+  },
+  "parity": {
+    "strength": "Elle est celle à qui l'on frappe dans la cage d'escalier : elle sait quel formulaire va où, et elle le remplit aussi pour les autres.",
+    "vulnerability": "Ses heures tiennent en deux vacations, de six à neuf heures et de dix-sept à vingt heures. Un changement d'horaire décidé par le prestataire désorganise tout le reste.",
+    "aspirations": [
+      "Passer le concours d'ATSEM, pour travailler en journée et dans un seul endroit",
+      "Que l'aîné obtienne l'internat du lycée qu'il a demandé"
+    ],
+    "concerns": [
+      "Que le marché de nettoyage soit repris par un autre prestataire, et ses heures avec",
+      "Que le plus jeune prenne l'habitude de ne rien demander"
+    ],
+    "nonMonetaryConstraint": "Deux vacations par jour et rien entre les deux : elle ne peut suivre aucune formation, même gratuite, même proposée, parce qu'aucune n'a lieu de neuf à seize heures.",
+    "nonMonetaryAdvantage": "Sa sœur habite deux étages plus bas. Les enfants ne sont jamais seuls, et cela ne coûte rien à personne.",
+    "opinionAgainstOwnInterest": "Elle est contre le versement des allocations familiales sous condition de ressources : « ce qui est pour les enfants doit être pour tous les enfants, sinon un jour on le retirera à ceux qu'on n'aime pas »."
+  },
+  "shortTermGoal": {
+    "label": "Payer le voyage scolaire de l'aîné en Espagne",
+    "amount": 320,
+    "deadline": "2027-04"
+  },
+  "embodiedDetails": [
+    "Elle fait ses courses le jeudi soir, parce que c'est le jour des démarques.",
+    "Les trois enfants dorment dans la même chambre, l'aîné sur un canapé-lit qui ne se replie plus.",
+    "Elle garde dans son sac un stylo quatre couleurs pris au travail, et elle y tient."
+  ],
+  "unavailableOptions": [
+    {
+      "option": "travailler-plus",
+      "reason": "Ses deux vacations encadrent la journée : il n'y a pas d'heure disponible entre les deux, ni après vingt heures."
+    },
+    {
+      "option": "puiser-epargne",
+      "reason": "Il y a 95 € sur le compte et aucun découvert autorisé : il n'y a pas d'épargne à puiser."
+    }
+  ],
+  "equivalenceRefs": [
+    {
+      "code": "alimentation",
+      "monthlyAmount": 680,
+      "narrativeLabel": "l'alimentation du mois pour quatre"
+    },
+    {
+      "code": "transport",
+      "monthlyAmount": 115,
+      "narrativeLabel": "les abonnements de transport de la famille"
+    },
+    {
+      "code": "loisirs",
+      "monthlyAmount": 35,
+      "narrativeLabel": "tout ce qui n'est pas indispensable, sur un mois"
+    },
+    {
+      "code": "projet",
+      "monthlyAmount": 40,
+      "narrativeLabel": "ce qu'elle met de côté pour le voyage scolaire"
+    }
+  ],
+  "narrative": {
+    "story": "Nadia nettoie les bureaux d'un siège social de Pantin depuis neuf ans, pour trois prestataires successifs qui ont repris le marché tour à tour, à chaque fois avec un contrat un peu différent. Le père des enfants est parti il y a six ans ; la pension a été fixée par le juge et n'a jamais été versée. Elle a arrêté de relancer au bout de deux ans, non par renoncement, mais parce que chaque courrier coûtait une soirée et ne rapportait rien. Elle sait exactement combien il reste sur le compte à n'importe quel moment du mois, sans avoir besoin de le regarder."
+  },
+  "lineOverrides": [
+    {
+      "code": "habillement",
+      "constrained": true,
+      "justification": "Trois enfants dont deux adolescents : les tailles changent, et un vêtement qu'on ne remplace pas devient un vêtement qu'on ne met plus. Ce poste n'est arbitrable que quelques mois."
+    }
+  ]
+}

@@ -3,49 +3,130 @@
   "charterVersion": "1.0",
   "fictional": true,
   "fictionNote": "Personnage fictif. Situation construite pour être plausible au regard des ordres de grandeur publics sur les revenus des travailleurs indépendants et les délais de paiement. Ne correspond à aucune personne réelle.",
-
   "identity": {
     "firstName": "Thomas",
     "age": 37,
     "identityLine": "graphiste indépendant, en couple sans enfant, locataire à Nantes",
     "incomeDecile": 6,
-    "calibrationSourceIds": ["insee-artisanat-revenus", "anil-loyers", "insee-niveaux-de-vie"]
+    "calibrationSourceIds": [
+      "insee-artisanat-revenus",
+      "anil-loyers",
+      "insee-niveaux-de-vie"
+    ]
   },
-
   "traits": {
-    "activities": ["self_employed"],
+    "activities": [
+      "self_employed"
+    ],
     "tenure": "tenant_private",
     "heating": "collective",
     "householdSize": 2,
     "childCount": 0,
-    "hasSchoolAgedChild": false
+    "hasSchoolAgedChild": false,
+    "housingZone": "tendue",
+    "recognisedDisability": false
   },
-
   "budget": {
     "lines": [
-      { "code": "revenu-independant", "group": "resource",
-        "value": { "amount": 2450, "unit": "EUR_month", "nature": "fiction", "note": "Moyenne lissée : les mois réels vont de 900 à 4 200 €" } },
-      { "code": "salaire-net", "group": "resource",
-        "value": { "amount": 1380, "unit": "EUR_month", "nature": "fiction", "note": "Sa compagne, à temps partiel choisi" } },
-      { "code": "logement", "group": "constrained",
-        "value": { "amount": 790, "unit": "EUR_month", "nature": "fiction", "note": "T3 dans le parc privé, charges comprises" } },
-      { "code": "energie", "group": "constrained",
-        "value": { "amount": 105, "unit": "EUR_month", "nature": "extrapolation" } },
-      { "code": "alimentation", "group": "constrained",
-        "value": { "amount": 430, "unit": "EUR_month", "nature": "hypothesis", "hypothesisId": "socle-alimentaire" } },
-      { "code": "transport", "group": "constrained",
-        "value": { "amount": 95, "unit": "EUR_month", "nature": "fiction" } },
-      { "code": "sante", "group": "constrained",
-        "value": { "amount": 210, "unit": "EUR_month", "nature": "fiction", "note": "Mutuelle et prévoyance : aucun arrêt indemnisé sans elle" } },
-      { "code": "impots", "group": "levy",
-        "value": { "amount": 480, "unit": "EUR_month", "nature": "hypothesis", "hypothesisId": "prestations-calibrage", "note": "Cotisations provisionnelles, régularisées l'année suivante" } },
-      { "code": "loisirs", "group": "adjustable",
-        "value": { "amount": 190, "unit": "EUR_month", "nature": "fiction" } },
-      { "code": "habillement", "group": "adjustable",
-        "value": { "amount": 70, "unit": "EUR_month", "nature": "fiction" } }
+      {
+        "code": "revenu-independant",
+        "group": "resource",
+        "value": {
+          "amount": 2450,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Moyenne lissée : les mois réels vont de 900 à 4 200 €"
+        }
+      },
+      {
+        "code": "salaire-net",
+        "group": "resource",
+        "value": {
+          "amount": 1380,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Sa compagne, à temps partiel choisi"
+        }
+      },
+      {
+        "code": "logement",
+        "group": "constrained",
+        "value": {
+          "amount": 790,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "T3 dans le parc privé, charges comprises"
+        }
+      },
+      {
+        "code": "energie",
+        "group": "constrained",
+        "value": {
+          "amount": 105,
+          "unit": "EUR_month",
+          "nature": "extrapolation"
+        }
+      },
+      {
+        "code": "alimentation",
+        "group": "constrained",
+        "value": {
+          "amount": 430,
+          "unit": "EUR_month",
+          "nature": "hypothesis",
+          "hypothesisId": "socle-alimentaire"
+        }
+      },
+      {
+        "code": "transport",
+        "group": "constrained",
+        "value": {
+          "amount": 95,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      },
+      {
+        "code": "sante",
+        "group": "constrained",
+        "value": {
+          "amount": 210,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Mutuelle et prévoyance : aucun arrêt indemnisé sans elle"
+        }
+      },
+      {
+        "code": "impots",
+        "group": "levy",
+        "value": {
+          "amount": 480,
+          "unit": "EUR_month",
+          "nature": "hypothesis",
+          "hypothesisId": "prestations-calibrage",
+          "note": "Cotisations provisionnelles, régularisées l'année suivante"
+        }
+      },
+      {
+        "code": "loisirs",
+        "group": "adjustable",
+        "value": {
+          "amount": 190,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      },
+      {
+        "code": "habillement",
+        "group": "adjustable",
+        "value": {
+          "amount": 70,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      }
     ]
   },
-
   "stocks": {
     "liquid7d": 3100,
     "liquid60d": 9800,
@@ -53,7 +134,6 @@
     "netWealth": 11000,
     "precautionFloorMonths": 3
   },
-
   "parity": {
     "strength": "Trois clients réguliers depuis plus de quatre ans, un métier qu'il peut exercer de n'importe où, et aucune charge de famille.",
     "vulnerability": "Pas un jour d'arrêt maladie indemnisé sans sa prévoyance, et un gros client qui représente à lui seul quatre mois de revenus.",
@@ -69,34 +149,50 @@
     "nonMonetaryAdvantage": "Il choisit ses horaires, ses clients et le lieu d'où il travaille, et personne ne peut le licencier.",
     "opinionAgainstOwnInterest": "Il trouve que les indépendants devraient cotiser autant que les salariés : « on veut la même protection, c'est normal de payer le même prix »."
   },
-
   "shortTermGoal": {
     "label": "Constituer trois mois de trésorerie d'avance avant décembre",
     "amount": 7500,
     "deadline": "2027-12"
   },
-
   "embodiedDetails": [
     "Il travaille dans la chambre du fond, face à un mur plutôt qu'à la fenêtre.",
     "Il garde un tableau des factures impayées scotché à côté de l'écran.",
     "Il fait les courses en semaine, à onze heures, parce qu'il n'y a personne."
   ],
-
   "unavailableOptions": [
-    { "option": "arret-maladie", "reason": "Un arrêt de moins de sept jours n'est jamais indemnisé pour son statut." },
-    { "option": "chomage-partiel", "reason": "Aucun dispositif de ce type n'existe pour les travailleurs indépendants." }
+    {
+      "option": "arret-maladie",
+      "reason": "Un arrêt de moins de sept jours n'est jamais indemnisé pour son statut."
+    },
+    {
+      "option": "chomage-partiel",
+      "reason": "Aucun dispositif de ce type n'existe pour les travailleurs indépendants."
+    }
   ],
-
   "equivalenceRefs": [
-    { "code": "alimentation", "monthlyAmount": 430, "narrativeLabel": "l'alimentation du mois" },
-    { "code": "loisirs", "monthlyAmount": 190, "narrativeLabel": "son budget loisirs du mois" },
-    { "code": "sante", "monthlyAmount": 210, "narrativeLabel": "sa mutuelle et sa prévoyance" },
-    { "code": "projet", "monthlyAmount": 620, "narrativeLabel": "ce qu'il met de côté pour sa trésorerie" }
+    {
+      "code": "alimentation",
+      "monthlyAmount": 430,
+      "narrativeLabel": "l'alimentation du mois"
+    },
+    {
+      "code": "loisirs",
+      "monthlyAmount": 190,
+      "narrativeLabel": "son budget loisirs du mois"
+    },
+    {
+      "code": "sante",
+      "monthlyAmount": 210,
+      "narrativeLabel": "sa mutuelle et sa prévoyance"
+    },
+    {
+      "code": "projet",
+      "monthlyAmount": 620,
+      "narrativeLabel": "ce qu'il met de côté pour sa trésorerie"
+    }
   ],
-
   "narrative": {
     "story": "Thomas a été salarié six ans dans une agence avant de partir en 2019, trois mois avant que tout s'arrête. Il raconte cette année-là comme la pire et la meilleure : il a cru tout perdre, et il a gardé deux clients qu'il a encore. Il facture à quarante-cinq jours et il est payé à soixante, ce qui fait qu'il travaille en permanence avec deux mois d'avance et deux mois de retard. Sa compagne a choisi un temps partiel, ce qui donne au ménage une régularité que lui n'aura jamais."
   },
-
   "lineOverrides": []
 }

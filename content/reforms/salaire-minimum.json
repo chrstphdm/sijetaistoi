@@ -1,0 +1,844 @@
+{
+  "id": "salaire-minimum",
+  "charterVersion": "1.0",
+  "descriptiveTitle": "Niveau du salaire minimum",
+  "statedBy": "Le Conseil du travail, acteur fictif de ce jeu",
+  "context": "Le salaire minimum est revalorisé automatiquement chaque année, par indexation sur l'inflation observée pour les ménages modestes et par la moitié du gain de pouvoir d'achat du salaire horaire ouvrier. Le Conseil du travail met en discussion quatre directions : une hausse de 10 % du brut, une hausse du net par baisse des cotisations salariales, un conditionnement des allègements de cotisations patronales aux entreprises qui augmentent au-dessus du minimum, ou le maintien de la seule indexation automatique. Aucune somme n'est à trouver : deux de ces options coûtent de l'argent public et deux n'en coûtent pas.",
+  "objective": {
+    "amount": 0,
+    "unit": "EUR_bn",
+    "nature": "fiction",
+    "note": "Objectif budgétaire nul, et c'est délibéré. Le niveau du salaire minimum est une règle, pas une dépense : il se décide sans qu'aucun montant ait à être trouvé, même si certaines des options examinées ont un coût."
+  },
+  "contextSourceIds": [
+    "groupe-experts-smic",
+    "insee-niveaux-de-vie",
+    "dares-contrats-courts"
+  ],
+  "modelLimitations": "Le modèle applique une variation identique à l'intérieur d'une tranche de revenu, alors que l'effet d'une hausse du salaire minimum dépend du nombre d'heures travaillées : la même hausse de 10 % rapporte deux fois moins à un temps partiel de vingt-huit heures qu'à un temps plein, et le jeu écrase cet écart. Il ne représente pas l'effet sur l'emploi, qui est l'objet du désaccord central, ni la diffusion aux salaires immédiatement supérieurs — le tassement des grilles —, dont l'ampleur dépend des conventions collectives. Il ne représente pas non plus l'effet sur les prix, ni sur les finances publiques par le biais des allègements de cotisations, dont le coût croît mécaniquement avec le niveau du minimum. Le corpus ne contient qu'un seul employeur, ce qui interdit de comparer un artisan sans salarié et une entreprise de trente-quatre personnes.",
+  "options": [
+    {
+      "id": "statu-quo",
+      "label": "S'en tenir à l'indexation automatique",
+      "decisionDescription": "Aucun coup de pouce. Le salaire minimum continue d'être revalorisé automatiquement chaque année selon la formule légale, qui garantit le maintien du pouvoir d'achat sans le faire progresser plus vite que les autres salaires.",
+      "families": [
+        "status_quo"
+      ],
+      "isStatusQuo": true,
+      "effects": [
+        {
+          "id": "sq-au-smic",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Salariés au voisinage du salaire minimum",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  3
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun coup de pouce. Il faut rappeler ce que le statu quo contient : l'indexation automatique maintient le pouvoir d'achat du minimum, elle ne l'augmente pas. Ne rien décider n'est donc ni un gel, ni une progression — c'est une stabilité, et elle est le produit d'une formule votée."
+        },
+        {
+          "id": "sq-au-dessus",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Salariés au-dessus du salaire minimum",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ],
+                [
+                  "incomeDecile",
+                  "gte",
+                  4
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet. La part des salariés rémunérés au voisinage du minimum a augmenté depuis vingt ans, et la principale conséquence du statu quo est le resserrement continu des grilles de salaire vers le bas — ce que le jeu ne représente pas."
+        },
+        {
+          "id": "sq-employeur",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Employeurs : masse salariale inchangée",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                [
+                  "incomeDecile",
+                  "gte",
+                  10
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucune charge supplémentaire. Le coût des allègements de cotisations sur les bas salaires, qui dépend du niveau du minimum, reste à son niveau actuel."
+        },
+        {
+          "id": "sq-indep",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Indépendants sans salarié",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  9
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Un indépendant n'a pas de salaire minimum : aucun plancher ne protège sa rémunération, et une mauvaise année peut la ramener en dessous du salaire minimum horaire sans qu'aucune règle ne s'y oppose. Cette asymétrie vaut pour les quatre options et n'est jamais au cœur du débat."
+        },
+        {
+          "id": "sq-retraites",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Retraités",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet direct. Le minimum de pension contributif n'est pas indexé sur le salaire minimum, contrairement à une idée répandue : les deux évoluent séparément."
+        },
+        {
+          "id": "sq-chomeurs",
+          "kind": "budget_line",
+          "code": "allocation-chomage",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Demandeurs d'emploi indemnisés",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet direct. Le niveau du salaire minimum détermine en revanche le salaire de référence d'un retour à l'emploi au minimum, et donc les droits futurs."
+        },
+        {
+          "id": "sq-inactifs",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Personnes sans activité",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet. L'allocation aux adultes handicapés et les pensions d'invalidité ne sont pas indexées sur le salaire minimum."
+        },
+        {
+          "id": "sq-finances",
+          "kind": "public_finance",
+          "publicBillions": 0,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet budgétaire. C'est la seule des quatre options dans ce cas, et c'est un argument technique en sa faveur."
+        }
+      ],
+      "argumentsFor": [
+        "La formule d'indexation protège le pouvoir d'achat du minimum sans décision politique annuelle, donc sans que son niveau devienne un enjeu de campagne tous les ans.",
+        "Relever le minimum tasse les grilles de salaire vers le bas si les salaires supérieurs ne suivent pas, et une part croissante des salariés se retrouve payée au minimum."
+      ],
+      "argumentsAgainst": [
+        "Maintenir le pouvoir d'achat n'est pas le faire progresser : à long terme, les salariés au minimum ne bénéficient d'aucun partage de la croissance.",
+        "Le statu quo laisse la négociation de branche régler le reste, et un grand nombre de branches ont des minima conventionnels inférieurs au salaire minimum légal."
+      ]
+    },
+    {
+      "id": "hausse-brut",
+      "label": "Augmenter le salaire minimum de 10 %",
+      "decisionDescription": "Le salaire minimum brut est relevé de 10 %. Le net augmente d'autant, le coût du travail aussi, et l'effet sur l'emploi est l'objet du désaccord central.",
+      "families": [
+        "scope_efficiency"
+      ],
+      "effects": [
+        {
+          "id": "hb-au-smic",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 110,
+          "scope": {
+            "description": "Salariés au voisinage du salaire minimum",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  3
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "highly_debated",
+          "hypothesisId": "smic-emploi",
+          "note": "Hausse appliquée de façon identique dans la tranche, alors qu'elle dépend du nombre d'heures : un temps partiel de vingt-huit heures gagne environ 90 €, un temps plein environ 130 €. L'incertitude porte sur l'emploi, pas sur le salaire : pour ceux qui conservent leur poste, le gain est certain."
+        },
+        {
+          "id": "hb-au-dessus",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 18,
+          "scope": {
+            "description": "Salariés au-dessus du salaire minimum : diffusion partielle",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ],
+                [
+                  "incomeDecile",
+                  "gte",
+                  4
+                ]
+              ]
+            }
+          },
+          "horizon": "y5",
+          "uncertainty": "highly_debated",
+          "hypothesisId": "smic-emploi",
+          "note": "Diffusion aux salaires immédiatement supérieurs, par renégociation des grilles. Son ampleur dépend entièrement des conventions collectives : elle peut être nulle, et l'écart avec le minimum se réduit alors d'autant."
+        },
+        {
+          "id": "hb-employeur",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": -390,
+          "scope": {
+            "description": "Employeurs : masse salariale alourdie",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                [
+                  "incomeDecile",
+                  "gte",
+                  10
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "highly_debated",
+          "hypothesisId": "smic-emploi",
+          "note": "Dans une entreprise de trente-quatre personnes dont une partie est rémunérée près du minimum, une hausse de 10 % représente plusieurs milliers d'euros par mois. Le modèle suppose qu'une part en est absorbée par la rémunération du dirigeant ; elle pourrait l'être par les prix, par la marge, ou par l'emploi."
+        },
+        {
+          "id": "hb-indep",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Indépendants sans salarié",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  9
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Un indépendant n'a pas de salaire minimum : aucun plancher ne protège sa rémunération, et une mauvaise année peut la ramener en dessous du salaire minimum horaire sans qu'aucune règle ne s'y oppose. Cette asymétrie vaut pour les quatre options et n'est jamais au cœur du débat."
+        },
+        {
+          "id": "hb-retraites",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Retraités",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet direct. Une hausse du salaire minimum augmente en revanche les cotisations encaissées par le système de retraite, ce qui améliore son équilibre : le jeu ne chiffre pas cet effet."
+        },
+        {
+          "id": "hb-chomeurs",
+          "kind": "budget_line",
+          "code": "allocation-chomage",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Demandeurs d'emploi indemnisés",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet sur son allocation. L'effet qui le concerne est celui sur l'embauche, et c'est précisément celui que le modèle ne sait pas représenter — alors que c'est le cœur du débat et qu'il a cinquante-quatre ans."
+        },
+        {
+          "id": "hb-inactifs",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Personnes sans activité",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet direct."
+        },
+        {
+          "id": "hb-finances",
+          "kind": "public_finance",
+          "publicBillions": -1.9,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "highly_debated",
+          "hypothesisId": "smic-emploi",
+          "note": "Coût pour les finances publiques, et non gain : les allègements de cotisations patronales sur les bas salaires sont calculés par référence au salaire minimum, et leur coût croît mécaniquement avec lui. Cet effet est peu connu et il est considérable."
+        }
+      ],
+      "argumentsFor": [
+        "C'est le seul levier qui augmente directement le revenu du travail sans passer par une prestation, donc sans condition de ressources ni démarche.",
+        "Les travaux récents sur les hausses de salaire minimum ne trouvent pas d'effet net négatif marqué sur l'emploi, contrairement à ce que prévoyaient les modèles antérieurs."
+      ],
+      "argumentsAgainst": [
+        "L'effet sur l'emploi des moins qualifiés et des très petites entreprises reste discuté, et une hausse de 10 % dépasse les ordres de grandeur sur lesquels portent les évaluations disponibles.",
+        "La hausse renchérit mécaniquement le coût des allègements de cotisations pour les finances publiques, ce qui réduit d'autant les marges pour d'autres politiques."
+      ]
+    },
+    {
+      "id": "hausse-nette",
+      "label": "Augmenter le net sans augmenter le brut",
+      "decisionDescription": "Le brut ne change pas. Les cotisations salariales sur les salaires proches du minimum sont réduites, et l'État compense la perte pour la sécurité sociale. Le net augmente sans que le coût du travail bouge.",
+      "families": [
+        "levies",
+        "public_spending"
+      ],
+      "isCompromise": true,
+      "effects": [
+        {
+          "id": "hn-au-smic",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 78,
+          "scope": {
+            "description": "Salariés au voisinage du salaire minimum",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  3
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Gain net immédiat et certain : il ne dépend d'aucune réaction de comportement, puisque le coût du travail ne change pas. C'est le principal avantage de cette option."
+        },
+        {
+          "id": "hn-au-dessus",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Salariés au-dessus du salaire minimum",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ],
+                [
+                  "incomeDecile",
+                  "gte",
+                  4
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet : l'allègement est ciblé sur les salaires proches du minimum. Au-delà du seuil, chaque euro de salaire supplémentaire fait perdre une partie de l'allègement, ce qui rend les augmentations plus coûteuses pour l'employeur. C'est la trappe à bas salaires, et cette option l'aggrave."
+        },
+        {
+          "id": "hn-employeur",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Employeurs : coût du travail inchangé",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                [
+                  "incomeDecile",
+                  "gte",
+                  10
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucune charge supplémentaire : c'est ce qui distingue cette option de la hausse du brut, et ce qui la rend acceptable pour les employeurs."
+        },
+        {
+          "id": "hn-indep",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Indépendants sans salarié",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  9
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Un indépendant n'a pas de salaire minimum : aucun plancher ne protège sa rémunération, et une mauvaise année peut la ramener en dessous du salaire minimum horaire sans qu'aucune règle ne s'y oppose. Cette asymétrie vaut pour les quatre options et n'est jamais au cœur du débat."
+        },
+        {
+          "id": "hn-retraites",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Retraités",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet direct, mais une remarque : réduire les cotisations salariales et compenser par l'impôt fait financer la protection sociale par la contribution sociale généralisée, que les retraités acquittent. Le financement se déplace vers eux sans que la mesure le dise."
+        },
+        {
+          "id": "hn-chomeurs",
+          "kind": "budget_line",
+          "code": "allocation-chomage",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Demandeurs d'emploi indemnisés",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet. Une baisse de cotisations salariales réduit aussi, à terme, les droits qu'elles financent : retraite et assurance chômage se calculent sur le salaire et les cotisations versées."
+        },
+        {
+          "id": "hn-inactifs",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Personnes sans activité",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet."
+        },
+        {
+          "id": "hn-finances",
+          "kind": "public_finance",
+          "publicBillions": -3.4,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Coût de la compensation à la sécurité sociale. Il est certain et immédiat, à la différence de celui des autres options."
+        }
+      ],
+      "argumentsFor": [
+        "Le gain est immédiat et certain pour les salariés concernés, sans aucun risque sur l'emploi puisque le coût du travail est inchangé.",
+        "Elle n'alourdit pas la charge des très petites entreprises, qui sont les plus exposées à une hausse du coût du travail."
+      ],
+      "argumentsAgainst": [
+        "Un allègement ciblé sur les bas salaires renchérit les augmentations au-dessus du seuil : il enferme davantage les salariés dans la zone du minimum.",
+        "Réduire les cotisations salariales revient à réduire les droits qu'elles ouvrent, et à transférer le financement de la protection sociale vers l'impôt, donc vers d'autres."
+      ]
+    },
+    {
+      "id": "conditionner-allegements",
+      "label": "Conditionner les allègements de cotisations",
+      "decisionDescription": "Le salaire minimum n'est pas modifié. Les allègements de cotisations patronales sur les bas salaires sont conditionnés à l'existence d'un accord de branche prévoyant des minima conventionnels supérieurs au minimum légal.",
+      "families": [
+        "scope_efficiency",
+        "levies"
+      ],
+      "effects": [
+        {
+          "id": "ca-bas-salaires",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 45,
+          "scope": {
+            "description": "Salariés jusqu'au cinquième décile : minima conventionnels relevés",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  5
+                ]
+              ]
+            }
+          },
+          "horizon": "y5",
+          "uncertainty": "highly_debated",
+          "hypothesisId": "smic-emploi",
+          "note": "Effet indirect et différé : il passe par la négociation de branche, que la mesure incite mais n'impose pas. Si les branches ne négocient pas, l'effet est nul et seul le retrait des allègements subsiste. C'est le pari de cette option, et il n'est pas garanti."
+        },
+        {
+          "id": "ca-au-dessus",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Salariés à partir du sixième décile",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ],
+                [
+                  "incomeDecile",
+                  "gte",
+                  6
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet : leur rémunération est très au-dessus des minima conventionnels, qui ne constituent pour eux aucune référence."
+        },
+        {
+          "id": "ca-employeur",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": -210,
+          "scope": {
+            "description": "Employeurs : allègements conditionnés",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                [
+                  "incomeDecile",
+                  "gte",
+                  10
+                ]
+              ]
+            }
+          },
+          "horizon": "y5",
+          "uncertainty": "highly_debated",
+          "hypothesisId": "smic-emploi",
+          "note": "Perte des allègements tant que la branche n'a pas relevé ses minima, puis coût du relèvement lui-même. L'entreprise subit donc la contrainte sans maîtriser la négociation qui la lève : c'est l'objection la plus sérieuse à cette option."
+        },
+        {
+          "id": "ca-indep",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Indépendants sans salarié",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  9
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Un indépendant n'a pas de salaire minimum : aucun plancher ne protège sa rémunération, et une mauvaise année peut la ramener en dessous du salaire minimum horaire sans qu'aucune règle ne s'y oppose. Cette asymétrie vaut pour les quatre options et n'est jamais au cœur du débat."
+        },
+        {
+          "id": "ca-retraites",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Retraités",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet direct."
+        },
+        {
+          "id": "ca-chomeurs",
+          "kind": "budget_line",
+          "code": "allocation-chomage",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Demandeurs d'emploi indemnisés",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet direct. Le retrait d'allègements renchérit l'embauche dans les branches qui ne négocient pas, ce qui le concerne sans que le modèle le représente."
+        },
+        {
+          "id": "ca-inactifs",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Personnes sans activité",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet."
+        },
+        {
+          "id": "ca-finances",
+          "kind": "public_finance",
+          "publicBillions": 2.3,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "smic-emploi",
+          "note": "Économie sur les allègements non versés, d'autant plus élevée que les branches négocient peu. Le rendement budgétaire est donc inverse de l'efficacité de la mesure, ce qui est une propriété embarrassante."
+        }
+      ],
+      "argumentsFor": [
+        "Les allègements de cotisations représentent une dépense publique considérable, versée sans contrepartie à des branches dont les minima conventionnels sont inférieurs au minimum légal.",
+        "La mesure agit sur l'ensemble de la grille basse plutôt que sur le seul minimum légal, et traite donc la cause du tassement des salaires plutôt que son symptôme."
+      ],
+      "argumentsAgainst": [
+        "L'entreprise subit le retrait des allègements sans maîtriser la négociation de branche qui le lèverait : elle est sanctionnée pour une décision qui n'est pas la sienne.",
+        "Son rendement budgétaire est d'autant plus élevé que les branches ne négocient pas, c'est-à-dire que la mesure échoue : l'incitation du financeur est inverse de l'objectif."
+      ]
+    },
+    {
+      "id": "contester-cadrage",
+      "label": "Je conteste la façon dont la question est posée",
+      "decisionDescription": "Le joueur refuse le cadrage : la question n'est pas le niveau du minimum, mais le fait qu'une part croissante des salariés y soit rémunérée, et ce qui produit cette concentration.",
+      "families": [
+        "challenge_framing"
+      ],
+      "effects": [
+        {
+          "id": "ca-contestation",
+          "kind": "service_level",
+          "scope": {
+            "description": "Aucun effet budgétaire modélisé"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Contester le cadrage ne produit aucun effet chiffré dans ce modèle. Cette absence est une limite du jeu, pas un jugement sur la pertinence de la contestation."
+        }
+      ],
+      "argumentsFor": [
+        "Débattre du niveau du minimum laisse entière la question de savoir pourquoi tant d'emplois sont payés au minimum, et ce que les allègements de cotisations sur les bas salaires y ont contribué.",
+        "Les quatre options prennent la structure des qualifications et l'organisation du travail pour des données, alors qu'elles résultent elles-mêmes de décisions de politique économique."
+      ],
+      "argumentsAgainst": [
+        "Le salaire minimum est revalorisé chaque 1er janvier, avec ou sans décision politique : refuser le cadrage laisse la formule s'appliquer.",
+        "La concentration des emplois au voisinage du minimum est elle-même un objet de désaccord : l'attribuer aux allègements de cotisations est une thèse, pas un constat."
+      ]
+    }
+  ]
+}

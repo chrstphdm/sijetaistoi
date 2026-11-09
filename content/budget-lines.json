@@ -5,6 +5,12 @@
     "methodNote": "Rémunération nette du dirigeant, lissée en moyenne mensuelle : l'irrégularité réelle est portée par les événements." },
   { "code": "prestations", "label": "Prestations", "group": "resource", "constrained": false, "kappa": 0,
     "methodNote": "Prestations familiales et aides au logement agrégées. Ordre de grandeur en attente du branchement d'OpenFisca." },
+  { "code": "pension-retraite", "label": "Pension de retraite", "group": "resource", "constrained": false, "kappa": 0,
+    "methodNote": "Pensions de base et complémentaires, nettes de prélèvements sociaux. Distinguée des prestations : une pension est la contrepartie de cotisations passées, une prestation est attribuée sous conditions de ressources. Une réforme peut toucher l'une sans toucher l'autre, et les confondre rendrait ce choix invisible." },
+  { "code": "allocation-chomage", "label": "Allocation chômage", "group": "resource", "constrained": false, "kappa": 0,
+    "methodNote": "Allocation d'aide au retour à l'emploi. Son montant et sa durée dépendent du salaire antérieur et de règles qui ont changé plusieurs fois depuis 2019 : le jeu fixe un niveau, il ne le calcule pas." },
+  { "code": "revenu-capital", "label": "Revenus du patrimoine", "group": "resource", "constrained": false, "kappa": 0,
+    "methodNote": "Loyers perçus, dividendes et intérêts, nets de prélèvement forfaitaire. Très concentrés : ce poste est nul pour la grande majorité des ménages, et ce zéro est lui-même une information." },
   { "code": "pension-alimentaire", "label": "Pension alimentaire", "group": "resource", "constrained": false, "kappa": 0,
     "methodNote": "Montant perçu, hors impayés. Le risque d'impayé est traité comme un événement." },
 
@@ -20,6 +26,9 @@
     "methodNote": "Garde, cantine, frais de scolarité. Reste à charge après aides." },
   { "code": "sante", "label": "Santé", "group": "constrained", "constrained": true, "kappa": 0.1,
     "methodNote": "Mutuelle et restes à charge récurrents. Les soins ponctuels sont des événements." },
+
+  { "code": "aide-proche", "label": "Aide à un proche", "group": "constrained", "constrained": true, "kappa": 0.05,
+    "methodNote": "Participation aux frais d'un parent dépendant. Classée en dépense contrainte parce que l'obligation alimentaire est juridique et non un arbitrage de consommation ; sa compressibilité presque nulle reste une hypothèse du modèle." },
 
   { "code": "credit-conso", "label": "Crédit en cours", "group": "credit", "constrained": true, "kappa": 0,
     "methodNote": "Mensualité contractuelle, capital et intérêts confondus." },

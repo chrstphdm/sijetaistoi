@@ -7,9 +7,12 @@ import { apply, initialState, MONTHS_PER_ACT, ACT_COUNT, type Command, type Game
 import { euros, formatEuros, type Cents } from '@/core/money.ts'
 import type { Judgement } from '@/core/opinion.ts'
 import { advance, createRandom, drawCounts } from '@/core/rng.ts'
-import { activeEffectsFor, applyEffectsToLines, rulesInForce, type Rule } from '@/core/world.ts'
+import {
+  activeEffectsFor, applyEffectsToLines, inForceNow, perceptiblyConcerned, rulesInForce,
+  type Rule,
+} from '@/core/world.ts'
 import type { BudgetLine } from '@/core/types.ts'
-import { characters, events, optionLookup, reforms, toBudgetLines, toStocks } from '@/content/load.ts'
+import { characters, events, optionLookup, reforms, toBudgetLines, toStocks, traitsOf } from '@/content/load.ts'
 import type { CharacterT, LifeEventT, ReformOptionT } from '@/schemas/index.ts'
 import { EMPTY_SETUP, type Setup } from './setup.ts'
 import { FORMAT_VERSION, load, save, type Saved } from './persistence.ts'
@@ -38,8 +41,6 @@ export type Step =
   | { readonly kind: 'judgement' }
   | { readonly kind: 'impact' }
   | { readonly kind: 'summary' }
-
-const traitsOf = (c: CharacterT) => ({ ...c.traits, incomeDecile: c.identity.incomeDecile })
 
 const CONTENT_VERSION = '0.1.0'
 
@@ -168,9 +169,11 @@ export function useGame(seed: string, setup: Setup = EMPTY_SETUP) {
 
   /* ------------------------------------------------------------ budget */
   const lines: BudgetLine[] = useMemo(() => {
+    // `inForceNow` : le releve du mois ne montre que ce qui s'applique
+    // deja. Un effet d'horizon y5 y figurait comme acquis.
     const base = applyEffectsToLines(
       toBudgetLines(character),
-      activeEffectsFor(state.world, traits, optionLookup),
+      inForceNow(activeEffectsFor(state.world, traits, optionLookup)),
     )
     const byCode = new Map(base.map((l) => [l.code, { ...l }]))
     for (const r of recurring) {
@@ -208,7 +211,9 @@ export function useGame(seed: string, setup: Setup = EMPTY_SETUP) {
     (target: CharacterT): Selection => {
       const inForce = rulesInForce(state.world)
       if (inForce.length === 0) return { kind: 'none_available' }
-      const effects = activeEffectsFor(state.world, traitsOf(target), optionLookup)
+      // Le rappel parle du mois en cours — « son reste a vivre passe de X a
+      // Y » — donc des seuls effets deja en vigueur.
+      const effects = inForceNow(activeEffectsFor(state.world, traitsOf(target), optionLookup))
       if (effects.length === 0) return { kind: 'none_available' }
 
       const before = computeMonthlyBudget(toBudgetLines(target))
@@ -305,8 +310,9 @@ export function useGame(seed: string, setup: Setup = EMPTY_SETUP) {
     const pool: CastingProfile[] = characters.map((c) => ({
       id: c.id,
       incomeDecile: c.identity.incomeDecile,
-      concernedByRule:
-        activeEffectsFor(state.world, traitsOf(c), optionLookup).length > 0,
+      concernedByRule: perceptiblyConcerned(
+        activeEffectsFor(state.world, traitsOf(c), optionLookup),
+      ),
     }))
     // La place preparee de cet acte, s'il y en a une et si elle n'a pas
     // deja ete jouee : imposer deux fois le meme personnage n'aurait pas

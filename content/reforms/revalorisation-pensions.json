@@ -27,7 +27,7 @@
         {
           "id": "sq-retraites",
           "kind": "budget_line",
-          "code": "prestations",
+          "code": "pension-retraite",
           "monthlyDelta": 0,
           "scope": {
             "when": {
@@ -47,7 +47,7 @@
         {
           "id": "sq-minimum",
           "kind": "budget_line",
-          "code": "prestations",
+          "code": "pension-retraite",
           "monthlyDelta": -31,
           "scope": {
             "when": {
@@ -99,7 +99,7 @@
         {
           "id": "sui-tous",
           "kind": "budget_line",
-          "code": "prestations",
+          "code": "pension-retraite",
           "monthlyDelta": -17,
           "scope": {
             "when": {
@@ -119,7 +119,7 @@
         {
           "id": "sui-minimum",
           "kind": "budget_line",
-          "code": "prestations",
+          "code": "pension-retraite",
           "monthlyDelta": 48,
           "scope": {
             "when": {
@@ -188,7 +188,7 @@
         {
           "id": "sic-modestes",
           "kind": "budget_line",
-          "code": "prestations",
+          "code": "pension-retraite",
           "monthlyDelta": 48,
           "scope": {
             "when": {
@@ -214,7 +214,7 @@
         {
           "id": "sic-au-dessus",
           "kind": "budget_line",
-          "code": "prestations",
+          "code": "pension-retraite",
           "monthlyDelta": -44,
           "scope": {
             "when": {
@@ -281,7 +281,7 @@
         {
           "id": "ca-retraites",
           "kind": "budget_line",
-          "code": "prestations",
+          "code": "pension-retraite",
           "monthlyDelta": 48,
           "scope": {
             "when": {
@@ -328,6 +328,32 @@
           },
           "horizon": "y1",
           "uncertainty": "established"
+        },
+        {
+          "id": "ca-ni-actif-ni-retraite",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "or": [
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ]
+              ]
+            },
+            "description": "Ni actifs, ni retraités : ni contributeurs, ni bénéficiaires"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Faire porter la revalorisation sur une cotisation des actifs laisse de côté ceux qui ne sont ni l'un ni l'autre : demandeurs d'emploi, personnes en invalidité. Ils ne paient rien et ne reçoivent rien, aujourd'hui. Ils toucheront une pension un jour, calculée sur une carrière interrompue, et c'est cet effet-là que le modèle ne sait pas représenter."
         },
         {
           "id": "ca-recette",

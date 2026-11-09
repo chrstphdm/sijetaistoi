@@ -13,7 +13,7 @@
 const STEPS = [
   { n: 1, label: 'Tu vis quelques mois\nde la vie de quelqu’un' },
   { n: 2, label: 'Tu décides une règle\npour tout le monde' },
-  { n: 3, label: 'Tu vois l’effet\nsur les six' },
+  { n: 3, label: 'Tu vois l’effet\nsur chacun' },
   { n: 4, label: 'Tu deviens\nquelqu’un d’autre' },
   { n: 5, label: 'Ta règle\nte revient' },
 ] as const

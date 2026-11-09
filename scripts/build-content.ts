@@ -163,10 +163,7 @@ for (const r of reforms) {
   const file = `reforms/${r.id}.json`
 
   const reachedBy = (ef: { scope: { when?: unknown } }) =>
-    characters.filter((c) =>
-      !ef.scope.when ||
-      evaluate(ef.scope.when as Condition, { ...c.traits, incomeDecile: c.identity.incomeDecile }),
-    )
+    characters.filter((c) => !ef.scope.when || evaluate(ef.scope.when as Condition, traitsOf(c)))
 
   /*
    * COUVERTURE, option par option.

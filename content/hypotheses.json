@@ -223,5 +223,248 @@
       }
     ],
     "appliedBy": "engine"
+  },
+  {
+    "id": "age-depart-effectif",
+    "question": "Décaler l'âge légal fait-il réellement partir plus tard, ou bascule-t-il une partie des assurés vers le chômage et l'invalidité ?",
+    "status": "highly_debated",
+    "whyDebated": "Les réformes passées montrent à la fois une hausse du taux d'emploi des seniors et une hausse du nombre de personnes ni en emploi ni à la retraite. Le partage entre les deux détermine le rendement net de la mesure, et il diffère fortement selon le métier, l'état de santé et la conjoncture. Les travaux disponibles ne s'accordent ni sur la proportion, ni sur la méthode pour l'établir.",
+    "appliedBy": "content",
+    "readings": [
+      {
+        "id": "A",
+        "mechanismLabel": "Report effectif du départ : l'essentiel des assurés reste en emploi jusqu'au nouvel âge",
+        "parameters": {
+          "employmentShare": 0.78
+        },
+        "sourceIds": [
+          "cor-retraites"
+        ]
+      },
+      {
+        "id": "B",
+        "mechanismLabel": "Report partiel : une part notable bascule vers le chômage, l'invalidité ou l'inactivité",
+        "parameters": {
+          "employmentShare": 0.52
+        },
+        "sourceIds": [
+          "cor-retraites",
+          "unedic-allocations"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "non-recours-minima",
+    "question": "Quelle part des droits aux minima sociaux et à la prime d'activité n'est pas réclamée ?",
+    "status": "debated",
+    "whyDebated": "Le non-recours ne s'observe pas directement : il se déduit d'une estimation du nombre d'ayants droit, elle-même construite sur des données déclaratives. Les estimations disponibles varient du simple au double selon la prestation et la méthode retenue, et la part imputable à la complexité plutôt qu'au renoncement volontaire est elle-même discutée.",
+    "appliedBy": "content",
+    "readings": [
+      {
+        "id": "A",
+        "mechanismLabel": "Non-recours modéré, concentré sur les droits les plus complexes",
+        "parameters": {
+          "nonRecourseRate": 0.2
+        },
+        "sourceIds": [
+          "drees-minima-sociaux"
+        ]
+      },
+      {
+        "id": "B",
+        "mechanismLabel": "Non-recours élevé et général, y compris sur les droits simples",
+        "parameters": {
+          "nonRecourseRate": 0.34
+        },
+        "sourceIds": [
+          "drees-minima-sociaux",
+          "cnaf-cout-garde"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "conditionnalite-retour-emploi",
+    "question": "Conditionner un minimum social à des heures d'activité augmente-t-il le retour à l'emploi durable ?",
+    "status": "highly_debated",
+    "whyDebated": "Les évaluations disponibles portent sur des dispositifs de nature très différente — accompagnement intensif, sanction, activité obligatoire — et les regrouper sous le même mot produit des résultats contradictoires. L'effet mesuré dépend aussi de ce qu'on appelle retour à l'emploi : une sortie des listes n'est pas un emploi, et un emploi de deux mois n'est pas une insertion.",
+    "appliedBy": "content",
+    "readings": [
+      {
+        "id": "A",
+        "mechanismLabel": "Effet positif porté par l'accompagnement, indépendamment de la condition",
+        "parameters": {
+          "employmentDelta": 0.11
+        },
+        "sourceIds": [
+          "drees-minima-sociaux"
+        ]
+      },
+      {
+        "id": "B",
+        "mechanismLabel": "Effet nul sur l'emploi durable, avec une hausse des sorties de dispositif sans emploi",
+        "parameters": {
+          "employmentDelta": 0.0
+        },
+        "sourceIds": [
+          "drees-minima-sociaux",
+          "unedic-allocations"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "duree-indemnisation-retour-emploi",
+    "question": "Raccourcir la durée d'indemnisation du chômage accélère-t-il le retour à l'emploi, et à quel salaire ?",
+    "status": "highly_debated",
+    "whyDebated": "Un effet sur la vitesse de reprise est observé dans plusieurs travaux, mais il se double d'un effet sur la qualité de l'emploi repris — salaire plus bas, contrat plus court — dont l'ampleur est discutée. Le résultat net dépend donc de ce que l'on mesure, et le désaccord porte autant sur l'objectif que sur les chiffres.",
+    "appliedBy": "content",
+    "readings": [
+      {
+        "id": "A",
+        "mechanismLabel": "Reprise plus rapide sans dégradation notable du salaire repris",
+        "parameters": {
+          "wageLossShare": 0.03
+        },
+        "sourceIds": [
+          "unedic-allocations"
+        ]
+      },
+      {
+        "id": "B",
+        "mechanismLabel": "Reprise plus rapide au prix d'un salaire durablement inférieur",
+        "parameters": {
+          "wageLossShare": 0.14
+        },
+        "sourceIds": [
+          "unedic-allocations",
+          "dares-contrats-courts"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "encadrement-loyers-offre",
+    "question": "Un plafonnement des loyers abaisse-t-il les loyers payés, ou réduit-il le nombre de logements offerts à la location ?",
+    "status": "highly_debated",
+    "whyDebated": "Les deux effets sont attestés dans la littérature, à des ampleurs qui dépendent du niveau du plafond, de sa durée et du marché local. Les travaux sur les dispositifs français récents sont encore courts, et les comparaisons internationales portent sur des encadrements beaucoup plus stricts. Le désaccord porte sur l'ampleur relative des deux effets, pas sur leur existence.",
+    "appliedBy": "content",
+    "readings": [
+      {
+        "id": "A",
+        "mechanismLabel": "Baisse effective des loyers, retrait marginal de l'offre",
+        "parameters": {
+          "rentDrop": 0.07,
+          "supplyDrop": 0.01
+        },
+        "sourceIds": [
+          "anil-loyers",
+          "olap-loyers-idf"
+        ]
+      },
+      {
+        "id": "B",
+        "mechanismLabel": "Baisse limitée aux baux encadrés, report vers la location meublée et la vente",
+        "parameters": {
+          "rentDrop": 0.02,
+          "supplyDrop": 0.06
+        },
+        "sourceIds": [
+          "anil-loyers",
+          "insee-patrimoine"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "incidence-fiscalite-capital",
+    "question": "Imposer les revenus du patrimoine au barème plutôt qu'à un taux forfaitaire modifie-t-il les comportements d'épargne et de localisation ?",
+    "status": "highly_debated",
+    "whyDebated": "Les réactions observées après les changements de régime mêlent de véritables changements de comportement et de simples décalages de la date de perception des revenus. Distinguer les deux suppose des données fiscales individuelles sur plusieurs années, et les travaux qui en disposent n'aboutissent pas aux mêmes conclusions.",
+    "appliedBy": "content",
+    "readings": [
+      {
+        "id": "A",
+        "mechanismLabel": "Réaction faible : l'essentiel des écarts observés relève du calendrier de perception",
+        "parameters": {
+          "behaviouralResponse": 0.08
+        },
+        "sourceIds": [
+          "insee-patrimoine",
+          "cpo-capital"
+        ]
+      },
+      {
+        "id": "B",
+        "mechanismLabel": "Réaction forte : arbitrage durable vers des véhicules moins imposés ou vers l'étranger",
+        "parameters": {
+          "behaviouralResponse": 0.35
+        },
+        "sourceIds": [
+          "cpo-capital"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "smic-emploi",
+    "question": "Une hausse du salaire minimum réduit-elle l'emploi peu qualifié ?",
+    "status": "highly_debated",
+    "whyDebated": "C'est l'une des questions les plus étudiées et les moins tranchées de l'économie du travail. Les travaux récents trouvent des effets allant d'une légère baisse à une absence d'effet, selon le niveau de départ, l'ampleur de la hausse et le marché local. Transposer ces résultats à une hausse de dix pour cent en France n'est pas une opération neutre.",
+    "appliedBy": "content",
+    "readings": [
+      {
+        "id": "A",
+        "mechanismLabel": "Effet nul ou négligeable sur l'emploi, gain net pour les salariés concernés",
+        "parameters": {
+          "employmentElasticity": -0.02
+        },
+        "sourceIds": [
+          "groupe-experts-smic"
+        ]
+      },
+      {
+        "id": "B",
+        "mechanismLabel": "Effet négatif concentré sur les très petites entreprises et les premières embauches",
+        "parameters": {
+          "employmentElasticity": -0.25
+        },
+        "sourceIds": [
+          "groupe-experts-smic",
+          "insee-artisanat-revenus"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gratuite-frequentation",
+    "question": "La gratuité des transports publics urbains augmente-t-elle leur fréquentation, et au détriment de quel mode de déplacement ?",
+    "status": "debated",
+    "whyDebated": "Les réseaux passés à la gratuité enregistrent une hausse de fréquentation, mais elle provient pour une large part de déplacements auparavant faits à pied ou à vélo, et non de la voiture. La part réellement reportée depuis l'automobile varie beaucoup selon la qualité du réseau, et c'est elle qui détermine si la mesure a un effet environnemental.",
+    "appliedBy": "content",
+    "readings": [
+      {
+        "id": "A",
+        "mechanismLabel": "Report significatif depuis la voiture, en particulier sur les trajets domicile-travail",
+        "parameters": {
+          "carShiftShare": 0.3
+        },
+        "sourceIds": [
+          "gart-transports"
+        ]
+      },
+      {
+        "id": "B",
+        "mechanismLabel": "Report principalement depuis la marche et le vélo, effet faible sur le trafic automobile",
+        "parameters": {
+          "carShiftShare": 0.08
+        },
+        "sourceIds": [
+          "gart-transports",
+          "insee-budget-des-familles"
+        ]
+      }
+    ]
   }
 ]

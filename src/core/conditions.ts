@@ -28,6 +28,25 @@ export const TRAIT_VOCABULARY = {
   'childCount': 'number',
   'hasSchoolAgedChild': 'boolean',
   'incomeDecile': 'number',
+  /**
+   * L'age vient de l'identite, pas des traits : il y est deja, et le
+   * dupliquer dans `traits` aurait cree deux ages pour une personne.
+   * Il est interrogeable parce qu'une mesure d'age — un report de l'age de
+   * depart — ne peut pas s'ecrire sans lui, et qu'on ne la deduit d'aucun
+   * autre attribut.
+   */
+  'age': 'number',
+  /**
+   * Zone tendue au sens du zonage reglementaire du logement. C'est le
+   * critere juridique qui commande l'encadrement des loyers : sans lui, une
+   * mesure de loyer ne pourrait viser que « les locataires », ce qui serait
+   * faux.
+   */
+  'housingZone': 'string',
+  /** Handicap ou invalidite reconnus. Un minimum social verse a ce titre
+   * n'obeit pas aux memes regles qu'un minimum social verse a un actif :
+   * les confondre ferait disparaitre la question meme. */
+  'recognisedDisability': 'boolean',
   // Contexte de partie, fourni par le moteur et non par le personnage.
   'month': 'number',
   'year': 'number',

@@ -1,9 +1,11 @@
 import { computeMonthlyBudget } from '@/core/budget.ts'
 import { comparabilityMetrics, absorptionRegime, type Scale } from '@/core/impact.ts'
 import { formatMetric, formatRecurring, regimeSentence } from '@/core/phrasing.ts'
-import { activeEffectsFor, applyEffectsToLines, type WorldState } from '@/core/world.ts'
+import {
+  activeEffectsFor, applyEffectsToLines, inForceNow, startsAtYear, type WorldState,
+} from '@/core/world.ts'
 import { motionFor } from '@/motion/table.ts'
-import { optionLookup, toBudgetLines, toStocks } from '@/content/load.ts'
+import { optionLookup, toBudgetLines, toStocks, traitsOf } from '@/content/load.ts'
 import type { CharacterT } from '@/schemas/index.ts'
 import { Amount } from './Amount.tsx'
 import { Seal } from './Seal.tsx'
@@ -45,10 +47,33 @@ type Props = {
   readonly screenIndex: number
 }
 
+/**
+ * La part differee d'un effet, datee.
+ *
+ * Toujours sous la ligne du present, jamais fondue dedans : c'est la
+ * confusion des deux qui a fait annoncer un gain immediat a des menages a qui
+ * la mesure coute d'abord.
+ */
+function Differe({ cents, year, name }: { cents: number; year: number | null; name: string }) {
+  if (cents === 0 || year === null) return null
+  return (
+    <div className="provenance">
+      {`À partir de la ${year}ᵉ année, `}
+      {/* `signed` comme partout ailleurs sur cet ecran : un montant signe se
+          rend d'une seule facon dans tout le jeu — signe, glyphe et mot —, et
+          un second vocabulaire pour dire la meme chose (« s'y ajoute », « s'en
+          retranche ») reintroduisait la variation que ce composant existe
+          precisement pour supprimer. */}
+      <Amount cents={cents * 12} nature="hypothesis" signed label={name} />
+      {` par an, soit ${formatRecurring(cents).split(', soit ')[1]}.`}
+    </div>
+  )
+}
+
 export function ImpactForEach({ characters, world, scale, onScaleChange, screenIndex }: Props) {
   const order = rotationOrder(characters.length, screenIndex)
 
-  // Motion IDENTIQUE pour les six : calculee une fois, hors de la boucle.
+  // Motion IDENTIQUE pour tous : calculee une fois, hors de la boucle.
   const motion = motionFor({ amountCents: 0, netIncomeCents: 1, slackCents: 1, scale: 'slack' })
 
   return (
@@ -77,11 +102,42 @@ export function ImpactForEach({ characters, world, scale, onScaleChange, screenI
       <ul className="impacts">
         {order.map((i) => {
           const c = characters[i]!
-          const traits = { ...c.traits, incomeDecile: c.identity.incomeDecile }
+          const traits = traitsOf(c)
           const before = computeMonthlyBudget(toBudgetLines(c))
           const effects = activeEffectsFor(world, traits, optionLookup)
-          const after = computeMonthlyBudget(applyEffectsToLines(toBudgetLines(c), effects))
-          const delta = after.slackCents - before.slackCents
+          /* Dedupliquee : plusieurs regles en vigueur peuvent viser la meme
+             portee, et la repeter donnerait l'impression de plusieurs
+             exclusions la ou il n'y en a qu'une. */
+          const reasons = [...new Set(effects.map((e) => e.effect.scope.description))]
+
+          /*
+           * CE QUI S'APPLIQUE MAINTENANT EN TETE, LE DIFFERE ENSUITE.
+           *
+           * Cet ecran additionnait tous les effets d'une regle sans regarder
+           * leur horizon. La contribution energie coute 14 EUR par mois des
+           * le premier mois aux menages en chauffage collectif, et leur rend
+           * 31 EUR « apres renovation effective », a cinq ans. Le total, +17,
+           * s'affichait au present : l'ecran annoncait un gain immediat a
+           * ceux a qui la mesure coute d'abord. L'erreur jouait dans un seul
+           * sens, et elle a vecu plusieurs mois pendant que les tests
+           * passaient au vert, parce qu'aucun ne lisait `horizon`.
+           *
+           * Le differe n'est pas masque — c'est un effet de la decision, et
+           * le cacher serait l'erreur inverse. Il est date, et separe.
+           */
+          const deltaTotal =
+            computeMonthlyBudget(applyEffectsToLines(toBudgetLines(c), effects)).slackCents -
+            before.slackCents
+          const delta =
+            computeMonthlyBudget(applyEffectsToLines(toBudgetLines(c), inForceNow(effects)))
+              .slackCents - before.slackCents
+          const deltaDiffere = deltaTotal - delta
+          const differes = effects.filter(
+            (e) => startsAtYear(e.effect.horizon) > 1 && e.deltaCents !== 0,
+          )
+          const aPartirDe = differes.length
+            ? Math.min(...differes.map((e) => startsAtYear(e.effect.horizon)))
+            : null
 
           return (
             <li
@@ -94,7 +150,22 @@ export function ImpactForEach({ characters, world, scale, onScaleChange, screenI
               <strong>{c.identity.firstName}</strong>
               {' — '}
               {delta === 0 ? (
-                <>aucun effet sur son budget courant.</>
+                <>
+                  aucun effet sur son budget courant.
+                  {/* POURQUOI, et pas seulement « aucun effet ».
+                      Le controle de couverture du build oblige l'auteur a
+                      ecrire, pour chaque personne qu'une option ne touche
+                      pas, quelle portee l'exclut et pour quelle raison. Cet
+                      ecran jetait ce travail : il affichait treize fois la
+                      meme phrase vide. Avec un corpus de treize situations,
+                      la plupart des lignes sont des effets nuls, et une
+                      comparaison faite de phrases identiques ne compare
+                      rien. La portee declaree est reprise telle quelle. */}
+                  {reasons.length > 0 && (
+                    <div className="provenance">Portée déclarée&nbsp;: {reasons.join(' ; ')}.</div>
+                  )}
+                  <Differe cents={deltaDiffere} year={aPartirDe} name={c.identity.firstName} />
+                </>
               ) : (
                 <>
                   {/* L'annuel en tête : 204 € se perçoit, 17 € passe inaperçu.
@@ -105,6 +176,7 @@ export function ImpactForEach({ characters, world, scale, onScaleChange, screenI
                   {scale !== 'euros' && <> — {formatMetric(scale, comparabilityMetrics(delta, before))}</>}
                   {'. Cette somme '}
                   {regimeSentence(absorptionRegime(delta, before, toStocks(c)), delta)}.
+                  <Differe cents={deltaDiffere} year={aPartirDe} name={c.identity.firstName} />
                 </>
               )}
               {effects.length === 0 && (

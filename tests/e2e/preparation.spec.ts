@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { settle } from './helpers.ts'
+import { characters } from '../../src/content/load.ts'
 
 /**
  * La porte de service : `#preparation`.
@@ -91,6 +92,11 @@ test('une partie normale continue d’annoncer un tirage au hasard', async ({ pa
 
   const registry = page.locator('details', { hasText: 'Comment ce jeu choisit' }).first()
   await registry.locator('summary').click()
-  await expect(registry).toContainText(/tiré au hasard parmi les 6/)
+  // Le NOMBRE vient du corpus, pas du test : l'écrire en dur avait fait
+  // échouer ce test le jour où le corpus s'est élargi, alors que la
+  // propriété vérifiée — un tirage annoncé comme tel — n'avait pas bougé.
+  await expect(registry).toContainText(
+    new RegExp(`tiré au hasard parmi les ${characters.length}`),
+  )
   await expect(registry).not.toContainText(/imposé/)
 })

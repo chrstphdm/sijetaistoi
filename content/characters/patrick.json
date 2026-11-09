@@ -1,0 +1,195 @@
+{
+  "id": "patrick",
+  "charterVersion": "1.0",
+  "fictional": true,
+  "fictionNote": "Personnage fictif. Situation construite pour être plausible au regard des ordres de grandeur publics sur l'indemnisation du chômage, les loyers du parc privé dans les Hauts-de-France et les charges d'une maison individuelle mal isolée. Ne correspond à aucune personne réelle.",
+  "identity": {
+    "firstName": "Patrick",
+    "age": 54,
+    "identityLine": "sans emploi depuis onze mois, ancien conducteur de ligne, locataire à Saint-Quentin",
+    "incomeDecile": 3,
+    "calibrationSourceIds": [
+      "unedic-allocations",
+      "anil-loyers"
+    ]
+  },
+  "traits": {
+    "activities": [
+      "unemployed"
+    ],
+    "tenure": "tenant_private",
+    "heating": "individual",
+    "householdSize": 1,
+    "childCount": 0,
+    "hasSchoolAgedChild": false,
+    "housingZone": "detendue",
+    "recognisedDisability": false
+  },
+  "budget": {
+    "lines": [
+      {
+        "code": "allocation-chomage",
+        "group": "resource",
+        "value": {
+          "amount": 1310,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Ordre de grandeur d'une allocation calculée sur un salaire de conducteur de ligne avec vingt-six ans d'ancienneté. Les droits ont été ouverts pour vingt-deux mois ; il en reste onze."
+        }
+      },
+      {
+        "code": "logement",
+        "group": "constrained",
+        "value": {
+          "amount": 540,
+          "unit": "EUR_month",
+          "nature": "fact",
+          "sourceId": "anil-loyers",
+          "note": "Maison de ville louée depuis quinze ans, loyer jamais réévalué."
+        }
+      },
+      {
+        "code": "energie",
+        "group": "constrained",
+        "value": {
+          "amount": 185,
+          "unit": "EUR_month",
+          "nature": "extrapolation",
+          "note": "Chauffage individuel au gaz, maison de 1950 non isolée. Ce poste a doublé en cinq ans."
+        }
+      },
+      {
+        "code": "alimentation",
+        "group": "constrained",
+        "value": {
+          "amount": 285,
+          "unit": "EUR_month",
+          "nature": "hypothesis",
+          "hypothesisId": "socle-alimentaire"
+        }
+      },
+      {
+        "code": "transport",
+        "group": "constrained",
+        "value": {
+          "amount": 165,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Voiture indispensable : aucun des trois derniers entretiens d'embauche n'était accessible en transport en commun."
+        }
+      },
+      {
+        "code": "sante",
+        "group": "constrained",
+        "value": {
+          "amount": 95,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Mutuelle individuelle, souscrite à la fin de la portabilité de celle de l'entreprise. Elle coûte plus cher et couvre moins."
+        }
+      },
+      {
+        "code": "credit-conso",
+        "group": "credit",
+        "value": {
+          "amount": 145,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Prêt travaux signé dix-huit mois avant le licenciement, pour l'isolation des combles qui n'a pas été faite. Vingt-neuf mensualités restantes."
+        }
+      },
+      {
+        "code": "loisirs",
+        "group": "adjustable",
+        "value": {
+          "amount": 50,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      },
+      {
+        "code": "habillement",
+        "group": "adjustable",
+        "value": {
+          "amount": 25,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      }
+    ]
+  },
+  "stocks": {
+    "liquid7d": 1200,
+    "liquid60d": 4100,
+    "authorisedOverdraft": 600,
+    "netWealth": 3800,
+    "precautionFloorMonths": 2
+  },
+  "parity": {
+    "strength": "Vingt-six ans sur la même ligne de production : il diagnostique une panne au bruit, et trois anciens collègues l'appellent encore pour ça.",
+    "vulnerability": "Il lui reste onze mois de droits et il a cinquante-quatre ans. Les deux chiffres ne se rencontrent dans aucune offre d'emploi.",
+    "aspirations": [
+      "Retrouver un poste en maintenance, même en intérim, même plus loin",
+      "Finir le ravalement qu'il avait commencé avant le licenciement"
+    ],
+    "concerns": [
+      "Que les onze mois passent sans qu'il retrouve, et qu'il bascule au revenu de solidarité",
+      "Que ses deux enfants s'en aperçoivent avant qu'il ait retrouvé"
+    ],
+    "nonMonetaryConstraint": "Un prêt travaux signé quand il avait un salaire : la mensualité ne se renégocie pas au motif que la situation a changé, et elle court encore deux ans et demi.",
+    "nonMonetaryAdvantage": "Un propriétaire qui le connaît depuis quinze ans et n'a jamais réévalué le loyer, ce qui lui laisse aujourd'hui trois cents euros de marge par rapport au marché.",
+    "opinionAgainstOwnInterest": "Il trouve légitime qu'on contrôle la recherche d'emploi et qu'on réduise l'allocation si elle n'est pas réelle : « j'ai cotisé pour que ça serve à ceux qui cherchent, pas pour autre chose »."
+  },
+  "shortTermGoal": {
+    "label": "Garder 3 000 € intacts jusqu'à la fin de ses droits",
+    "amount": 3000,
+    "deadline": "2027-10"
+  },
+  "embodiedDetails": [
+    "Il met toujours un pantalon et des chaussures de ville pour aller chercher le pain, depuis onze mois.",
+    "Il a gardé la clé de son vestiaire de l'usine, accrochée au même trousseau.",
+    "Il fait les mots fléchés du journal à la table de la cuisine, pas dans le fauteuil."
+  ],
+  "unavailableOptions": [
+    {
+      "option": "travailler-plus",
+      "reason": "Il n'a pas de travail : il n'y a aucune heure à ajouter, et c'est précisément le problème."
+    },
+    {
+      "option": "renegocier-credit",
+      "reason": "Deux demandes de report d'échéances ont été refusées, au motif que ses revenus ne sont pas pérennes."
+    }
+  ],
+  "equivalenceRefs": [
+    {
+      "code": "energie",
+      "monthlyAmount": 185,
+      "narrativeLabel": "sa facture de chauffage"
+    },
+    {
+      "code": "alimentation",
+      "monthlyAmount": 285,
+      "narrativeLabel": "son alimentation du mois"
+    },
+    {
+      "code": "transport",
+      "monthlyAmount": 165,
+      "narrativeLabel": "ce que lui coûte la voiture"
+    },
+    {
+      "code": "credit-conso",
+      "monthlyAmount": 145,
+      "narrativeLabel": "la mensualité du prêt travaux"
+    }
+  ],
+  "narrative": {
+    "story": "Patrick est entré à l'usine à vingt-huit ans, après l'armée et deux ans d'intérim. Il y a conduit la même ligne de conditionnement pendant vingt-six ans, formé une douzaine de nouveaux, et refusé deux fois un poste de chef d'équipe parce qu'il n'aimait pas l'idée de noter les gens. Le site a fermé en janvier : quatre-vingt-dix postes, un plan de sauvegarde de l'emploi, et un solde de tout compte dont il a placé l'essentiel sur un livret auquel il s'était promis de ne pas toucher. Il y touche depuis quatre mois, un peu chaque mois, et il connaît le chiffre exact."
+  },
+  "lineOverrides": [
+    {
+      "code": "transport",
+      "constrained": true,
+      "justification": "Saint-Quentin et son bassin d'emploi : les entretiens, les agences d'intérim et les sites industriels sont hors desserte. Renoncer à la voiture revient à renoncer à chercher."
+    }
+  ]
+}

@@ -138,8 +138,18 @@ describe('paquet compilé', () => {
 })
 
 describe('réformes — symétrie imposée par le schéma', () => {
-  const reform = bundle.reforms[0]
+  // Designee par son IDENTIFIANT, jamais par sa position. Ce bloc lisait
+  // `reforms[0]`, qui a cesse de designer la contribution energie le jour ou
+  // une reforme a ete ajoutee avant elle dans l'ordre alphabetique : trois
+  // tests se sont alors mis a verifier le schema contre `undefined`, donc a
+  // ne rien verifier du tout.
+  const reform = bundle.reforms.find((r: { id: string }) => r.id === 'contribution-energie')
   const taxe = reform.options.find((o: { id: string }) => o.id === 'taxe-energie')
+
+  it('les deux fixtures de ce bloc existent bien dans le corpus', () => {
+    expect(reform, 'réforme contribution-energie introuvable').toBeTruthy()
+    expect(taxe, 'option taxe-energie introuvable').toBeTruthy()
+  })
 
   it('le corpus réel valide', () => {
     expect(Reform.safeParse(reform).success).toBe(true)
@@ -197,27 +207,61 @@ describe('réformes — symétrie imposée par le schéma', () => {
   })
 })
 
-describe('corpus complet — cible du plan', () => {
-  it('compte six personnages, douze événements et six réformes', () => {
-    expect(bundle.characters.length).toBe(6)
-    expect(bundle.events.length).toBe(12)
-    expect(bundle.reforms.length).toBe(6)
+describe('corpus complet — ce que le jeu peut faire apparaître', () => {
+  type Char = {
+    identity: { incomeDecile: number }
+    traits: {
+      activities: string[]; tenure: string; childCount: number
+      housingZone: string; recognisedDisability: boolean
+    }
+  }
+  const chars = bundle.characters as Char[]
+
+  it('comporte de quoi tirer trois actes contrastés et les comparer', () => {
+    // Pas de nombre cible : trois personnages par partie et une règle de
+    // contraste de trois déciles exigent un corpus large, et le plafond est
+    // la lisibilité de l'écran « vu par chacun », pas un chiffre.
+    expect(chars.length).toBeGreaterThanOrEqual(9)
+    expect(bundle.events.length).toBeGreaterThanOrEqual(12)
+    expect(bundle.reforms.length).toBeGreaterThanOrEqual(9)
   })
 
-  it('couvre les six situations annoncées dans le brief', () => {
-    const activities = bundle.characters.flatMap((c: { traits: { activities: string[] } }) => c.traits.activities)
-    for (const a of ['employee', 'self_employed', 'student', 'retired']) {
+  it('couvre les dix déciles de revenu', () => {
+    // Un corpus qui saute un décile laisse un trou dont personne ne parle.
+    // Les absences restantes doivent être DÉCLARÉES sur la page méthode, pas
+    // découvertes par un joueur.
+    const deciles = new Set(chars.map((c) => c.identity.incomeDecile))
+    const manquants = [1,2,3,4,5,6,7,8,9,10].filter((d) => !deciles.has(d))
+    expect(manquants, `déciles absents : ${manquants.join(', ')}`).toEqual([])
+  })
+
+  it('couvre les situations d’activité, y compris celles qui n’en sont pas une', () => {
+    const activities = chars.flatMap((c) => c.traits.activities)
+    for (const a of ['employee', 'self_employed', 'student', 'retired', 'unemployed', 'inactive']) {
       expect(activities, `aucun personnage « ${a} »`).toContain(a)
     }
-    const deciles = bundle.characters.map((c: { identity: { incomeDecile: number } }) => c.identity.incomeDecile)
-    // Les situations doivent couvrir l'échelle, pas se concentrer en bas.
-    expect(Math.min(...deciles)).toBeLessThanOrEqual(2)
-    expect(Math.max(...deciles)).toBeGreaterThanOrEqual(8)
   })
 
-  it('couvre des statuts d’occupation différents', () => {
-    const tenures = new Set(bundle.characters.map((c: { traits: { tenure: string } }) => c.traits.tenure))
-    expect(tenures.size).toBeGreaterThanOrEqual(3)
+  it('couvre les cinq statuts d’occupation du logement', () => {
+    const tenures = new Set(chars.map((c) => c.traits.tenure))
+    for (const t of ['owner_with_loan', 'owner_outright', 'tenant_private', 'tenant_social', 'housed']) {
+      expect([...tenures], `aucun personnage « ${t} »`).toContain(t)
+    }
+  })
+
+  it('couvre les situations que le brief désignait comme manquantes', () => {
+    // Chacune de ces absences changeait ce que le jeu pouvait faire
+    // apparaître : une mesure sur le parc social, sur l'invalidité, sur les
+    // familles nombreuses ou sur les zones tendues n'avait personne à
+    // atteindre, et le contrôle de couverture du build ne pouvait pas le
+    // voir — il vérifie que chacun est atteint, pas que chaque situation
+    // existe.
+    expect(chars.some((c) => c.traits.tenure === 'tenant_social'), 'parc social').toBe(true)
+    expect(chars.some((c) => c.traits.childCount >= 3), 'famille nombreuse').toBe(true)
+    expect(chars.some((c) => c.traits.recognisedDisability), 'handicap reconnu').toBe(true)
+    expect(chars.some((c) => c.traits.housingZone === 'tendue'), 'zone tendue').toBe(true)
+    expect(chars.some((c) => c.traits.housingZone === 'detendue'), 'hors zone tendue').toBe(true)
+    expect(chars.some((c) => c.traits.activities.includes('unemployed')), 'sans emploi').toBe(true)
   })
 
   it('chaque réforme mobilise au moins trois familles de leviers', () => {

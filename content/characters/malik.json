@@ -1,0 +1,199 @@
+{
+  "id": "malik",
+  "charterVersion": "1.0",
+  "fictional": true,
+  "fictionNote": "Personnage fictif. Situation construite pour être plausible au regard des ordres de grandeur publics sur les rémunérations de l'intérim en logistique, la durée des missions et le coût des abonnements de transport de l'agglomération lyonnaise. Ne correspond à aucune personne réelle.",
+  "identity": {
+    "firstName": "Malik",
+    "age": 22,
+    "identityLine": "intérimaire en logistique, missions d'une à trois semaines, hébergé chez sa mère à Vénissieux",
+    "incomeDecile": 3,
+    "calibrationSourceIds": [
+      "dares-contrats-courts",
+      "insee-niveaux-de-vie"
+    ]
+  },
+  "traits": {
+    "activities": [
+      "employee"
+    ],
+    "tenure": "housed",
+    "heating": "collective",
+    "householdSize": 1,
+    "childCount": 0,
+    "hasSchoolAgedChild": false,
+    "housingZone": "tendue",
+    "recognisedDisability": false
+  },
+  "budget": {
+    "lines": [
+      {
+        "code": "salaire-net",
+        "group": "resource",
+        "value": {
+          "amount": 1180,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Moyenne sur douze mois, indemnités de fin de mission et de congés payés comprises. L'écart réel va de 780 € un mois creux à 1 650 € un mois chargé : cette irrégularité n'est pas dans ce chiffre, elle est dans les événements."
+        }
+      },
+      {
+        "code": "prestations",
+        "group": "resource",
+        "value": {
+          "amount": 105,
+          "unit": "EUR_month",
+          "nature": "hypothesis",
+          "hypothesisId": "prestations-calibrage",
+          "note": "Prime d'activité, recalculée chaque trimestre sur les trois mois précédents. Avec des missions irrégulières, elle varie d'un trimestre à l'autre sans qu'il sache à l'avance de combien."
+        }
+      },
+      {
+        "code": "logement",
+        "group": "constrained",
+        "value": {
+          "amount": 200,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Participation convenue au loyer de sa mère. Ce n'est ni un bail ni un hébergement gratuit."
+        }
+      },
+      {
+        "code": "energie",
+        "group": "constrained",
+        "value": {
+          "amount": 55,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Sa part des charges d'énergie du foyer."
+        }
+      },
+      {
+        "code": "alimentation",
+        "group": "constrained",
+        "value": {
+          "amount": 230,
+          "unit": "EUR_month",
+          "nature": "hypothesis",
+          "hypothesisId": "socle-alimentaire"
+        }
+      },
+      {
+        "code": "transport",
+        "group": "constrained",
+        "value": {
+          "amount": 95,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Abonnement du réseau lyonnais, plus l'essence du scooter pour les prises de poste à cinq heures, hors desserte."
+        }
+      },
+      {
+        "code": "sante",
+        "group": "constrained",
+        "value": {
+          "amount": 40,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      },
+      {
+        "code": "credit-conso",
+        "group": "credit",
+        "value": {
+          "amount": 115,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Scooter acheté à crédit à dix-neuf ans, faute d'obtenir un prêt bancaire. Il connaît le taux."
+        }
+      },
+      {
+        "code": "loisirs",
+        "group": "adjustable",
+        "value": {
+          "amount": 150,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      },
+      {
+        "code": "habillement",
+        "group": "adjustable",
+        "value": {
+          "amount": 85,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      }
+    ]
+  },
+  "stocks": {
+    "liquid7d": 640,
+    "liquid60d": 1150,
+    "authorisedOverdraft": 300,
+    "netWealth": 1150,
+    "precautionFloorMonths": 0
+  },
+  "parity": {
+    "strength": "Trois agences différentes le rappellent : en deux ans il n'a jamais refusé une mission ni annulé un matin, et dans ce métier cela se sait vite.",
+    "vulnerability": "Aucun bailleur ne regarde deux fois un dossier d'intérimaire. Il a les moyens de payer un loyer, pas celui de prouver qu'il les aura encore dans six mois.",
+    "aspirations": [
+      "Passer le certificat de conduite des chariots à mât rétractable, mieux payés",
+      "Avoir un studio à lui avant vingt-cinq ans"
+    ],
+    "concerns": [
+      "Que la plateforme automatise la préparation de commandes, comme celle de Corbas l'an dernier",
+      "Que sa mère s'habitue à compter sur les deux cents euros"
+    ],
+    "nonMonetaryConstraint": "Des missions annoncées la veille pour le lendemain : il ne peut s'inscrire à aucune formation qui exige d'être présent un jour fixe, y compris celles qui le feraient sortir de l'intérim.",
+    "nonMonetaryAdvantage": "Un logement qui ne lui coûte ni caution, ni garant, ni préavis, et qu'aucun dossier ne peut lui refuser.",
+    "opinionAgainstOwnInterest": "Il est contre l'idée de taxer davantage les contrats courts, qui le protégeraient pourtant : « si ça coûte plus cher de me prendre trois semaines, on ne me prendra pas trois semaines »."
+  },
+  "shortTermGoal": {
+    "label": "Réunir les 1 400 € de caution et de premier loyer d'un studio",
+    "amount": 1400,
+    "deadline": "2027-12"
+  },
+  "embodiedDetails": [
+    "Il garde ses chaussures de sécurité dans un sac, jamais dans l'entrée, parce que sa mère n'aime pas l'odeur.",
+    "Il a un carnet où il note le nom du chef d'équipe de chaque mission, avec une note sur dix.",
+    "Il joue au football le dimanche matin dans le même club depuis ses huit ans."
+  ],
+  "unavailableOptions": [
+    {
+      "option": "demenager",
+      "reason": "Aucun dossier de location n'aboutit sans trois bulletins de salaire d'un contrat stable, et il n'en aura pas."
+    },
+    {
+      "option": "emprunter-banque",
+      "reason": "Un intérimaire sans ancienneté n'obtient pas de prêt : son scooter a été financé par un crédit à la consommation, à un taux qu'il connaît."
+    }
+  ],
+  "equivalenceRefs": [
+    {
+      "code": "logement",
+      "monthlyAmount": 200,
+      "narrativeLabel": "ce qu'il verse à sa mère chaque mois"
+    },
+    {
+      "code": "loisirs",
+      "monthlyAmount": 150,
+      "narrativeLabel": "son budget sorties du mois"
+    },
+    {
+      "code": "credit-conso",
+      "monthlyAmount": 115,
+      "narrativeLabel": "la mensualité du scooter"
+    }
+  ],
+  "narrative": {
+    "story": "Malik a arrêté le lycée en terminale professionnelle, à trois mois du bac, parce qu'une mission de six semaines s'est présentée et qu'il fallait un revenu à la maison cette année-là. Il n'en fait pas une histoire. Depuis, il enchaîne : préparation de commandes, chargement, inventaires de fin d'année, parfois deux agences la même semaine. Il sait quelle plateforme fournit des gants et laquelle n'en fournit pas, quel entrepôt est chauffé et lequel ne l'est pas. Sa mère lui dit une fois par trimestre qu'il devrait reprendre une formation, et il répond à chaque fois qu'il va le faire, ce qui est vrai et ne se produit pas."
+  },
+  "lineOverrides": [
+    {
+      "code": "logement",
+      "constrained": true,
+      "justification": "Sa mère équilibre son propre budget sur cette participation : il ne peut pas la suspendre un mois sans la mettre en difficulté. Un hébergement gratuit n'est pas toujours gratuit."
+    }
+  ]
+}

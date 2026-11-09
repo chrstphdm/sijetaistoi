@@ -5,6 +5,7 @@ import { BalanceIcon, HeroCast, LookArt, TheoryIcon } from './HomeArt.tsx'
 import { LoopDiagram } from './LoopDiagram.tsx'
 import { ScaleDemo } from './ScaleDemo.tsx'
 import { Seal, sealHue } from './Seal.tsx'
+import { spellCount } from '../words.ts'
 
 /**
  * Accueil et contrat.
@@ -104,12 +105,12 @@ export function HomeScreen({ onStart, onMethod }: {
         </section>
 
         <section className="band band--tint" aria-labelledby="h-cast">
-          <h2 id="h-cast">Les six personnes que tu peux incarner</h2>
+          <h2 id="h-cast">Les {spellCount(characters.length)} personnes que tu peux incarner</h2>
           <p className="lead">
             Tu en incarnes trois par partie, tirées au sort. Chacune est représentée
             par un motif abstrait plutôt que par un visage — un portrait de «&nbsp;mère
-            célibataire&nbsp;» serait une caricature en puissance. Les six motifs ont
-            exactement la même densité.
+            célibataire&nbsp;» serait une caricature en puissance. Les{' '}
+            {spellCount(characters.length)} motifs ont exactement la même densité.
           </p>
           <ul className="cast">
             {characters.map((c) => (

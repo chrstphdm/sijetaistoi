@@ -98,7 +98,7 @@ export function ScaleDemo() {
         ))}
       </ol>
 
-      {/* En euros les six barres sont identiques, ce qui n'est pas un
+      {/* En euros toutes les barres sont identiques, ce qui n'est pas un
           défaut d'affichage mais le point de départ du raisonnement. Le
           dire évite que l'écran paraisse cassé. */}
       <p className="demo__turn">

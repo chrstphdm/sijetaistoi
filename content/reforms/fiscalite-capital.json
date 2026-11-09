@@ -1,0 +1,804 @@
+{
+  "id": "fiscalite-capital",
+  "charterVersion": "1.0",
+  "descriptiveTitle": "Imposition des revenus du patrimoine",
+  "statedBy": "Le Conseil budgétaire, acteur fictif de ce jeu",
+  "context": "Les revenus du patrimoine — loyers perçus, dividendes, intérêts, plus-values — sont imposés depuis 2018 à un prélèvement forfaitaire unique de 30 %, quel que soit leur montant, là où les revenus du travail suivent un barème progressif pouvant aller jusqu'à 45 %. Le Conseil budgétaire met en discussion quatre traitements : imposer ces revenus au barème, relever le taux forfaitaire, exonérer les petits portefeuilles et imposer plus fortement les grands, ou ne rien changer. Le rendement en jeu est de l'ordre de 6 milliards d'euros par an.",
+  "objective": {
+    "amount": 6,
+    "unit": "EUR_bn",
+    "nature": "fiction",
+    "note": "Montant posé par un acteur fictif du jeu. Les estimations publiques de rendement d'un retour au barème varient fortement selon l'ampleur supposée des réactions de comportement, qui est précisément ce qui est débattu."
+  },
+  "contextSourceIds": [
+    "cpo-capital",
+    "insee-patrimoine",
+    "insee-niveaux-de-vie"
+  ],
+  "modelLimitations": "Un seul personnage de ce corpus perçoit des revenus du patrimoine. Ce n'est pas un défaut de construction : ces revenus sont parmi les plus concentrés qui soient, et un corpus de treize situations réparties sur l'échelle des revenus n'en contiendrait pas davantage. Mais cela interdit toute comparaison entre détenteurs, alors que le sujet oppose précisément un retraité propriétaire d'un studio et un portefeuille de plusieurs millions, que le même taux frappe aujourd'hui à l'identique. Le modèle ne représente pas non plus les plus-values, qui constituent une part importante de ces revenus, ni l'arbitrage entre percevoir un dividende et le laisser dans l'entreprise, ni l'affectation effective du rendement : toutes les options supposent que la recette revienne aux ménages, ce qu'aucun mécanisme ne garantit.",
+  "options": [
+    {
+      "id": "statu-quo",
+      "label": "Ne rien changer",
+      "decisionDescription": "Le prélèvement forfaitaire unique reste à 30 %, quel que soit le montant des revenus du patrimoine et quel que soit le revenu de celui qui les perçoit.",
+      "families": [
+        "status_quo"
+      ],
+      "isStatusQuo": true,
+      "effects": [
+        {
+          "id": "kq-salaries",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ]
+              ]
+            },
+            "description": "Salariés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun changement. Leur revenu d'activité reste imposé au barème progressif, et les revenus du patrimoine à un taux fixe : l'écart entre les deux traitements est le statu quo, et il est le sujet."
+        },
+        {
+          "id": "kq-independants",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "employee"
+                  ]
+                }
+              ]
+            },
+            "description": "Indépendants sans activité salariée"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun changement. Un indépendant peut arbitrer entre se verser une rémunération, imposée au barème, et un dividende, imposé au forfait — arbitrage qui n'existe pas pour un salarié."
+        },
+        {
+          "id": "kq-retraites",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            },
+            "description": "Retraités"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun changement. Un patrimoine constitué d'une résidence principale ne produit aucun revenu imposable à ce titre : le statu quo lui est indifférent."
+        },
+        {
+          "id": "kq-chomeurs",
+          "kind": "budget_line",
+          "code": "allocation-chomage",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ]
+              ]
+            },
+            "description": "Demandeurs d'emploi indemnisés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun changement."
+        },
+        {
+          "id": "kq-inactifs",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ]
+              ]
+            },
+            "description": "Personnes sans activité"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun changement."
+        },
+        {
+          "id": "kq-detenteur",
+          "kind": "budget_line",
+          "code": "revenu-capital",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Détenteurs de revenus du patrimoine : taux forfaitaire maintenu",
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  10
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Le taux de 30 % s'applique au premier euro comme au dernier. C'est son principal avantage revendiqué — la lisibilité et la prévisibilité — et son principal reproche : un même taux pour un livret et pour un portefeuille de plusieurs millions."
+        },
+        {
+          "id": "kq-finances",
+          "kind": "public_finance",
+          "publicBillions": -6,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Besoin non couvert, au sens du cadrage posé par le Conseil."
+        }
+      ],
+      "argumentsFor": [
+        "Un taux unique et prévisible est le seul qui ne pousse pas à déplacer la perception d'un revenu d'une année sur l'autre ou d'un véhicule vers un autre, et son rendement est donc stable.",
+        "Les revenus du patrimoine supportent déjà des prélèvements sociaux au même taux que le travail, et le capital a souvent été constitué avec des revenus déjà imposés."
+      ],
+      "argumentsAgainst": [
+        "Un revenu obtenu sans travail est moins imposé qu'un revenu obtenu en travaillant, à montant égal : c'est le statu quo, et il n'a jamais été défendu comme un principe.",
+        "Un taux unique est régressif à l'intérieur même de son assiette : il frappe identiquement un petit épargnant et un très gros détenteur."
+      ]
+    },
+    {
+      "id": "bareme-progressif",
+      "label": "Imposer ces revenus au barème progressif",
+      "decisionDescription": "Les revenus du patrimoine sont ajoutés aux autres revenus et imposés au barème progressif, comme avant 2018. Le rendement est restitué par une baisse des prélèvements sur les revenus d'activité modestes.",
+      "families": [
+        "levies"
+      ],
+      "effects": [
+        {
+          "id": "kb-salaries",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ]
+              ]
+            },
+            "description": "Salariés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet direct : ils ne perçoivent pas de revenus du patrimoine. Le gain qui leur revient dépend de l'affectation de la recette, qui est une hypothèse du jeu et non une caractéristique de la mesure."
+        },
+        {
+          "id": "kb-independants",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "employee"
+                  ]
+                }
+              ]
+            },
+            "description": "Indépendants sans activité salariée"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet direct sur la rémunération d'activité. L'arbitrage entre rémunération et dividende disparaîtrait en revanche, puisque les deux seraient imposés de la même façon : c'est l'un des effets les moins discutés et les plus structurants de cette option."
+        },
+        {
+          "id": "kb-retraites",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            },
+            "description": "Retraités"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet direct, faute de revenus du patrimoine. Un patrimoine qui ne produit aucun revenu n'est pas touché par une mesure sur les revenus du patrimoine. C'est la distinction la plus mal comprise du sujet : une maison habitée et un appartement loué sont deux formes de patrimoine, et une seule rapporte quelque chose chaque mois."
+        },
+        {
+          "id": "kb-chomeurs",
+          "kind": "budget_line",
+          "code": "allocation-chomage",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ]
+              ]
+            },
+            "description": "Demandeurs d'emploi indemnisés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet."
+        },
+        {
+          "id": "kb-inactifs",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ]
+              ]
+            },
+            "description": "Personnes sans activité"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet."
+        },
+        {
+          "id": "kb-detenteur",
+          "kind": "budget_line",
+          "code": "revenu-capital",
+          "monthlyDelta": -480,
+          "scope": {
+            "description": "Détenteurs de revenus du patrimoine, tranches supérieures",
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  10
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "highly_debated",
+          "hypothesisId": "incidence-fiscalite-capital",
+          "note": "Imposition au barème, pour un contribuable dont les autres revenus atteignent déjà la tranche haute. L'ampleur réelle dépend de la réaction : percevoir moins, percevoir plus tard, ou percevoir ailleurs. Les travaux disponibles divergent fortement sur cette réaction."
+        },
+        {
+          "id": "kb-restitution-salaries",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 22,
+          "scope": {
+            "description": "Salariés jusqu'au sixième décile : restitution du rendement",
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "lte",
+                  6
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "incidence-fiscalite-capital",
+          "note": "Restitution supposée du rendement sous forme d'allègement sur les revenus d'activité modestes. Cette affectation est une hypothèse du jeu : aucun mécanisme ne lie la recette d'un impôt à une dépense, et l'histoire des affectations annoncées invite à la prudence."
+        },
+        {
+          "id": "kb-restitution-retraites",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": 18,
+          "scope": {
+            "description": "Retraités : restitution du rendement",
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "incidence-fiscalite-capital",
+          "note": "Même hypothèse d'affectation. Les retraités modestes sont concernés par la restitution sans l'être par le prélèvement, ce qui est l'un des arguments de cette option."
+        },
+        {
+          "id": "kb-finances",
+          "kind": "public_finance",
+          "publicBillions": 6,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "highly_debated",
+          "hypothesisId": "incidence-fiscalite-capital",
+          "note": "Rendement très sensible aux comportements : les estimations publiques vont du simple au double selon l'ampleur supposée de la réaction, et le rendement observé après 2018 a été interprété dans les deux sens."
+        }
+      ],
+      "argumentsFor": [
+        "Un euro est un euro : imposer différemment selon la manière dont il a été obtenu introduit une hiérarchie que personne n'assume publiquement.",
+        "La progressivité s'applique à l'intérieur même de l'assiette, donc un petit épargnant est moins imposé qu'aujourd'hui, et un très gros détenteur davantage."
+      ],
+      "argumentsAgainst": [
+        "Les capitaux se déplacent plus facilement que les salaires : le rendement annoncé dépend d'une réaction de comportement qui a été sous-estimée par le passé.",
+        "Le capital productif d'une entreprise et un placement financier sont traités identiquement, alors que l'un finance l'emploi et l'autre non."
+      ]
+    },
+    {
+      "id": "taux-releve",
+      "label": "Relever le taux forfaitaire à 36 %",
+      "decisionDescription": "Le prélèvement forfaitaire unique est maintenu dans son principe, mais son taux passe de 30 à 36 %. La simplicité est conservée, l'écart avec le travail est réduit sans être supprimé.",
+      "families": [
+        "levies"
+      ],
+      "isCompromise": true,
+      "effects": [
+        {
+          "id": "kt-salaries",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ]
+              ]
+            },
+            "description": "Salariés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet direct. La restitution est plus faible que dans l'option précédente, parce que le rendement l'est aussi."
+        },
+        {
+          "id": "kt-independants",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "employee"
+                  ]
+                }
+              ]
+            },
+            "description": "Indépendants sans activité salariée"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet direct sur la rémunération. L'arbitrage entre rémunération et dividende subsiste, réduit mais non supprimé."
+        },
+        {
+          "id": "kt-retraites",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            },
+            "description": "Retraités"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet direct. Un patrimoine qui ne produit aucun revenu n'est pas touché par une mesure sur les revenus du patrimoine. C'est la distinction la plus mal comprise du sujet : une maison habitée et un appartement loué sont deux formes de patrimoine, et une seule rapporte quelque chose chaque mois."
+        },
+        {
+          "id": "kt-chomeurs",
+          "kind": "budget_line",
+          "code": "allocation-chomage",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ]
+              ]
+            },
+            "description": "Demandeurs d'emploi indemnisés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet."
+        },
+        {
+          "id": "kt-inactifs",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ]
+              ]
+            },
+            "description": "Personnes sans activité"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet."
+        },
+        {
+          "id": "kt-detenteur",
+          "kind": "budget_line",
+          "code": "revenu-capital",
+          "monthlyDelta": -190,
+          "scope": {
+            "description": "Détenteurs de revenus du patrimoine : taux relevé",
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  10
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "incidence-fiscalite-capital",
+          "note": "Prélèvement supplémentaire de six points. L'effet est proportionnel au revenu perçu, et donc identique en pourcentage pour un petit et un gros détenteur : c'est ce que ce compromis conserve du dispositif actuel, en bien comme en mal."
+        },
+        {
+          "id": "kt-restitution",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 9,
+          "scope": {
+            "description": "Salariés des quatre premiers déciles : restitution du rendement",
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "lte",
+                  4
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "incidence-fiscalite-capital",
+          "note": "Restitution supposée, plus étroitement ciblée faute d'un rendement suffisant pour aller plus haut."
+        },
+        {
+          "id": "kt-finances",
+          "kind": "public_finance",
+          "publicBillions": 2.8,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "incidence-fiscalite-capital",
+          "note": "Rendement inférieur de moitié à celui du barème, mais nettement plus prévisible : un taux forfaitaire déclenche moins d'arbitrages qu'un passage au barème."
+        }
+      ],
+      "argumentsFor": [
+        "Il réduit l'écart avec l'imposition du travail sans rétablir la complexité et les arbitrages de calendrier que le barème provoque.",
+        "Son rendement est prévisible, là où celui d'un retour au barème dépend entièrement d'hypothèses de comportement contestées."
+      ],
+      "argumentsAgainst": [
+        "Il conserve le défaut principal du dispositif : un taux identique pour un livret d'épargne et pour un portefeuille de plusieurs millions.",
+        "Il augmente la charge des petits détenteurs, qui seraient au contraire allégés par un barème progressif."
+      ]
+    },
+    {
+      "id": "exoneration-seuil",
+      "label": "Exonérer les petits revenus du patrimoine, imposer fortement les grands",
+      "decisionDescription": "Les revenus du patrimoine sont exonérés en dessous d'un seuil annuel, et imposés au barème majoré au-dessus. Le rendement est affecté aux prestations sous conditions de ressources.",
+      "families": [
+        "levies",
+        "scope_efficiency"
+      ],
+      "effects": [
+        {
+          "id": "ke-salaries",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ]
+              ]
+            },
+            "description": "Salariés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet direct ni sur le prélèvement, ni sur la restitution : celle-ci est affectée aux prestations sous conditions de ressources, qu'ils ne perçoivent pas."
+        },
+        {
+          "id": "ke-independants",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "employee"
+                  ]
+                }
+              ]
+            },
+            "description": "Indépendants sans activité salariée"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet direct sur la rémunération d'activité."
+        },
+        {
+          "id": "ke-retraites",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            },
+            "description": "Retraités"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Un retraité dont l'épargne produit quelques centaines d'euros par an serait exonéré, alors qu'il est aujourd'hui prélevé à 30 % dès le premier euro. Un patrimoine qui ne produit aucun revenu n'est pas touché par une mesure sur les revenus du patrimoine. C'est la distinction la plus mal comprise du sujet : une maison habitée et un appartement loué sont deux formes de patrimoine, et une seule rapporte quelque chose chaque mois."
+        },
+        {
+          "id": "ke-chomeurs",
+          "kind": "budget_line",
+          "code": "allocation-chomage",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ]
+              ]
+            },
+            "description": "Demandeurs d'emploi indemnisés"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet."
+        },
+        {
+          "id": "ke-inactifs",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ]
+              ]
+            },
+            "description": "Personnes sans activité"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet direct sur le prélèvement. La restitution affectée aux prestations sous conditions de ressources la concerne, elle, directement."
+        },
+        {
+          "id": "ke-detenteur",
+          "kind": "budget_line",
+          "code": "revenu-capital",
+          "monthlyDelta": -520,
+          "scope": {
+            "description": "Détenteurs au-delà du seuil : barème majoré",
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  10
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "highly_debated",
+          "hypothesisId": "incidence-fiscalite-capital",
+          "note": "Imposition plus lourde que dans l'option du barème simple, parce que l'exonération sous le seuil doit être financée par les tranches supérieures. La réaction de comportement attendue est d'autant plus forte."
+        },
+        {
+          "id": "ke-restitution-prestations",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 46,
+          "scope": {
+            "description": "Deux premiers déciles : prestations revalorisées",
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "lte",
+                  2
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "incidence-fiscalite-capital",
+          "note": "Affectation supposée du rendement aux prestations sous conditions de ressources. Cette option est la seule des quatre dont la restitution ne passe pas par le revenu d'activité : elle atteint donc ceux qui n'en ont pas."
+        },
+        {
+          "id": "ke-finances",
+          "kind": "public_finance",
+          "publicBillions": 4.1,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "highly_debated",
+          "hypothesisId": "incidence-fiscalite-capital",
+          "note": "Rendement intermédiaire : le barème majoré rapporte plus sur les grandes assiettes, l'exonération sous le seuil coûte."
+        }
+      ],
+      "argumentsFor": [
+        "Elle distingue enfin le petit épargnant du grand détenteur, ce qu'aucun taux unique ne fait, et elle allège le premier.",
+        "Elle est la seule option dont la contrepartie atteigne les personnes sans revenu d'activité, c'est-à-dire celles que les allègements de prélèvements ne touchent jamais."
+      ],
+      "argumentsAgainst": [
+        "Un seuil crée un effet de bord : juste au-dessus, l'imposition devient très lourde, ce qui pousse à organiser ses revenus autour du seuil plutôt qu'en fonction de leur emploi.",
+        "Concentrer la charge sur un très petit nombre de contribuables rend le rendement dépendant des décisions de quelques-uns, donc instable."
+      ]
+    },
+    {
+      "id": "contester-cadrage",
+      "label": "Je conteste la façon dont la question est posée",
+      "decisionDescription": "Le joueur refuse le cadrage : la question n'est pas de savoir à quel taux imposer un revenu du patrimoine, mais comment le patrimoine se constitue et se transmet, ce qui ne se règle pas par un taux.",
+      "families": [
+        "challenge_framing"
+      ],
+      "effects": [
+        {
+          "id": "ke-contestation",
+          "kind": "service_level",
+          "scope": {
+            "description": "Aucun effet budgétaire modélisé"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Contester le cadrage ne produit aucun effet chiffré dans ce modèle. Cette absence est une limite du jeu, pas un jugement sur la pertinence de la contestation."
+        }
+      ],
+      "argumentsFor": [
+        "Imposer le revenu d'un patrimoine laisse entière la question du patrimoine lui-même, dont la distribution est bien plus inégale que celle des revenus et dont l'essentiel provient de la transmission.",
+        "Les quatre options supposent que la recette revienne aux ménages sous une forme ou une autre, alors qu'aucun mécanisme ne lie une recette à une dépense : le choix présenté n'est peut-être pas celui qui sera fait."
+      ],
+      "argumentsAgainst": [
+        "Le taux d'imposition de ces revenus s'applique chaque année à des montants connus : refuser le cadrage laisse le taux actuel en place.",
+        "Déplacer la question vers la transmission ne la simplifie pas : elle appelle le même type d'arbitrage, avec des réactions de comportement du même ordre."
+      ]
+    }
+  ]
+}

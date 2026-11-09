@@ -1,0 +1,214 @@
+{
+  "id": "helene",
+  "charterVersion": "1.0",
+  "fictional": true,
+  "fictionNote": "Personnage fictif. Situation construite pour être plausible au regard des ordres de grandeur publics sur les restes à charge en établissement d'hébergement pour personnes âgées dépendantes, les loyers du parc privé toulousain et les salaires de l'encadrement logistique. Ne correspond à aucune personne réelle.",
+  "identity": {
+    "firstName": "Hélène",
+    "age": 52,
+    "identityLine": "responsable d'exploitation logistique, un fils étudiant, aidante de sa mère en Ehpad, locataire à Toulouse",
+    "incomeDecile": 7,
+    "calibrationSourceIds": [
+      "drees-aidants",
+      "anil-loyers",
+      "insee-niveaux-de-vie"
+    ]
+  },
+  "traits": {
+    "activities": [
+      "employee"
+    ],
+    "tenure": "tenant_private",
+    "heating": "collective",
+    "householdSize": 1,
+    "childCount": 0,
+    "hasSchoolAgedChild": false,
+    "housingZone": "tendue",
+    "recognisedDisability": false
+  },
+  "budget": {
+    "lines": [
+      {
+        "code": "salaire-net",
+        "group": "resource",
+        "value": {
+          "amount": 2780,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Cadre, quinze ans d'ancienneté, part variable annuelle lissée sur douze mois."
+        }
+      },
+      {
+        "code": "logement",
+        "group": "constrained",
+        "value": {
+          "amount": 760,
+          "unit": "EUR_month",
+          "nature": "fact",
+          "sourceId": "anil-loyers",
+          "note": "T3 du parc privé, charges comprises, sous le loyer médian de son quartier."
+        }
+      },
+      {
+        "code": "energie",
+        "group": "constrained",
+        "value": {
+          "amount": 110,
+          "unit": "EUR_month",
+          "nature": "extrapolation"
+        }
+      },
+      {
+        "code": "alimentation",
+        "group": "constrained",
+        "value": {
+          "amount": 310,
+          "unit": "EUR_month",
+          "nature": "hypothesis",
+          "hypothesisId": "socle-alimentaire"
+        }
+      },
+      {
+        "code": "transport",
+        "group": "constrained",
+        "value": {
+          "amount": 185,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Voiture et péage : le site logistique est à vingt-deux kilomètres, hors de toute desserte."
+        }
+      },
+      {
+        "code": "sante",
+        "group": "constrained",
+        "value": {
+          "amount": 125,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      },
+      {
+        "code": "aide-proche",
+        "group": "constrained",
+        "value": {
+          "amount": 430,
+          "unit": "EUR_month",
+          "nature": "fact",
+          "sourceId": "drees-aidants",
+          "note": "Sa moitié du reste à charge de l'Ehpad de sa mère, après allocation personnalisée d'autonomie. L'autre moitié est due par son frère."
+        }
+      },
+      {
+        "code": "enfants",
+        "group": "constrained",
+        "value": {
+          "amount": 300,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Loyer et charges du studio de son fils à Montpellier, pendant son master. Il n'habite plus chez elle, et ce poste n'est donc compté nulle part dans les statistiques de son ménage."
+        }
+      },
+      {
+        "code": "impots",
+        "group": "levy",
+        "value": {
+          "amount": 215,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      },
+      {
+        "code": "loisirs",
+        "group": "adjustable",
+        "value": {
+          "amount": 130,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      },
+      {
+        "code": "habillement",
+        "group": "adjustable",
+        "value": {
+          "amount": 65,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      }
+    ]
+  },
+  "stocks": {
+    "liquid7d": 1450,
+    "liquid60d": 3200,
+    "authorisedOverdraft": 1500,
+    "netWealth": 18000,
+    "precautionFloorMonths": 2
+  },
+  "parity": {
+    "strength": "Elle a refait le plan de transport d'un entrepôt de cent quatre-vingts personnes : on lui confie les réorganisations parce qu'elle les fait tenir sans casser les équipes.",
+    "vulnerability": "Tout ce qu'elle a mis de côté en vingt ans part en six mois si l'état de sa mère exige une unité protégée, dont le reste à charge est le double.",
+    "aspirations": [
+      "Passer à quatre cinquièmes, un jour, et pouvoir le dire sans que cela s'entende comme un désengagement",
+      "Emmener sa mère voir la mer une dernière fois, tant que c'est possible"
+    ],
+    "concerns": [
+      "Que son frère cesse de verser sa moitié, comme il l'a déjà fait deux mois",
+      "Que son fils renonce à son master pour aller travailler"
+    ],
+    "nonMonetaryConstraint": "Deux heures de route aller-retour, deux dimanches par mois, pour voir sa mère. Ce n'est pas une dépense : c'est ce qui reste de son temps libre.",
+    "nonMonetaryAdvantage": "Un contrat de cadre et quinze ans d'ancienneté : son emploi ne dépend d'aucun carnet de commandes, et elle le sait depuis longtemps.",
+    "opinionAgainstOwnInterest": "Elle est contre la déduction fiscale des frais d'hébergement d'un parent dépendant, dont elle bénéficie pourtant : « ça rend l'aide plus facile pour ceux qui paient des impôts, et plus difficile pour ceux qui n'en paient pas »."
+  },
+  "shortTermGoal": {
+    "label": "Reconstituer les 2 000 € de précaution entamés l'an dernier",
+    "amount": 2000,
+    "deadline": "2027-12"
+  },
+  "embodiedDetails": [
+    "Elle appelle l'Ehpad le mardi et le vendredi, à la même heure, pour ne pas tomber pendant les repas.",
+    "Elle garde dans son portefeuille une photo de sa mère à vingt-cinq ans, en maillot, sur une plage de Palavas.",
+    "Elle n'a jamais pris de vacances en août, pour laisser le mois à ceux de son équipe qui ont des enfants."
+  ],
+  "unavailableOptions": [
+    {
+      "option": "reduire-logement",
+      "reason": "Un T3 à 760 € charges comprises est déjà sous le loyer médian de son quartier : le réduire suppose de changer de commune, donc de trajet."
+    },
+    {
+      "option": "cesser-aide",
+      "reason": "L'obligation alimentaire est juridique : son frère et elle ont été appelés conjointement par le département, et un refus se règle au tribunal."
+    }
+  ],
+  "equivalenceRefs": [
+    {
+      "code": "aide-proche",
+      "monthlyAmount": 430,
+      "narrativeLabel": "sa part du reste à charge de l'Ehpad"
+    },
+    {
+      "code": "alimentation",
+      "monthlyAmount": 310,
+      "narrativeLabel": "son alimentation du mois"
+    },
+    {
+      "code": "loisirs",
+      "monthlyAmount": 130,
+      "narrativeLabel": "son budget loisirs du mois"
+    },
+    {
+      "code": "enfants",
+      "monthlyAmount": 300,
+      "narrativeLabel": "le studio de son fils à Montpellier"
+    }
+  ],
+  "narrative": {
+    "story": "Hélène a commencé comme agent de planning à vingt-trois ans, dans l'entrepôt où elle est aujourd'hui responsable d'exploitation. Elle a divorcé à quarante et un ans, gardé le fils, et repris un appartement plus petit sans jamais racheter de bien, parce que le moment n'était jamais le bon et qu'ensuite il a été trop tard. Sa mère est entrée en Ehpad il y a trois ans, après une chute et quatre mois d'hôpital. Le premier devis l'a sidérée : deux mille deux cents euros par mois, dont il restait onze cents une fois les aides déduites, à partager avec son frère. Elle gagne bien sa vie et elle compte chaque mois, et elle a mis longtemps à oser le dire."
+  },
+  "lineOverrides": [
+    {
+      "code": "enfants",
+      "constrained": true,
+      "justification": "Un master en deux ans, dans une autre ville, avec un studio déjà loué : interrompre cette aide en cours d'année reviendrait à interrompre les études. Le caractère contraint est ici une décision de modélisation, et elle est discutable."
+    }
+  ]
+}

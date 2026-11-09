@@ -57,7 +57,7 @@
         {
           "id": "csg-haut",
           "kind": "budget_line",
-          "code": "prestations",
+          "code": "pension-retraite",
           "monthlyDelta": -42,
           "scope": {
             "when": {
@@ -168,6 +168,48 @@
           "uncertainty": "established"
         },
         {
+          "id": "cu-sans-activite",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ]
+              ]
+            },
+            "description": "Personnes sans revenu d'activité : hors de l'assiette"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Une cotisation dite universelle assise sur les revenus d'activité ne l'est pas : qui n'a pas d'activité ne cotise pas. Ce n'est pas un oubli de la mesure, c'est sa définition. Reste la question qu'elle ne tranche pas : faut-il que l'aide à l'autonomie soit financée par ceux-là seuls qui travaillent, alors qu'une personne en invalidité peut être concernée par la perte d'autonomie plus tôt que les autres."
+        },
+        {
+          "id": "cu-chomage",
+          "kind": "budget_line",
+          "code": "allocation-chomage",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ]
+              ]
+            },
+            "description": "Demandeurs d'emploi indemnisés : hors de l'assiette"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "L'allocation chômage n'est pas un revenu d'activité : elle n'entre pas dans l'assiette retenue. Le modèle n'applique donc aucun prélèvement ici, ce qui suppose un choix — exonérer les allocations — que la mesure telle qu'énoncée ne précise pas."
+        },
+        {
           "id": "cu-retraites",
           "kind": "budget_line",
           "code": "sante",
@@ -243,6 +285,27 @@
           "uncertainty": "highly_debated",
           "hypothesisId": "indexation-pensions",
           "note": "Chiffrage très incertain : il dépend de la date de transmission, du nombre d'héritiers et du barème retenu. Il est présenté comme un ordre de grandeur annualisé, pas comme une prévision. Les locataires ne sont pas concernés par cette contribution."
+        },
+        {
+          "id": "succ-heberge",
+          "kind": "budget_line",
+          "code": "logement",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "tenure",
+                  "eq",
+                  "housed"
+                ]
+              ]
+            },
+            "description": "Personnes hébergées : rien à transmettre, rien à recevoir ici"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Un prélèvement sur les successions n'a d'effet mensuel que sur qui détient un patrimoine transmissible. Il n'en a aucun ici — ce qui ne veut pas dire que la mesure soit sans portée pour cette situation : elle décide de ce que les héritiers recevront, et donc de l'écart entre ceux qui héritent et ceux qui n'héritent pas. Le jeu ne sait représenter que l'effet mensuel."
         },
         {
           "id": "su-aide",

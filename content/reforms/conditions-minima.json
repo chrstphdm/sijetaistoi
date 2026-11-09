@@ -1,0 +1,812 @@
+{
+  "id": "conditions-minima",
+  "charterVersion": "1.0",
+  "descriptiveTitle": "Conditions d'accès aux minima sociaux et à la prime d'activité",
+  "statedBy": "Le Conseil budgétaire, acteur fictif de ce jeu",
+  "context": "Le Conseil budgétaire ouvre une discussion sur les conditions d'accès aux minima sociaux et à la prime d'activité. Quatre directions sont sur la table : exiger un volume d'activité hebdomadaire, réduire les montants, verser automatiquement les droits pour réduire le non-recours, ou ne rien changer. Aucune somme n'est à trouver : il s'agit de décider d'une règle, et les quatre options ont des coûts budgétaires opposés.",
+  "objective": {
+    "amount": 0,
+    "unit": "EUR_bn",
+    "nature": "fiction",
+    "note": "Objectif budgétaire nul, et c'est délibéré. Cette décision ne cherche pas à lever une somme : elle fixe une règle. Les autres réformes de ce jeu sont posées sous la forme « il manque tant de milliards, où les trouver », qui est un cadrage parmi d'autres ; celle-ci montre qu'une décision politique majeure peut n'avoir aucun montant à son origine."
+  },
+  "contextSourceIds": [
+    "drees-minima-sociaux",
+    "insee-niveaux-de-vie",
+    "cnaf-cout-garde"
+  ],
+  "modelLimitations": "Trois limites pèsent lourd ici. D'abord, le jeu applique les variations en euros par mois à l'intérieur d'une tranche de revenu, et non en pourcentage du droit réel : une même baisse de 8 % représente 34 € pour l'un et 83 € pour l'autre, et le modèle écrase cet écart. Ensuite, le non-recours n'est modélisé par aucun attribut : le gain d'un versement automatique est appliqué uniformément à la tranche, alors que deux personnes de ce corpus réclament déjà tout ce à quoi elles ont droit et n'y gagneraient rien. Enfin, et surtout, le corpus ne contient aucun allocataire du revenu de solidarité active : la mesure la plus discutée du pays ne touche directement personne ici, et cette absence est déclarée sur la page méthode.",
+  "options": [
+    {
+      "id": "statu-quo",
+      "label": "Ne rien changer",
+      "decisionDescription": "Les conditions et les montants restent en l'état. Le non-recours actuel reste en l'état lui aussi : il fait partie du statu quo.",
+      "families": [
+        "status_quo"
+      ],
+      "isStatusQuo": true,
+      "effects": [
+        {
+          "id": "mq-beneficiaires",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "lte",
+                  2
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "unemployed"
+                  ]
+                }
+              ]
+            },
+            "description": "Deux premiers déciles : bénéficiaires de prestations sous conditions"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun changement. Il faut toutefois rappeler ce que le statu quo contient : entre un cinquième et un tiers des droits ne sont pas réclamés, selon les estimations disponibles. Ce non-recours n'est pas un accident du dispositif, il en est un résultat."
+        },
+        {
+          "id": "mq-limite",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "eq",
+                  3
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "unemployed"
+                  ]
+                }
+              ]
+            },
+            "description": "Troisième décile : prime d'activité seule"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun changement. La prime d'activité continue d'être recalculée chaque trimestre sur les trois mois précédents, ce qui la rend imprévisible pour qui a des revenus irréguliers."
+        },
+        {
+          "id": "mq-chomeurs",
+          "kind": "budget_line",
+          "code": "allocation-chomage",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ]
+              ]
+            },
+            "description": "Demandeurs d'emploi indemnisés : pas encore au minimum social"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun changement aujourd'hui. La question se posera à la fin de ses droits, et les règles qu'il trouvera alors sont celles qui se décident maintenant."
+        },
+        {
+          "id": "mq-retraites",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            },
+            "description": "Retraités"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "L'allocation de solidarité aux personnes âgées obéit à des règles distinctes, que cette décision ne modifie pas."
+        },
+        {
+          "id": "mq-salaries-aises",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  4
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ]
+              ]
+            },
+            "description": "Salariés à partir du quatrième décile"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Non concernés : au-dessus des plafonds de ressources."
+        },
+        {
+          "id": "mq-independants-aises",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  4
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "employee"
+                  ]
+                }
+              ]
+            },
+            "description": "Indépendants à partir du quatrième décile"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Non concernés : au-dessus des plafonds de ressources. Un indépendant dont l'activité s'effondre peut toutefois y basculer en un trimestre."
+        }
+      ],
+      "argumentsFor": [
+        "Chaque modification des règles produit une vague de ruptures de droits chez des personnes qui n'ont rien changé à leur situation, et plusieurs mois de rattrapage.",
+        "Les évaluations des conditions d'activité portent sur des dispositifs trop différents pour trancher : décider sans savoir expose à défaire dans cinq ans ce qu'on aura fait."
+      ],
+      "argumentsAgainst": [
+        "Ne rien changer, c'est maintenir un niveau de non-recours que personne ne défend lorsqu'on le lui expose, et qui atteint d'abord les situations les plus instables.",
+        "Le statu quo n'est pas neutre : il résulte de décisions antérieures, prises dans des contextes différents, et jamais réexaminées ensemble."
+      ]
+    },
+    {
+      "id": "heures-activite",
+      "label": "Exiger quinze heures d'activité par semaine",
+      "decisionDescription": "Le versement est conditionné à quinze heures hebdomadaires d'activité ou de formation. Qui travaille déjà n'est pas concerné ; pour les autres, le versement est suspendu si la condition n'est pas remplie.",
+      "families": [
+        "scope_efficiency"
+      ],
+      "effects": [
+        {
+          "id": "mh-beneficiaires",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "lte",
+                  2
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "unemployed"
+                  ]
+                }
+              ]
+            },
+            "description": "Deux premiers déciles : bénéficiaires de prestations sous conditions"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Effet nul, et c'est l'argument central des partisans : qui travaille déjà remplit la condition sans rien changer. L'effet se concentrerait sur ceux qui ne travaillent pas — que ce corpus ne contient pas."
+        },
+        {
+          "id": "mh-limite",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "eq",
+                  3
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "unemployed"
+                  ]
+                }
+              ]
+            },
+            "description": "Troisième décile : prime d'activité seule"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Effet nul pour la même raison. Une mission d'intérim de trois semaines remplit largement la condition ; la semaine sans mission, non. Comment la condition s'apprécie sur des revenus discontinus n'est pas précisé par la mesure."
+        },
+        {
+          "id": "mh-chomeurs",
+          "kind": "budget_line",
+          "code": "allocation-chomage",
+          "monthlyDelta": -340,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ]
+              ]
+            },
+            "description": "Demandeurs d'emploi indemnisés : pas encore au minimum social"
+          },
+          "horizon": "y5",
+          "uncertainty": "highly_debated",
+          "hypothesisId": "conditionnalite-retour-emploi",
+          "note": "À la fin de ses droits, son allocation deviendrait un minimum social conditionné. Le modèle retient l'hypothèse d'une suspension partielle faute de remplir la condition, à un âge où les offres de formation se raréfient. Que cette suspension se produise effectivement, et qu'elle conduise ou non à un emploi, est précisément ce qui est débattu."
+        },
+        {
+          "id": "mh-retraites",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            },
+            "description": "Retraités"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Non concernée : aucune condition d'activité ne s'applique aux droits liés à l'âge."
+        },
+        {
+          "id": "mh-salaries-aises",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  4
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ]
+              ]
+            },
+            "description": "Salariés à partir du quatrième décile"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Non concernés. Il faut noter que la condition ne s'applique qu'aux droits sous conditions de ressources, et jamais aux aides qui transitent par l'impôt."
+        },
+        {
+          "id": "mh-independants-aises",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  4
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "employee"
+                  ]
+                }
+              ]
+            },
+            "description": "Indépendants à partir du quatrième décile"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Non concernés, pour la même raison."
+        },
+        {
+          "id": "mh-invalidite",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Personnes en invalidité : exemption non précisée",
+            "when": {
+              "and": [
+                [
+                  "recognisedDisability",
+                  "eq",
+                  true
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "La mesure telle qu'énoncée ne dit pas si l'invalidité reconnue exempte de la condition. Le modèle retient qu'elle exempte, et affiche donc zéro. Cette indétermination n'est pas un détail de rédaction : c'est elle qui fait que la mesure est redoutée par des personnes qu'elle n'est peut-être pas censée viser."
+        },
+        {
+          "id": "mh-finances",
+          "kind": "public_finance",
+          "publicBillions": 0.4,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "highly_debated",
+          "hypothesisId": "conditionnalite-retour-emploi",
+          "note": "Économie attendue sur les versements suspendus, diminuée du coût de l'accompagnement et du contrôle. Le solde peut être négatif selon l'intensité de l'accompagnement retenue, et plusieurs évaluations le trouvent tel."
+        }
+      ],
+      "argumentsFor": [
+        "Une contrepartie rend le dispositif défendable devant ceux qui le financent, et plusieurs allocataires eux-mêmes demandent un cadre plutôt qu'un versement sans accompagnement.",
+        "L'accompagnement intensif qui va avec la condition produit, dans les évaluations disponibles, un effet positif sur le retour à l'emploi, quelle que soit la condition elle-même."
+      ],
+      "argumentsAgainst": [
+        "Les évaluations attribuent l'effet à l'accompagnement et non à la condition : on peut donc avoir l'un sans l'autre, et la condition n'ajoute que le risque de suspension.",
+        "Une suspension de versement frappe un budget qui n'a aucune réserve : l'effet est immédiat et difficilement réversible, alors que le retour à l'emploi ne l'est pas."
+      ]
+    },
+    {
+      "id": "baisse-montant",
+      "label": "Réduire les montants de 8 %",
+      "decisionDescription": "Aucune condition nouvelle, mais des montants réduits de 8 %. Le dispositif reste ouvert aux mêmes personnes, pour moins.",
+      "families": [
+        "public_spending"
+      ],
+      "effects": [
+        {
+          "id": "mb-beneficiaires",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": -62,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "lte",
+                  2
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "unemployed"
+                  ]
+                }
+              ]
+            },
+            "description": "Deux premiers déciles : bénéficiaires de prestations sous conditions"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Baisse appliquée en euros à l'intérieur de la tranche, alors que la mesure est un pourcentage : l'écart réel va de 34 € à 83 € selon le droit perçu. Le modèle écrase cette différence, et c'est l'une de ses limites les plus gênantes ici."
+        },
+        {
+          "id": "mb-limite",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": -12,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "eq",
+                  3
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "unemployed"
+                  ]
+                }
+              ]
+            },
+            "description": "Troisième décile : prime d'activité seule"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "La prime d'activité est faible à ce niveau de revenu : 8 % de peu font peu. Ce qui se joue n'est pas le montant, c'est le signal."
+        },
+        {
+          "id": "mb-chomeurs",
+          "kind": "budget_line",
+          "code": "allocation-chomage",
+          "monthlyDelta": -52,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ]
+              ]
+            },
+            "description": "Demandeurs d'emploi indemnisés : pas encore au minimum social"
+          },
+          "horizon": "y5",
+          "uncertainty": "debated",
+          "hypothesisId": "conditionnalite-retour-emploi",
+          "note": "Aucun effet aujourd'hui : son allocation relève de l'assurance chômage, pas des minima. L'effet est porté à cinq ans, quand ses droits seront épuisés."
+        },
+        {
+          "id": "mb-retraites",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            },
+            "description": "Retraités"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Non concernée."
+        },
+        {
+          "id": "mb-salaries-aises",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  4
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ]
+              ]
+            },
+            "description": "Salariés à partir du quatrième décile"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Non concernés. Aucune économie ne leur revient : elle réduit la dépense publique, sans contrepartie directe pour eux."
+        },
+        {
+          "id": "mb-independants-aises",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  4
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "employee"
+                  ]
+                }
+              ]
+            },
+            "description": "Indépendants à partir du quatrième décile"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Non concernés, pour la même raison."
+        },
+        {
+          "id": "mb-finances",
+          "kind": "public_finance",
+          "publicBillions": 2.1,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Économie directe, de rendement prévisible : c'est le levier dont le résultat budgétaire est le plus certain, et c'est son seul avantage technique."
+        }
+      ],
+      "argumentsFor": [
+        "L'écart entre un revenu d'activité au salaire minimum et un minimum social est jugé trop faible par une partie de ceux qui travaillent à ce niveau de salaire.",
+        "C'est le levier dont le rendement budgétaire est le plus certain, là où les effets d'une conditionnalité sont contestés dans les deux sens."
+      ],
+      "argumentsAgainst": [
+        "Les montants actuels sont déjà en dessous du seuil de pauvreté pour une personne seule : les réduire déplace le problème vers l'aide alimentaire et les impayés de loyer.",
+        "Creuser l'écart par le bas plutôt que par le haut suppose que le niveau des bas salaires soit, lui, intouchable : c'est un choix, et il n'est pas énoncé."
+      ]
+    },
+    {
+      "id": "automatisation",
+      "label": "Verser les droits automatiquement",
+      "decisionDescription": "Les droits sont calculés et versés automatiquement à partir des données déjà connues de l'administration, sans démarche. Les conditions ne changent pas, mais le non-recours diminue — et la dépense augmente.",
+      "families": [
+        "public_spending",
+        "scope_efficiency"
+      ],
+      "isCompromise": true,
+      "effects": [
+        {
+          "id": "ma-beneficiaires",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 64,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "lte",
+                  2
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "unemployed"
+                  ]
+                }
+              ]
+            },
+            "description": "Deux premiers déciles : bénéficiaires de prestations sous conditions"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "non-recours-minima",
+          "note": "Gain appliqué uniformément à la tranche. Le modèle ne sait pas qui ne réclame pas ses droits : deux personnes de ce corpus réclament déjà tout, et pour elles ce gain n'existerait pas. Le non-recours dépend de la stabilité de la situation et de la familiarité administrative, que le jeu ne représente pas."
+        },
+        {
+          "id": "ma-limite",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 28,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "eq",
+                  3
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "unemployed"
+                  ]
+                }
+              ]
+            },
+            "description": "Troisième décile : prime d'activité seule"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "non-recours-minima",
+          "note": "Un versement automatique supprimerait l'écart entre ce qui est dû et ce qui est perçu sur des revenus irréguliers, qui est ici la principale cause de non-recours : non pas l'ignorance, mais la déclaration trimestrielle oubliée."
+        },
+        {
+          "id": "ma-chomeurs",
+          "kind": "budget_line",
+          "code": "allocation-chomage",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "unemployed"
+                ]
+              ]
+            },
+            "description": "Demandeurs d'emploi indemnisés : pas encore au minimum social"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet sur l'assurance chômage, qui est déjà versée sans démarche mensuelle."
+        },
+        {
+          "id": "ma-retraites",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "retired"
+                ]
+              ]
+            },
+            "description": "Retraités"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Non concernée directement. L'allocation de solidarité aux personnes âgées connaît pourtant l'un des taux de non-recours les plus élevés, et elle n'entre pas dans cette décision."
+        },
+        {
+          "id": "ma-salaries-aises",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": -18,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  4
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ]
+              ]
+            },
+            "description": "Salariés à partir du quatrième décile"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Contribution au financement du surcoût, par l'impôt. Ils ne reçoivent rien en retour et paient pour des droits déjà ouverts mais non versés : c'est exactement ce qui rend cette option difficile à défendre, et exactement ce qui la rend juste."
+        },
+        {
+          "id": "ma-independants-aises",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": -18,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  4
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "employee"
+                  ]
+                }
+              ]
+            },
+            "description": "Indépendants à partir du quatrième décile"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Même contribution, même absence de contrepartie directe."
+        },
+        {
+          "id": "ma-finances",
+          "kind": "public_finance",
+          "publicBillions": -2.6,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "non-recours-minima",
+          "note": "Coût supplémentaire, et non économie : verser ce qui est dû coûte davantage que de laisser une part des droits non réclamés. L'ampleur dépend entièrement du taux de non-recours réel, qui est estimé et non mesuré."
+        }
+      ],
+      "argumentsFor": [
+        "Verser ce qui est légalement dû n'est pas une dépense nouvelle : c'est l'exécution d'un droit déjà voté, aujourd'hui inappliqué pour une part des ayants droit.",
+        "Le non-recours frappe le plus durement les situations les plus instables, c'est-à-dire précisément celles que le dispositif était censé protéger en priorité."
+      ],
+      "argumentsAgainst": [
+        "Le surcoût est réel et immédiat, alors que l'estimation du non-recours sur laquelle il repose varie du simple au double selon les méthodes.",
+        "Un versement sans démarche supprime le moment du contact avec l'administration, qui est aussi celui où un accompagnement peut s'engager."
+      ]
+    },
+    {
+      "id": "contester-cadrage",
+      "label": "Je conteste la façon dont la question est posée",
+      "decisionDescription": "Le joueur refuse le cadrage : la question n'est pas de savoir à quelles conditions verser un minimum, mais pourquoi il faut un minimum, c'est-à-dire pourquoi le travail et le logement ne suffisent pas.",
+      "families": [
+        "challenge_framing"
+      ],
+      "effects": [
+        {
+          "id": "ma-contestation",
+          "kind": "service_level",
+          "scope": {
+            "description": "Aucun effet budgétaire modélisé"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Contester le cadrage ne produit aucun effet chiffré dans ce modèle. Cette absence est une limite du jeu, pas un jugement sur la pertinence de la contestation."
+        }
+      ],
+      "argumentsFor": [
+        "Discuter des conditions d'accès à un minimum social revient à tenir pour acquis qu'il faille un minimum social, donc que les salaires et les loyers soient ce qu'ils sont.",
+        "Ce corpus ne contient aucun allocataire du revenu de solidarité active : la décision la plus débattue du pays s'y joue à vide, et aucun arbitrage entre les quatre options ne corrige cela."
+      ],
+      "argumentsAgainst": [
+        "Les règles d'accès produisent des effets immédiats sur des personnes réelles, que l'on refuse ou non le cadrage : quelqu'un les écrira.",
+        "Déplacer la question vers les salaires et les loyers ne la résout pas : ce sont aussi des décisions, et elles appellent le même genre d'arbitrage."
+      ]
+    }
+  ]
+}

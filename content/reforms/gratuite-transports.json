@@ -1,0 +1,642 @@
+{
+  "id": "gratuite-transports",
+  "charterVersion": "1.0",
+  "descriptiveTitle": "Tarification des transports publics urbains",
+  "statedBy": "L'Autorité des mobilités, acteur fictif de ce jeu",
+  "context": "Les réseaux de transport public urbain sont financés pour environ un tiers par les recettes tarifaires, le reste provenant du versement mobilité acquitté par les employeurs et des budgets des collectivités. L'Autorité des mobilités met en discussion quatre directions : la gratuité totale des réseaux urbains, une gratuité réservée à certains publics, un investissement dans le réseau et les dessertes périurbaines plutôt qu'une baisse des tarifs, ou le maintien de la tarification actuelle. Le coût d'une gratuité totale est estimé à 3,5 milliards d'euros par an.",
+  "objective": {
+    "amount": 3.5,
+    "unit": "EUR_bn",
+    "nature": "fiction",
+    "note": "Montant posé par un acteur fictif du jeu, correspondant aux recettes tarifaires qu'il faudrait remplacer. Il ne décrit aucune nécessité constatée."
+  },
+  "contextSourceIds": [
+    "gart-transports",
+    "insee-budget-des-familles"
+  ],
+  "modelLimitations": "Le modèle traite tout habitant d'une agglomération dense comme un usager du réseau, ce qui est faux : deux des personnages concernés se déplacent en voiture pour des raisons d'horaires ou de site de travail, et une gratuité ne leur rendrait rien. Il ne représente ni le report depuis la voiture — qui est le seul effet environnemental attendu et le plus contesté —, ni la saturation du réseau, ni la dégradation du service qui accompagne une hausse de fréquentation non financée. Il ne distingue pas non plus le périmètre réel des autorités organisatrices, qui ne coïncide ni avec la commune ni avec le zonage du logement utilisé ici comme substitut.",
+  "options": [
+    {
+      "id": "statu-quo",
+      "label": "Maintenir la tarification actuelle",
+      "decisionDescription": "Les tarifs et les tarifications sociales existantes sont maintenus. Les recettes tarifaires continuent de couvrir environ un tiers du coût des réseaux.",
+      "families": [
+        "status_quo"
+      ],
+      "isStatusQuo": true,
+      "effects": [
+        {
+          "id": "tq-tendue-bas",
+          "kind": "budget_line",
+          "code": "transport",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Usagers des réseaux urbains, premiers déciles",
+            "when": {
+              "and": [
+                [
+                  "housingZone",
+                  "eq",
+                  "tendue"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  3
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun changement. Les tarifications sociales existantes restent en place : elles dépendent du revenu, exigent une démarche annuelle, et leur taux de non-recours est élevé. Le statu quo contient ce non-recours."
+        },
+        {
+          "id": "tq-tendue-haut",
+          "kind": "budget_line",
+          "code": "transport",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Habitants des agglomérations denses, déciles supérieurs",
+            "when": {
+              "and": [
+                [
+                  "housingZone",
+                  "eq",
+                  "tendue"
+                ],
+                [
+                  "incomeDecile",
+                  "gte",
+                  4
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun changement. Une partie d'entre eux ne prend pas le réseau — horaires décalés, sites de travail hors desserte — et paie pourtant le versement mobilité par l'intermédiaire de son employeur."
+        },
+        {
+          "id": "tq-detendue",
+          "kind": "budget_line",
+          "code": "transport",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Hors agglomérations denses",
+            "when": {
+              "and": [
+                [
+                  "housingZone",
+                  "eq",
+                  "detendue"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Hors périmètre : les réseaux concernés sont ceux des agglomérations denses. Hors de ces agglomérations, la dépense de transport est une voiture, et aucune tarification ne la rend gratuite. C'est la ligne de partage la plus nette de cette décision, et elle ne passe pas entre les riches et les pauvres : elle passe entre ceux qui ont un réseau et ceux qui n'en ont pas."
+        },
+        {
+          "id": "tq-finances",
+          "kind": "public_finance",
+          "publicBillions": 0,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet. Les recettes tarifaires continuent de couvrir un tiers du coût, ce qui est le point de départ de toutes les autres options."
+        }
+      ],
+      "argumentsFor": [
+        "La recette tarifaire finance l'entretien et le renouvellement du matériel : s'en priver expose à une dégradation du service, qui pénalise d'abord ceux qui n'ont pas d'alternative.",
+        "Les tarifications sociales existantes ciblent déjà les ménages modestes, pour un coût très inférieur à celui d'une gratuité générale."
+      ],
+      "argumentsAgainst": [
+        "Les tarifications sociales supposent une démarche et une condition de ressources, et leur non-recours est élevé : le droit existe sans être exercé.",
+        "Le coût du transport est une dépense contrainte pour qui travaille à horaires décalés, et il n'est compressible qu'en renonçant au travail."
+      ]
+    },
+    {
+      "id": "gratuite-totale",
+      "label": "Rendre les réseaux urbains gratuits",
+      "decisionDescription": "Les réseaux de transport public des agglomérations denses deviennent gratuits. La recette tarifaire est remplacée par une hausse du versement mobilité et par une contribution des trois derniers déciles.",
+      "families": [
+        "public_spending",
+        "levies"
+      ],
+      "effects": [
+        {
+          "id": "tg-tendue-bas",
+          "kind": "budget_line",
+          "code": "transport",
+          "monthlyDelta": 85,
+          "scope": {
+            "description": "Usagers des réseaux urbains, premiers déciles",
+            "when": {
+              "and": [
+                [
+                  "housingZone",
+                  "eq",
+                  "tendue"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  3
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Suppression de l'abonnement et des titres, y compris les abonnements scolaires. Le gain est le plus élevé pour les familles qui achètent plusieurs abonnements, ce que le modèle approxime par un montant unique dans la tranche."
+        },
+        {
+          "id": "tg-tendue-haut",
+          "kind": "budget_line",
+          "code": "transport",
+          "monthlyDelta": 60,
+          "scope": {
+            "description": "Habitants des agglomérations denses, déciles supérieurs",
+            "when": {
+              "and": [
+                [
+                  "housingZone",
+                  "eq",
+                  "tendue"
+                ],
+                [
+                  "incomeDecile",
+                  "gte",
+                  4
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "gratuite-frequentation",
+          "note": "Gain affiché pour toute la tranche, alors que deux de ces personnes se déplacent en voiture et n'y gagneraient rien. C'est la limite la plus gênante de ce modèle sur ce sujet : il confond habiter une agglomération et utiliser son réseau."
+        },
+        {
+          "id": "tg-detendue",
+          "kind": "budget_line",
+          "code": "transport",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Hors agglomérations denses",
+            "when": {
+              "and": [
+                [
+                  "housingZone",
+                  "eq",
+                  "detendue"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Hors périmètre : les réseaux concernés sont ceux des agglomérations denses. Hors de ces agglomérations, la dépense de transport est une voiture, et aucune tarification ne la rend gratuite. C'est la ligne de partage la plus nette de cette décision, et elle ne passe pas entre les riches et les pauvres : elle passe entre ceux qui ont un réseau et ceux qui n'en ont pas."
+        },
+        {
+          "id": "tg-payeurs-sal",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": -14,
+          "scope": {
+            "description": "Trois derniers déciles, salariés : contribution au financement",
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  7
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Contribution au remplacement de la recette tarifaire. Elle est due que l'on utilise ou non le réseau, et elle est due aussi par ceux qui vivent hors des agglomérations desservies."
+        },
+        {
+          "id": "tg-payeurs-ind",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": -14,
+          "scope": {
+            "description": "Trois derniers déciles, indépendants : contribution au financement",
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  7
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "employee"
+                  ]
+                }
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Même contribution. S'y ajoute, pour un employeur, la hausse du versement mobilité, que le modèle ne chiffre pas séparément."
+        },
+        {
+          "id": "tg-finances",
+          "kind": "public_finance",
+          "publicBillions": -3.5,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "debated",
+          "hypothesisId": "gratuite-frequentation",
+          "note": "Coût du remplacement de la recette tarifaire, augmenté du coût de la fréquentation supplémentaire — fréquence, matériel, personnel — que la gratuité provoque. Ce second terme est systématiquement sous-estimé dans les projections initiales des réseaux qui ont franchi le pas."
+        }
+      ],
+      "argumentsFor": [
+        "La gratuité supprime le non-recours : aucun dossier, aucune condition de ressources, aucune démarche annuelle à renouveler.",
+        "Elle supprime aussi le coût de la billettique et du contrôle, qui représente une part non négligeable de la recette qu'elle remplace."
+      ],
+      "argumentsAgainst": [
+        "La hausse de fréquentation observée dans les réseaux gratuits provient surtout de trajets auparavant faits à pied ou à vélo, et l'effet sur le trafic automobile est faible.",
+        "Elle bénéficie aux habitants des agglomérations desservies et la font financer par tous, y compris par ceux qui n'ont aucun réseau et pour qui la voiture reste obligatoire."
+      ]
+    },
+    {
+      "id": "gratuite-ciblee",
+      "label": "Rendre les transports gratuits pour certains publics",
+      "decisionDescription": "La gratuité est réservée aux moins de vingt-six ans, aux plus de soixante-cinq ans et aux ménages des trois premiers déciles. Les autres continuent de payer le tarif plein.",
+      "families": [
+        "public_spending",
+        "scope_efficiency"
+      ],
+      "isCompromise": true,
+      "effects": [
+        {
+          "id": "tc-jeunes",
+          "kind": "budget_line",
+          "code": "transport",
+          "monthlyDelta": 70,
+          "scope": {
+            "description": "Moins de vingt-six ans en agglomération dense",
+            "when": {
+              "and": [
+                [
+                  "age",
+                  "lte",
+                  26
+                ],
+                [
+                  "housingZone",
+                  "eq",
+                  "tendue"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Gratuité attribuée sur un critère d'âge, donc sans démarche de ressources et sans non-recours. C'est le ciblage le plus simple à administrer, et le moins précis : il inclut des jeunes aisés et exclut des trentenaires modestes."
+        },
+        {
+          "id": "tc-modestes",
+          "kind": "budget_line",
+          "code": "transport",
+          "monthlyDelta": 85,
+          "scope": {
+            "description": "Trois premiers déciles en agglomération dense",
+            "when": {
+              "and": [
+                [
+                  "housingZone",
+                  "eq",
+                  "tendue"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  3
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Gratuité sous condition de ressources. Elle suppose un dossier et une actualisation, donc elle reproduit le non-recours que la gratuité générale supprimait."
+        },
+        {
+          "id": "tc-autres",
+          "kind": "budget_line",
+          "code": "transport",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Agglomérations denses, au-dessus des seuils",
+            "when": {
+              "and": [
+                [
+                  "housingZone",
+                  "eq",
+                  "tendue"
+                ],
+                [
+                  "incomeDecile",
+                  "gte",
+                  4
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Tarif plein maintenu. Un ciblage fait apparaître des seuils : un euro de revenu supplémentaire fait perdre la gratuité entière, ce qui est l'effet de bord classique de toute condition de ressources."
+        },
+        {
+          "id": "tc-detendue",
+          "kind": "budget_line",
+          "code": "transport",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Hors agglomérations denses",
+            "when": {
+              "and": [
+                [
+                  "housingZone",
+                  "eq",
+                  "detendue"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Hors périmètre : les réseaux concernés sont ceux des agglomérations denses. Hors de ces agglomérations, la dépense de transport est une voiture, et aucune tarification ne la rend gratuite. C'est la ligne de partage la plus nette de cette décision, et elle ne passe pas entre les riches et les pauvres : elle passe entre ceux qui ont un réseau et ceux qui n'en ont pas."
+        },
+        {
+          "id": "tc-aines",
+          "kind": "budget_line",
+          "code": "pension-retraite",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Plus de soixante-cinq ans hors agglomération dense",
+            "when": {
+              "and": [
+                [
+                  "age",
+                  "gte",
+                  65
+                ],
+                [
+                  "housingZone",
+                  "eq",
+                  "detendue"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Éligible au critère d'âge, et sans réseau pour en bénéficier. Le dispositif lui ouvre un droit qu'elle ne peut pas exercer : c'est la même asymétrie que pour tous les habitants des territoires peu denses, et elle est ici rendue visible par un droit nominalement accordé."
+        },
+        {
+          "id": "tc-finances",
+          "kind": "public_finance",
+          "publicBillions": -1.3,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Coût nettement inférieur à la gratuité générale, parce que les publics visés sont aussi ceux qui acquittent déjà les tarifs les plus bas : une partie de la dépense remplace des tarifications sociales existantes."
+        }
+      ],
+      "argumentsFor": [
+        "Le coût est trois fois inférieur à celui d'une gratuité générale, pour un effet concentré sur ceux dont la dépense de transport pèse le plus lourd.",
+        "La recette tarifaire est préservée pour l'essentiel, donc la capacité d'entretenir et d'étendre le réseau aussi."
+      ],
+      "argumentsAgainst": [
+        "Toute condition de ressources recrée la démarche, le dossier et le non-recours que la gratuité générale faisait disparaître.",
+        "Un ciblage par l'âge accorde la gratuité à des jeunes aisés et la refuse à des actifs modestes de trente ans, sans que personne ne défende ce résultat."
+      ]
+    },
+    {
+      "id": "investissement-reseau",
+      "label": "Investir dans le réseau plutôt qu'en baisser le prix",
+      "decisionDescription": "Les tarifs ne changent pas. La recette, augmentée d'une contribution des trois derniers déciles, finance la fréquence, le matériel et des dessertes périurbaines nouvelles.",
+      "families": [
+        "public_spending",
+        "levies"
+      ],
+      "effects": [
+        {
+          "id": "ti-detendue",
+          "kind": "budget_line",
+          "code": "transport",
+          "monthlyDelta": 45,
+          "scope": {
+            "description": "Hors agglomérations denses : dessertes nouvelles",
+            "when": {
+              "and": [
+                [
+                  "housingZone",
+                  "eq",
+                  "detendue"
+                ]
+              ]
+            }
+          },
+          "horizon": "y10",
+          "uncertainty": "debated",
+          "hypothesisId": "gratuite-frequentation",
+          "note": "Gain différé et incertain : il suppose que les dessertes nouvelles soient effectivement réalisées là où ces personnes habitent, et qu'elles correspondent à leurs horaires. C'est la seule option des quatre dont la contrepartie aille aux territoires peu denses, et c'est aussi la plus hypothétique."
+        },
+        {
+          "id": "ti-tendue-bas",
+          "kind": "budget_line",
+          "code": "transport",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Usagers des réseaux urbains, premiers déciles",
+            "when": {
+              "and": [
+                [
+                  "housingZone",
+                  "eq",
+                  "tendue"
+                ],
+                [
+                  "incomeDecile",
+                  "lte",
+                  3
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucune baisse de tarif. La contrepartie est une fréquence accrue et un matériel renouvelé, c'est-à-dire du temps gagné et du confort — que ce jeu ne sait pas convertir en euros, et qu'il affiche donc comme un zéro."
+        },
+        {
+          "id": "ti-tendue-haut",
+          "kind": "budget_line",
+          "code": "transport",
+          "monthlyDelta": 0,
+          "scope": {
+            "description": "Agglomérations denses, déciles supérieurs",
+            "when": {
+              "and": [
+                [
+                  "housingZone",
+                  "eq",
+                  "tendue"
+                ],
+                [
+                  "incomeDecile",
+                  "gte",
+                  4
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucune baisse de tarif, même remarque sur la contrepartie en qualité de service."
+        },
+        {
+          "id": "ti-payeurs-sal",
+          "kind": "budget_line",
+          "code": "salaire-net",
+          "monthlyDelta": -14,
+          "scope": {
+            "description": "Trois derniers déciles, salariés : contribution au financement",
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  7
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "employee"
+                ]
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established"
+        },
+        {
+          "id": "ti-payeurs-ind",
+          "kind": "budget_line",
+          "code": "revenu-independant",
+          "monthlyDelta": -14,
+          "scope": {
+            "description": "Trois derniers déciles, indépendants : contribution au financement",
+            "when": {
+              "and": [
+                [
+                  "incomeDecile",
+                  "gte",
+                  7
+                ],
+                [
+                  "activities",
+                  "contains",
+                  "self_employed"
+                ],
+                {
+                  "not": [
+                    "activities",
+                    "contains",
+                    "employee"
+                  ]
+                }
+              ]
+            }
+          },
+          "horizon": "y1",
+          "uncertainty": "established"
+        },
+        {
+          "id": "ti-service",
+          "kind": "service_level",
+          "scope": {
+            "description": "Qualité de service : fréquence, matériel, amplitude horaire"
+          },
+          "horizon": "y5",
+          "uncertainty": "established",
+          "note": "L'essentiel de l'effet de cette option est un niveau de service, pas un montant. Le jeu ne sait pas représenter ce qu'une rame toutes les quatre minutes au lieu de douze change pour quelqu'un qui travaille à horaires décalés, et cette incapacité désavantage systématiquement les options de ce type."
+        },
+        {
+          "id": "ti-finances",
+          "kind": "public_finance",
+          "publicBillions": -2.4,
+          "scope": {
+            "description": "Finances publiques"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Coût de l'investissement, hors recette tarifaire maintenue. L'investissement produit ses effets en cinq à dix ans, délai que les deux options de gratuité n'ont pas."
+        }
+      ],
+      "argumentsFor": [
+        "Le premier obstacle à l'usage des transports publics est l'absence de desserte et la faible fréquence, pas le prix du billet : la gratuité d'un bus qui ne passe pas ne sert à rien.",
+        "C'est la seule option dont la contrepartie atteigne les territoires peu denses, où la dépense de transport est la plus contrainte et la moins évitable."
+      ],
+      "argumentsAgainst": [
+        "L'effet est différé de cinq à dix ans et dépend d'arbitrages locaux à venir, là où une baisse de tarif produit un effet dès le premier mois.",
+        "Rien ne garantit que les dessertes nouvelles soient réalisées là où vivent ceux qui financent la mesure, ni qu'elles correspondent à leurs horaires de travail."
+      ]
+    },
+    {
+      "id": "contester-cadrage",
+      "label": "Je conteste la façon dont la question est posée",
+      "decisionDescription": "Le joueur refuse le cadrage : la question n'est pas le prix du transport, mais la distance entre les logements abordables et les emplois, qui est le produit de décisions d'urbanisme et de prix du foncier.",
+      "families": [
+        "challenge_framing"
+      ],
+      "effects": [
+        {
+          "id": "ti-contestation",
+          "kind": "service_level",
+          "scope": {
+            "description": "Aucun effet budgétaire modélisé"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Contester le cadrage ne produit aucun effet chiffré dans ce modèle. Cette absence est une limite du jeu, pas un jugement sur la pertinence de la contestation."
+        }
+      ],
+      "argumentsFor": [
+        "Les quatre options tiennent pour acquis que l'on doive parcourir ces distances : la dépense de transport est d'abord la conséquence de l'éloignement entre logement abordable et emploi.",
+        "Aucune n'aborde le coût de la voiture, qui est pourtant la dépense de transport réelle de la moitié de ce corpus et la seule qui ne soit jamais tarifée collectivement."
+      ],
+      "argumentsAgainst": [
+        "Les abonnements se paient chaque mois et les réseaux se financent chaque année : refuser le cadrage laisse la tarification actuelle en place.",
+        "Rapprocher logements et emplois est l'affaire de plusieurs décennies, et les trajets de demain matin ont lieu de toute façon."
+      ]
+    }
+  ]
+}

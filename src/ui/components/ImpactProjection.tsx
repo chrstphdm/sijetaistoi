@@ -2,7 +2,7 @@ import { computeMonthlyBudget } from '@/core/budget.ts'
 import { formatEuros } from '@/core/money.ts'
 import { project, sharedScale, firstUncertainYear, DEFAULT_YEARS, type HorizonKey, type ProjectedEffect, type ProjectionPoint } from '@/core/projection.ts'
 import { activeEffectsFor, type WorldState } from '@/core/world.ts'
-import { characters, optionLookup, toBudgetLines } from '@/content/load.ts'
+import { characters, optionLookup, toBudgetLines, traitsOf } from '@/content/load.ts'
 import type { CharacterT } from '@/schemas/index.ts'
 import { Seal } from './Seal.tsx'
 
@@ -35,7 +35,7 @@ function pathFor(points: readonly ProjectionPoint[], scale: number): string {
 }
 
 function effectsFor(character: CharacterT, world: WorldState): ProjectedEffect[] {
-  const traits = { ...character.traits, incomeDecile: character.identity.incomeDecile }
+  const traits = traitsOf(character)
   return activeEffectsFor(world, traits, optionLookup).map((r) => ({
     monthlyCents: r.deltaCents,
     horizon: (r.effect.horizon ?? 'y1') as HorizonKey,
@@ -68,7 +68,7 @@ export function ImpactProjection({ world }: { readonly world: WorldState }) {
 
       <p>
         Le cumul des règles que tu as décidées, année après année. L’échelle est la même
-        pour les six&nbsp;: les courbes sont donc comparables entre elles.
+        pour tous&nbsp;: les courbes sont donc comparables entre elles.
       </p>
 
       <ul className="proj">

@@ -3,45 +3,110 @@
   "charterVersion": "1.0",
   "fictional": true,
   "fictionNote": "Personnage fictif. Situation construite pour être plausible au regard des ordres de grandeur publics sur les pensions de retraite et les charges de propriétaires sans crédit. Ne correspond à aucune personne réelle.",
-
   "identity": {
     "firstName": "Michèle",
     "age": 71,
     "identityLine": "retraitée, ancienne secrétaire de mairie, propriétaire d'une maison en Corrèze",
     "incomeDecile": 4,
-    "calibrationSourceIds": ["insee-niveaux-de-vie", "drees-salaires-soin"]
+    "calibrationSourceIds": [
+      "insee-niveaux-de-vie",
+      "drees-salaires-soin"
+    ]
   },
-
   "traits": {
-    "activities": ["retired"],
+    "activities": [
+      "retired"
+    ],
     "tenure": "owner_outright",
     "heating": "individual",
     "householdSize": 1,
     "childCount": 0,
-    "hasSchoolAgedChild": false
+    "hasSchoolAgedChild": false,
+    "housingZone": "detendue",
+    "recognisedDisability": false
   },
-
   "budget": {
     "lines": [
-      { "code": "prestations", "group": "resource",
-        "value": { "amount": 1480, "unit": "EUR_month", "nature": "fiction", "note": "Pension de base et complémentaire, après prélèvements sociaux" } },
-      { "code": "logement", "group": "constrained",
-        "value": { "amount": 165, "unit": "EUR_month", "nature": "fiction", "note": "Taxe foncière et assurance ; crédit soldé en 2014" } },
-      { "code": "energie", "group": "constrained",
-        "value": { "amount": 240, "unit": "EUR_month", "nature": "extrapolation", "note": "Maison de 1962, chauffage au fioul, isolation d'origine" } },
-      { "code": "alimentation", "group": "constrained",
-        "value": { "amount": 290, "unit": "EUR_month", "nature": "hypothesis", "hypothesisId": "socle-alimentaire" } },
-      { "code": "transport", "group": "constrained",
-        "value": { "amount": 130, "unit": "EUR_month", "nature": "fiction", "note": "Voiture indispensable : commerces à onze kilomètres" } },
-      { "code": "sante", "group": "constrained",
-        "value": { "amount": 195, "unit": "EUR_month", "nature": "fiction", "note": "Mutuelle senior et restes à charge réguliers" } },
-      { "code": "loisirs", "group": "adjustable",
-        "value": { "amount": 85, "unit": "EUR_month", "nature": "fiction" } },
-      { "code": "habillement", "group": "adjustable",
-        "value": { "amount": 40, "unit": "EUR_month", "nature": "fiction" } }
+      {
+        "code": "pension-retraite",
+        "group": "resource",
+        "value": {
+          "amount": 1480,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Pension de base et complémentaire, nette de prélèvements sociaux, pour une carrière complète de catégorie C territoriale."
+        }
+      },
+      {
+        "code": "logement",
+        "group": "constrained",
+        "value": {
+          "amount": 165,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Taxe foncière et assurance ; crédit soldé en 2014"
+        }
+      },
+      {
+        "code": "energie",
+        "group": "constrained",
+        "value": {
+          "amount": 240,
+          "unit": "EUR_month",
+          "nature": "extrapolation",
+          "note": "Maison de 1962, chauffage au fioul, isolation d'origine"
+        }
+      },
+      {
+        "code": "alimentation",
+        "group": "constrained",
+        "value": {
+          "amount": 290,
+          "unit": "EUR_month",
+          "nature": "hypothesis",
+          "hypothesisId": "socle-alimentaire"
+        }
+      },
+      {
+        "code": "transport",
+        "group": "constrained",
+        "value": {
+          "amount": 130,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Voiture indispensable : commerces à onze kilomètres"
+        }
+      },
+      {
+        "code": "sante",
+        "group": "constrained",
+        "value": {
+          "amount": 195,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Mutuelle senior et restes à charge réguliers"
+        }
+      },
+      {
+        "code": "loisirs",
+        "group": "adjustable",
+        "value": {
+          "amount": 85,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      },
+      {
+        "code": "habillement",
+        "group": "adjustable",
+        "value": {
+          "amount": 40,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      }
     ]
   },
-
   "stocks": {
     "liquid7d": 2400,
     "liquid60d": 7800,
@@ -49,7 +114,6 @@
     "netWealth": 148000,
     "precautionFloorMonths": 2
   },
-
   "parity": {
     "strength": "Elle a géré l'état civil d'une commune pendant trente et un ans et sait exactement à quelle porte frapper pour débloquer un dossier.",
     "vulnerability": "Sa maison vaut cent quarante mille euros et lui coûte deux cent quarante euros de fioul par mois : son patrimoine ne paie pas ses factures.",
@@ -65,36 +129,51 @@
     "nonMonetaryAdvantage": "Aucun loyer, aucune mensualité de crédit, et une maison qu'elle peut vendre ou mettre en viager si tout se complique.",
     "opinionAgainstOwnInterest": "Elle estime que les retraités devraient contribuer davantage : « on a eu les trente glorieuses et des carrières complètes, ce n'est pas aux jeunes de tout porter »."
   },
-
   "shortTermGoal": {
     "label": "Réunir les 4 000 € de reste à charge pour l'isolation des combles",
     "amount": 4000,
     "deadline": "2027-10"
   },
-
   "embodiedDetails": [
     "Elle ne chauffe que la cuisine et une chambre depuis l'hiver dernier.",
     "Elle fait ses courses le jeudi, parce que c'est le jour du marché au bourg.",
     "Elle garde le numéro de la mairie sur un papier scotché près du téléphone fixe."
   ],
-
   "unavailableOptions": [
-    { "option": "travailler-plus", "reason": "Elle a soixante et onze ans et un poignet opéré deux fois." },
-    { "option": "demenager", "reason": "Vendre en Corrèze prendrait dix-huit mois et ne financerait rien d'équivalent ailleurs." }
+    {
+      "option": "travailler-plus",
+      "reason": "Elle a soixante et onze ans et un poignet opéré deux fois."
+    },
+    {
+      "option": "demenager",
+      "reason": "Vendre en Corrèze prendrait dix-huit mois et ne financerait rien d'équivalent ailleurs."
+    }
   ],
-
   "equivalenceRefs": [
-    { "code": "energie", "monthlyAmount": 240, "narrativeLabel": "sa facture de chauffage" },
-    { "code": "sante", "monthlyAmount": 195, "narrativeLabel": "sa mutuelle et ses soins du mois" },
-    { "code": "projet", "monthlyAmount": 130, "narrativeLabel": "ce qu'elle met de côté pour l'isolation" }
+    {
+      "code": "energie",
+      "monthlyAmount": 240,
+      "narrativeLabel": "sa facture de chauffage"
+    },
+    {
+      "code": "sante",
+      "monthlyAmount": 195,
+      "narrativeLabel": "sa mutuelle et ses soins du mois"
+    },
+    {
+      "code": "projet",
+      "monthlyAmount": 130,
+      "narrativeLabel": "ce qu'elle met de côté pour l'isolation"
+    }
   ],
-
   "narrative": {
     "story": "Michèle a travaillé trente et un ans à la mairie de sa commune, d'abord au service de l'état civil puis au secrétariat général. Elle a pris sa retraite en 2019 avec une carrière complète, ce qu'elle rappelle volontiers parce qu'elle sait que c'est devenu rare. Son mari est mort il y a six ans. Elle vit seule dans la maison qu'ils avaient achetée en 1988 et finie de payer en 2014, trop grande pour elle et impossible à vendre à un prix qui lui permettrait d'aller ailleurs. Elle a reçu trois devis pour les combles et n'en a donné suite à aucun."
   },
-
   "lineOverrides": [
-    { "code": "transport", "constrained": true,
-      "justification": "Commune rurale sans desserte : le premier commerce est à onze kilomètres et il n'existe aucune ligne de transport public." }
+    {
+      "code": "transport",
+      "constrained": true,
+      "justification": "Commune rurale sans desserte : le premier commerce est à onze kilomètres et il n'existe aucune ligne de transport public."
+    }
   ]
 }
