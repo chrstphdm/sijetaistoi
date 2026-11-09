@@ -2,7 +2,10 @@ import { expect, test } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 import { reach, settle } from './helpers.ts'
 
-const PHASES = ['intro', 'month', 'reform', 'judgement', 'impact', 'callback', 'summary'] as const
+const PHASES = [
+  'home', 'contract', 'intro', 'month', 'reform',
+  'judgement', 'impact', 'callback', 'summary',
+] as const
 
 for (const phase of PHASES) {
   test(`aucune violation d'accessibilité — phase ${phase}`, async ({ page }) => {

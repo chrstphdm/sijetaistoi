@@ -714,3 +714,41 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
 .diag--blocking .diag__tag { color: var(--perspective-a); }
 .diag--warning { border-left-style: dashed; background: var(--paper-sunk); }
 .diag--warning .diag__tag { color: var(--ink-2); }
+
+/* ------------------------------------------------------------------ */
+/* Accueil et contrat                                                  */
+/* ------------------------------------------------------------------ */
+
+.home { max-width: var(--measure-doc); margin-block: var(--space-8); }
+.home__title { font-size: 34px; margin-bottom: var(--space-2); }
+.home__tagline { font-size: 19px; color: var(--ink-2); margin-bottom: var(--space-6); }
+.home__actions { margin: var(--space-6) 0 var(--space-4); }
+
+/* Le bouton de départ est le seul élément mis en avant de la page : c'est
+   la seule action attendue. Il n'y a rien à configurer avant de jouer. */
+.home__start {
+  font-size: 17px;
+  padding: var(--space-3) var(--space-6);
+  background: var(--perspective-a);
+  color: var(--paper-raised);
+  border-color: var(--perspective-a);
+}
+.home__start:hover { background: var(--ink); border-color: var(--ink); }
+
+.contract-list { list-style: none; padding: 0; counter-reset: contrat; }
+.contract-list li {
+  counter-increment: contrat;
+  border-left: 3px solid var(--rule);
+  padding: 0 0 0 var(--space-4);
+  margin-bottom: var(--space-6);
+}
+.contract-list h2 {
+  font-size: 18px;
+  margin-bottom: var(--space-1);
+}
+/* Le numéro est écrit, pas seulement suggéré par la position. */
+.contract-list h2::before {
+  content: counter(contrat) '. ';
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}

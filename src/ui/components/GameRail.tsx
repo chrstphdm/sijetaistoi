@@ -32,6 +32,8 @@ type Props = {
 }
 
 const SCOPE_NOW: Record<Step['kind'], (who: string) => string> = {
+  home: () => 'tu n’as pas encore commencé',
+  contract: () => 'tu n’as pas encore commencé',
   intro: (w) => `tu fais connaissance avec ${w}`,
   callback: (w) => `tu fais connaissance avec ${w}`,
   month: (w) => `tu décides pour ${w}`,

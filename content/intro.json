@@ -1,0 +1,32 @@
+{
+  "title": "Si j’étais toi",
+  "tagline": "Vivre quelques mois dans la peau de trois personnes différentes, décider de règles qui s'appliquent à toutes, et voir ce que cela change.",
+  "pitch": [
+    "Tu vas incarner successivement trois personnes dont les situations n'ont rien à voir. Tu vivras quelques mois de leur vie, avec leur budget, leurs contraintes et ce qu'elles ne peuvent pas faire.",
+    "Entre deux personnages, tu décideras de règles qui s'appliqueront à tout le monde. Puis tu deviendras quelqu'un d'autre, et ces règles continueront de s'appliquer.",
+    "Ce jeu ne cherche pas à te convaincre. Il n'y a pas de bonne réponse cachée, pas de score, et aucune conclusion à la fin."
+  ],
+  "duration": "Compte une vingtaine de minutes. Tu peux t'arrêter et reprendre.",
+  "startLabel": "Commencer",
+  "contractTitle": "Trois choses avant de commencer",
+  "contract": [
+    {
+      "id": "non-choix",
+      "title": "Tu ne choisis pas qui tu es",
+      "body": "Les personnages sont tirés au sort. Le premier l'est uniformément, sans aucune contrainte ; les suivants parmi ceux qui satisfont des règles publiées. Le jeu ne t'envoie jamais chez la personne pour qui une décision serait la plus douloureuse."
+    },
+    {
+      "id": "persistance",
+      "title": "Ce que tu décides reste en vigueur",
+      "body": "Une règle que tu votes s'applique à tous les personnages de la partie, y compris à ceux que tu incarneras plus tard. Tu pourras la relire à tout moment, et tu sauras toujours si une décision n'engage qu'un personnage ou tout le monde."
+    },
+    {
+      "id": "donnees",
+      "title": "Tes réponses restent sur cet appareil",
+      "body": "Ce que tu écris porte sur tes opinions. Rien n'est transmis à aucun serveur, et ce site ne charge aucune ressource extérieure. Évite malgré tout de laisser une partie en cours sur un ordinateur partagé."
+    }
+  ],
+  "fiction": "Les personnages sont fictifs. Les montants sont des ordres de grandeur plausibles, pas des prévisions, et chaque chiffre affiché indique d'où il vient.",
+  "contractStartLabel": "J'ai compris, je commence",
+  "methodLabel": "Comment ce jeu est construit, et ce qu'il ne parvient pas à éviter"
+}

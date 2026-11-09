@@ -6,6 +6,7 @@ import { characters, reforms } from '@/content/load.ts'
 import { CONSTRAINT_STATEMENTS } from '@/core/casting.ts'
 import { useGame } from './useGame.ts'
 import { CharacterIntro } from './components/CharacterIntro.tsx'
+import { ContractScreen, HomeScreen } from './components/HomeScreen.tsx'
 import { GameRail } from './components/GameRail.tsx'
 import { MethodScreen } from './components/MethodScreen.tsx'
 
@@ -87,6 +88,29 @@ export function App() {
       <div className="layout layout--single">
         <main className="layout__main">
           <MethodScreen onBack={() => setShowMethod(false)} />
+        </main>
+      </div>
+    )
+  }
+
+  if (step.kind === 'home') {
+    return (
+      <div className="layout layout--single">
+        <main className="layout__main">
+          <HomeScreen onStart={actions.toContract} onMethod={() => setShowMethod(true)} />
+        </main>
+      </div>
+    )
+  }
+
+  if (step.kind === 'contract') {
+    return (
+      <div className="layout layout--single">
+        <main className="layout__main">
+          <ContractScreen
+            onStart={actions.beginGame}
+            hypothesisSet="sensibilité faible des comportements"
+          />
         </main>
       </div>
     )

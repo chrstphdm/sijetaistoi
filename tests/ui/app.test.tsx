@@ -8,6 +8,12 @@ afterEach(cleanup)
 
 type User = ReturnType<typeof userEvent.setup>
 
+/** Traverse l'accueil et le contrat jusqu'au premier personnage. */
+async function enterGame(user: User) {
+  await user.click(screen.getByRole('button', { name: 'Commencer' }))
+  await user.click(screen.getByRole('button', { name: /je commence/i }))
+}
+
 /**
  * Traverse les mois restants jusqu'à l'écran de réforme.
  * Gère les trois états possibles : options repliées, options déjà dépliées,
@@ -45,17 +51,50 @@ async function playAct(user: User, phrase?: string) {
   await user.click(screen.getByRole('button', { name: /ce que cela change pour chacun/i }))
 }
 
-describe('ouverture', () => {
-  it('présente le personnage par des détails non économiques avant tout chiffre', () => {
+describe('accueil et contrat', () => {
+  it('ouvre sur une page d’accueil, pas sur une partie déjà commencée', () => {
     render(<App />)
+    expect(screen.getByRole('heading', { level: 1, name: 'Si j’étais toi' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Commencer' })).toBeTruthy()
+    // Aucun personnage n'est imposé avant que le joueur ait accepté.
+    expect(screen.queryByText(/^Tu es /)).toBeNull()
+  })
+
+  it('annonce les trois engagements AVANT la première décision', async () => {
+    // C'est la pièce anti-embuscade : sans elle, découvrir trois actes plus
+    // tard qu'on subit sa propre règle est un piège.
+    const user = userEvent.setup()
+    render(<App />)
+    await user.click(screen.getByRole('button', { name: 'Commencer' }))
+
+    expect(screen.getByRole('heading', { name: /Trois choses avant de commencer/ })).toBeTruthy()
+    expect(screen.getByRole('heading', { name: /Tu ne choisis pas qui tu es/ })).toBeTruthy()
+    expect(screen.getByRole('heading', { name: /Ce que tu décides reste en vigueur/ })).toBeTruthy()
+    expect(screen.getByRole('heading', { name: /Tes réponses restent sur cet appareil/ })).toBeTruthy()
+  })
+
+  it('ne lance la partie qu’après acceptation explicite', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.click(screen.getByRole('button', { name: 'Commencer' }))
+    expect(screen.queryByText(/^Tu es /)).toBeNull()
+    await user.click(screen.getByRole('button', { name: /je commence/i }))
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toMatch(/Tu es \w+/)
+  })
+
+  it('présente le personnage par des détails non économiques avant tout chiffre', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await enterGame(user)
     const intro = screen.getByRole('heading', { level: 1 }).closest('section')!
     expect(intro.textContent).toMatch(/Tu es \w+/)
-    // Pas de relevé tant que le joueur n'a pas commencé le mois.
     expect(screen.queryByText('Relevé du mois')).toBeNull()
   })
 
-  it('publie les règles du tirage, accessibles depuis le premier écran', () => {
+  it('publie les règles du tirage, accessibles depuis le premier écran', async () => {
+    const user = userEvent.setup()
     render(<App />)
+    await enterGame(user)
     // Replié par défaut pour ne pas encombrer l'écran de décision, mais
     // toujours présent : la transparence ne doit pas dépendre d'une page à part.
     const draw = screen
@@ -72,6 +111,7 @@ describe('un mois vécu', () => {
   it('oblige à regarder le relevé avant de proposer les options', async () => {
     const user = userEvent.setup()
     render(<App />)
+    await enterGame(user)
     await user.click(screen.getByRole('button', { name: /Commencer le mois/ }))
 
     expect(screen.getByText('Relevé du mois')).toBeTruthy()
@@ -83,6 +123,7 @@ describe('un mois vécu', () => {
   it('n’affiche aucun score ni vocabulaire de réussite', async () => {
     const user = userEvent.setup()
     render(<App />)
+    await enterGame(user)
     await user.click(screen.getByRole('button', { name: /Commencer le mois/ }))
 
     const text = document.body.textContent?.toLowerCase() ?? ''
@@ -94,6 +135,7 @@ describe('un mois vécu', () => {
   it('montre ce qui n’est pas possible pour ce personnage', async () => {
     const user = userEvent.setup()
     render(<App />)
+    await enterGame(user)
     await user.click(screen.getByRole('button', { name: /Commencer le mois/ }))
     await user.click(screen.getByRole('button', { name: /Voir les possibilités/ }))
     // L'absence de choix est une donnée du modèle, pas un oubli.
@@ -105,6 +147,7 @@ describe('une partie complète en trois actes', () => {
   it('se déroule jusqu’au bilan, en citant le joueur', async () => {
     const user = userEvent.setup()
     render(<App />)
+    await enterGame(user)
 
     await playAct(user, 'celui qui consomme doit payer')
     await user.click(screen.getByRole('button', { name: /Quelques mois plus tard/ }))
@@ -122,6 +165,7 @@ describe('une partie complète en trois actes', () => {
   it('incarne trois personnages différents', async () => {
     const user = userEvent.setup()
     render(<App />)
+    await enterGame(user)
     await playAct(user, 'ma phrase')
     await user.click(screen.getByRole('button', { name: /Quelques mois plus tard/ }))
     await playAct(user)
@@ -137,6 +181,7 @@ describe('une partie complète en trois actes', () => {
   it('n’affiche jamais de score ni d’étiquette politique au bilan', async () => {
     const user = userEvent.setup()
     render(<App />)
+    await enterGame(user)
     await playAct(user, 'ma phrase')
     await user.click(screen.getByRole('button', { name: /Quelques mois plus tard/ }))
     await playAct(user)
@@ -156,6 +201,7 @@ describe('registre et consultation', () => {
   it('rend les décisions relisables depuis la chronologie', async () => {
     const user = userEvent.setup()
     render(<App />)
+    await enterGame(user)
     // Aucune décision prise : rien à relire, donc rien à afficher.
     expect(screen.queryByRole('button', { name: /Revoir ta décision/ })).toBeNull()
 
@@ -166,8 +212,10 @@ describe('registre et consultation', () => {
     expect(within(timeline).getByText('« ma règle »')).toBeTruthy()
   })
 
-  it('situe le joueur en français ordinaire, sans jamais le noter', () => {
+  it('situe le joueur en français ordinaire, sans jamais le noter', async () => {
+    const user = userEvent.setup()
     render(<App />)
+    await enterGame(user)
     const rail = screen.getByRole('navigation', { name: /Où tu en es/ })
     // Trois actes, chacun nommé, le premier marqué comme étape courante.
     expect(rail.textContent).toContain('Acte 1')
@@ -182,6 +230,7 @@ describe('registre et consultation', () => {
   it('montre l’avancement des mois, et l’écrit pour les lecteurs d’écran', async () => {
     const user = userEvent.setup()
     render(<App />)
+    await enterGame(user)
     await user.click(screen.getByRole('button', { name: /Commencer le mois/ }))
 
     const months = screen.getByRole('list', { name: /Mois vécus/ })
@@ -191,8 +240,10 @@ describe('registre et consultation', () => {
     expect(months.textContent).toContain('à venir')
   })
 
-  it('donne à chaque personnage un sceau, sans dessiner aucun corps', () => {
+  it('donne à chaque personnage un sceau, sans dessiner aucun corps', async () => {
+    const user = userEvent.setup()
     render(<App />)
+    await enterGame(user)
     const seal = document.querySelector('.seal')
     expect(seal).toBeTruthy()
     expect(seal?.querySelectorAll('rect').length).toBe(12)
@@ -204,6 +255,7 @@ describe('registre et consultation', () => {
     // pas évidente, le mécanisme central du jeu ne fonctionne plus.
     const user = userEvent.setup()
     render(<App />)
+    await enterGame(user)
     const timeline = () => screen.getByRole('navigation', { name: /Où tu en es/ })
 
     await user.click(screen.getByRole('button', { name: /Commencer le mois/ }))
@@ -223,6 +275,7 @@ describe('registre et consultation', () => {
     // aux options, le joueur a perdu le bandeau de vue.
     const user = userEvent.setup()
     render(<App />)
+    await enterGame(user)
     await user.click(screen.getByRole('button', { name: /Commencer le mois/ }))
     await user.click(screen.getByRole('button', { name: /Voir les possibilités/ }))
 
@@ -243,6 +296,7 @@ describe('registre et consultation', () => {
     // options entre elles.
     const user = userEvent.setup()
     render(<App />)
+    await enterGame(user)
     await user.click(screen.getByRole('button', { name: /Commencer le mois/ }))
     await user.click(screen.getByRole('button', { name: /Voir les possibilités/ }))
 
@@ -253,6 +307,7 @@ describe('registre et consultation', () => {
   it('permet de consulter les autres personnages sans y inciter', async () => {
     const user = userEvent.setup()
     render(<App />)
+    await enterGame(user)
     await user.click(screen.getByRole('button', { name: /Commencer le mois/ }))
     await walkMonths(user)
     // Accessible, mais replié : la consultation est possible sans être incitée.
@@ -315,6 +370,7 @@ describe('page méthode', () => {
     render(<App />)
     await user.click(screen.getByRole('button', { name: /Comment ce jeu est construit/ }))
     await user.click(screen.getByRole('button', { name: 'Revenir au jeu' }))
-    expect(screen.getByRole('button', { name: /Commencer le mois/ })).toBeTruthy()
+    // On revient à l'endroit d'où l'on vient : l'accueil.
+    expect(screen.getByRole('button', { name: 'Commencer' })).toBeTruthy()
   })
 })

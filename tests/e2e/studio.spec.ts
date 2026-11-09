@@ -5,6 +5,8 @@ import { settle } from './helpers.ts'
 test.describe('Atelier', () => {
   test('s’ouvre depuis le jeu et liste tout le contenu', async ({ page }) => {
     await page.goto('/')
+    await page.getByRole('button', { name: 'Commencer' }).click()
+    await page.getByRole('button', { name: /je commence/i }).click()
     await page.getByRole('button', { name: /Ouvrir l’Atelier/ }).click()
 
     await expect(page.getByRole('heading', { name: 'Atelier', level: 1 })).toBeVisible()

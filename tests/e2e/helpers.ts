@@ -18,11 +18,20 @@ export async function playMonths(page: Page) {
   }
 }
 
-export type Phase = 'intro' | 'month' | 'reform' | 'judgement' | 'impact' | 'callback' | 'summary'
+export type Phase =
+  | 'home' | 'contract' | 'intro' | 'month' | 'reform'
+  | 'judgement' | 'impact' | 'callback' | 'summary'
 
 /** Avance jusqu'à une phase donnée du parcours. */
 export async function reach(page: Page, phase: Phase) {
   await page.goto('/')
+  if (phase === 'home') return
+
+  await page.getByRole('button', { name: 'Commencer' }).click()
+  if (phase === 'contract') return
+
+  // Le contrat n'est pas escamotable : il faut l'accepter explicitement.
+  await page.getByRole('button', { name: /je commence/i }).click()
   if (phase === 'intro') return
 
   await page.getByRole('button', { name: /Commencer le mois/ }).click()

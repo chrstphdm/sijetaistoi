@@ -14,7 +14,11 @@ test.describe('tenue sur petit écran', () => {
       expect(scrollWidth, `débordement horizontal sur « ${label} »`).toBeLessThanOrEqual(clientWidth + 1)
     }
 
-    await overflows('intro')
+    await overflows('accueil')
+    await page.getByRole('button', { name: 'Commencer' }).click()
+    await overflows('contrat')
+    await page.getByRole('button', { name: /je commence/i }).click()
+    await overflows('rencontre')
     await page.getByRole('button', { name: /Commencer le mois/ }).click()
     await overflows('mois')
     await playMonths(page)

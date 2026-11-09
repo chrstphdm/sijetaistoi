@@ -27,6 +27,8 @@ const MONTH_NAMES = [
 ]
 
 export type Step =
+  | { readonly kind: 'home' }
+  | { readonly kind: 'contract' }
   | { readonly kind: 'intro' }
   | { readonly kind: 'month'; readonly event: LifeEventT | null }
   | { readonly kind: 'callback'; readonly selection: Selection }
@@ -55,7 +57,7 @@ export function useGame(seed: string) {
     ]
   })
 
-  const [step, setStep] = useState<Step>({ kind: 'intro' })
+  const [step, setStep] = useState<Step>({ kind: 'home' })
   const [monthsDone, setMonthsDone] = useState(0)
   const [recurring, setRecurring] = useState<readonly Recurring[]>([])
   const [oneOff, setOneOff] = useState<Cents>(0)
@@ -148,6 +150,8 @@ export function useGame(seed: string) {
   )
 
   /* -------------------------------------------------------- actions */
+  const toContract = () => setStep({ kind: 'contract' })
+  const beginGame = () => setStep({ kind: 'intro' })
   const startMonths = () => setStep({ kind: 'month', event: pickEvent() })
 
   const resolveEvent = (event: LifeEventT | null, optionId: string | null) => {
@@ -234,6 +238,6 @@ export function useGame(seed: string) {
   return {
     state, step, character, budget, stocks, lines, month, reform,
     monthsDone, oneOff, wording, setWording,
-    actions: { startMonths, resolveEvent, vote, answer, toImpact, nextAct, consultOthers },
+    actions: { toContract, beginGame, startMonths, resolveEvent, vote, answer, toImpact, nextAct, consultOthers },
   }
 }

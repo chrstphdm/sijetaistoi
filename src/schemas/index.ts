@@ -28,6 +28,27 @@ export const MethodPage = z.object({
   closing: z.string().min(40),
 })
 
+export const IntroPage = z.object({
+  title: z.string().min(3),
+  tagline: z.string().min(40),
+  pitch: z.array(z.string().min(60)).min(3),
+  duration: z.string().min(20),
+  startLabel: z.string().min(3),
+  contractTitle: z.string().min(10),
+  /**
+   * Le contrat porte exactement trois engagements, et le schema l'impose :
+   * le non-choix du personnage, la persistance des regles, et le sort des
+   * reponses. En retirer un reviendrait a transformer la partie en
+   * embuscade sur ce point precis.
+   */
+  contract: z
+    .array(z.object({ id: Id, title: z.string().min(10), body: z.string().min(80) }))
+    .length(3),
+  fiction: z.string().min(60),
+  contractStartLabel: z.string().min(3),
+  methodLabel: z.string().min(10),
+})
+
 export const ContentBundle = z.object({
   contentVersion: z.string(),
   builtFrom: z.object({ fileCount: z.number().int(), charterVersion: z.string() }),
@@ -38,6 +59,7 @@ export const ContentBundle = z.object({
   events: z.array(LifeEvent),
   reforms: z.array(Reform),
   method: MethodPage,
+  intro: IntroPage,
 })
 
 export type ContentBundleT = z.infer<typeof ContentBundle>
