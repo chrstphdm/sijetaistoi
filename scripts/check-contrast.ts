@@ -65,8 +65,30 @@ const PAIRS: readonly Pair[] = [
   { fg: 'rule-strong', bg: 'paper', min: 3, what: 'bordure de composant' },
 ]
 
+/**
+ * Paires ecrites en dur dans base.css, hors du jeu de jetons.
+ *
+ * Les bandes sombres de la page d'accueil forcent les accents clairs ; le
+ * script ne peut pas les deduire de tokens.css. Les omettre a laisse passer
+ * un bouton a 1,98:1, attrape seulement par axe-core au navigateur.
+ */
+const LITERAL_PAIRS: readonly { fg: string; bg: string; min: number; what: string }[] = [
+  { fg: '#1e1b16', bg: '#73c0c6', min: 4.5, what: 'bouton de départ sur bande sombre' },
+  { fg: '#73c0c6', bg: '#1e1b16', min: 4.5, what: 'chiffres sur bande sombre' },
+  { fg: '#e0a85a', bg: '#1e1b16', min: 4.5, what: 'chiffre zéro sur bande sombre' },
+  { fg: '#e8e3d8', bg: '#1e1b16', min: 4.5, what: 'légende des chiffres' },
+]
+
 const problems: string[] = []
 const rows: string[] = []
+
+for (const p of LITERAL_PAIRS) {
+  const r = ratio(p.fg, p.bg)
+  rows.push(`  ${'littéral'.padEnd(7)} ${p.what.padEnd(38)} ${r.toFixed(2).padStart(6)}:1  (min ${p.min})`)
+  if (r < p.min) {
+    problems.push(`littéral · ${p.what} : ${r.toFixed(2)}:1 entre ${p.fg} et ${p.bg}, minimum ${p.min}:1`)
+  }
+}
 
 for (const [theme, tokens] of [['clair', light], ['sombre', dark]] as const) {
   for (const p of PAIRS) {

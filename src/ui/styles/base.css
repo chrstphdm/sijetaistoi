@@ -880,23 +880,48 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
 /* ---------------------------------------------------- Bandeau d'ouverture */
 
 .hero {
+  position: relative;
+  overflow: hidden;
   background: var(--ink);
   color: var(--paper);
-  padding: clamp(var(--space-8), 9vw, 7rem) var(--space-6);
+  padding: clamp(3.5rem, 12vw, 9rem) var(--space-6) clamp(3rem, 8vw, 6rem);
+  min-height: min(78vh, 680px);
+  display: flex; align-items: center;
 }
-.hero__inner { max-width: var(--page); margin-inline: auto; }
+
+/* Trame décorative : les six sceaux, en grand, générés. C'est la seule
+   image du site, et elle n'est pas un fichier. aria-hidden, donc elle ne
+   porte rien — c'est à cette condition qu'elle peut s'autoriser des
+   opacités qui ne passeraient aucun contrôle de contraste. */
+.banner { position: absolute; inset: 0; pointer-events: none; }
+.banner__svg { width: 100%; height: 100%; display: block; }
+/* Le dégradé protège la lisibilité du texte à gauche et laisse la trame
+   respirer à droite. La première version la noyait entièrement. */
+.hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    100deg,
+    var(--ink) 30%,
+    color-mix(in oklab, var(--ink) 80%, transparent) 52%,
+    color-mix(in oklab, var(--ink) 28%, transparent) 100%
+  );
+}
+
+.hero__inner { position: relative; z-index: 1; max-width: var(--page); margin-inline: auto; width: 100%; }
 .hero__title {
-  font-size: clamp(40px, 8vw, 86px);
-  line-height: 1.02;
-  margin: 0 0 var(--space-4);
+  font-size: clamp(46px, 11vw, 112px);
+  line-height: 0.96;
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--space-6);
   color: var(--paper);
 }
 .hero__tagline {
-  font-size: clamp(18px, 2.4vw, 26px);
-  line-height: 1.45;
-  max-width: 34ch;
+  font-size: clamp(19px, 2.8vw, 30px);
+  line-height: 1.4;
+  max-width: 26ch;
   color: var(--paper-sunk);
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-8);
 }
 .hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); max-width: none; }
 .hero__note { font-family: system-ui, sans-serif; font-size: 14px; color: var(--rule); }
@@ -1082,3 +1107,93 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
    1 200 pixels de défilement pour six lignes de texte. */
 @media (min-width: 440px) { .cast { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 439px) { .cast li { padding: var(--space-3); } }
+
+/* ------------------------------------------------------------- Chiffres */
+
+/* Cinq nombres, en très grand. Ils disent en trois secondes ce que trois
+   paragraphes diraient en trente. Le dernier est un zéro, et c'est le plus
+   parlant des cinq. */
+.figures {
+  background: var(--ink);
+  color: var(--paper);
+  padding: var(--space-8) max(var(--space-6), calc((100% - var(--page)) / 2 + var(--space-6)));
+  max-width: none;
+}
+.figures ul {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; gap: var(--space-6);
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+}
+.figures li { display: flex; flex-direction: column; gap: var(--space-1); }
+.figures b {
+  font-size: clamp(44px, 6vw, 72px);
+  line-height: 1;
+  color: var(--perspective-a);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.figures span {
+  font-family: system-ui, sans-serif; font-size: 14px; line-height: 1.4;
+  color: var(--paper-sunk);
+}
+/* Le zéro prend l'autre accent : la distinction est aussi portée par le
+   texte, « score, classement ou étiquette », jamais par la couleur seule. */
+.figures--zero b { color: var(--perspective-b); }
+
+/* Sur fond sombre, on force les accents CLAIRS : les accents sombres y
+   perdent tout contraste. Conséquence qu'il ne faut pas rater : le texte
+   posé SUR un accent doit alors être sombre, pas clair. L'oublier donnait
+   1,98:1 sur le bouton de départ — relevé par axe-core. */
+.hero, .figures, .band--close { --perspective-a: #73c0c6; --perspective-b: #e0a85a; }
+.hero .home__start,
+.band--close .home__start { color: var(--ink); }
+.hero .home__start:hover,
+.band--close .home__start:hover { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+
+/* ------------------------------------------- Rythme des sections */
+
+/* Un filet d'accent au-dessus de chaque titre : il découpe la page en
+   chapitres au lieu d'un défilement continu, et donne une couleur à des
+   sections qui étaient toutes beiges. */
+.band h2 {
+  position: relative;
+  padding-top: var(--space-4);
+}
+.band h2::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 3rem; height: 4px;
+  background: var(--perspective-a);
+  border-radius: 2px;
+}
+.band--tint h2::before { background: var(--perspective-b); }
+
+/* Les bandes alternées doivent se distinguer franchement : deux beiges
+   voisins ne découpent rien. */
+.band--tint { background: var(--paper-sunk); box-shadow: inset 0 1px 0 var(--rule-hair), inset 0 -1px 0 var(--rule-hair); }
+
+/* Les replis étaient des filets gris sans présence. */
+.fold, .tension {
+  border: 1px solid var(--rule);
+  border-left-width: 4px;
+  transition: background 160ms var(--ease-enter);
+}
+.fold:hover, .tension:hover { background: var(--tint-a); }
+.tension { border-left-color: var(--perspective-b); }
+@media (prefers-reduced-motion: reduce) {
+  .fold, .tension { transition: none; }
+}
+
+/* Les cartes gagnent une ombre discrète : sur un fond papier, un simple
+   filet ne les détache pas. */
+.cards > li, .cards > article, .cast li {
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--ink) 8%, transparent);
+}
+
+/* Clôture : on termine sur le fond sombre, comme on a commencé. */
+.band--close {
+  background: var(--ink);
+  color: var(--paper);
+  max-width: none;
+  padding-inline: max(var(--space-6), calc((100% - var(--page)) / 2 + var(--space-6)));
+}
+.band--close .timeline__toggle { color: var(--paper-sunk); border-bottom-color: var(--rule-strong); }

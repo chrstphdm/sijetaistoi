@@ -2,6 +2,7 @@ import { bundle, characters } from '@/content/load.ts'
 import { LoopDiagram } from './LoopDiagram.tsx'
 import { ScaleDemo } from './ScaleDemo.tsx'
 import { Seal } from './Seal.tsx'
+import { SealBanner } from './SealBanner.tsx'
 
 /**
  * Accueil et contrat.
@@ -37,6 +38,7 @@ export function HomeScreen({ onStart, onMethod }: {
       {/* Bandeau d'ouverture : le titre, la promesse, et l'action. Rien
           d'autre — on doit pouvoir jouer sans lire une ligne de plus. */}
       <header className="hero">
+        <SealBanner />
         <div className="hero__inner">
           <h1 className="hero__title">{i.title}</h1>
           <p className="hero__tagline">{i.tagline}</p>
@@ -48,6 +50,18 @@ export function HomeScreen({ onStart, onMethod }: {
       </header>
 
       <main className="page__body">
+        {/* Ce que contient une partie, d'un coup d'œil. Le dernier chiffre
+            est un zéro, et c'est volontairement le plus parlant. */}
+        <section className="figures" aria-label="Le jeu en chiffres">
+          <ul>
+            <li><b>3</b><span>personnes incarnées, tirées au sort</span></li>
+            <li><b>6</b><span>situations dans le corpus</span></li>
+            <li><b>4</b><span>façons de mesurer un même montant</span></li>
+            <li><b>20</b><span>minutes environ</span></li>
+            <li className="figures--zero"><b>0</b><span>score, classement ou étiquette</span></li>
+          </ul>
+        </section>
+
         {/* Le critère de réussite, en grand : c'est la seule promesse du jeu. */}
         <section className="band">
           <blockquote className="pull">
