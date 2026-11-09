@@ -57,6 +57,17 @@ npm run test:e2e         # axe-core, clavier, 400 px, lecture muette
 Chacune de ces commandes échoue si une règle est enfreinte. Elles ont toutes été
 vérifiées sur du contenu volontairement fautif.
 
+## Hébergement
+
+Le site est publié sur GitHub Pages. Il ne charge aucune ressource externe et n'émet
+aucune requête réseau : vos réponses ne peuvent donc pas quitter votre navigateur, même
+par accident.
+
+Une limite à connaître : GitHub Pages ne permet aucun en-tête HTTP personnalisé. La
+Content-Security-Policy passe par une balise `meta`, ce qui couvre tout sauf
+`frame-ancestors` — le site peut être inclus dans une page tierce sans pouvoir
+l'empêcher.
+
 ## Limites de cette note
 
 Elle a été écrite par la même personne que le dispositif qu'elle décrit. Une relecture

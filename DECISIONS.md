@@ -104,3 +104,25 @@ Le brief disait « pas **nécessairement** ». L'implémentation dit « jamais �
 L'écart a été signalé au porteur du projet. Argument pour le tirage : c'est ce qui
 rend crédible la phrase « le jeu ne t'envoie pas là où ça fait mal ». Décision en
 attente.
+
+## 15 — Déploiement sur GitHub Pages plutôt que Cloudflare
+
+J'avais argumenté pour Cloudflare Pages, au motif que lui seul permet des en-têtes
+HTTP personnalisés, donc une vraie Content-Security-Policy — un site qui manipule des
+opinions politiques ne devant charger aucune ressource tierce.
+
+Vérification faite, cet argument tenait moins qu'annoncé : le site ne charge **aucune**
+ressource externe, n'émet **aucune** requête réseau, et n'utilise que des polices
+système. La CSP était une défense en profondeur, pas une protection indispensable.
+
+Et le porteur du projet n'a pas de compte Cloudflare : ses cinq autres sites sont sur
+GitHub Pages. Imposer un second hébergeur pour un bénéfice théorique n'était pas
+défendable.
+
+Ce que le choix coûte réellement, et qui n'est pas nul : une balise `meta` couvre la
+plupart des directives CSP, mais pas `frame-ancestors` ni `Permissions-Policy`. Le site
+peut donc être inclus dans une iframe tierce. Le risque est faible — aucun identifiant,
+aucune action aux conséquences durables — mais il existe.
+
+`public/_headers` est conservé : il ne sert à rien sur Pages, et resservira si le site
+change un jour d'hébergeur.

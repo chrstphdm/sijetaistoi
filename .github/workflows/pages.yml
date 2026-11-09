@@ -1,0 +1,55 @@
+name: Déploiement
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Déploiement sur GitHub Pages, comme les autres sites du compte.
+# Aucun secret n'est nécessaire : Pages utilise le jeton intégré.
+#
+# Ce que ce choix coûte, dit explicitement : GitHub Pages ne permet aucun
+# en-tête HTTP personnalisé, donc public/_headers n'y est pas appliqué. La
+# Content-Security-Policy passe par une balise meta dans index.html, qui
+# couvre tout sauf frame-ancestors et Permissions-Policy. Le site ne charge
+# aucune ressource externe et n'émet aucune requête, donc le risque réel se
+# limite à l'inclusion dans une iframe tierce.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Une seule publication à la fois ; on ne rejoue pas une publication en cours.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  construire:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+
+      # npm run build enchaîne contenu, lexique et contrastes : rien ne part
+      # en ligne si une garantie de neutralité est enfreinte.
+      - run: npm run build
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  publier:
+    needs: construire
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

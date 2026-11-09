@@ -10,6 +10,23 @@
       content="Vivre quelques mois dans la peau de plusieurs personnes, décider de règles qui s'appliquent à toutes, et voir ce que cela change."
     />
     <meta name="referrer" content="no-referrer" />
+
+    <!--
+      Content-Security-Policy par balise, parce que GitHub Pages ne permet
+      aucun en-tête HTTP personnalisé.
+
+      Elle couvre l'essentiel : rien ne peut être chargé ni envoyé ailleurs.
+      Deux directives ne fonctionnent PAS par balise et sont donc perdues :
+      frame-ancestors, qui empêche l'inclusion du site dans une iframe
+      tierce, et Permissions-Policy. Le risque est faible ici — aucun
+      identifiant, aucune action aux conséquences durables — mais il est
+      réel, et c'est le prix de GitHub Pages. public/_headers reste présent
+      pour un hébergeur qui les respecterait.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'"
+    />
   </head>
   <body>
     <div id="root"></div>

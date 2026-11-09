@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { buildSummary, type KpiAnswer } from '@/core/summary.ts'
 import { lastJudgement } from '@/core/game.ts'
 import type { Scale } from '@/core/impact.ts'
@@ -33,6 +33,19 @@ export function App() {
   const [showStudio, setShowStudio] = useState(
     () => typeof window !== 'undefined' && window.location.hash === '#atelier',
   )
+
+  /**
+   * Le fragment d'URL est écouté, pas seulement lu au démarrage.
+   *
+   * Sans cela, coller « #atelier » dans la barre d'adresse d'une page déjà
+   * ouverte ne faisait rien, et le bouton Précédent ne ramenait pas au jeu.
+   * Relevé par un test de bout en bout.
+   */
+  useEffect(() => {
+    const sync = () => setShowStudio(window.location.hash === '#atelier')
+    window.addEventListener('hashchange', sync)
+    return () => window.removeEventListener('hashchange', sync)
+  }, [])
 
   const nameOf = (id: string) =>
     characters.find((c) => c.id === id)?.identity.firstName ?? id
