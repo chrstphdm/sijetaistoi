@@ -15,7 +15,7 @@ test.describe('tenue sur petit écran', () => {
     }
 
     await overflows('accueil')
-    await page.getByRole('button', { name: 'Commencer' }).click()
+    await page.getByRole('button', { name: 'Commencer' }).first().click()
     await overflows('contrat')
     await page.getByRole('button', { name: /je commence/i }).click()
     await overflows('rencontre')

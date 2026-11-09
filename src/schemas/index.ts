@@ -28,6 +28,32 @@ export const MethodPage = z.object({
   closing: z.string().min(40),
 })
 
+/**
+ * Un principe de justice porte TOUJOURS son objection.
+ *
+ * Presenter un principe sans ce qu'on lui reproche reviendrait a le
+ * recommander. Le schema rend donc l'objection obligatoire, et d'une
+ * longueur comparable a la definition — une objection expediee en une
+ * ligne face a une definition de cinq serait un epouvantail.
+ */
+export const Principle = z
+  .object({
+    id: Id,
+    label: z.string().min(4),
+    definition: z.string().min(100),
+    objection: z.string().min(100),
+  })
+  .check((ctx) => {
+    const p = ctx.value
+    const ratio = p.definition.length / p.objection.length
+    if (ratio > 2 || ratio < 0.5) {
+      ctx.issues.push({
+        code: 'custom', input: p, path: ['objection'],
+        message: `déséquilibre entre la définition (${p.definition.length} signes) et l’objection (${p.objection.length}) : une objection expédiée est un épouvantail`,
+      })
+    }
+  })
+
 export const IntroPage = z.object({
   title: z.string().min(3),
   tagline: z.string().min(40),
@@ -47,6 +73,35 @@ export const IntroPage = z.object({
   fiction: z.string().min(60),
   contractStartLabel: z.string().min(3),
   methodLabel: z.string().min(10),
+
+  goalTitle: z.string().min(10),
+  goal: z.array(z.string().min(80)).min(2),
+  rulesTitle: z.string().min(10),
+  rules: z.array(z.object({ id: Id, title: z.string().min(5), body: z.string().min(80) })).min(4),
+
+  theoryTitle: z.string().min(10),
+  theoryLead: z.string().min(40),
+  /**
+   * Chaque theorie porte SON objection, exigee par le schema et de longueur
+   * comparable. Une theorie presentee sans ce qu'on lui reproche serait
+   * recommandee, pas expliquee — et le jeu se reclamerait d'une doctrine.
+   */
+  theories: z
+    .array(
+      z.object({
+        id: Id,
+        title: z.string().min(5),
+        body: z.string().min(150),
+        objection: z.string().min(120),
+      }),
+    )
+    .min(3),
+
+  lookTitle: z.string().min(10),
+  look: z.array(z.object({ id: Id, title: z.string().min(5), body: z.string().min(120) })).min(3),
+  notTitle: z.string().min(10),
+  notList: z.array(z.string().min(50)).min(3),
+  principlesTitle: z.string().min(10),
 })
 
 export const ContentBundle = z.object({
@@ -60,6 +115,7 @@ export const ContentBundle = z.object({
   reforms: z.array(Reform),
   method: MethodPage,
   intro: IntroPage,
+  principles: z.object({ note: z.string().min(40), principles: z.array(Principle).min(10) }),
 })
 
 export type ContentBundleT = z.infer<typeof ContentBundle>

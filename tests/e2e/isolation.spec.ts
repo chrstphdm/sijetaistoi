@@ -59,5 +59,5 @@ test('l’Atelier n’est pas livré au visiteur', async ({ page }) => {
   await page.goto('/#atelier')
   await expect(page.getByRole('heading', { name: 'Atelier', level: 1 })).toHaveCount(0)
   // Le jeu s'affiche normalement, le fragment est simplement ignoré.
-  await expect(page.getByRole('button', { name: 'Commencer' })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Commencer' }).first()).toBeVisible()
 })

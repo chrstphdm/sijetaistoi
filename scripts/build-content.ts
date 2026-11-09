@@ -64,6 +64,7 @@ const events = parseEachFile(LifeEvent, listJson('events'))
 const reforms = parseEachFile(Reform, listJson('reforms'))
 const method = parseOne(MethodPage, 'method.json', readJson('method.json'))
 const intro = parseOne(IntroPage, 'intro.json', readJson('intro.json'))
+const principles = readJson('principles.json')
 
 // --------------------------------------------------- integrite referentielle
 const sourceIds = new Set(sources.map((s) => s.id))
@@ -189,6 +190,7 @@ const bundle = {
   reforms,
   method,
   intro,
+  principles,
 }
 
 const verified = ContentBundle.safeParse(bundle)

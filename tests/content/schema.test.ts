@@ -238,3 +238,76 @@ describe('corpus complet — cible du plan', () => {
     }
   })
 })
+
+describe('page d’accueil — toute thèse porte son objection', () => {
+  const intro = bundle.intro
+
+  it('expose le but, les règles, les théories et l’allure', () => {
+    expect(intro.goal.length).toBeGreaterThanOrEqual(2)
+    expect(intro.rules.length).toBeGreaterThanOrEqual(4)
+    expect(intro.theories.length).toBeGreaterThanOrEqual(3)
+    expect(intro.look.length).toBeGreaterThanOrEqual(3)
+  })
+
+  it('accompagne chaque théorie de ce qu’on lui reproche', () => {
+    // Une théorie présentée sans objection serait recommandée, pas
+    // expliquée — et le jeu se réclamerait d'une doctrine.
+    for (const t of intro.theories) {
+      expect(t.objection.length, `théorie « ${t.title} »`).toBeGreaterThan(120)
+    }
+  })
+
+  it('donne à l’objection un poids comparable à la thèse', () => {
+    for (const t of intro.theories) {
+      const ratio = t.body.length / t.objection.length
+      expect(ratio, `théorie « ${t.title} »`).toBeLessThan(3)
+    }
+  })
+
+  it('nomme le voile d’ignorance sans en adopter les conclusions', () => {
+    const voile = intro.theories.find((t: { id: string }) => t.id === 'voile')
+    expect(voile).toBeTruthy()
+    expect(voile.body).toContain('emprunte')
+    expect(voile.objection).toContain('reproche')
+  })
+
+  it('déclare ce que le jeu n’est pas, dont sa propre partialité', () => {
+    const joined = intro.notList.join(' ')
+    expect(joined).toContain('pas neutre')
+  })
+})
+
+describe('principes de justice', () => {
+  const principles = bundle.principles.principles
+
+  it('en expose au moins dix, chacun avec son objection', () => {
+    expect(principles.length).toBeGreaterThanOrEqual(10)
+    for (const p of principles) {
+      expect(p.definition.length, p.label).toBeGreaterThan(100)
+      expect(p.objection.length, p.label).toBeGreaterThan(100)
+    }
+  })
+
+  it('n’expédie aucune objection face à sa définition', () => {
+    // Une objection en une ligne face à une définition de cinq serait un
+    // épouvantail.
+    for (const p of principles) {
+      const ratio = p.definition.length / p.objection.length
+      expect(ratio, p.label).toBeLessThan(2)
+      expect(ratio, p.label).toBeGreaterThan(0.5)
+    }
+  })
+
+  it('couvre les principes opposés deux à deux', () => {
+    const ids = principles.map((p: { id: string }) => p.id)
+    for (const pair of [
+      ['besoin', 'merite'],
+      ['egalite-de-traitement', 'equite'],
+      ['solidarite', 'responsabilite-individuelle'],
+      ['contribution-proportionnelle', 'contribution-progressive'],
+      ['universalite', 'reciprocite'],
+    ]) {
+      for (const id of pair) expect(ids, `principe « ${id} » manquant`).toContain(id)
+    }
+  })
+})

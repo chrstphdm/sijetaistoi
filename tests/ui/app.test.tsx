@@ -10,7 +10,8 @@ type User = ReturnType<typeof userEvent.setup>
 
 /** Traverse l'accueil et le contrat jusqu'au premier personnage. */
 async function enterGame(user: User) {
-  await user.click(screen.getByRole('button', { name: 'Commencer' }))
+  // Le bouton est répété en haut et en bas de l'accueil : on prend le premier.
+  await user.click(screen.getAllByRole('button', { name: 'Commencer' })[0]!)
   await user.click(screen.getByRole('button', { name: /je commence/i }))
 }
 
@@ -55,7 +56,8 @@ describe('accueil et contrat', () => {
   it('ouvre sur une page d’accueil, pas sur une partie déjà commencée', () => {
     render(<App />)
     expect(screen.getByRole('heading', { level: 1, name: 'Si j’étais toi' })).toBeTruthy()
-    expect(screen.getByRole('button', { name: 'Commencer' })).toBeTruthy()
+    // Répété en haut et en bas : on peut jouer tout de suite ou lire d'abord.
+    expect(screen.getAllByRole('button', { name: 'Commencer' })).toHaveLength(2)
     // Aucun personnage n'est imposé avant que le joueur ait accepté.
     expect(screen.queryByText(/^Tu es /)).toBeNull()
   })
@@ -65,7 +67,7 @@ describe('accueil et contrat', () => {
     // tard qu'on subit sa propre règle est un piège.
     const user = userEvent.setup()
     render(<App />)
-    await user.click(screen.getByRole('button', { name: 'Commencer' }))
+    await user.click(screen.getAllByRole('button', { name: 'Commencer' })[0]!)
 
     expect(screen.getByRole('heading', { name: /Trois choses avant de commencer/ })).toBeTruthy()
     expect(screen.getByRole('heading', { name: /Tu ne choisis pas qui tu es/ })).toBeTruthy()
@@ -76,7 +78,7 @@ describe('accueil et contrat', () => {
   it('ne lance la partie qu’après acceptation explicite', async () => {
     const user = userEvent.setup()
     render(<App />)
-    await user.click(screen.getByRole('button', { name: 'Commencer' }))
+    await user.click(screen.getAllByRole('button', { name: 'Commencer' })[0]!)
     expect(screen.queryByText(/^Tu es /)).toBeNull()
     await user.click(screen.getByRole('button', { name: /je commence/i }))
     expect(screen.getByRole('heading', { level: 1 }).textContent).toMatch(/Tu es \w+/)
@@ -371,6 +373,6 @@ describe('page méthode', () => {
     await user.click(screen.getByRole('button', { name: /Comment ce jeu est construit/ }))
     await user.click(screen.getByRole('button', { name: 'Revenir au jeu' }))
     // On revient à l'endroit d'où l'on vient : l'accueil.
-    expect(screen.getByRole('button', { name: 'Commencer' })).toBeTruthy()
+    expect(screen.getAllByRole('button', { name: 'Commencer' }).length).toBeGreaterThan(0)
   })
 })

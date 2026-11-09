@@ -27,7 +27,7 @@ export async function reach(page: Page, phase: Phase) {
   await page.goto('/')
   if (phase === 'home') return
 
-  await page.getByRole('button', { name: 'Commencer' }).click()
+  await page.getByRole('button', { name: 'Commencer' }).first().click()
   if (phase === 'contract') return
 
   // Le contrat n'est pas escamotable : il faut l'accepter explicitement.

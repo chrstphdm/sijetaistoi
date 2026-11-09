@@ -28,5 +28,93 @@
   ],
   "fiction": "Les personnages sont fictifs. Les montants sont des ordres de grandeur plausibles, pas des prévisions, et chaque chiffre affiché indique d'où il vient.",
   "contractStartLabel": "J'ai compris, je commence",
-  "methodLabel": "Comment ce jeu est construit, et ce qu'il ne parvient pas à éviter"
+  "methodLabel": "Comment ce jeu est construit, et ce qu'il ne parvient pas à éviter",
+  "goalTitle": "Ce que ce jeu cherche à faire",
+  "goal": [
+    "Ce jeu n'a qu'un seul objectif, et il ne porte sur aucune politique en particulier : qu'à la fin d'une partie, tu puisses te dire que tu n'avais pas réalisé qu'une décision qui te semblait évidente pouvait être vécue comme ça par quelqu'un d'autre.",
+    "Il ne cherche pas à te faire changer d'avis. Il ne défend aucun parti, aucune doctrine, et ne contient aucune bonne réponse cachée. Il ne te donnera pas de score, ne te rangera dans aucune catégorie, et ne te dira jamais si tu as eu raison.",
+    "Ce qu'il fait, c'est te mettre dans la situation de quelqu'un d'autre après que tu aies décidé pour lui."
+  ],
+  "rulesTitle": "Comment une partie se déroule",
+  "rules": [
+    {
+      "id": "trois-actes",
+      "title": "Trois actes, trois personnes",
+      "body": "Tu incarnes successivement trois personnages tirés parmi six. Pour chacun, tu vis deux ou trois mois : son budget, ses dépenses contraintes, ce qu'il peut arbitrer et ce qu'il ne peut pas."
+    },
+    {
+      "id": "deux-portees",
+      "title": "Deux sortes de décisions",
+      "body": "Certaines n'engagent que le personnage que tu incarnes, ce mois-ci. D'autres deviennent des règles pour tout le monde. L'écran te dit toujours de laquelle il s'agit, parce que c'est là que tout se joue."
+    },
+    {
+      "id": "persistance",
+      "title": "Tes règles te reviennent",
+      "body": "Quand tu changes de personnage, les règles que tu as décidées continuent de s'appliquer. Le jeu te rappelle alors ta propre phrase, telle que tu l'as écrite, et te montre ce qu'elle produit ici — et ailleurs."
+    },
+    {
+      "id": "echelles",
+      "title": "Quatre façons de mesurer",
+      "body": "Après chaque décision, tu vois son effet sur les six personnages. Tu peux changer d'échelle : en euros, en part du revenu, en part du reste à vivre, en jours de dépenses. Le classement des plus touchés change selon celle que tu choisis."
+    },
+    {
+      "id": "avis",
+      "title": "On te demande ton avis, deux fois",
+      "body": "Après chaque décision, le jeu demande si elle te semble bien et juste, et pourquoi. Il repose la même question plus tard, après que tu aies vécu autre chose. Il note les écarts sans en tirer de conclusion."
+    }
+  ],
+  "theoryTitle": "Ce qui a guidé la conception",
+  "theoryLead": "Ces travaux ont servi d'outils, pas de doctrines. Aucun n'est présenté ici comme vrai, et chacun est accompagné de ce qu'on lui reproche.",
+  "theories": [
+    {
+      "id": "voile",
+      "title": "Le voile d'ignorance",
+      "body": "L'idée, formulée par John Rawls en 1971, est qu'on juge plus honnêtement une règle quand on ignore quelle place on occupera sous son empire. Le jeu lui emprunte une seule chose : le fait que tu ne choisisses pas ton personnage, et que tu décides avant de savoir qui tu seras ensuite.",
+      "objection": "On lui reproche de supposer qu'un raisonnement abstrait, détaché de toute appartenance, serait plus juste qu'un raisonnement situé — et de produire des conclusions qui dépendent entièrement de l'aversion au risque qu'on prête aux gens. Le jeu n'adopte pas ses conclusions, seulement son dispositif."
+    },
+    {
+      "id": "principes",
+      "title": "Les principes de justice en tension",
+      "body": "Besoin, mérite, égalité de traitement, responsabilité, solidarité, réciprocité : les désaccords politiques portent souvent moins sur les faits que sur celui de ces principes qui doit primer. Le jeu les met en concurrence dans des situations concrètes plutôt que de les discuter dans l'abstrait.",
+      "objection": "Découper les désaccords en principes nommés est déjà une interprétation : elle suppose que les positions politiques se ramènent à des arbitrages de valeurs, alors qu'elles reposent aussi sur des désaccords factuels, des intérêts, et des expériences vécues."
+    },
+    {
+      "id": "spent",
+      "title": "Ce qu'on reproche aux jeux d'empathie",
+      "body": "Un précédent proche, SPENT, faisait vivre un mois de budget contraint. Une étude randomisée a mesuré qu'il ne modifiait pas la façon dont les joueurs expliquaient la pauvreté, et que ses joueurs signaient MOINS une pétition sur le salaire minimum que le groupe témoin. La cause avancée : ses mécaniques suggéraient que la situation se résout en faisant de meilleurs choix.",
+      "objection": "Ce jeu reste exposé au même reproche. Il a donc supprimé tout score, toute barre de réussite, tout « tu as bouclé ton mois », et il rend visible ce que chaque personnage NE PEUT PAS faire. Cela ne garantit pas qu'il y échappe."
+    },
+    {
+      "id": "rhetorique",
+      "title": "L'animation est un argument",
+      "body": "La durée, l'amplitude, le délai, l'ordre d'apparition et le son sont des figures de rhétorique. Un jeu qui met en scène une panne de chaudière et affiche un héritage en texte plat défend une thèse sans l'écrire. L'intensité visuelle est donc calculée par une fonction qui ignore le signe du montant, l'identité du personnage et ton opinion.",
+      "objection": "Une neutralité obtenue en supprimant tout mouvement trahirait l'objet du jeu, qui est de faire ressentir ce qu'un montant représente. La ligne entre faire ressentir et manipuler reste un jugement, même encadré par des règles."
+    }
+  ],
+  "lookTitle": "Pourquoi ça ressemble à ça",
+  "look": [
+    {
+      "id": "pas-de-corps",
+      "title": "Aucun visage, aucun corps",
+      "body": "Tout corps dessiné encode un vêtement, un teint, une corpulence, une posture — autant de stéréotypes qu'on ne sait pas neutraliser. Un portrait de « mère célibataire » est une caricature en puissance. Chaque personnage est donc représenté par un motif abstrait, dont la densité est rigoureusement identique pour tous, et dont la couleur est attribuée par ordre alphabétique."
+    },
+    {
+      "id": "document",
+      "title": "Des documents, pas un tableau de bord",
+      "body": "Les chiffres apparaissent dans un relevé daté, pas dans des jauges. Le reste à vivre a exactement le même poids typographique que la part déjà engagée : le grossir ferait lire le solde comme un score d'habileté, alors que l'essentiel du résultat n'a pas été choisi."
+    },
+    {
+      "id": "couleurs",
+      "title": "Ni rouge, ni vert",
+      "body": "Le rouge marque la faute et l'alarme, et la paire rouge-vert exclut une partie des lecteurs. Un montant en moins porte donc un signe, un symbole et le mot écrit en toutes lettres. Les deux couleurs d'accent du jeu ont la même force perceptive, vérifiée à chaque mise en ligne, et n'indiquent jamais un gain ou une perte."
+    }
+  ],
+  "notTitle": "Ce que ce jeu n'est pas",
+  "notList": [
+    "Ce n'est pas un test politique : il ne te situe sur aucun axe et ne te compare à personne.",
+    "Ce n'est pas un simulateur : les montants sont des ordres de grandeur plausibles, pas des prévisions, et le modèle ignore volontairement les comportements et les effets de second tour.",
+    "Ce n'est pas un quiz : aucune réponse n'est comptée juste ou fausse.",
+    "Ce n'est pas neutre pour autant. La page « Comment ce jeu est construit » détaille les six biais que le dispositif ne parvient pas à éviter."
+  ],
+  "principlesTitle": "Les principes que le jeu met en tension"
 }

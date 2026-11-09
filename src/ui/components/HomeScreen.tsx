@@ -19,6 +19,8 @@ export function HomeScreen({ onStart, onMethod }: {
   readonly onMethod: () => void
 }) {
   const i = bundle.intro
+  const principles = bundle.principles.principles
+
   return (
     <article className="sheet home">
       <h1 className="home__title">{i.title}</h1>
@@ -28,7 +30,91 @@ export function HomeScreen({ onStart, onMethod }: {
         <p key={p}>{p}</p>
       ))}
 
-      <p className="provenance">{i.duration}</p>
+      {/* Le bouton est répété : en haut pour qui veut jouer tout de suite,
+          en bas pour qui a lu la page. Rien n'oblige à lire. */}
+      <p className="home__actions">
+        <button type="button" className="home__start" onClick={onStart}>
+          {i.startLabel}
+        </button>
+        <span className="provenance">{i.duration}</span>
+      </p>
+
+      <section aria-labelledby="h-goal">
+        <h2 id="h-goal">{i.goalTitle}</h2>
+        {i.goal.map((p) => (
+          <p key={p}>{p}</p>
+        ))}
+      </section>
+
+      <section aria-labelledby="h-rules">
+        <h2 id="h-rules">{i.rulesTitle}</h2>
+        <ol className="home__cards">
+          {i.rules.map((r) => (
+            <li key={r.id}>
+              <h3>{r.title}</h3>
+              <p>{r.body}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* Chaque théorie porte son objection, et le schéma l'exige. Une
+          théorie présentée sans ce qu'on lui reproche serait recommandée,
+          pas expliquée — et le jeu se réclamerait d'une doctrine. */}
+      <section aria-labelledby="h-theory">
+        <h2 id="h-theory">{i.theoryTitle}</h2>
+        <p className="provenance">{i.theoryLead}</p>
+        {i.theories.map((t) => (
+          <div key={t.id} className="home__theory">
+            <h3>{t.title}</h3>
+            <p>{t.body}</p>
+            <p className="home__objection">
+              <span className="home__objection-tag">Ce qu’on lui reproche</span>
+              {t.objection}
+            </p>
+          </div>
+        ))}
+      </section>
+
+      <section aria-labelledby="h-principles">
+        <h2 id="h-principles">{i.principlesTitle}</h2>
+        <p className="provenance">{bundle.principles.note}</p>
+        <dl className="home__principles">
+          {principles.map((p) => (
+            <div key={p.id}>
+              <dt>{p.label}</dt>
+              <dd>
+                {p.definition}
+                <span className="home__objection">
+                  <span className="home__objection-tag">Ce qu’on lui reproche</span>
+                  {p.objection}
+                </span>
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+
+      <section aria-labelledby="h-look">
+        <h2 id="h-look">{i.lookTitle}</h2>
+        <ol className="home__cards">
+          {i.look.map((l) => (
+            <li key={l.id}>
+              <h3>{l.title}</h3>
+              <p>{l.body}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section aria-labelledby="h-not">
+        <h2 id="h-not">{i.notTitle}</h2>
+        <ul>
+          {i.notList.map((n) => (
+            <li key={n}>{n}</li>
+          ))}
+        </ul>
+      </section>
 
       <p className="home__actions">
         <button type="button" className="home__start" onClick={onStart}>

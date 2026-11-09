@@ -1,0 +1,89 @@
+{
+  "note": "Chaque principe porte SA PROPRE OBJECTION, et le schéma l'impose. Présenter un principe sans ce qu'on lui reproche reviendrait à le recommander. Aucun de ces principes n'est tenu pour supérieur aux autres : le jeu les met en tension, il ne les classe pas.",
+  "principles": [
+    {
+      "id": "besoin",
+      "label": "Le besoin",
+      "definition": "Chacun reçoit selon ce qui lui manque, et contribue selon ce dont il peut se passer. Deux personnes dans des situations différentes doivent être traitées différemment pour être traitées justement.",
+      "objection": "Mesurer un besoin suppose de décider ce qui est nécessaire et ce qui ne l'est pas, ce qui donne à quelqu'un le pouvoir de juger la vie des autres. Et un système qui donne selon le besoin peut décourager ceux qui font l'effort de réduire le leur."
+    },
+    {
+      "id": "egalite-de-traitement",
+      "label": "L'égalité de traitement",
+      "definition": "La même règle s'applique à tous, sans distinction de situation. Un euro est un euro, une démarche est une démarche, et personne n'a à justifier qui il est pour obtenir ce à quoi il a droit.",
+      "objection": "Appliquer la même règle à des situations très inégales reconduit l'inégalité de départ. Une amende au montant fixe ne pèse pas du tout de la même façon selon le revenu."
+    },
+    {
+      "id": "equite",
+      "label": "L'équité",
+      "definition": "Les écarts de traitement sont acceptables s'ils corrigent des désavantages que personne n'a choisis : le lieu de naissance, la santé, l'héritage.",
+      "objection": "Distinguer ce qui est choisi de ce qui est subi est très difficile en pratique, et la frontière retenue détermine entièrement le résultat. Elle est elle-même un choix politique."
+    },
+    {
+      "id": "merite",
+      "label": "Le mérite",
+      "definition": "Qui travaille plus, prend plus de risques ou se forme davantage doit en retirer davantage. Le lien entre l'effort et le résultat rend l'écart acceptable.",
+      "objection": "Ce qu'on appelle mérite dépend largement de circonstances non choisies — la santé, l'éducation reçue, les relations. Et deux efforts égaux ne rapportent pas la même chose selon le secteur."
+    },
+    {
+      "id": "responsabilite-individuelle",
+      "label": "La responsabilité individuelle",
+      "definition": "Chacun assume les conséquences de ses propres décisions. Faire porter à la collectivité le coût d'un choix personnel déresponsabilise et pèse sur ceux qui ont choisi autrement.",
+      "objection": "Beaucoup de situations qu'on attribue à un choix n'en sont pas un : on ne choisit ni son employeur qui ferme, ni la desserte en transports de sa commune, ni la qualité thermique d'un logement qu'on loue."
+    },
+    {
+      "id": "solidarite",
+      "label": "La solidarité",
+      "definition": "Les risques qui peuvent frapper n'importe qui — maladie, perte d'emploi, perte d'autonomie — sont mieux portés ensemble que séparément. Mutualiser coûte moins cher que s'assurer seul, et n'exclut personne.",
+      "objection": "Un risque mutualisé sans limite devient un coût collectif que personne ne maîtrise, et l'éloignement entre celui qui paie et celui qui reçoit affaiblit le consentement à payer."
+    },
+    {
+      "id": "contribution-proportionnelle",
+      "label": "La contribution proportionnelle",
+      "definition": "Chacun verse la même part de ce qu'il a. Un taux unique traite tout le monde identiquement, se calcule simplement et se contourne difficilement.",
+      "objection": "La même part ne représente pas le même sacrifice : dix pour cent d'un revenu modeste retirent de l'essentiel, dix pour cent d'un revenu élevé retirent de l'épargne."
+    },
+    {
+      "id": "contribution-progressive",
+      "label": "La contribution progressive",
+      "definition": "La part versée augmente avec ce qu'on a, parce que le sacrifice réel que représente un euro diminue à mesure qu'on en possède.",
+      "objection": "Fixer le rythme de la progression relève d'un jugement qu'aucun calcul ne tranche, et concentrer la recette sur peu de contribuables la rend sensible à leurs décisions."
+    },
+    {
+      "id": "securite-economique",
+      "label": "La sécurité économique",
+      "definition": "Pouvoir prévoir son mois prochain vaut en soi. Une protection contre les chocs permet de se former, de déménager, de créer — autant de choses qu'on ne tente pas quand une mauvaise surprise suffit à tout faire basculer.",
+      "objection": "La sécurité a un prix, payé par d'autres ou par soi-même sous forme de prélèvement, et une protection trop étendue peut figer des situations qu'il vaudrait mieux quitter."
+    },
+    {
+      "id": "liberte-de-choix",
+      "label": "La liberté de choix",
+      "definition": "Mieux vaut donner des moyens et laisser chacun décider de leur usage que décider à sa place. Personne ne connaît mieux sa situation que celui qui la vit.",
+      "objection": "Un choix n'en est un que si les options existent réellement et qu'on dispose de l'information pour les comparer, ce qui est loin d'être toujours le cas."
+    },
+    {
+      "id": "reciprocite",
+      "label": "La réciprocité",
+      "definition": "Recevoir de la collectivité appelle une contrepartie, sous forme de contribution, de recherche d'emploi ou d'engagement. C'est ce qui rend le système acceptable pour ceux qui le financent.",
+      "objection": "Exiger une contrepartie de qui n'est pas en mesure de la fournir ajoute une peine à une difficulté, et le contrôle qu'elle suppose coûte parfois plus cher que ce qu'il économise."
+    },
+    {
+      "id": "universalite",
+      "label": "L'universalité",
+      "definition": "Un droit ouvert à tous sans condition de ressources évite la stigmatisation, le non-recours et les effets de seuil, et coûte moins cher à gérer qu'un dispositif ciblé.",
+      "objection": "Verser à ceux qui n'en ont pas besoin disperse une ressource limitée, et le montant versé à chacun s'en trouve réduit d'autant."
+    },
+    {
+      "id": "soutenabilite",
+      "label": "La soutenabilité",
+      "definition": "Une règle n'est juste que si elle peut durer. Financer aujourd'hui par de la dette revient à décider pour des gens qui n'ont pas voix au chapitre.",
+      "objection": "Refuser l'endettement pour un investissement dont les effets durent trente ans fait porter toute la charge à une seule génération, ce qui est aussi une forme d'injustice entre générations."
+    },
+    {
+      "id": "transparence",
+      "label": "La lisibilité",
+      "definition": "Une règle qu'on ne comprend pas ne peut pas être discutée, ni contestée, ni même réclamée. La simplicité est une condition de la justice, pas un confort administratif.",
+      "objection": "Une règle simple est nécessairement grossière : elle ignore des situations particulières que seule une règle complexe saurait traiter correctement."
+    }
+  ]
+}

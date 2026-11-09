@@ -752,3 +752,47 @@ details summary { font-family: system-ui, sans-serif; font-size: 14px; cursor: p
   color: var(--ink-3);
   font-variant-numeric: tabular-nums;
 }
+
+/* Page d'accueil : un document qui se lit, avec le bouton de départ
+   répété en haut et en bas. Rien n'oblige à lire avant de jouer. */
+.home h2 { margin-top: var(--space-8); font-size: 22px; }
+.home h3 { font-size: 17px; margin-bottom: var(--space-1); }
+.home__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); }
+
+.home__cards { list-style: none; padding: 0; counter-reset: carte; }
+.home__cards li {
+  counter-increment: carte;
+  border-left: 3px solid var(--rule-hair);
+  padding-left: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+.home__cards h3::before {
+  content: counter(carte) '. ';
+  color: var(--ink-3); font-variant-numeric: tabular-nums;
+}
+
+.home__theory { margin-bottom: var(--space-6); }
+
+/* L'objection n'est ni en plus petit, ni en plus pâle, ni repliée : elle a
+   le même poids que ce qu'elle conteste. L'afficher moins visiblement
+   reviendrait à recommander la thèse. */
+.home__objection {
+  display: block;
+  margin-top: var(--space-2);
+  padding-left: var(--space-4);
+  border-left: 2px dashed var(--rule);
+}
+.home__objection-tag {
+  display: block;
+  font-family: system-ui, sans-serif; font-size: 12px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3);
+  margin-bottom: var(--space-1);
+}
+
+.home__principles { margin: var(--space-4) 0; }
+.home__principles > div {
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--rule-hair);
+}
+.home__principles dt { font-weight: 600; margin-bottom: var(--space-1); }
+.home__principles dd { margin: 0; max-width: var(--measure-narrative); }
