@@ -1,9 +1,10 @@
 // @vitest-environment jsdom
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import { render, screen, cleanup, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { App } from '@/ui/App.tsx'
 import { characters } from '@/content/load.ts'
+import { preloadScreens } from '@/ui/screens.ts'
 
 /*
  * jsdom n'implemente pas `window.scrollTo` : il journalise « Not implemented »
@@ -12,6 +13,14 @@ import { characters } from '@/content/load.ts'
  */
 window.scrollTo = () => {}
 
+
+/*
+ * Les écrans différés (src/ui/screens.ts) sont chargés AVANT les tests,
+ * comme ils le sont dans le navigateur avant le premier clic. Sans cela, un
+ * test pourrait chercher un écran pendant que son fichier arrive encore, et
+ * réussir ou échouer selon la vitesse de la machine.
+ */
+beforeAll(() => preloadScreens())
 
 afterEach(cleanup)
 
