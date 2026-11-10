@@ -40,6 +40,7 @@ import { SummaryScreen } from './components/Summary.tsx'
 import { ImpactProjection } from './components/ImpactProjection.tsx'
 import { relaunchSentence } from '@/core/opinion.ts'
 import { makeSeed, replaySameSeed, seedFromUrl, startFreshGame } from './seed.ts'
+import { seedOffset } from '@/core/rng.ts'
 import { setupFromUrl, isPrepared, EMPTY_SETUP } from './setup.ts'
 import { SetupScreen } from './components/SetupScreen.tsx'
 import { useScreenChange } from './navigation.ts'
@@ -390,7 +391,7 @@ export function App() {
 
           <ReformVote
             reform={reform}
-            order={rotationOrder(reform.options.length, state.act)}
+            order={rotationOrder(reform.options.length, state.act + seedOffset(seed, 'vote', reform.options.length))}
             who={character.identity.firstName}
             onVote={actions.vote}
           />
@@ -437,7 +438,7 @@ export function App() {
         <>
           <ImpactForEach
             characters={characters} world={state.world} scale={scale}
-            onScaleChange={setScale} screenIndex={state.act}
+            onScaleChange={setScale} screenIndex={state.act + seedOffset(seed, 'impact', characters.length)}
           />
           <section className="sheet">
             <button type="button" className="btn-primary" onClick={actions.nextAct}>

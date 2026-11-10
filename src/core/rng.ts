@@ -109,3 +109,23 @@ export function advance(random: RandomSource, counts: DrawCounts): void {
     for (let i = random[name].draws; i < target; i++) random[name].next()
   }
 }
+
+/**
+ * Décalage d'affichage propre à une partie, tiré de sa graine.
+ *
+ * Les rotations d'ordre (écran d'impact, options du vote) partaient de
+ * l'acte seul : toutes les parties montraient les mêmes trois ordres. Sur
+ * l'écran d'impact, seuls trois personnages ouvraient jamais la liste ; au
+ * vote, le statu quo n'était jamais présenté premier ni deuxième. Relevé
+ * par le simulateur. Le décalage est un simple hachage de la graine : il ne
+ * consomme aucun flux aléatoire, si bien qu'aucun tirage n'est déplacé, et
+ * une même graine redonne le même ordre.
+ */
+export function seedOffset(seed: string, salt: string, modulo: number): number {
+  let h = 2166136261
+  for (const ch of `${salt}:${seed}`) {
+    h ^= ch.charCodeAt(0)
+    h = Math.imul(h, 16777619)
+  }
+  return modulo > 0 ? (h >>> 0) % modulo : 0
+}

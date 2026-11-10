@@ -540,7 +540,7 @@ describe('relance : la même question, après l’avoir vécue', () => {
    * qui échoue au hasard finit par ne plus être lu.
    */
   beforeEach(() => {
-    window.history.replaceState(null, '', '/?graine=test2345')
+    window.history.replaceState(null, '', '/?graine=abcd2345')
     localStorage.clear()
     sessionStorage.clear()
   })

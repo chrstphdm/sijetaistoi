@@ -30,7 +30,7 @@ import {
 import { evaluate, type Condition } from '../src/core/conditions.ts'
 import { apply, initialState, MONTHS_PER_ACT, ACT_COUNT, type Command, type GameState } from '../src/core/game.ts'
 import { euros, formatEuros, type Cents } from '../src/core/money.ts'
-import { advance, createRandom, type RandomSource, type Stream } from '../src/core/rng.ts'
+import { advance, createRandom, seedOffset, type RandomSource, type Stream } from '../src/core/rng.ts'
 import {
   activeEffectsFor, applyEffectsToLines, applyRule, inForceNow, perceptiblyConcerned, rulesInForce,
   type Rule, type WorldState,
@@ -89,9 +89,11 @@ function linesFor(character: CharacterT, world: WorldState, recurring: readonly 
 
 /** Événements éligibles ET porteurs d'un enjeu : le filtre de `pickEvent`. */
 function eligibleEvents(
-  used: readonly string[], character: CharacterT, lines: readonly BudgetLine[],
+  used: readonly string[], character: CharacterT, lines: readonly BudgetLine[], monthIndex: number,
 ): LifeEventT[] {
-  const traits = traitsFor(character)
+  // Comme `pickEvent` : le mois et l'année sont fournis aux conditions.
+  const m = (2 + monthIndex) % 12
+  const traits = { ...traitsFor(character), month: m + 1, year: 2027 + Math.floor((2 + monthIndex) / 12) }
   return events.filter(
     (e) =>
       !used.includes(e.id) &&
@@ -112,11 +114,18 @@ function callbackDelta(target: CharacterT, world: WorldState): { effects: number
 function buildCallback(target: CharacterT, state: GameState, stream: Stream): Selection {
   const inForce = rulesInForce(state.world)
   if (inForce.length === 0) return { kind: 'none_available' }
-  const effects = inForceNow(activeEffectsFor(state.world, traitsFor(target), optionLookup))
-  if (effects.length === 0) return { kind: 'none_available' }
+  const all = inForceNow(activeEffectsFor(state.world, traitsFor(target), optionLookup))
+  if (all.length === 0) return { kind: 'none_available' }
+  // Comme `buildCallback` : la règle citée est celle dont on chiffre l'effet.
   const before = computeMonthlyBudget(toBudgetLines(target))
-  const after = computeMonthlyBudget(applyEffectsToLines(toBudgetLines(target), effects))
-  const rule = inForce[inForce.length - 1]!
+  const byRule = [...inForce].reverse()
+    .map((r) => {
+      const effects = all.filter((e) => e.rule.id === r.id)
+      return { rule: r, effects, after: computeMonthlyBudget(applyEffectsToLines(toBudgetLines(target), effects)) }
+    })
+    .filter((x) => x.effects.length > 0)
+  if (byRule.length === 0) return { kind: 'none_available' }
+  const { rule, after } = byRule.find((x) => x.after.slackCents !== before.slackCents) ?? byRule[0]!
   const candidate: CallbackCandidate = {
     rule,
     characterId: target.id,
@@ -314,6 +323,7 @@ export function playGame(seed: string, policy: PolicyId): GameRecord {
   }
 
   let usedEvents: string[] = []
+  let monthIndex = 0
   let reformIndex = 0
   const months: MonthRecord[] = []
   const callbacks: CallbackRecord[] = []
@@ -327,7 +337,7 @@ export function playGame(seed: string, policy: PolicyId): GameRecord {
 
     // startMonths : état à jour.
     let pending: LifeEventT | null =
-      random.events.pick(eligibleEvents(usedEvents, character, linesFor(character, state.world, recurring))) ?? null
+      random.events.pick(eligibleEvents(usedEvents, character, linesFor(character, state.world, recurring), monthIndex)) ?? null
     const target = MONTHS_PER_ACT[state.act - 1] ?? 2
     for (let done = 0; done < target; done++) {
       const event = pending
@@ -361,15 +371,19 @@ export function playGame(seed: string, policy: PolicyId): GameRecord {
       } else {
         months.push({ act: state.act, characterId: character.id, eventId: null, repeated: false, consecutive: false, blocked: false })
       }
-      // Mois suivant, tiré avec l'état du rendu courant : voir l'en-tête.
+      monthIndex += 1
+      // Mois suivant, tiré avec l'état du rendu courant, l'événement qui vient
+      // d'être vécu exclu (comme `resolveEvent` → `pickEvent(justUsed)`).
       if (done + 1 < target)
-        pending = random.events.pick(eligibleEvents(usedBefore, character, linesBefore)) ?? null
+        pending = random.events.pick(
+          eligibleEvents(event ? [...usedBefore, event.id] : usedBefore, character, linesBefore, monthIndex),
+        ) ?? null
     }
 
     // La relance et le jugement ne consomment aucun aléatoire et n'agissent
     // sur aucun tirage : ils sont omis.
     const reform = reformOrder[Math.min(reformIndex, reformOrder.length - 1)]!
-    const displayOrder = rotationOrder(reform.options.length, state.act)
+    const displayOrder = rotationOrder(reform.options.length, state.act + seedOffset(seed, 'vote', reform.options.length))
     const optionIndex = voteFor(policy, { reform, displayOrder, state, seed, random, character, player })
     const option = reform.options[optionIndex]!
     votes.push({ reformId: reform.id, optionId: option.id, position: displayOrder.indexOf(optionIndex) })
@@ -383,7 +397,7 @@ export function playGame(seed: string, policy: PolicyId): GameRecord {
     })
 
     // Écran d'impact : `screenIndex={state.act}`.
-    const order = rotationOrder(characters.length, state.act)
+    const order = rotationOrder(characters.length, state.act + seedOffset(seed, 'impact', characters.length))
     playedImpactPositions.push(order.indexOf(characters.indexOf(character)))
 
     // nextAct
@@ -575,7 +589,7 @@ export function chi2Critical(df: number): number {
  */
 export function eventCapacity(): Record<string, number> {
   return Object.fromEntries(
-    characters.map((c) => [c.id, eligibleEvents([], c, linesFor(c, { rules: [], hypothesisSetId: 'sensibilite-faible' }, [])).length]),
+    characters.map((c) => [c.id, eligibleEvents([], c, linesFor(c, { rules: [], hypothesisSetId: 'sensibilite-faible' }, []), 0).length]),
   )
 }
 
@@ -670,7 +684,7 @@ export function formatReport(reports: readonly PolicyReport[]): string {
     return pct(r.votePositions[c.slice(-1)] ?? 0, total)
   }, 'politique'))
   const optionsLen = reforms[0]!.options.length
-  out.push(`  Ordre d'affichage du vote, rotationOrder(${optionsLen}, acte) — identique dans TOUTES les parties :`)
+  out.push(`  Ordre d'affichage du vote, rotationOrder(${optionsLen}, acte), avant le décalage propre à chaque graine :`)
   for (let act = 1; act <= ACT_COUNT; act++) {
     const order = rotationOrder(optionsLen, act)
     out.push(`    acte ${act} : ${order.map((i) => (i === 0 ? 'statu-quo' : i === optionsLen - 1 ? 'contester' : `option ${i}`)).join(' · ')}`)
@@ -732,14 +746,21 @@ export function formatReport(reports: readonly PolicyReport[]): string {
   out.push('  Rappels dont la règle citée, seule, n’a pas le signe de l’effet annoncé (qui cumule toutes les règles) :')
   out.push('  ' + reports.map((r) => `${r.policy} ${pct(r.citedRuleSignMismatch, r.emittedCallbacks)}`).join(', '))
 
-  out.push('\n8. ÉQUILIBRE POSITIONNEL — écran « Le choix vu par chacun » (rotationOrder, screenIndex = acte)')
-  const pos = impactScreenPositions()
-  out.push(`  Positions occupées sur les ${ACT_COUNT} écrans d’une partie (identiques dans toutes les parties) :`)
-  out.push(table(ids, ['acte I', 'acte II', 'acte III'], (id, c) => String(pos[id]![['acte I', 'acte II', 'acte III'].indexOf(c)]), 'personnage'))
-  const firsts = ids.filter((id) => pos[id]!.includes(1))
-  const neverTop = ids.filter((id) => pos[id]!.every((p) => p > Math.ceil(ids.length / 2)))
-  out.push(`  En tête au moins une fois : ${firsts.join(', ')} (${firsts.length}/${ids.length}).`)
-  out.push(`  Toujours dans la moitié basse : ${neverTop.join(', ') || 'aucun'}.`)
+  out.push('\n8. ÉQUILIBRE POSITIONNEL — écran « Le choix vu par chacun » (rotation décalée par la graine)')
+  // Sur autant de graines que de parties simulées : part des écrans où chaque
+  // personnage ouvre la liste, et part où il la ferme.
+  const heads: Record<string, number> = {}
+  const tails: Record<string, number> = {}
+  for (let k = 0; k < runs; k++) {
+    for (let act = 1; act <= ACT_COUNT; act++) {
+      const order = rotationOrder(characters.length, act + seedOffset(`pos-${k}`, 'impact', characters.length))
+      heads[characters[order[0]!]!.id] = (heads[characters[order[0]!]!.id] ?? 0) + 1
+      tails[characters[order[order.length - 1]!]!.id] = (tails[characters[order[order.length - 1]!]!.id] ?? 0) + 1
+    }
+  }
+  out.push(table(ids, ['en tête', 'en dernier'], (id, c) =>
+    pct((c === 'en tête' ? heads[id] : tails[id]) ?? 0, runs * ACT_COUNT), 'personnage'))
+  out.push(`  attendu : ${pct(1, ids.length)} pour chacun.`)
   out.push('  Position du personnage incarné sur l’écran de son acte (1 = en tête) :')
   const positions = Array.from({ length: ids.length }, (_, i) => String(i + 1))
   const mean = (r: PolicyReport) =>

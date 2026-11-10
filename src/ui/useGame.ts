@@ -218,14 +218,28 @@ export function useGame(seed: string, setup: Setup = EMPTY_SETUP) {
   }, [monthsDone, state.act])
 
   /* ----------------------------------------------------- événements */
-  const pickEvent = useCallback((): LifeEventT | null => {
+  /*
+   * `justUsed` : l'événement que l'on vient de résoudre. Appelée depuis
+   * `resolveEvent`, cette fonction voit encore l'état d'AVANT la mise à jour
+   * — `usedEvents` ne contient pas l'événement du mois écoulé — et le même
+   * événement revenait le mois suivant dans 13,8 % des mois et 78 % des
+   * parties. Relevé par le simulateur (scripts/simulate.ts).
+   *
+   * Le mois et l'année sont fournis aux conditions : le vocabulaire les
+   * déclare « fournis par le moteur », mais personne ne les fournissait, et
+   * le voyage scolaire — réservé aux mois de mars à mai — n'apparaissait
+   * jamais.
+   */
+  const pickEvent = useCallback((justUsed: readonly string[] = []): LifeEventT | null => {
+    const m = (2 + monthIndex.current) % 12
+    const context = { ...traits, month: m + 1, year: 2027 + Math.floor((2 + monthIndex.current) / 12) }
     // Écartés aussi : ceux qui, chiffrés sur CETTE situation, ne mettent
     // rien en jeu ou ne laissent plus de choix.
     const eligible = events.filter(
       (e) =>
-        !usedEvents.includes(e.id) &&
-        evaluate(e.eligibility as Condition, traits) &&
-        isMeaningful(resolveFor(e, lines, traits)),
+        !usedEvents.includes(e.id) && !justUsed.includes(e.id) &&
+        evaluate(e.eligibility as Condition, context) &&
+        isMeaningful(resolveFor(e, lines, context)),
     )
     return random.events.pick(eligible) ?? null
   }, [usedEvents, traits, lines, random])
@@ -237,12 +251,29 @@ export function useGame(seed: string, setup: Setup = EMPTY_SETUP) {
       if (inForce.length === 0) return { kind: 'none_available' }
       // Le rappel parle du mois en cours — « son reste a vivre passe de X a
       // Y » — donc des seuls effets deja en vigueur.
-      const effects = inForceNow(activeEffectsFor(state.world, traitsOf(target), optionLookup))
-      if (effects.length === 0) return { kind: 'none_available' }
+      const all = inForceNow(activeEffectsFor(state.world, traitsOf(target), optionLookup))
+      if (all.length === 0) return { kind: 'none_available' }
 
+      /*
+       * LA RÈGLE CITÉE EST CELLE DONT ON CHIFFRE L'EFFET.
+       *
+       * Le rappel citait la dernière règle votée, mais chiffrait l'effet de
+       * TOUTES les règles en vigueur : dans 8 à 14 % des rappels, la règle
+       * citée allait seule dans le sens inverse du montant affiché. On cite
+       * maintenant la plus récente qui touche réellement ce personnage, et le
+       * montant ne porte que sur elle.
+       */
       const before = computeMonthlyBudget(toBudgetLines(target))
-      const after = computeMonthlyBudget(applyEffectsToLines(toBudgetLines(target), effects))
-      const rule = inForce[inForce.length - 1]!
+      const byRule = [...inForce].reverse()
+        .map((r) => {
+          const effects = all.filter((e) => e.rule.id === r.id)
+          const after = computeMonthlyBudget(applyEffectsToLines(toBudgetLines(target), effects))
+          return { rule: r, effects, after }
+        })
+        .filter((x) => x.effects.length > 0)
+      if (byRule.length === 0) return { kind: 'none_available' }
+      const chosen = byRule.find((x) => x.after.slackCents !== before.slackCents) ?? byRule[0]!
+      const { rule, effects, after } = chosen
 
       const candidate: CallbackCandidate = {
         rule,
@@ -288,7 +319,7 @@ export function useGame(seed: string, setup: Setup = EMPTY_SETUP) {
     const target = MONTHS_PER_ACT[state.act - 1] ?? 2
     if (done >= target)
       setStep(pendingRelaunch ? { kind: 'relaunch', questionId: pendingRelaunch } : { kind: 'reform' })
-    else setStep({ kind: 'month', event: pickEvent() })
+    else setStep({ kind: 'month', event: pickEvent(event ? [event.id] : []) })
   }
 
   const vote = (option: ReformOptionT) => {
