@@ -44,11 +44,11 @@
         "code": "prestations",
         "group": "resource",
         "value": {
-          "amount": 790,
+          "amount": 954,
           "unit": "EUR_month",
           "nature": "hypothesis",
           "hypothesisId": "prestations-calibrage",
-          "note": "Allocations familiales pour trois enfants, complément familial et aide au logement, agrégés."
+          "note": "Allocations familiales pour trois enfants, complément familial et aide au logement, calculé avec OpenFisca-France, législation de juin 2025 (voir scripts/openfisca). Elle aurait droit en plus à l'allocation de soutien familial, environ 600 € par mois, puisque la pension fixée par le juge n'est jamais versée : elle ne la demande pas. Ce non-recours fait partie de sa situation."
         }
       },
       {

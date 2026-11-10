@@ -4,6 +4,7 @@ import { durability, setDurability } from '../persistence.ts'
 import { BalanceIcon, HeroCast, LookArt, TheoryIcon, TrustIcon } from './HomeArt.tsx'
 import { REPO_URL } from '../links.ts'
 import { useReveal } from '../useReveal.ts'
+import { DISCLAIMER } from './LegalScreen.tsx'
 import { LoopDiagram } from './LoopDiagram.tsx'
 import { ScaleDemo } from './ScaleDemo.tsx'
 import { Seal, sealHue } from './Seal.tsx'
@@ -45,9 +46,10 @@ const capitalised = (w: string) => w.charAt(0).toUpperCase() + w.slice(1)
 
 const at = (i: number) => ({ '--i': i }) as CSSProperties
 
-export function HomeScreen({ onStart, onMethod }: {
+export function HomeScreen({ onStart, onMethod, onLegal }: {
   readonly onStart: () => void
   readonly onMethod: () => void
+  readonly onLegal?: () => void
 }) {
   const i = bundle.intro
   const principles = bundle.principles.principles
@@ -109,6 +111,7 @@ export function HomeScreen({ onStart, onMethod }: {
               <span>{checks} règles de neutralité vérifiées</span>
               <span>{bundle.sources.length} sources publiques</span>
               <span>{biases} biais déclarés</span>
+              <span>Aides et impôts vérifiés avec OpenFisca</span>
               <a href="#confiance">Comment le jeu se garde de te convaincre&nbsp;↓</a>
             </p>
           </div>
@@ -171,6 +174,23 @@ export function HomeScreen({ onStart, onMethod }: {
               <p>
                 Le cadrage des questions, le choix des sujets, la mesure affichée en premier… Ils
                 sont publiés, pour pouvoir être contestés.
+              </p>
+            </li>
+            <li className="trust__card trust__card--law" style={at(4)}>
+              <span className="trust__icon"><TrustIcon id="law" /></span>
+              <p className="trust__figure">
+                <b className="trust__brand">OpenFisca</b> aides et impôts recalculés selon la loi
+              </p>
+              <p>
+                Les prestations et l’impôt de chaque personnage sont vérifiés à chaque mise en ligne
+                avec OpenFisca-France, le modèle libre de la législation socio-fiscale française.
+                Un écart non expliqué bloque la publication. Les effets des décisions, eux, restent
+                des estimations&nbsp;: les calculer ainsi est l’étape suivante.
+              </p>
+              <p className="trust__orgs">
+                <a href="https://openfisca.org/fr/" rel="noopener noreferrer">openfisca.org&nbsp;↗</a>
+                {' · '}
+                <a href={`${REPO_URL}/blob/main/scripts/openfisca/dernier-audit.md`} rel="noopener noreferrer">le dernier audit&nbsp;↗</a>
               </p>
             </li>
           </ul>
@@ -424,6 +444,12 @@ export function HomeScreen({ onStart, onMethod }: {
               {i.methodLabel}
             </button>
           </p>
+          <p className="disclaimer">{DISCLAIMER}</p>
+          {onLegal && (
+            <p>
+              <button type="button" className="timeline__toggle" onClick={onLegal}>Mentions légales</button>
+            </p>
+          )}
         </section>
       </main>
     </div>
@@ -450,6 +476,7 @@ export function ContractScreen({ onStart, hypothesisSet }: {
       </ol>
 
       <p className="provenance">{i.fiction}</p>
+      <p className="provenance">{DISCLAIMER}</p>
       <p className="provenance">
         Cette partie utilise le jeu d’hypothèses «&nbsp;{hypothesisSet}&nbsp;», tiré au sort.
         Les points où les études disponibles ne convergent pas sont signalés à mesure.

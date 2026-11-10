@@ -87,3 +87,16 @@ ici pour pouvoir être invoquées en revue, pas pour décorer.
   publiquement, jamais un classement.
 - **F4** Les absents du corpus comptent autant que les présents. Leur absence est
   documentée dans la note de méthode.
+
+## G — Publication
+
+- **G1** Le jeu ne publie aucun résultat agrégé sur les opinions de ses joueurs : ni
+  pourcentage, ni tendance, ni « ce que pensent les joueurs ». Les réponses restent sur
+  l'appareil de chacun. Publier un tel résultat le ferait lire comme un sondage, ce qu'il
+  n'est pas, et pourrait relever de la loi du 19 juillet 1977 sur les sondages.
+- **G2** Aucun parti, aucun candidat, aucun programme n'est nommé, ni dans le contenu, ni
+  sur les pages qui le présentent. Le critère de choix des sujets — un débat réellement
+  divisé — est écrit sur la page méthode.
+- **G3** Les instances qui posent les questions sont fictives, et l'avertissement du site
+  le dit. Un organisme réel n'est cité que comme source de chiffres.
+

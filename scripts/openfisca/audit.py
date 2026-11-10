@@ -22,7 +22,7 @@ fiches ne portent pas) :
   - L'âge des enfants n'est pas toujours connu : 8 ans par défaut.
   - La commune est celle de l'histoire du personnage (table ci-dessous), et
     le loyer est la ligne « logement », charges comprises.
-  - Les revenus sont supposés stables sur les vingt-quatre mois précédents.
+  - Les revenus sont supposés stables sur les trois années précédentes.
 
 Usage :
     python3 -m venv .venv && .venv/bin/pip install -r scripts/openfisca/requirements.txt
@@ -69,7 +69,8 @@ TENURE = {
     'housed': 'loge_gratuitement',
 }
 
-MONTHS = [f'{y}-{m:02d}' for y in (YEAR - 1, YEAR) for m in range(1, 13)]
+# Trois années : les prestations familiales se calculent sur les revenus de N-2.
+MONTHS = [f'{y}-{m:02d}' for y in (YEAR - 2, YEAR - 1, YEAR) for m in range(1, 13)]
 
 
 def monthly(value):
@@ -112,6 +113,8 @@ def situation(c):
             individus[p]['rpns_autres_revenus'] = dict(years)
 
     p0 = individus[persons[0]]
+    if lines.get('pension-alimentaire'):
+        p0['pensions_alimentaires_percues'] = monthly(lines['pension-alimentaire'])
     if lines.get('revenu-capital'):
         # Loyers et intérêts : pris en compte dans les ressources des minima.
         p0['revenus_locatifs'] = monthly(lines['revenu-capital'])
@@ -159,6 +162,7 @@ def compute(tbs, c):
         'prime_activite': fam('ppa'),
         'allocations_familiales': fam('af'),
         'complement_familial': fam('cf'),
+        'soutien_familial': fam('asf'),
         'rsa': fam('rsa'),
     }
     try:
@@ -172,7 +176,27 @@ def compute(tbs, c):
     return out
 
 
+# Écarts connus, et pourquoi : ce n'est pas une erreur de la fiche, c'est une
+# limite de ce que le calcul reçoit. Un écart nouveau, lui, fait échouer --check.
+KNOWN = {
+    ('yanis', 'prestations'): "la bourse sur critères sociaux n'est pas calculée par OpenFisca",
+    ('berangere', 'impots'): "la ligne comprend les prélèvements sociaux et l'impôt sur les revenus du "
+                             "patrimoine, qui ne sont pas transmis au calcul",
+    ('thomas', 'impots'): "la ligne porte ses cotisations sociales provisionnelles, pas l'impôt sur le revenu",
+    ('nadia', 'prestations'): "elle ne demande pas l'allocation de soutien familial à laquelle elle aurait droit : "
+                              "ce non-recours est déclaré dans sa fiche",
+}
+
+TOLERANCE_EUROS = 20
+TOLERANCE_SHARE = 0.15
+
+
+def off(fiche, calcul):
+    return abs(calcul - fiche) > max(TOLERANCE_EUROS, TOLERANCE_SHARE * max(abs(fiche), abs(calcul)))
+
+
 def main():
+    check = '--check' in sys.argv
     tbs = FranceTaxBenefitSystem()
     rows = []
     for path in sorted(glob.glob(os.path.join(ROOT, 'content', 'characters', '*.json'))):
@@ -198,6 +222,26 @@ def main():
         imp_s = f'{imp:.0f}' if isinstance(imp, float) else imp
         print(f'| {c["identity"]["firstName"]} | {fiche:.0f} | {benefits:.0f} | {benefits - fiche:+.0f} | '
               f'{lines.get("impots", 0):.0f} | {imp_s} | {detail or "—"} |')
+
+    failures = []
+    for c, lines, r, benefits in rows:
+        pairs = [('prestations', lines.get('prestations', 0), benefits)]
+        if isinstance(r['impot_mensuel'], float):
+            pairs.append(('impots', lines.get('impots', 0), r['impot_mensuel']))
+        for what, fiche, calcul in pairs:
+            if not off(fiche, calcul):
+                continue
+            reason = KNOWN.get((c['id'], what))
+            if reason:
+                print(f'\n- {c["identity"]["firstName"]}, {what} : écart connu — {reason}.')
+            else:
+                failures.append(f'{c["identity"]["firstName"]}, {what} : fiche {fiche:.0f} €, calcul {calcul:.0f} €')
+    if failures:
+        print('\n## Écarts non expliqués\n')
+        for f in failures:
+            print(f'- {f}')
+    if check and failures:
+        sys.exit(1)
 
 
 if __name__ == '__main__':

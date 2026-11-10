@@ -211,6 +211,14 @@ const TRUST_ICONS: Record<string, ReactNode> = {
       <circle cx="13" cy="41" r="2.5" /><circle cx="35" cy="41" r="2.5" />
     </Icon>
   ),
+  // Une calculette : les montants recalculés selon la loi.
+  law: (
+    <Icon>
+      <rect x="10" y="5" width="28" height="38" rx="4" />
+      <rect x="15" y="10" width="18" height="8" rx="1.5" />
+      <path d="M16 25h2M23 25h2M30 25h2M16 31h2M23 31h2M30 31h2M16 37h2M23 37h9" />
+    </Icon>
+  ),
   // Une loupe : ce qu'on n'a pas su éviter, mis en évidence.
   biases: (
     <Icon>

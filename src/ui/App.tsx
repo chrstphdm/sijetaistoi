@@ -9,6 +9,7 @@ import { CharacterIntro } from './components/CharacterIntro.tsx'
 import { ContractScreen, HomeScreen } from './components/HomeScreen.tsx'
 import { GameRail } from './components/GameRail.tsx'
 import { MethodScreen } from './components/MethodScreen.tsx'
+import { LegalScreen } from './components/LegalScreen.tsx'
 
 /**
  * L'Atelier n'existe QU'EN DÉVELOPPEMENT.
@@ -98,6 +99,7 @@ export function App() {
   const [kpi, setKpi] = useState<KpiAnswer | null>(null)
   const [showOthers, setShowOthers] = useState(false)
   const [showMethod, setShowMethod] = useState(false)
+  const [showLegal, setShowLegal] = useState(false)
   const [hash, setHash] = useState(() =>
     typeof window === 'undefined' ? '' : window.location.hash,
   )
@@ -129,6 +131,8 @@ export function App() {
   useScreenChange(
     showSetup
       ? { key: 'preparation', title: 'Préparer une partie' }
+      : showLegal
+        ? { key: 'mentions', title: 'Mentions légales' }
       : showMethod
         ? { key: 'methode', title: 'Comment ce jeu est construit' }
         : {
@@ -170,6 +174,17 @@ export function App() {
     )
   }
 
+  if (showLegal) {
+    return (
+      <div className="layout layout--single" id="haut">
+        <SkipLink />
+        <main className="layout__main" id="contenu" tabIndex={-1}>
+          <LegalScreen onBack={() => setShowLegal(false)} />
+        </main>
+      </div>
+    )
+  }
+
   // La page méthode remplace le jeu plutôt que de s'y superposer : c'est un
   // document qu'on lit, pas une infobulle.
   if (showMethod) {
@@ -177,7 +192,7 @@ export function App() {
       <div className="layout layout--single" id="haut">
         <SkipLink />
         <main className="layout__main" id="contenu" tabIndex={-1}>
-          <MethodScreen onBack={() => setShowMethod(false)} />
+          <MethodScreen onBack={() => setShowMethod(false)} onLegal={() => setShowLegal(true)} />
         </main>
         <BackToTop />
       </div>
@@ -189,7 +204,7 @@ export function App() {
       <div className="layout layout--single" id="haut">
         <SkipLink />
         <main className="layout__main" id="contenu" tabIndex={-1}>
-          <HomeScreen onStart={actions.toContract} onMethod={() => setShowMethod(true)} />
+          <HomeScreen onStart={actions.toContract} onMethod={() => setShowMethod(true)} onLegal={() => setShowLegal(true)} />
         </main>
         <BackToTop />
       </div>
@@ -453,6 +468,11 @@ export function App() {
         <p>
           <button type="button" className="timeline__toggle" onClick={() => setShowMethod(true)}>
             Comment ce jeu est construit, et ce qu’il ne parvient pas à éviter
+          </button>
+        </p>
+        <p>
+          <button type="button" className="timeline__toggle" onClick={() => setShowLegal(true)}>
+            Mentions légales
           </button>
         </p>
         {STUDIO_AVAILABLE && (

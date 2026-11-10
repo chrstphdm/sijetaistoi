@@ -50,6 +50,17 @@
         }
       },
       {
+        "code": "prestations",
+        "group": "resource",
+        "value": {
+          "amount": 228,
+          "unit": "EUR_month",
+          "nature": "hypothesis",
+          "hypothesisId": "prestations-calibrage",
+          "note": "Allocations familiales pour deux adolescents, majorées à partir de quatorze ans ; calculé avec OpenFisca-France, législation de juin 2025 (voir scripts/openfisca). Elles manquaient au relevé : elles sont versées dès deux enfants, sous un plafond de ressources qui module leur montant."
+        }
+      },
+      {
         "code": "logement",
         "group": "constrained",
         "value": {
@@ -134,6 +145,16 @@
           "amount": 150,
           "unit": "EUR_month",
           "nature": "fiction"
+        }
+      },
+      {
+        "code": "impots",
+        "group": "levy",
+        "value": {
+          "amount": 353,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Impôt sur le revenu du foyer, calculé avec OpenFisca-France, législation de juin 2025 (voir scripts/openfisca). Il manquait au relevé."
         }
       }
     ]

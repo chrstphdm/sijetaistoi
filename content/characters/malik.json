@@ -42,11 +42,11 @@
         "code": "prestations",
         "group": "resource",
         "value": {
-          "amount": 105,
+          "amount": 206,
           "unit": "EUR_month",
           "nature": "hypothesis",
           "hypothesisId": "prestations-calibrage",
-          "note": "Prime d'activité, recalculée chaque trimestre sur les trois mois précédents. Avec des missions irrégulières, elle varie d'un trimestre à l'autre sans qu'il sache à l'avance de combien."
+          "note": "Prime d'activité, calculé avec OpenFisca-France, législation de juin 2025 (voir scripts/openfisca), sur un salaire supposé régulier. Elle est recalculée chaque trimestre sur les trois mois précédents : avec des missions irrégulières, elle varie d'un trimestre à l'autre sans qu'il sache à l'avance de combien."
         }
       },
       {

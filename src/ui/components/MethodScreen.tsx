@@ -77,7 +77,7 @@ const DeviceIcon = () => (
   </Icon>
 )
 
-export function MethodScreen({ onBack }: { readonly onBack?: () => void }) {
+export function MethodScreen({ onBack, onLegal }: { readonly onBack?: () => void; readonly onLegal?: () => void }) {
   const m = bundle.method
   const debated = bundle.hypotheses.filter((h) => h.status !== 'consensual')
   const section = (id: string) => m.sections.find((s) => s.id === id)
@@ -358,6 +358,11 @@ export function MethodScreen({ onBack }: { readonly onBack?: () => void }) {
 
         <section className="band band--close">
           <p className="method__closing">{m.closing}</p>
+          {onLegal && (
+            <p>
+              <button type="button" className="timeline__toggle" onClick={onLegal}>Mentions légales</button>
+            </p>
+          )}
           {onBack && (
             <p className="hero__actions">
               <button type="button" className="home__start" onClick={onBack}>

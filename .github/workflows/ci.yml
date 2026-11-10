@@ -60,3 +60,20 @@ jobs:
           name: rapport-playwright
           path: playwright-report/
           retention-days: 7
+
+  # Les prestations et l'impôt des fiches sont saisis à la main. Cette étape
+  # les recalcule selon la loi avec OpenFisca-France, et échoue si un écart
+  # apparaît qui n'est ni corrigé ni expliqué dans scripts/openfisca/audit.py.
+  audit-openfisca:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: scripts/openfisca/requirements.txt
+      - run: pip install -r scripts/openfisca/requirements.txt
+
+      - name: Prestations et impôt des fiches, contre le calcul réglementaire
+        run: python scripts/openfisca/audit.py --check

@@ -7,7 +7,7 @@
     "firstName": "Rachid",
     "age": 39,
     "identityLine": "ingénieur informatique, en couple, deux enfants de 4 et 7 ans, locataire à Montreuil",
-    "incomeDecile": 5,
+    "incomeDecile": 6,
     "calibrationSourceIds": [
       "olap-loyers-idf",
       "cnaf-cout-garde",
@@ -114,9 +114,10 @@
         "code": "impots",
         "group": "levy",
         "value": {
-          "amount": 620,
+          "amount": 168,
           "unit": "EUR_month",
-          "nature": "fiction"
+          "nature": "fiction",
+          "note": "Impôt sur le revenu du foyer, calculé avec OpenFisca-France, législation de juin 2025 (voir scripts/openfisca). Le relevé portait 620 € : l'impôt était compté une seconde fois alors que les salaires sont déjà nets du prélèvement à la source."
         }
       },
       {
@@ -204,7 +205,7 @@
     }
   ],
   "narrative": {
-    "story": "Rachid est arrivé à Montreuil pour six mois, le temps d'une mission, il y a quatorze ans. Le T4 a été trouvé grâce à un collègue qui partait, à un prix qui semblait déjà élevé et qui paraît aujourd'hui une aubaine. Son seul salaire dépasse de loin le salaire médian. Mais à quatre, avec ce loyer, leur niveau de vie est exactement celui du milieu du pays, et ils n'ont pas de patrimoine. Les deux faits sont vrais en même temps, et c'est la chose la plus difficile à faire entendre autour d'eux : à sa famille, qui le croit riche, comme à ses collègues propriétaires, qui le croient imprévoyant."
+    "story": "Rachid est arrivé à Montreuil pour six mois, le temps d'une mission, il y a quatorze ans. Le T4 a été trouvé grâce à un collègue qui partait, à un prix qui semblait déjà élevé et qui paraît aujourd'hui une aubaine. Son seul salaire dépasse de loin le salaire médian. Mais à quatre, avec ce loyer, leur niveau de vie dépasse à peine celui du milieu du pays, et ils n'ont pas de patrimoine. Les deux faits sont vrais en même temps, et c'est la chose la plus difficile à faire entendre autour d'eux : à sa famille, qui le croit riche, comme à ses collègues propriétaires, qui le croient imprévoyant."
   },
   "lineOverrides": []
 }

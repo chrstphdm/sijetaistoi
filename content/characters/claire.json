@@ -7,7 +7,7 @@
     "firstName": "Claire",
     "age": 34,
     "identityLine": "aide-soignante en Ehpad, une fille de 6 ans, locataire à Amiens",
-    "incomeDecile": 2,
+    "incomeDecile": 3,
     "calibrationSourceIds": [
       "drees-salaires-soin",
       "anil-loyers",
@@ -43,10 +43,11 @@
         "code": "prestations",
         "group": "resource",
         "value": {
-          "amount": 430,
+          "amount": 623,
           "unit": "EUR_month",
           "nature": "hypothesis",
-          "hypothesisId": "prestations-calibrage"
+          "hypothesisId": "prestations-calibrage",
+          "note": "Aide au logement, prime d'activité, et allocation de soutien familial différentielle : la pension versée par le père est inférieure à son montant, et la Caf verse l'écart. Montants calculé avec OpenFisca-France, législation de juin 2025 (voir scripts/openfisca)."
         }
       },
       {

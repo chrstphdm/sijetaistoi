@@ -2466,3 +2466,21 @@ fieldset:has(input[type='radio']) > label:has(input:focus-visible) {
   .standing__marker, .reveal.is-in .ladder__curve, .reveal.is-in .ladder__area, .reveal.is-in .ladder__mark { animation: none !important; }
 }
 .standing a { color: var(--perspective-a); text-underline-offset: 2px; }
+
+/* Avertissement de bas de page, sur fond sombre. */
+.band--close .disclaimer { color: var(--paper-sunk); font: 400 13px/1.55 var(--font-ui); max-width: 70ch; margin-top: var(--space-6); }
+.band--close .timeline__toggle { font: 400 13px var(--font-ui); }
+.legal h2 { font-size: 20px; margin-top: var(--space-6); }
+.legal a { color: var(--perspective-a); }
+.trust__figure .trust__brand { font-size: clamp(28px, 3vw, 36px); letter-spacing: -0.01em; }
+.trust__card--law { border-color: color-mix(in oklab, var(--perspective-a) 45%, var(--rule-hair)); }
+.trust__orgs a { color: var(--perspective-a); }
+/* OpenFisca : un bandeau pleine largeur sous les quatre garanties. */
+.trust__card--law {
+  grid-column: 1 / -1;
+  display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: var(--space-6); align-items: start;
+  background: linear-gradient(120deg, var(--paper-raised), var(--tint-a));
+}
+.trust__card--law > .trust__icon { grid-row: 1 / span 3; }
+.trust__card--law > p { max-width: 70ch; }
+@media (max-width: 640px) { .trust__card--law { grid-template-columns: minmax(0, 1fr); } .trust__card--law > .trust__icon { grid-row: auto; } }

@@ -7,7 +7,7 @@
     "firstName": "Lucie",
     "age": 31,
     "identityLine": "en invalidité depuis cinq ans, ancienne vendeuse, locataire du parc social à Clermont-Ferrand",
-    "incomeDecile": 1,
+    "incomeDecile": 2,
     "calibrationSourceIds": [
       "drees-minima-sociaux",
       "ancols-loyers-sociaux"
@@ -32,11 +32,11 @@
         "code": "prestations",
         "group": "resource",
         "value": {
-          "amount": 1040,
+          "amount": 1300,
           "unit": "EUR_month",
           "nature": "hypothesis",
           "hypothesisId": "prestations-calibrage",
-          "note": "Pension d'invalidité de catégorie 2, complément d'allocation aux adultes handicapés et aide au logement, agrégés. Le jeu ne calcule pas l'articulation exacte entre ces trois droits, qui est l'une des plus complexes du système."
+          "note": "Pension d'invalidité de catégorie 2 complétée par l'allocation aux adultes handicapés jusqu'à son montant plein, et aide au logement. Montants calculé avec OpenFisca-France, législation de juin 2025 (voir scripts/openfisca)."
         }
       },
       {
