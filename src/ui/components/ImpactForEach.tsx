@@ -2,10 +2,11 @@ import { computeMonthlyBudget } from '@/core/budget.ts'
 import { comparabilityMetrics, absorptionRegime, type Scale } from '@/core/impact.ts'
 import { formatMetric, formatRecurring, regimeSentence } from '@/core/phrasing.ts'
 import {
-  activeEffectsFor, applyEffectsToLines, inForceNow, startsAtYear, type WorldState,
+  activeEffectsFor, applyEffectsToLines, inForceNow, rulesInForce, startsAtYear, type WorldState,
 } from '@/core/world.ts'
 import { motionFor } from '@/motion/table.ts'
-import { optionLookup, toBudgetLines, toStocks, traitsOf } from '@/content/load.ts'
+import { optionLookup, reforms, toBudgetLines, toStocks, traitsOf } from '@/content/load.ts'
+import { useState } from 'react'
 import type { CharacterT } from '@/schemas/index.ts'
 import { Amount } from './Amount.tsx'
 import { Seal } from './Seal.tsx'
@@ -100,8 +101,23 @@ function Signed({ cents, metric }: { cents: number; metric: string }) {
   )
 }
 
-export function ImpactForEach({ characters, world, scale, onScaleChange, screenIndex }: Props) {
+export function ImpactForEach({ characters, world: fullWorld, scale, onScaleChange, screenIndex }: Props) {
   const order = rotationOrder(characters.length, screenIndex)
+
+  /*
+   * QUELLE DÉCISION A PROVOQUÉ QUOI.
+   *
+   * À partir du deuxième acte, cet écran additionnait toutes les règles en
+   * vigueur sans dire laquelle produisait quoi : on ne pouvait pas relier un
+   * effet à une décision. Par défaut, il montre maintenant la décision que
+   * le joueur vient de prendre, SEULE, et la nomme ; un sélecteur montre le
+   * cumul ; chaque rangée dépliée détaille la part de chaque règle.
+   */
+  const inForce = rulesInForce(fullWorld)
+  const latest = inForce[inForce.length - 1]
+  const [mode, setMode] = useState<'last' | 'all'>('last')
+  const only = (ruleId: string): WorldState => ({ ...fullWorld, rules: fullWorld.rules.filter((r) => r.id === ruleId) })
+  const world = mode === 'last' && latest ? only(latest.id) : fullWorld
 
   // Motion IDENTIQUE pour tous : calculee une fois, hors de la boucle.
   const motion = motionFor({ amountCents: 0, netIncomeCents: 1, slackCents: 1, scale: 'slack' })
@@ -154,8 +170,19 @@ export function ImpactForEach({ characters, world, scale, onScaleChange, screenI
     const signedMetric = (cents: number) =>
       Math.sign(cents) * comparabilityMetrics(cents, before)[scale]
 
+    // La part de chaque règle, calculée seule : c'est ce qui permet de dire
+    // quelle décision a provoqué quoi pour cette personne.
+    const byRule = inForce.length > 1
+      ? inForce.map((r) => {
+          const own = activeEffectsFor(only(r.id), traits, optionLookup)
+          const now = computeMonthlyBudget(applyEffectsToLines(toBudgetLines(c), inForceNow(own))).slackCents - before.slackCents
+          const total = computeMonthlyBudget(applyEffectsToLines(toBudgetLines(c), own)).slackCents - before.slackCents
+          return { rule: r, now, later: total - now }
+        })
+      : []
+
     return {
-      character: c, before, effects, reasons, delta, deltaDiffere, aPartirDe,
+      character: c, before, effects, reasons, delta, deltaDiffere, aPartirDe, byRule,
       now: signedMetric(delta), later: signedMetric(deltaDiffere),
     }
   })
@@ -166,6 +193,29 @@ export function ImpactForEach({ characters, world, scale, onScaleChange, screenI
   return (
     <section className="sheet" aria-labelledby="impact-title">
       <h2 id="impact-title">Le choix vu par chacun</h2>
+
+      {latest && (
+        <p className="impact-decision">
+          <span className="impact-decision__label">Ta décision</span>
+          <strong>{latest.shortLabel}</strong>
+          <span className="impact-decision__q">{reforms.find((r) => r.id === latest.reformId)?.descriptiveTitle}</span>
+        </p>
+      )}
+
+      {/* Le cumul n'a de sens qu'à partir de deux règles. */}
+      {inForce.length > 1 && (
+        <fieldset className="impact-mode">
+          <legend>Ce que montrent les barres</legend>
+          <label>
+            <input type="radio" name="impact-mode" checked={mode === 'last'} onChange={() => setMode('last')} />{' '}
+            cette décision seule
+          </label>
+          <label>
+            <input type="radio" name="impact-mode" checked={mode === 'all'} onChange={() => setMode('all')} />{' '}
+            toutes tes décisions ({inForce.length}), cumulées
+          </label>
+        </fieldset>
+      )}
 
       <p role="note">
         Changer d’échelle change la mesure, pas les faits. Aucune de ces quatre mesures n’est
@@ -276,6 +326,22 @@ export function ImpactForEach({ characters, world, scale, onScaleChange, screenI
                     Aucune des règles en vigueur ne le concerne. Ce n’est pas la même chose qu’un
                     effet nul&nbsp;: aucune ne s’applique à sa situation.
                   </div>
+                )}
+                {/* La part de chaque décision, calculée seule. */}
+                {r.byRule.length > 0 && (
+                  <ul className="impact__byrule" aria-label={`Part de chaque décision pour ${c.identity.firstName}`}>
+                    {r.byRule.map((b) => (
+                      <li key={b.rule.id}>
+                        <strong>{b.rule.shortLabel}</strong>{' : '}
+                        {b.now === 0 && b.later === 0 ? 'aucun effet' : (
+                          <>
+                            {b.now !== 0 ? <><Amount cents={b.now} nature="hypothesis" signed label={b.rule.shortLabel} /> par mois</> : 'rien maintenant'}
+                            {b.later !== 0 && <>, puis <Amount cents={b.later} nature="hypothesis" signed label={`${b.rule.shortLabel}, à terme`} /> à terme</>}
+                          </>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
                 )}
               </div>
               </details>

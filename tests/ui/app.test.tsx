@@ -629,3 +629,30 @@ describe('relance : la même question, après l’avoir vécue', () => {
     expect(within(answers).getByText(/est passée de/)).toBeTruthy()
   })
 })
+
+describe('le choix vu par chacun, au deuxième acte', () => {
+  beforeEach(() => {
+    window.history.replaceState(null, '', '/?graine=abcd2345')
+    localStorage.clear()
+    sessionStorage.clear()
+  })
+  afterEach(() => window.history.replaceState(null, '', '/'))
+
+  it('dit quelle décision a provoqué quoi, et sur qui', async () => {
+    // À partir de deux règles, l'écran additionnait tout sans dire laquelle
+    // produisait quoi. Il nomme maintenant la décision, la montre seule par
+    // défaut, et détaille la part de chacune dans chaque rangée.
+    const user = userEvent.setup()
+    render(<App />)
+    await enterGame(user)
+    await playAct(user)
+    await user.click(screen.getByRole('button', { name: /Quelques mois plus tard/ }))
+    await playAct(user)
+
+    const section = screen.getByRole('heading', { name: /vu par chacun/ }).closest('section')!
+    expect(within(section).getByText(/Ta décision/)).toBeTruthy()
+    expect(within(section).getByRole('radio', { name: /cette décision seule/ })).toHaveProperty('checked', true)
+    expect(within(section).getByRole('radio', { name: /toutes tes décisions \(2\)/ })).toBeTruthy()
+    expect(section.querySelectorAll('.impact__byrule').length).toBeGreaterThan(0)
+  })
+})
