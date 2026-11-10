@@ -2552,3 +2552,9 @@ body:has(.page) { padding-inline: 0; }
 .recall__option--mine { border: 2px solid var(--perspective-a); }
 .recall__mine { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--perspective-a); }
 .recall__wording { font-style: italic; }
+
+/* La taille des tuiles suit leur nombre : sur un anneau de rayon 41 %, la
+   place disponible par tuile est 2π × 41 % / n, soit environ 258 % / n.
+   Une largeur fixe de 17 % faisait se chevaucher les tuiles dès que le
+   corpus a dépassé treize personnages. */
+.hero-cast__tile { width: min(17%, calc(215% / var(--n-tiles, 13))); }
