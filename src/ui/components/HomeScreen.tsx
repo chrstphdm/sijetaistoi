@@ -10,6 +10,8 @@ import { ScaleDemo } from './ScaleDemo.tsx'
 import { Seal, sealHue } from './Seal.tsx'
 import { IncomeLadder, Standing, coveredDeciles } from './PopulationPlace.tsx'
 import { spellCount } from '../words.ts'
+import { ALL_TERMS, firstOccurrences } from '../glossary.ts'
+import { Glossed, Term } from './Term.tsx'
 
 /**
  * Accueil et contrat.
@@ -94,6 +96,22 @@ export function HomeScreen({ onStart, onMethod, onLegal }: {
   const tenures = new Set(characters.map((c) => c.traits.tenure)).size
   const insee = bundle.sources.find((s) => s.id === bundle.population.livingStandardDeciles.sourceId)
 
+  /*
+   * Les termes du glossaire, marqués à leur première apparition dans
+   * l'ordre de lecture. « décile » et « niveau de vie » le sont par le code,
+   * plus haut que tout texte du contenu ; les autres, là où le contenu les
+   * emploie d'abord. Les onglets repliés n'en reçoivent pas : ce qui est
+   * caché n'est pas une première rencontre.
+   */
+  const goal = i.goal.slice(1)
+  const marks = firstOccurrences(
+    [...goal, ...i.rules.map((r) => r.body), ...i.notList.map((n) => n.body)],
+    ALL_TERMS, ['decile', 'niveau-de-vie'],
+  )
+  const goalMarks = marks.slice(0, goal.length)
+  const ruleMarks = marks.slice(goal.length, goal.length + i.rules.length)
+  const notMarks = marks.slice(goal.length + i.rules.length)
+
   const start = (
     <button type="button" className="home__start" onClick={onStart}>
       {i.startLabel}
@@ -133,7 +151,7 @@ export function HomeScreen({ onStart, onMethod, onLegal }: {
         <section className="figures" aria-label="Le jeu en chiffres">
           <ul>
             <li><Count n={3} /><span>personnes incarnées, tirées au sort</span></li>
-            <li><Count n={characters.length} /><span>situations dans le corpus</span></li>
+            <li><Count n={characters.length} /><span>personnages, autant de situations de vie</span></li>
             <li><Count n={4} /><span>façons de mesurer un même montant</span></li>
             <li><Count n={20} /><span>minutes environ</span></li>
             <li className="figures--zero"><Count n={0} /><span>score, classement ou étiquette</span></li>
@@ -244,11 +262,11 @@ export function HomeScreen({ onStart, onMethod, onLegal }: {
             </article>
 
             <article className="corpus__card">
-              <h3>{capitalised(spellCount(characters.length))} situations, du premier au dernier décile de revenu</h3>
+              <h3>{capitalised(spellCount(characters.length))} situations, du premier au dernier <Term id="decile">décile</Term> de revenu</h3>
               <p>
                 Les personnages sont fictifs, mais leurs budgets sont calibrés sur les statistiques
                 publiques. Calculés sur leurs relevés, ils occupent {spellCount(coveredDeciles())} des dix
-                déciles de niveau de vie,{' '}
+                déciles de <Term id="niveau-de-vie">niveau de vie</Term>,{' '}
                 {spellCount(activities)} situations d’activité et {spellCount(tenures)} façons
                 d’être logé.
               </p>
@@ -280,8 +298,8 @@ export function HomeScreen({ onStart, onMethod, onLegal }: {
             <cite>Le seul objectif de ce jeu, et le seul critère de sa réussite.</cite>
           </blockquote>
           <div className="prose">
-            {i.goal.slice(1).map((p) => (
-              <p key={p}>{p}</p>
+            {goal.map((p, k) => (
+              <p key={p}><Glossed text={p} mark={goalMarks[k]} /></p>
             ))}
           </div>
         </section>
@@ -294,7 +312,7 @@ export function HomeScreen({ onStart, onMethod, onLegal }: {
               {i.rules.map((r, k) => (
                 <li key={r.id} style={at(k)}>
                   <h3>{r.title}</h3>
-                  <p>{r.body}</p>
+                  <p><Glossed text={r.body} mark={ruleMarks[k]} /></p>
                 </li>
               ))}
             </ol>
@@ -465,7 +483,7 @@ export function HomeScreen({ onStart, onMethod, onLegal }: {
                   <span className="not__pre">Ce n’est pas</span>
                   <s className="not__word">{n.label}</s>
                 </span>
-                <p>{n.body}</p>
+                <p><Glossed text={n.body} mark={notMarks[k]} /></p>
               </li>
             ))}
           </ul>

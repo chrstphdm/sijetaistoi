@@ -47,6 +47,7 @@ import { useScreenChange } from './navigation.ts'
 import { BackToTop, ScreenTitle, SkipLink } from './components/Navigation.tsx'
 import type { Step } from './useGame.ts'
 import { spellCount } from './words.ts'
+import { Term } from './components/Term.tsx'
 
 /**
  * Titre de chaque ecran, pour l'onglet et pour le lecteur d'ecran.
@@ -459,7 +460,7 @@ export function App() {
             <p>
               Une autre partie tire d’autres personnages et d’autres décisions parmi les{' '}
               {spellCount(characters.length)} personnages et les {spellCount(reforms.length)}{' '}
-              décisions du corpus. Une partie n’en présente que trois de chaque.
+              décisions que compte le jeu. Une partie n’en présente que trois de chaque.
             </p>
             <p>
               <button type="button" className="btn-primary" onClick={startFreshGame}>
@@ -475,7 +476,7 @@ export function App() {
               </button>
             </p>
             <p className="provenance">
-              Cette partie-ci porte la graine <code>{seed}</code>, inscrite dans l’adresse.
+              Cette partie-ci porte la <Term id="graine">graine</Term> <code>{seed}</code>, inscrite dans l’adresse.
               La rouvrir te ramène là où tu en étais&nbsp;; la rejouer depuis le début donne
               exactement la même partie, ce qui permet de la partager ou de vérifier que le
               tirage n’était pas arrangé.
@@ -544,7 +545,7 @@ export function App() {
             {state.castHistory
               .map((d) => `${nameOf(d.picked)}${d.imposed ? ' (imposé)' : ''}`)
               .join(' → ')}.
-            {reforms.length > 0 && ` Réformes du corpus : ${reforms.length}.`}
+            {reforms.length > 0 && ` Décisions collectives que compte le jeu : ${reforms.length}.`}
           </p>
         </details>
       </aside>

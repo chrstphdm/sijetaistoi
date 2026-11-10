@@ -15,7 +15,7 @@
     "olap-loyers-idf",
     "ancols-loyers-sociaux"
   ],
-  "modelLimitations": "Ce modèle applique une variation de loyer identique à l'intérieur d'une tranche de revenu, alors que l'écart au loyer de référence dépend du logement et non du locataire : un plafonnement rapporterait bien davantage à un locataire payant 1 780 € qu'à un autre payant 420 €, et ces montants sont ici écrasés. Il ne représente ni la durée — l'encadrement n'agit qu'au changement de locataire ou au renouvellement du bail, donc très progressivement —, ni le report vers la location meublée et la vente, ni l'effet sur la construction neuve, ni le nombre de logements sociaux, qui est pourtant le paramètre décisif pour les locataires du parc social. Le corpus ne contient qu'un seul bailleur, ce qui est cohérent avec la concentration réelle de la détention locative mais interdit toute comparaison entre bailleurs.",
+  "modelLimitations": "Ce modèle applique une variation de loyer identique à l'intérieur d'une tranche de revenu, alors que l'écart au loyer de référence dépend du logement et non du locataire : un plafonnement rapporterait bien davantage à un locataire payant 1 780 € qu'à un autre payant 420 €, et ces montants sont ici écrasés. Il ne représente ni la durée — l'encadrement n'agit qu'au changement de locataire ou au renouvellement du bail, donc très progressivement —, ni le report vers la location meublée et la vente, ni l'effet sur la construction neuve, ni le nombre de logements sociaux, qui est pourtant le paramètre décisif pour les locataires du parc social. Les personnages ne comptent qu'un seul bailleur, ce qui est cohérent avec la concentration réelle de la détention locative mais interdit toute comparaison entre bailleurs.",
   "options": [
     {
       "id": "statu-quo",
@@ -397,7 +397,7 @@
           "horizon": "y5",
           "uncertainty": "highly_debated",
           "hypothesisId": "encadrement-loyers-offre",
-          "note": "Un gain de locataire est une perte de bailleur : l'encadrement ne crée pas de ressource, il en déplace. Le corpus ne contient qu'un bailleur, ce qui reflète la concentration réelle de la détention locative mais ne permet aucune comparaison entre bailleurs — un retraité propriétaire d'un studio et une société foncière subissent la même règle.",
+          "note": "Un gain de locataire est une perte de bailleur : l'encadrement ne crée pas de ressource, il en déplace. Les personnages ne comptent qu'un bailleur, ce qui reflète la concentration réelle de la détention locative mais ne permet aucune comparaison entre bailleurs — un retraité propriétaire d'un studio et une société foncière subissent la même règle.",
           "monthlyShare": {
             "rate": -0.12,
             "of": "revenu-capital"

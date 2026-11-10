@@ -15,7 +15,7 @@
     "insee-patrimoine",
     "insee-niveaux-de-vie"
   ],
-  "modelLimitations": "Un seul personnage de ce corpus perçoit des revenus du patrimoine. Ce n'est pas un défaut de construction : ces revenus sont parmi les plus concentrés qui soient, et un corpus de treize situations réparties sur l'échelle des revenus n'en contiendrait pas davantage. Mais cela interdit toute comparaison entre détenteurs, alors que le sujet oppose précisément un retraité propriétaire d'un studio et un portefeuille de plusieurs millions, que le même taux frappe aujourd'hui à l'identique. Le modèle ne représente pas non plus les plus-values, qui constituent une part importante de ces revenus, ni l'arbitrage entre percevoir un dividende et le laisser dans l'entreprise, ni l'affectation effective du rendement : toutes les options supposent que la recette revienne aux ménages, ce qu'aucun mécanisme ne garantit.",
+  "modelLimitations": "Un seul des treize personnages perçoit des revenus du patrimoine. Ce n'est pas un défaut de construction : ces revenus sont parmi les plus concentrés qui soient, et treize situations réparties sur l'échelle des revenus n'en contiendrait pas davantage. Mais cela interdit toute comparaison entre détenteurs, alors que le sujet oppose précisément un retraité propriétaire d'un studio et un portefeuille de plusieurs millions, que le même taux frappe aujourd'hui à l'identique. Le modèle ne représente pas non plus les plus-values, qui constituent une part importante de ces revenus, ni l'arbitrage entre percevoir un dividende et le laisser dans l'entreprise, ni l'affectation effective du rendement : toutes les options supposent que la recette revienne aux ménages, ce qu'aucun mécanisme ne garantit.",
   "options": [
     {
       "id": "statu-quo",
