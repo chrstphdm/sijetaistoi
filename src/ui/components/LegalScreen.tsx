@@ -48,8 +48,10 @@ export function LegalScreen({ onBack }: { readonly onBack: () => void }) {
         <h2 id="legal-host">Hébergeur</h2>
         <p>
           GitHub, Inc. (service GitHub Pages), 88 Colin P. Kelly Jr. Street, San Francisco,
-          CA 94107, États-Unis —{' '}
-          <a href="https://github.com" rel="noopener noreferrer">github.com&nbsp;↗</a>.
+          CA 94107, États-Unis. Contact&nbsp;:{' '}
+          <a href="https://support.github.com/contact" rel="noopener noreferrer">formulaire de GitHub&nbsp;↗</a>
+          {' '}; délégué à la protection des données&nbsp;: dpo@github.com. GitHub ne publie pas
+          de numéro de téléphone dans ses documents officiels.
         </p>
       </section>
 

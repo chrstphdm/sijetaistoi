@@ -42,6 +42,13 @@ function Count({ n }: { readonly n: number }) {
 }
 
 /** Index de cascade, pour que les cartes d'une grille arrivent l'une après l'autre. */
+/** Les trois onglets de « Pour aller plus loin ». */
+const DEEPER = [
+  { id: 'theories', label: (i: typeof bundle.intro) => i.theoryTitle },
+  { id: 'principes', label: (i: typeof bundle.intro) => i.principlesTitle },
+  { id: 'allure', label: (i: typeof bundle.intro) => i.lookTitle },
+] as const
+
 const capitalised = (w: string) => w.charAt(0).toUpperCase() + w.slice(1)
 
 const at = (i: number) => ({ '--i': i }) as CSSProperties
@@ -56,6 +63,7 @@ export function HomeScreen({ onStart, onMethod, onLegal }: {
   const byId = new Map(principles.map((p) => [p.id, p]))
   const allIds = characters.map((c) => c.id)
   const root = useRef<HTMLDivElement>(null)
+  const [deeper, setDeeper] = useState(0)
   useReveal(root)
 
   /*
@@ -329,11 +337,36 @@ export function HomeScreen({ onStart, onMethod, onLegal }: {
           </ul>
         </section>
 
-        {/* Chaque thèse porte son objection, au même format et au même
-            poids visuel. L'afficher plus discrètement reviendrait à
-            recommander la thèse. */}
-        <section className="band reveal" aria-labelledby="h-theory">
-          <h2 id="h-theory">{i.theoryTitle}</h2>
+        {/* POUR ALLER PLUS LOIN, à la demande. Ces trois sections faisaient à elles
+            seules près d'un tiers d'une page de dix mille pixels. Elles sont
+            regroupées en onglets : tout le contenu reste là, rien n'est imposé.
+            Thèses et objections restent repliées ENSEMBLE, jamais l'une sans
+            l'autre. */}
+        <section className="band reveal deeper" aria-labelledby="h-deeper">
+          <h2 id="h-deeper">Pour aller plus loin</h2>
+          <div className="deeper__tabs" role="tablist" aria-label="Pour aller plus loin">
+            {DEEPER.map((d, k) => (
+              <button
+                key={d.id} type="button" role="tab" id={`tab-${d.id}`}
+                aria-selected={deeper === k} aria-controls={`panel-${d.id}`}
+                tabIndex={deeper === k ? 0 : -1}
+                className={`deeper__tab${deeper === k ? ' deeper__tab--on' : ''}`}
+                onClick={() => setDeeper(k)}
+                onKeyDown={(e) => {
+                  if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return
+                  const next = (k + (e.key === 'ArrowRight' ? 1 : DEEPER.length - 1)) % DEEPER.length
+                  setDeeper(next)
+                  document.getElementById(`tab-${DEEPER[next]!.id}`)?.focus()
+                }}
+              >
+                {d.label(i)}
+              </button>
+            ))}
+          </div>
+
+          <div role="tabpanel" id="panel-theories" aria-labelledby="tab-theories" hidden={deeper !== 0} className="deeper__panel">
+
+          <h3 className="deeper__title">{i.theoryTitle}</h3>
           <p className="lead">{i.theoryLead}</p>
           {/* Repliées comme les principes, et pour la même raison : la
               page faisait plus de 10 000 pixels sur petit écran. Thèse et
@@ -354,10 +387,10 @@ export function HomeScreen({ onStart, onMethod, onLegal }: {
               </li>
             ))}
           </ul>
-        </section>
+          </div>
+          <div role="tabpanel" id="panel-principes" aria-labelledby="tab-principes" hidden={deeper !== 1} className="deeper__panel">
 
-        <section className="band band--tint reveal" aria-labelledby="h-principles">
-          <h2 id="h-principles">{i.principlesTitle}</h2>
+          <h3 className="deeper__title">{i.principlesTitle}</h3>
           <p className="lead">{bundle.principles.note}</p>
 
           {/* En paires opposées : c'est la tension entre deux principes
@@ -402,10 +435,10 @@ export function HomeScreen({ onStart, onMethod, onLegal }: {
               )
             })}
           </div>
-        </section>
+          </div>
+          <div role="tabpanel" id="panel-allure" aria-labelledby="tab-allure" hidden={deeper !== 2} className="deeper__panel">
 
-        <section className="band reveal" aria-labelledby="h-look">
-          <h2 id="h-look">{i.lookTitle}</h2>
+          <h3 className="deeper__title">{i.lookTitle}</h3>
           {/* Dépliées : trois paragraphes courts, qui n'ont pas d'objection
               à replier avec eux. Chacun a sa vignette, qui montre ce que le
               texte décrit. */}
@@ -418,6 +451,7 @@ export function HomeScreen({ onStart, onMethod, onLegal }: {
               </li>
             ))}
           </ul>
+          </div>
         </section>
 
         <section className="band band--tint reveal" aria-labelledby="h-not">
