@@ -229,8 +229,9 @@ et des décisions qui coûtent à certains. Quelqu'un peut s'y reconnaître.
 
 ### La dernière question du jeu
 
-À la fin, l'écran « Bilan » pose sa propre question (« Y a-t-il eu un moment, pendant
-cette partie, où tu t'es dit… ? ») avec quatre réponses. Laisser le joueur y répondre seul,
+À la fin, l'écran « Bilan » pose sa propre question (« Pendant cette partie, une décision
+t'a-t-elle paru différente selon la personne que tu incarnais, ou est-elle restée la même à
+tes yeux ? ») avec quatre réponses, puis une question ouverte facultative. Laisser le joueur y répondre seul,
 sans commentaire, et noter sa réponse dans la grille. L'entretien vient **après**.
 
 ### Clôture

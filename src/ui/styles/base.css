@@ -2558,3 +2558,13 @@ body:has(.page) { padding-inline: 0; }
    Une largeur fixe de 17 % faisait se chevaucher les tuiles dès que le
    corpus a dépassé treize personnages. */
 .hero-cast__tile { width: min(17%, calc(215% / var(--n-tiles, 13))); }
+.kpi__open { display: grid; gap: var(--space-2); margin-top: var(--space-4); font: 400 15px/1.45 var(--font-ui); }
+
+/* Ce qui s'est passé : la partie relue, dans la colonne. */
+.history { list-style: none; padding: 0; margin: var(--space-2) 0 0; display: grid; gap: var(--space-3); }
+.history__act { padding-top: var(--space-2); border-top: 1px solid var(--rule-hair); }
+.history__head { font-weight: 700; font-size: 12px; letter-spacing: 0.04em; margin: 0 0 4px; max-width: none; }
+.history__months { list-style: none; padding: 0; margin: 0 0 6px; display: grid; gap: 3px; font-size: 12px; color: var(--ink-2); }
+.history__months strong { color: var(--ink); font-weight: 600; }
+.history__decision { display: grid; gap: 2px; font-size: 12px; padding: 6px 8px; background: var(--paper-sunk); border-radius: var(--radius-s); }
+.history__q { color: var(--ink-2); }

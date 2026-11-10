@@ -135,7 +135,11 @@ describe('mouvements de position', () => {
 
 describe('question KPI', () => {
   it('mesure l’objectif du projet, et non l’opinion du joueur', () => {
-    expect(KPI_QUESTION).toContain('pas réalisé')
+    // Elle ne souffle pas la réponse attendue : la phrase du déclic n'y figure
+    // pas, et les deux issues sont offertes à égalité.
+    expect(KPI_QUESTION).not.toContain('pas réalisé')
+    expect(KPI_QUESTION).toContain('différente')
+    expect(KPI_QUESTION).toContain('restée la même')
     for (const word of ['impôt', 'taxe', 'juste', 'politique', 'réforme']) {
       expect(KPI_QUESTION.toLowerCase()).not.toContain(word)
     }

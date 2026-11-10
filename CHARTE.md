@@ -82,7 +82,11 @@ ici pour pouvoir être invoquées en revue, pas pour décorer.
 ## F — Équilibre du corpus
 
 - **F1 (bloquant)** Au moins un cinquième des événements sont favorables.
-- **F2 (bloquant)** Au plus la moitié des rappels d'une partie sont défavorables.
+- **F2 (bloquant)** Au plus la moitié des rappels d'une partie sont défavorables, arrondie
+  au supérieur : un rappel défavorable sur un, un sur deux, deux sur trois. Arrondir au
+  dessous interdirait tout rappel défavorable dans une partie qui n'en compte qu'un, et
+  ferait de ces parties-là une suite de bonnes nouvelles — le biais inverse de celui que la
+  règle combat.
 - **F3 (bloquant)** Le tirage des personnages est uniforme sous contraintes déclarées
   publiquement, jamais un classement.
 - **F4** Les absents du corpus comptent autant que les présents. Leur absence est

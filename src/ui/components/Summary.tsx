@@ -1,5 +1,5 @@
 import {
-  KPI_OPTIONS, KPI_QUESTION, tendencySentence, type KpiAnswer, type Summary,
+  KPI_OPTIONS, KPI_QUESTION, KPI_FOLLOW_UP, tendencySentence, type KpiAnswer, type Summary,
 } from '@/core/summary.ts'
 
 /**
@@ -127,9 +127,17 @@ export function SummaryScreen({
           </div>
         </fieldset>
         {kpi && (
-          <p className="provenance">
-            Merci. Cette réponse reste sur cet appareil, comme le reste.
-          </p>
+          <>
+            {/* Facultative, et jamais relue par le jeu : elle sert au joueur,
+                et à qui l'observe lors d'un test. */}
+            <label className="kpi__open">
+              <span>{KPI_FOLLOW_UP} <span className="provenance">(facultatif)</span></span>
+              <textarea rows={3} />
+            </label>
+            <p className="provenance">
+              Merci. Cette réponse reste sur cet appareil, comme le reste.
+            </p>
+          </>
         )}
       </section>
     </>

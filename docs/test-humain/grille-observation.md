@@ -148,7 +148,7 @@ Mêmes observables qu'à l'acte I. Noter en plus : comprend-il que l'écran d'im
 
 | Outil | Quand (écran) | Ce qu'il y cherchait |
 |---|---|---|
-| ☐ « Revoir tes décisions » (colonne latérale) | | |
+| ☐ « Revoir ce qui s’est passé » (colonne latérale) | | |
 | ☐ « Comment ce jeu est construit » (page méthode) — sections lues : | | |
 | ☐ « Comment ce jeu choisit tes personnages » | | |
 

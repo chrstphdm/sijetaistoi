@@ -228,7 +228,8 @@ describe('une partie complète en trois actes', () => {
     for (const f of ['de gauche', 'de droite', 'ton score', 'tu es plutôt']) {
       expect(text).not.toContain(f)
     }
-    expect(screen.getByText(/pas réalisé/)).toBeTruthy()
+    // La question finale est bien posée — sans souffler la phrase du déclic.
+    expect(screen.getByText(/paru différente selon la personne/)).toBeTruthy()
   })
 })
 
@@ -237,14 +238,17 @@ describe('registre et consultation', () => {
     const user = userEvent.setup()
     render(<App />)
     await enterGame(user)
-    // Aucune décision prise : rien à relire, donc rien à afficher.
-    expect(screen.queryByRole('button', { name: /Revoir ta décision/ })).toBeNull()
+    // Rien de vécu : rien à relire, donc rien à afficher.
+    expect(screen.queryByRole('button', { name: /Revoir ce qui s’est passé/ })).toBeNull()
 
     await playAct(user, 'ma règle')
-    const toggle = screen.getByRole('button', { name: /Revoir ta décision/ })
+    const toggle = screen.getByRole('button', { name: /Revoir ce qui s’est passé, dont ta décision/ })
     await user.click(toggle)
     const timeline = screen.getByRole('navigation', { name: /Où tu en es/ })
+    // La décision, la phrase écrite, l'avis donné — et les mois vécus.
     expect(within(timeline).getByText('« ma règle »')).toBeTruthy()
+    expect(within(timeline).getByText(/Ton avis : plutôt oui/)).toBeTruthy()
+    expect(timeline.querySelectorAll('.history__months li').length).toBeGreaterThan(0)
   })
 
   it('situe le joueur en français ordinaire, sans jamais le noter', async () => {

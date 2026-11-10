@@ -155,9 +155,18 @@ export const totalMovement = (summary: Summary): number =>
  *
  * C'est le seul endroit du jeu ou l'on mesure quelque chose, et ce qu'on
  * mesure est l'objectif du projet — pas l'opinion du joueur.
+ *
+ * Elle reprenait mot pour mot la phrase du declic que le jeu cherche a
+ * produire (« tu n'avais pas realise qu'une decision pouvait etre vecue
+ * comme ca… ») : elle soufflait sa propre reponse et poussait vers « oui »,
+ * ce qui faussait la seule mesure du jeu. Elle offre maintenant les deux
+ * issues a egalite, et une question ouverte permet de dire laquelle.
  */
 export const KPI_QUESTION =
-  'Y a-t-il eu un moment, pendant cette partie, où tu t’es dit que tu n’avais pas réalisé qu’une décision pouvait être vécue comme ça par quelqu’un d’autre ?'
+  'Pendant cette partie, une décision t’a-t-elle paru différente selon la personne que tu incarnais, ou est-elle restée la même à tes yeux ?'
+
+/** Question ouverte, facultative : le texte libre montre si le déclic a eu lieu, mieux qu'une case. */
+export const KPI_FOLLOW_UP = 'Si oui, laquelle, et qu’est-ce qui a changé ?'
 
 export const KPI_OPTIONS = ['oui', 'plutôt oui', 'plutôt non', 'non'] as const
 export type KpiAnswer = (typeof KPI_OPTIONS)[number]

@@ -26,7 +26,7 @@
         "Toute hypothèse du modèle porte au moins deux lectures nommées par un mécanisme. Une hypothèse à lecture unique trancherait en silence un débat ouvert.",
         "Toute réforme offre le statu quo et la contestation du cadrage, et chacune de ses options porte au moins deux arguments dans chaque sens, dans un rapport qui ne dépasse pas deux pour un.",
         "Aucune option n'a que des effets défavorables : qui y gagne doit être identifié, ou l'absence de gagnant explicitée.",
-        "Au plus la moitié des rappels d'une partie peuvent être défavorables. Sans cette règle, le jeu ne montrerait que les conséquences douloureuses des choix du joueur.",
+        "Au plus la moitié des rappels d'une partie peuvent être défavorables, arrondie au supérieur : un sur un, un sur deux, deux sur trois. Sans cette règle, le jeu ne montrerait que les conséquences douloureuses des choix du joueur ; arrondie au-dessous, elle ne montrerait jamais de conséquence défavorable dans une partie à un seul rappel.",
         "L'intensité d'une animation est calculée par une fonction qui ne reçoit ni l'identité du personnage, ni la mesure concernée, ni l'opinion du joueur, et qui détruit le signe du montant. Un gain et une perte de même ampleur reçoivent donc une mise en scène identique.",
         "Les fiches de personnages ont des longueurs comparables : un personnage deux fois plus détaillé recevrait deux fois plus d'empathie.",
         "Au moins un cinquième des événements sont favorables, sinon leur ensemble raconterait une thèse sur la vie.",

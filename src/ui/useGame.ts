@@ -452,7 +452,7 @@ export function useGame(seed: string, setup: Setup = EMPTY_SETUP) {
 
   return {
     state, step, event, character, budget, stocks, lines, month, reform,
-    monthsDone, monthLog, oneOff, wording, setWording,
+    monthsDone, monthLog, oneOff, wording, setWording, journal,
     restored: restored !== null,
     actions: { toContract, beginGame, startMonths, resolveEvent, vote, answer, answerFor, toImpact, nextAct, toReform, consultOthers },
   }

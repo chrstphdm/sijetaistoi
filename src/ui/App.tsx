@@ -7,6 +7,7 @@ import { CONSTRAINT_STATEMENTS } from '@/core/casting.ts'
 import { useGame } from './useGame.ts'
 import { ContractScreen, HomeScreen } from './components/HomeScreen.tsx'
 import { GameRail } from './components/GameRail.tsx'
+import { buildHistory } from './history.ts'
 
 /**
  * L'Atelier n'existe QU'EN DÉVELOPPEMENT.
@@ -277,6 +278,7 @@ export function App() {
           collé en haut ; seule la disposition visuelle le place dessous. */}
       <div className="side">
         <GameRail
+          history={buildHistory(game.journal)}
           state={state} step={step} nameOf={nameOf} allIds={allIds}
           month={month} monthsDone={game.monthsDone}
         />
