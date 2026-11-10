@@ -13,17 +13,17 @@
     {
       "id": "non-choix",
       "title": "Tu ne choisis pas qui tu es",
-      "body": "Les personnages sont tirés au sort. Le premier l'est uniformément, sans aucune contrainte ; les suivants parmi ceux qui satisfont des règles publiées. Le jeu ne t'envoie jamais chez la personne pour qui une décision serait la plus douloureuse."
+      "body": "Les personnages sont tirés au sort : le premier sans aucune condition, les suivants parmi ceux que permettent des règles publiées. Le jeu ne t'envoie jamais chez la personne pour qui une décision serait la plus douloureuse."
     },
     {
       "id": "persistance",
       "title": "Ce que tu décides reste en vigueur",
-      "body": "Une règle que tu votes s'applique à tous les personnages de la partie, y compris à ceux que tu incarneras plus tard. Tu pourras la relire à tout moment, et tu sauras toujours si une décision n'engage qu'un personnage ou tout le monde."
+      "body": "Une règle que tu votes s'applique à tous les personnages, y compris à ceux que tu incarneras plus tard. Tu pourras toujours la relire, et tu sauras toujours si un choix n'engage qu'une personne ou tout le monde."
     },
     {
       "id": "donnees",
       "title": "Tes réponses restent sur cet appareil",
-      "body": "Ce que tu écris porte sur tes opinions. Rien n'est transmis à aucun serveur, et ce site ne charge aucune ressource extérieure. Évite malgré tout de laisser une partie en cours sur un ordinateur partagé."
+      "body": "Ce que tu réponds porte sur tes opinions. Rien n'est envoyé à aucun serveur : ta partie vit dans ce navigateur, le temps de cet onglet."
     }
   ],
   "fiction": "Les personnages sont fictifs. Les montants sont des ordres de grandeur plausibles, pas des prévisions, et chaque chiffre affiché indique d'où il vient.",

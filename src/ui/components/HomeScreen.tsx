@@ -1,7 +1,7 @@
 import { useRef, useState, type CSSProperties } from 'react'
 import { bundle, characters } from '@/content/load.ts'
 import { durability, setDurability } from '../persistence.ts'
-import { BalanceIcon, HeroCast, LookArt, TheoryIcon, TrustIcon } from './HomeArt.tsx'
+import { BalanceIcon, HeroCast, Icon, LookArt, TheoryIcon, TrustIcon } from './HomeArt.tsx'
 import { REPO_URL } from '../links.ts'
 import { useReveal } from '../useReveal.ts'
 import { DISCLAIMER } from '../disclaimer.ts'
@@ -508,63 +508,96 @@ export function HomeScreen({ onStart, onMethod, onLegal }: {
   )
 }
 
+/** Pictogrammes des trois engagements : décoratifs, chaque carte a son titre. */
+const CONTRACT_ICONS: Record<string, React.ReactNode> = {
+  // Un dé : on ne choisit pas qui l'on est.
+  'non-choix': (
+    <Icon>
+      <rect x="8" y="8" width="32" height="32" rx="6" />
+      <circle cx="17" cy="17" r="2.4" fill="currentColor" stroke="none" />
+      <circle cx="31" cy="17" r="2.4" fill="currentColor" stroke="none" />
+      <circle cx="24" cy="24" r="2.4" fill="currentColor" stroke="none" />
+      <circle cx="17" cy="31" r="2.4" fill="currentColor" stroke="none" />
+      <circle cx="31" cy="31" r="2.4" fill="currentColor" stroke="none" />
+    </Icon>
+  ),
+  // Une flèche qui revient : la règle votée te revient.
+  persistance: (
+    <Icon>
+      <path d="M38 22a14 14 0 1 1-4-9" />
+      <path d="M36 6v8h-8" />
+      <path d="M18 24h12M18 29h8" />
+    </Icon>
+  ),
+  // Un appareil verrouillé : rien ne sort.
+  donnees: (
+    <Icon>
+      <rect x="12" y="4" width="24" height="40" rx="4" />
+      <rect x="18" y="20" width="12" height="10" rx="1.5" />
+      <path d="M20 20v-3a4 4 0 0 1 8 0v3" />
+    </Icon>
+  ),
+}
+
 export function ContractScreen({ onStart, hypothesisSet }: {
   readonly onStart: () => void
   readonly hypothesisSet: string
 }) {
   const i = bundle.intro
   const [keep, setKeep] = useState(() => durability() === 'device')
+  /*
+   * Trois cartes, un geste. L'écran était un mur de texte : trois
+   * paragraphes, trois blocs de petits caractères, un encadré — et deux
+   * redites (la fiction, l'appareil). Les engagements sont maintenant
+   * illustrés côte à côte ; le choix de conserver la partie est dans la
+   * carte qui parle de l'appareil ; les mentions tiennent en un seul
+   * encadré, toujours visible avant la première décision.
+   */
   return (
-    <article className="sheet home" aria-labelledby="contract-title">
+    <article className="sheet pact" aria-labelledby="contract-title">
+      <p className="sheet__kicker">Avant la première décision</p>
       <h1 id="contract-title">{i.contractTitle}</h1>
 
-      <ol className="contract-list">
-        {i.contract.map((c) => (
-          <li key={c.id}>
+      <ol className="contract__cards">
+        {i.contract.map((c, k) => (
+          <li key={c.id} className="contract__card">
+            <span className="contract__num" aria-hidden="true">{k + 1}</span>
+            <span className="contract__icon">{CONTRACT_ICONS[c.id] ?? null}</span>
             <h2>{c.title}</h2>
             <p>{c.body}</p>
+            {/* OÙ VIT LA PARTIE : le défaut est le plus prudent — l'onglet —,
+                et la conservation durable est un choix explicite, fait ici,
+                là où l'on parle de l'appareil. Voir src/ui/persistence.ts. */}
+            {c.id === 'donnees' && (
+              <label className="contract__keep">
+                <input
+                  type="checkbox" checked={keep}
+                  onChange={(e) => { setKeep(e.target.checked); setDurability(e.target.checked ? 'device' : 'session') }}
+                />
+                <span>
+                  Garder cette partie sur cet appareil pour la reprendre plus tard.
+                  <small> À éviter sur un ordinateur partagé.</small>
+                </span>
+              </label>
+            )}
           </li>
         ))}
       </ol>
 
-      <p className="provenance">{i.fiction}</p>
-      <p className="provenance">{DISCLAIMER}</p>
-      <p className="provenance">
-        Cette partie utilise le jeu d’hypothèses «&nbsp;{hypothesisSet}&nbsp;», tiré au sort.
-        Les points où les études disponibles ne convergent pas sont signalés à mesure.
-      </p>
-
-      {/* OU VIT LA PARTIE, dit avant de commencer et non enfoui dans une
-          mention légale. Les jugements du joueur sur des questions politiques
-          sont des opinions politiques : des données sensibles. Le défaut est
-          donc le plus prudent — l'onglet — et la conservation durable est un
-          choix explicite. Voir src/ui/persistence.ts. */}
-      <fieldset className="keep">
-        <legend>Cette partie et toi</legend>
-        <p className="provenance">
-          Ce que tu réponds reste sur cet appareil&nbsp;: le jeu n’envoie rien, à personne.
-          Par défaut, ta partie vit le temps de cet onglet — tu peux recharger la page sans
-          rien perdre, et tout disparaît quand tu le fermes.
+      <aside className="contract__note" aria-label="Bon à savoir">
+        <p><strong>Bon à savoir.</strong> {DISCLAIMER}</p>
+        <p>
+          Le modèle suppose que les comportements changent peu après une décision (hypothèse
+          «&nbsp;{hypothesisSet}&nbsp;»). Là où les études disponibles divergent, le jeu le
+          signale à mesure.
         </p>
-        <label className="keep__choice">
-          <input
-            type="checkbox" checked={keep}
-            onChange={(e) => { setKeep(e.target.checked); setDurability(e.target.checked ? 'device' : 'session') }}
-          />
-          <span>
-            Garder cette partie sur cet appareil pour la reprendre plus tard.
-            <span className="provenance">
-              {' '}À éviter sur un ordinateur partagé&nbsp;: la personne suivante pourrait lire
-              ce que tu as répondu.
-            </span>
-          </span>
-        </label>
-      </fieldset>
+      </aside>
 
-      <p className="home__actions">
+      <p className="contract__go">
         <button type="button" className="home__start" onClick={onStart}>
           {i.contractStartLabel}
         </button>
+        <span className="provenance">{i.duration}</span>
       </p>
     </article>
   )
