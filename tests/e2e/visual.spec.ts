@@ -1,5 +1,5 @@
 import { test } from '@playwright/test'
-import { reach, settle, startClean, type Phase } from './helpers.ts'
+import { reach, revealAll, settle, startClean, type Phase } from './helpers.ts'
 
 /**
  * Captures d'ecran, pour regarder le site plutot que de l'asserter.
@@ -26,6 +26,7 @@ for (const { phase, name } of SHOTS) {
   test(`capture ${name}`, async ({ page }, info) => {
     await reach(page, phase)
     await settle(page)
+    if (phase === 'home') await revealAll(page)
     await page.screenshot({
       path: `captures/${info.project.name}-${name}.png`,
       fullPage: true,

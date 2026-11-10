@@ -911,7 +911,7 @@
     {
       "id": "contester-cadrage",
       "label": "Je conteste la façon dont la question est posée",
-      "decisionDescription": "Le joueur refuse le cadrage : la question n'est pas de savoir à quelles conditions verser un minimum, mais pourquoi il faut un minimum, c'est-à-dire pourquoi le travail et le logement ne suffisent pas.",
+      "decisionDescription": "Tu refuses la question telle qu'elle est posée : la question n'est pas de savoir à quelles conditions verser un minimum, mais pourquoi il faut un minimum, c'est-à-dire pourquoi le travail et le logement ne suffisent pas.",
       "families": [
         "challenge_framing"
       ],

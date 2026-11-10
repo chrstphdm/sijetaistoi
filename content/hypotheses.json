@@ -115,7 +115,7 @@
     "id": "indexation-pensions",
     "question": "Désindexer partiellement les pensions une année donnée a-t-il un effet durable sur le niveau de vie des retraités ?",
     "status": "debated",
-    "whyDebated": "L'effet dépend de ce qui se passe ensuite : un rattrapage ultérieur annule l'écart, son absence le rend permanent et cumulatif. Les travaux disponibles divergent sur la fréquence réelle des rattrapages, et la question relève autant de l'observation historique que de l'anticipation politique.",
+    "whyDebated": "L'effet dépend de ce qui se passe ensuite : un rattrapage ultérieur annule l'écart, son absence le rend permanent et cumulatif. Les études disponibles divergent sur la fréquence réelle des rattrapages, et la question relève autant de l'observation historique que de l'anticipation politique.",
     "readings": [
       {
         "id": "A",
@@ -143,7 +143,7 @@
     "id": "incidence-tva",
     "question": "Une hausse de la TVA est-elle intégralement répercutée sur les prix payés par les ménages ?",
     "status": "highly_debated",
-    "whyDebated": "La répercussion dépend du secteur, de la concurrence et du moment du cycle. Les travaux disponibles observent aussi bien des répercussions complètes que partielles, et parfois asymétriques selon que le taux monte ou baisse. Le désaccord porte sur l'ampleur et sur la durée du phénomène, pas sur son existence.",
+    "whyDebated": "La répercussion dépend du secteur, de la concurrence et du moment du cycle. Les études disponibles observent aussi bien des répercussions complètes que partielles, et parfois asymétriques selon que le taux monte ou baisse. Le désaccord porte sur l'ampleur et sur la durée du phénomène, pas sur son existence.",
     "readings": [
       {
         "id": "A",
@@ -228,7 +228,7 @@
     "id": "age-depart-effectif",
     "question": "Décaler l'âge légal fait-il réellement partir plus tard, ou bascule-t-il une partie des assurés vers le chômage et l'invalidité ?",
     "status": "highly_debated",
-    "whyDebated": "Les réformes passées montrent à la fois une hausse du taux d'emploi des seniors et une hausse du nombre de personnes ni en emploi ni à la retraite. Le partage entre les deux détermine le rendement net de la mesure, et il diffère fortement selon le métier, l'état de santé et la conjoncture. Les travaux disponibles ne s'accordent ni sur la proportion, ni sur la méthode pour l'établir.",
+    "whyDebated": "Les réformes passées montrent à la fois une hausse du taux d'emploi des seniors et une hausse du nombre de personnes ni en emploi ni à la retraite. Le partage entre les deux détermine le rendement net de la mesure, et il diffère fortement selon le métier, l'état de santé et la conjoncture. Les études disponibles ne s'accordent ni sur la proportion, ni sur la méthode pour l'établir.",
     "appliedBy": "content",
     "readings": [
       {

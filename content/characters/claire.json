@@ -163,7 +163,7 @@
     ],
     "concerns": [
       "Que la voiture lâche avant l'hiver, parce qu'il n'y a pas de bus après 21 h",
-      "Que Jade finisse par s'apercevoir de ce qu'elle refuse"
+      "Que Jade finisse par s'apercevoir de tout ce que sa mère lui refuse"
     ],
     "nonMonetaryConstraint": "Garde exclusive de sa fille : elle ne peut accepter aucune heure supplémentaire le soir, c'est-à-dire aucune des mieux payées.",
     "nonMonetaryAdvantage": "Un emploi stable en contrat à durée indéterminée, dans un secteur qui peine à recruter : elle ne craint pas de perdre son poste.",

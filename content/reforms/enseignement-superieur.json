@@ -380,7 +380,7 @@
     {
       "id": "contester-cadrage",
       "label": "Je conteste la façon dont la question est posée",
-      "decisionDescription": "Le joueur refuse le cadrage : la question du taux d'encadrement ne se réduit pas à un montant, et d'autres leviers existent — organisation des cursus, part du présentiel, orientation en amont.",
+      "decisionDescription": "Tu refuses la question telle qu'elle est posée : la question du taux d'encadrement ne se réduit pas à un montant, et d'autres leviers existent — organisation des cursus, part du présentiel, orientation en amont.",
       "families": [
         "challenge_framing"
       ],

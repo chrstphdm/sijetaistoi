@@ -162,7 +162,7 @@ export function MonthlyBudget({
       ) : (
         <p className="provenance">
           Sur ce montant, {Math.round(adjustable / 100)} € sont déjà prévus pour des dépenses que
-          {' '}{budget.adjustableCents === 0 ? 'personne' : 'le personnage'} peut décaler.
+          {' '}{budget.adjustableCents === 0 ? 'personne ne' : 'le personnage'} peut décaler.
         </p>
       )}
     </>

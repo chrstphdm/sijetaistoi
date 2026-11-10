@@ -687,7 +687,7 @@
     {
       "id": "contester-cadrage",
       "label": "Je conteste la façon dont la question est posée",
-      "decisionDescription": "Le joueur refuse le cadrage : la question posée n'est pas de savoir comment équilibrer un système, mais ce que l'on attend d'une vie de travail et de ce qui vient après.",
+      "decisionDescription": "Tu refuses la question telle qu'elle est posée : la question posée n'est pas de savoir comment équilibrer un système, mais ce que l'on attend d'une vie de travail et de ce qui vient après.",
       "families": [
         "challenge_framing"
       ],

@@ -553,13 +553,13 @@
       ],
       "argumentsAgainst": [
         "Un patrimoine constitué à partir de revenus déjà imposés est taxé une seconde fois à sa transmission.",
-        "Le patrimoine principal est souvent le logement, et le payer peut obliger les héritiers à le vendre."
+        "Le patrimoine principal est souvent le logement, et payer les droits peut obliger les héritiers à le vendre."
       ]
     },
     {
       "id": "contester-cadrage",
       "label": "Je conteste la façon dont la question est posée",
-      "decisionDescription": "Le joueur refuse le cadrage : la question n'est pas de savoir qui paie cinq milliards, mais pourquoi l'aide apportée aujourd'hui par les proches n'apparaît dans aucun budget.",
+      "decisionDescription": "Tu refuses la question telle qu'elle est posée : la question n'est pas de savoir qui paie cinq milliards, mais pourquoi l'aide apportée aujourd'hui par les proches n'apparaît dans aucun budget.",
       "families": [
         "challenge_framing"
       ],

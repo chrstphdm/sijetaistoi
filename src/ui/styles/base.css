@@ -2230,3 +2230,239 @@ fieldset:has(input[type='radio']) > label:has(input:focus-visible) {
 /* Liens des pages : l'accent, jamais le bleu par défaut du navigateur. */
 .page a { color: var(--perspective-a); text-underline-offset: 3px; }
 .page a:hover { text-decoration-thickness: 2px; }
+
+/* ================================================================== */
+/* Accueil — animations                                                */
+/* ================================================================== */
+
+/* Règles (voir useReveal.ts) : rien n'est caché sans JavaScript — l'état
+   d'attente n'existe que sous [data-reveal] ; tout s'arrête si moins de
+   mouvement est demandé ; aucune information n'est portée par le seul
+   mouvement. Durées courtes, une seule fois. */
+
+/* ---------------------------------------- Les sections montent à l'écran */
+[data-reveal] .reveal:not(.is-in) { opacity: 0; transform: translateY(24px); }
+.reveal.is-in { animation: rise 640ms var(--ease-enter) both; }
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } }
+
+/* Leurs cartes arrivent en cascade, après le titre. */
+[data-reveal] .reveal:not(.is-in) :is(.trust__card, .cast > li, .theory, .look, .not, .cards > li, .subject, .deciles__slot) {
+  opacity: 0;
+}
+.reveal.is-in :is(.trust__card, .cast > li, .theory, .look, .not, .cards > li, .subject, .deciles__slot) {
+  animation: rise 560ms var(--ease-enter) both;
+  animation-delay: calc(160ms + var(--i, 0) * 60ms);
+}
+
+/* ------------------------------------------- Les chiffres qui comptent */
+@property --n { syntax: '<integer>'; inherits: false; initial-value: 0; }
+.count { --n: var(--to); counter-reset: n var(--n); font-variant-numeric: tabular-nums lining-nums; }
+.count::after { content: counter(n); }
+/* La valeur réelle reste dans le texte, pour qui ne voit pas le dessin. */
+.count__n {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+[data-reveal] .count:not(.is-in) { --n: 0; }
+.count.is-in { animation: count-up 1400ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+@keyframes count-up { from { --n: 0; } to { --n: var(--to); } }
+/* Les compteurs des cartes démarrent avec elles. */
+.trust__card .count.is-in { animation-delay: calc(260ms + var(--i, 0) * 60ms); }
+
+/* ------------------------------------------- Le tirage, dans le bandeau */
+/* Un balayage à égalité sur les treize tuiles, puis trois s'allument. */
+.hero-cast.is-in .hero-cast__tile {
+  animation:
+    tile-in 520ms var(--ease-enter) both,
+    tile-sweep 420ms ease-out calc(700ms + var(--i) * 80ms) backwards;
+}
+.hero-cast.is-in .hero-cast__tile--drawn {
+  animation:
+    tile-in 520ms var(--ease-enter) both,
+    tile-sweep 420ms ease-out calc(700ms + var(--i) * 80ms) backwards,
+    tile-drawn 1800ms var(--ease-enter) calc(700ms + 13 * 80ms + 200ms) backwards;
+}
+@keyframes tile-sweep {
+  40% { box-shadow: inset 0 0 0 2px oklch(0.85 0.12 var(--seal-hue)), 0 0 0 4px oklch(0.85 0.12 var(--seal-hue) / 0.25); }
+}
+@keyframes tile-drawn {
+  20%, 70% {
+    scale: 1.14;
+    box-shadow: inset 0 0 0 2px oklch(0.9 0.12 var(--seal-hue)), 0 0 28px 4px oklch(0.85 0.14 var(--seal-hue) / 0.55);
+  }
+}
+.hero-cast.is-in .hero-cast__center b { animation: rise 600ms var(--ease-enter) 1.9s backwards; }
+
+/* --------------------------------------------- La boucle, étape par étape */
+.loop__progress {
+  fill: none; stroke: var(--perspective-a); stroke-width: 3; stroke-linecap: round;
+  stroke-dasharray: 100; stroke-dashoffset: 100;
+}
+.loop.is-in .loop__progress { animation: loop-draw 2600ms cubic-bezier(0.65, 0, 0.35, 1) 200ms forwards; }
+@keyframes loop-draw { to { stroke-dashoffset: 0; } }
+/* Sans animation, le tracé n'existe pas : l'anneau en pointillés suffit. */
+[data-reveal] .loop:not(.is-in) .loop__step { opacity: 0.25; }
+.loop.is-in .loop__step {
+  transform-box: fill-box; transform-origin: center;
+  animation: step-on 500ms var(--ease-enter) calc(200ms + var(--i) * 520ms) backwards;
+}
+@keyframes step-on { from { opacity: 0.25; scale: 0.8; } }
+
+/* ---------------------------------------------- Moins de mouvement demandé */
+@media (prefers-reduced-motion: reduce) {
+  .reveal.is-in, .reveal.is-in *, .count.is-in, .hero-cast.is-in .hero-cast__tile,
+  .hero-cast.is-in .hero-cast__center b, .loop.is-in .loop__progress, .loop.is-in .loop__step {
+    animation: none !important;
+  }
+  .loop__progress { display: none; }
+}
+
+/* ================================================================== */
+/* Accueil — des mesures, pas des partis ; la couverture du corpus     */
+/* ================================================================== */
+
+.corpus { display: grid; gap: var(--space-4); grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 900px) { .corpus { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.corpus__card {
+  display: flex; flex-direction: column; gap: var(--space-3);
+  padding: var(--space-6);
+  background: var(--paper);
+  border: 1px solid var(--rule-hair); border-radius: var(--radius-m);
+  box-shadow: var(--shadow-1);
+}
+.corpus__card h3 { font-size: clamp(19px, 2vw, 22px); margin: 0; }
+.corpus__card > p { font-size: 15px; max-width: none; margin: 0; color: var(--ink-2); }
+.corpus__card .corpus__note { margin-top: auto; padding-top: var(--space-2); font: 400 13px/1.5 var(--font-ui); }
+.corpus__note .timeline__toggle { font: inherit; color: var(--perspective-a); min-height: 0; }
+
+.subjects { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.subject {
+  display: inline-flex; flex-direction: column; gap: 1px;
+  padding: 6px 12px;
+  background: var(--paper-raised);
+  border: 1px solid var(--rule-hair); border-radius: var(--radius-s);
+}
+.subject__title { font: 600 13px/1.3 var(--font-ui); color: var(--ink); }
+.subject__orgs { font: 500 11px/1.3 var(--font-ui); color: var(--ink-2); letter-spacing: 0.02em; }
+
+.deciles { margin: var(--space-2) 0 0; }
+.deciles__axis {
+  list-style: none; padding: 0 0 var(--space-1); margin: 0;
+  display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 4px;
+  align-items: end;
+  border-bottom: 2px solid var(--rule);
+}
+.deciles__slot { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.deciles__stack { display: flex; flex-direction: column-reverse; align-items: center; gap: 4px; min-height: 22px; }
+.deciles__who { line-height: 0; }
+.deciles__n { font: 600 12px/1 var(--font-ui); color: var(--ink-2); padding-top: 4px; }
+.deciles__legend {
+  display: grid; grid-template-columns: 1fr auto 1fr; gap: var(--space-2);
+  margin-top: var(--space-2);
+  font: 500 12px/1.3 var(--font-ui); color: var(--ink-2);
+}
+.deciles__legend > :nth-child(2) { text-align: center; }
+.deciles__legend > :last-child { text-align: right; }
+
+/* Le tracé de la boucle passe sous les libellés : un liseré de la couleur
+   du fond les garde lisibles. */
+.loop__label { paint-order: stroke; stroke: var(--paper-sunk); stroke-width: 5px; stroke-linejoin: round; }
+.loop__progress { stroke-width: 2.5; }
+
+/* Les treize sujets sur deux colonnes : en une seule, la carte faisait le
+   double de sa voisine. */
+.subjects { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr)); }
+.subject { display: flex; }
+.deciles__stack { gap: 6px; min-height: 30px; }
+.deciles__who .seal { width: 30px; height: 30px; }
+@media (max-width: 520px) { .deciles__who .seal { width: 20px; height: 20px; } }
+
+/* ================================================================== */
+/* Situer un personnage dans la population                             */
+/* ================================================================== */
+
+.standing {
+  margin: var(--space-4) 0;
+  padding: var(--space-4);
+  background: var(--paper-sunk);
+  border-radius: var(--radius-m);
+  font-family: var(--font-ui);
+}
+.standing p { max-width: none; margin: 0; }
+.standing__title { font: 700 11px/1.3 var(--font-ui); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); margin-bottom: var(--space-2) !important; }
+.standing__value { font-size: 15px; color: var(--ink-2); }
+.standing__value strong { font: 600 22px/1.2 Georgia, 'Times New Roman', serif; color: var(--ink); }
+
+/* La population, de la plus modeste à la plus aisée : un dégradé neutre
+   (aucune couleur de jugement), neuf traits pour les déciles, et le
+   personnage posé dessus. */
+.standing__bar {
+  position: relative; height: 12px; margin: 22px 0 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--tint-a), color-mix(in oklab, var(--perspective-a) 55%, var(--tint-a)));
+}
+.standing__bar i { position: absolute; top: 2px; bottom: 2px; width: 1px; background: color-mix(in oklab, var(--paper) 70%, transparent); }
+.standing__marker {
+  position: absolute; left: var(--at); top: 50%;
+  translate: -50% -50%;
+  display: grid; place-items: center;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--paper-raised);
+  box-shadow: 0 0 0 2px var(--perspective-a), var(--shadow-1);
+  animation: marker-in 900ms var(--ease-enter) both;
+}
+@keyframes marker-in { from { left: 0; opacity: 0; } }
+.standing__ends { display: flex; justify-content: space-between; font-size: 11px; color: var(--ink-2); }
+.standing__sentence { font-size: 14px; margin-top: var(--space-2) !important; color: var(--ink); }
+.standing__chips { list-style: none; padding: 0; margin: var(--space-3) 0 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.standing__chips li {
+  padding: 6px 10px; border-radius: var(--radius-s);
+  background: var(--paper-raised); border: 1px solid var(--rule-hair);
+  font-size: 13px; color: var(--ink-2);
+}
+.standing__chips strong { color: var(--ink); font-weight: 600; }
+.standing__source { font-size: 12px; color: var(--ink-2); margin-top: var(--space-3) !important; }
+
+/* Version compacte, dans les cartes des personnages. */
+.standing--compact { margin: var(--space-2) 0 0; padding: 0; background: none; }
+.standing--compact .standing__value { font-size: 12px; }
+.standing--compact .standing__value strong { font: 600 13px/1.2 var(--font-ui); }
+.standing--compact .standing__bar { height: 6px; margin: 12px 0 2px; }
+.standing--compact .standing__marker { width: 20px; height: 20px; box-shadow: 0 0 0 1.5px var(--perspective-a); }
+.standing--compact .standing__ends { display: none; }
+.standing--compact .standing__sentence { font-size: 12px; color: var(--ink-2); margin-top: 6px !important; }
+/* Dans les cartes, la jauge part avec la carte. */
+[data-reveal] .reveal:not(.is-in) .standing__marker { animation: none; opacity: 0; }
+.reveal.is-in .cast .standing__marker { animation-delay: calc(400ms + var(--i, 0) * 60ms); }
+
+/* ------------------------------------------- La courbe des niveaux de vie */
+.ladder { margin: var(--space-2) 0 0; }
+.ladder__svg { width: 100%; height: auto; display: block; overflow: visible; }
+.ladder__grid { stroke: var(--rule-hair); stroke-width: 1; }
+.ladder__tick { font: 500 10px var(--font-ui); fill: var(--ink-2); text-anchor: middle; }
+.ladder__tick--y { text-anchor: end; }
+.ladder__area { fill: color-mix(in oklab, var(--perspective-a) 14%, transparent); }
+.ladder__curve { fill: none; stroke: var(--perspective-a); stroke-width: 2.5; stroke-linejoin: round; }
+.ladder__beyond { stroke: var(--perspective-a); stroke-width: 2; stroke-dasharray: 3 4; opacity: 0.6; }
+.ladder__stem { stroke: var(--rule-strong); stroke-width: 1; }
+.ladder__dot { fill: var(--paper-raised); stroke: var(--ink); stroke-width: 1.5; }
+
+.reveal.is-in .ladder__curve { stroke-dasharray: 100; animation: ladder-draw 1600ms cubic-bezier(0.65, 0, 0.35, 1) 300ms both; }
+@keyframes ladder-draw { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+.reveal.is-in .ladder__area { animation: rise 900ms var(--ease-enter) 900ms both; }
+.reveal.is-in .ladder__mark { animation: rise 500ms var(--ease-enter) calc(1300ms + var(--i) * 90ms) both; }
+[data-reveal] .reveal:not(.is-in) :is(.ladder__curve, .ladder__area, .ladder__mark) { opacity: 0; }
+
+.ladder__list {
+  list-style: none; padding: 0; margin: var(--space-3) 0 0;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 9.5rem), 1fr)); gap: 4px var(--space-3);
+  font: 400 12px/1.4 var(--font-ui);
+}
+.ladder__list li { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.ladder__name { font-weight: 600; color: var(--ink); }
+.ladder__where { color: var(--ink-2); margin-inline-start: auto; white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .standing__marker, .reveal.is-in .ladder__curve, .reveal.is-in .ladder__area, .reveal.is-in .ladder__mark { animation: none !important; }
+}
+.standing a { color: var(--perspective-a); text-underline-offset: 2px; }

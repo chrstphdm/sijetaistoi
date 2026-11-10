@@ -524,7 +524,7 @@
     {
       "id": "contester-cadrage",
       "label": "Je conteste la façon dont la question est posée",
-      "decisionDescription": "Le joueur refuse le cadrage : la question n'est pas d'aligner deux régimes mais de savoir pourquoi la protection dépend du statut d'emploi plutôt que de la situation.",
+      "decisionDescription": "Tu refuses la question telle qu'elle est posée : la question n'est pas d'aligner deux régimes mais de savoir pourquoi la protection dépend du statut d'emploi plutôt que de la situation.",
       "families": [
         "challenge_framing"
       ],

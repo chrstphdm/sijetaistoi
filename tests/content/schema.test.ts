@@ -226,13 +226,18 @@ describe('corpus complet — ce que le jeu peut faire apparaître', () => {
     expect(bundle.reforms.length).toBeGreaterThanOrEqual(9)
   })
 
-  it('couvre les dix déciles de revenu', () => {
+  it('déclare sur la page méthode chaque décile que le corpus n’occupe pas', () => {
     // Un corpus qui saute un décile laisse un trou dont personne ne parle.
-    // Les absences restantes doivent être DÉCLARÉES sur la page méthode, pas
-    // découvertes par un joueur.
+    // Les absences doivent être DÉCLARÉES sur la page méthode, pas
+    // découvertes par un joueur. Depuis que le décile est vérifié contre le
+    // budget, le neuvième est vide : il est nommé.
+    const ORDINAL = ['premier', 'deuxième', 'troisième', 'quatrième', 'cinquième',
+      'sixième', 'septième', 'huitième', 'neuvième', 'dixième']
     const deciles = new Set(chars.map((c) => c.identity.incomeDecile))
-    const manquants = [1,2,3,4,5,6,7,8,9,10].filter((d) => !deciles.has(d))
-    expect(manquants, `déciles absents : ${manquants.join(', ')}`).toEqual([])
+    const manquants = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].filter((d) => !deciles.has(d))
+    expect(manquants.length, 'au plus un décile manquant').toBeLessThanOrEqual(1)
+    const methode = JSON.stringify(bundle.method)
+    for (const d of manquants) expect(methode, `décile ${d} absent et non déclaré`).toContain(ORDINAL[d - 1])
   })
 
   it('couvre les situations d’activité, y compris celles qui n’en sont pas une', () => {

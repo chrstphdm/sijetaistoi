@@ -13,7 +13,7 @@ import { readFileSync, readdirSync, writeFileSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { z } from 'zod'
-import { ContentBundle, IntroPage, MethodPage } from '../src/schemas/index.ts'
+import { ContentBundle, IntroPage, MethodPage, Population } from '../src/schemas/index.ts'
 import { Source, Hypothesis, BudgetLineRef } from '../src/schemas/referentials.ts'
 import { Character } from '../src/schemas/character.ts'
 import { LifeEvent } from '../src/schemas/event.ts'
@@ -22,6 +22,7 @@ import { evaluate, validateCondition, type Condition } from '../src/core/conditi
 import { computeMonthlyBudget } from '../src/core/budget.ts'
 import { hasChoosableOption } from '../src/core/availability.ts'
 import { toBudgetLines, toStocks, traitsOf } from '../src/content/mapping.ts'
+import { annualLivingStandard, decileOf, percentileOf } from '../src/core/population.ts'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 const CONTENT = join(ROOT, 'content')
@@ -67,6 +68,7 @@ const events = parseEachFile(LifeEvent, listJson('events'))
 const reforms = parseEachFile(Reform, listJson('reforms'))
 const method = parseOne(MethodPage, 'method.json', readJson('method.json'))
 const intro = parseOne(IntroPage, 'intro.json', readJson('intro.json'))
+const population = parseOne(Population, 'population.json', readJson('population.json'))
 const principles = readJson('principles.json')
 
 // --------------------------------------------------- integrite referentielle
@@ -76,8 +78,32 @@ const lineCodes = new Set(budgetLines.map((l) => l.code))
 
 const complain = (file: string, path: string, message: string) => problems.push({ file, path, message })
 
+// Chaque repère de population cite une source connue (charte A2).
+for (const [key, block] of Object.entries(population ?? {}))
+  if (typeof block === 'object' && 'sourceId' in block && !sourceIds.has(block.sourceId))
+    complain('population.json', `${key}.sourceId`, `source inconnue : ${block.sourceId}`)
+
 for (const c of characters) {
   const file = `characters/${c.id}.json`
+
+  /*
+   * LE DÉCILE DÉCLARÉ EST CELUI DU BUDGET.
+   *
+   * Il commande plus de cent conditions de décisions et la règle de tirage ;
+   * le joueur, lui, voit le budget. Sept personnages sur treize étaient
+   * déclarés un décile ou plus au-dessus de ce que leur relevé donne, et
+   * Rachid trois : il payait les contributions des « trois derniers déciles »
+   * avec un niveau de vie médian. Calculé selon la définition de l'Insee,
+   * comparé à ses seuils publiés.
+   */
+  if (population) {
+    const annual = annualLivingStandard(computeMonthlyBudget(toBudgetLines(c)), c.traits)
+    const computed = decileOf(percentileOf(annual, population.livingStandardDeciles.values))
+    if (computed !== c.identity.incomeDecile)
+      complain(file, 'identity.incomeDecile',
+        `décile déclaré ${c.identity.incomeDecile}, mais son budget le place au décile ${computed} ` +
+          `(niveau de vie ${annual} € par an et par unité de consommation)`)
+  }
 
   for (const id of c.identity.calibrationSourceIds) {
     if (!sourceIds.has(id)) complain(file, 'identity.calibrationSourceIds', `source inconnue : ${id}`)
@@ -298,6 +324,9 @@ for (const e of events) {
 // Les sources et hypotheses orphelines ne sont pas une erreur, mais un
 // signal : du contenu a peut-etre ete supprime sans nettoyer son appui.
 const used = new Set<string>()
+// Les repères de population citent leurs sources.
+if (population)
+  for (const block of [population.livingStandardDeciles, population.tenure, population.households]) used.add(block.sourceId)
 for (const c of characters) {
   c.identity.calibrationSourceIds.forEach((s) => used.add(s))
   c.budget.lines.forEach((l) => {
@@ -349,6 +378,7 @@ const bundle = {
   reforms,
   method,
   intro,
+  population,
   principles,
 }
 

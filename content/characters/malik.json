@@ -7,7 +7,7 @@
     "firstName": "Malik",
     "age": 22,
     "identityLine": "intérimaire en logistique, missions d'une à trois semaines, hébergé chez sa mère à Vénissieux",
-    "incomeDecile": 3,
+    "incomeDecile": 2,
     "calibrationSourceIds": [
       "dares-contrats-courts",
       "insee-niveaux-de-vie"

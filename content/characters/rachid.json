@@ -7,7 +7,7 @@
     "firstName": "Rachid",
     "age": 39,
     "identityLine": "ingénieur informatique, en couple, deux enfants de 4 et 7 ans, locataire à Montreuil",
-    "incomeDecile": 8,
+    "incomeDecile": 5,
     "calibrationSourceIds": [
       "olap-loyers-idf",
       "cnaf-cout-garde",
@@ -204,7 +204,7 @@
     }
   ],
   "narrative": {
-    "story": "Rachid est arrivé à Montreuil pour six mois, le temps d'une mission, il y a quatorze ans. Le T4 a été trouvé grâce à un collègue qui partait, à un prix qui semblait déjà élevé et qui paraît aujourd'hui une aubaine. Sa conjointe et lui gagnent ensemble plus de cinq mille euros par mois, ce qui les place parmi les vingt pour cent les mieux payés du pays, et ils n'ont pas de patrimoine. Les deux faits sont vrais en même temps, et c'est la chose la plus difficile à faire entendre autour d'eux : à sa famille, qui le croit riche, comme à ses collègues propriétaires, qui le croient imprévoyant."
+    "story": "Rachid est arrivé à Montreuil pour six mois, le temps d'une mission, il y a quatorze ans. Le T4 a été trouvé grâce à un collègue qui partait, à un prix qui semblait déjà élevé et qui paraît aujourd'hui une aubaine. Son seul salaire dépasse de loin le salaire médian. Mais à quatre, avec ce loyer, leur niveau de vie est exactement celui du milieu du pays, et ils n'ont pas de patrimoine. Les deux faits sont vrais en même temps, et c'est la chose la plus difficile à faire entendre autour d'eux : à sa famille, qui le croit riche, comme à ses collègues propriétaires, qui le croient imprévoyant."
   },
   "lineOverrides": []
 }

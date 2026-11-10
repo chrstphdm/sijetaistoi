@@ -7,7 +7,7 @@
     "firstName": "Lucie",
     "age": 31,
     "identityLine": "en invalidité depuis cinq ans, ancienne vendeuse, locataire du parc social à Clermont-Ferrand",
-    "incomeDecile": 2,
+    "incomeDecile": 1,
     "calibrationSourceIds": [
       "drees-minima-sociaux",
       "ancols-loyers-sociaux"

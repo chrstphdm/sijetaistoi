@@ -151,5 +151,32 @@
     "url": "https://www.gart.org/",
     "vintage": "2025",
     "scope": "Fréquentation, tarification et financement des réseaux de transport public urbain."
+  },
+  {
+    "id": "insee-distribution-niveaux-de-vie",
+    "name": "Distribution des niveaux de vie",
+    "organisation": "INSEE",
+    "affiliation": "statistics_body",
+    "url": "https://www.insee.fr/fr/statistiques/2416808",
+    "vintage": "2024",
+    "scope": "Déciles de niveau de vie annuel, en euros 2024. France métropolitaine, personnes des ménages ordinaires dont la personne de référence n'est pas étudiante. Enquête Revenus fiscaux et sociaux."
+  },
+  {
+    "id": "insee-statut-occupation",
+    "name": "Statut d'occupation des résidences principales",
+    "organisation": "INSEE",
+    "affiliation": "statistics_body",
+    "url": "https://www.insee.fr/fr/statistiques/2415555",
+    "vintage": "2026",
+    "scope": "Part des résidences principales selon le statut d'occupation, au 1er janvier 2026, données provisoires. France hors Mayotte. Insee-SDES, estimations annuelles du parc de logements."
+  },
+  {
+    "id": "insee-structure-menages",
+    "name": "Ménages selon la structure familiale",
+    "organisation": "INSEE",
+    "affiliation": "statistics_body",
+    "url": "https://www.insee.fr/fr/statistiques/2381514",
+    "vintage": "2023",
+    "scope": "Répartition des ménages selon leur structure familiale. France hors Mayotte, recensement de la population 2023."
   }
 ]

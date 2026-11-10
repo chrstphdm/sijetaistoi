@@ -111,6 +111,38 @@ export const IntroPage = z.object({
   principlesTitle: z.string().min(10),
 })
 
+/**
+ * Reperes de population, pour SITUER les personnages — jamais pour les
+ * declarer representatifs. Faits publies, chacun avec sa source.
+ */
+const Share = z.number().min(0).max(100)
+export const Population = z.object({
+  note: z.string().min(40),
+  livingStandardDeciles: z.object({
+    values: z.array(z.number().positive()).length(9),
+    year: z.number().int(),
+    unit: z.literal('EUR_year'),
+    sourceId: Id,
+    scope: z.string().min(20),
+  }),
+  tenure: z.object({
+    shares: z.object({
+      owner_outright: Share, owner_with_loan: Share, tenant_social: Share,
+      tenant_private: Share, housed: Share,
+    }),
+    date: z.string(),
+    sourceId: Id,
+    scope: z.string().min(10),
+  }),
+  households: z.object({
+    shares: z.object({ single: Share, loneParent: Share, coupleNoChild: Share, coupleWithChildren: Share, other: Share }),
+    year: z.number().int(),
+    sourceId: Id,
+    scope: z.string().min(10),
+  }),
+})
+export type PopulationT = z.infer<typeof Population>
+
 export const ContentBundle = z.object({
   contentVersion: z.string(),
   builtFrom: z.object({ fileCount: z.number().int(), charterVersion: z.string() }),
@@ -122,6 +154,7 @@ export const ContentBundle = z.object({
   reforms: z.array(Reform),
   method: MethodPage,
   intro: IntroPage,
+  population: Population,
   principles: z.object({
     note: z.string().min(40),
     principles: z.array(Principle).min(10),

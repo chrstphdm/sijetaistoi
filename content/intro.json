@@ -32,15 +32,15 @@
   "goalTitle": "Ce que ce jeu cherche à faire",
   "goal": [
     "Ce jeu n'a qu'un seul objectif, et il ne porte sur aucune politique en particulier : qu'à la fin d'une partie, tu puisses te dire que tu n'avais pas réalisé qu'une décision qui te semblait évidente pouvait être vécue comme ça par quelqu'un d'autre.",
-    "Il ne cherche pas à te faire changer d'avis. Il ne défend aucun parti, aucune doctrine, et ne contient aucune bonne réponse cachée. Il ne te donnera pas de score, ne te rangera dans aucune catégorie, et ne te dira jamais si tu as eu raison.",
-    "Ce qu'il fait, c'est te mettre dans la situation de quelqu'un d'autre après que tu aies décidé pour lui."
+    "Ce jeu ne cherche pas à te faire changer d'avis. Il ne défend aucun parti, aucune doctrine, et ne contient aucune bonne réponse cachée. Il ne te donnera pas de score, ne te rangera dans aucune catégorie, et ne te dira jamais si tu as eu raison.",
+    "Il te place dans la situation de quelqu'un d'autre, après que tu as décidé pour lui."
   ],
   "rulesTitle": "Comment une partie se déroule",
   "rules": [
     {
       "id": "trois-actes",
       "title": "Trois actes, trois personnes",
-      "body": "Tu incarnes successivement trois personnages tirés parmi six. Pour chacun, tu vis deux ou trois mois : son budget, ses dépenses contraintes, ce qu'il peut arbitrer et ce qu'il ne peut pas."
+      "body": "Tu incarnes successivement trois personnages, tirés au sort parmi les treize du jeu. Pour chacun, tu vis deux ou trois mois : son budget, ses dépenses contraintes, ce qu'il peut arbitrer et ce qu'il ne peut pas."
     },
     {
       "id": "deux-portees",
@@ -55,12 +55,12 @@
     {
       "id": "echelles",
       "title": "Quatre façons de mesurer",
-      "body": "Après chaque décision, tu vois son effet sur les six personnages. Tu peux changer d'échelle : en euros, en part du revenu, en part du reste à vivre, en jours de dépenses. Le classement des plus touchés change selon celle que tu choisis."
+      "body": "Après chaque décision, tu vois son effet sur tous les personnages. Tu peux changer d'échelle : en euros, en part du revenu, en part du reste à vivre, en jours de dépenses. Le classement des plus touchés change selon celle que tu choisis."
     },
     {
       "id": "avis",
       "title": "On te demande ton avis, deux fois",
-      "body": "Après chaque décision, le jeu demande si elle te semble bien et juste, et pourquoi. Il repose la même question plus tard, après que tu aies vécu autre chose. Il note les écarts sans en tirer de conclusion."
+      "body": "Après chaque décision, le jeu demande si elle te semble bien et juste, et pourquoi. Il repose la même question plus tard, une fois que tu as vécu autre chose. Il note les écarts sans en tirer de conclusion."
     }
   ],
   "theoryTitle": "Ce qui a guidé la conception",
@@ -129,7 +129,7 @@
     {
       "id": "neutre",
       "label": "neutre",
-      "body": "Ce n'est pas neutre pour autant. La page « Comment ce jeu est construit » détaille les six biais que le dispositif ne parvient pas à éviter."
+      "body": "Ce n'est pas neutre pour autant. La page « Comment ce jeu est construit » détaille les biais que le dispositif ne parvient pas à éviter."
     }
   ],
   "principlesTitle": "Les principes que le jeu met en tension"

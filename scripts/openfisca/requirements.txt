@@ -1,0 +1,2 @@
+OpenFisca-Core==44.7.1
+OpenFisca-France==176.1.10

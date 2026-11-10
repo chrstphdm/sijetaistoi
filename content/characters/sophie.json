@@ -7,7 +7,7 @@
     "firstName": "Sophie",
     "age": 41,
     "identityLine": "technicienne territoriale, en couple, deux enfants, accédante à la propriété près de Nancy",
-    "incomeDecile": 5,
+    "incomeDecile": 4,
     "calibrationSourceIds": [
       "insee-niveaux-de-vie",
       "anil-loyers",

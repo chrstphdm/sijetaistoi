@@ -7,7 +7,7 @@
     "firstName": "Michèle",
     "age": 71,
     "identityLine": "retraitée, ancienne secrétaire de mairie, propriétaire d'une maison en Corrèze",
-    "incomeDecile": 4,
+    "incomeDecile": 3,
     "calibrationSourceIds": [
       "insee-niveaux-de-vie",
       "drees-salaires-soin"

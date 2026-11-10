@@ -256,7 +256,7 @@
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Aucun effet direct, faute de revenus du patrimoine. Un patrimoine qui ne produit aucun revenu n'est pas touché par une mesure sur les revenus du patrimoine. C'est la distinction la plus mal comprise du sujet : une maison habitée et un appartement loué sont deux formes de patrimoine, et une seule rapporte quelque chose chaque mois."
+          "note": "Aucun effet direct, faute de revenus du patrimoine. Un patrimoine qui ne produit aucun revenu n'est pas touché par une mesure sur les revenus du patrimoine. La distinction compte : une maison habitée et un appartement loué sont deux formes de patrimoine, et une seule rapporte quelque chose chaque mois."
         },
         {
           "id": "kb-chomeurs",
@@ -320,7 +320,7 @@
           "horizon": "y1",
           "uncertainty": "highly_debated",
           "hypothesisId": "incidence-fiscalite-capital",
-          "note": "Imposition au barème, pour un contribuable dont les autres revenus atteignent déjà la tranche haute. L'ampleur réelle dépend de la réaction : percevoir moins, percevoir plus tard, ou percevoir ailleurs. Les travaux disponibles divergent fortement sur cette réaction. Seule la part financière du revenu du patrimoine est concernée : les loyers perçus suivent déjà le barème.",
+          "note": "Imposition au barème, pour un contribuable dont les autres revenus atteignent déjà la tranche haute. L'ampleur réelle dépend de la réaction : percevoir moins, percevoir plus tard, ou percevoir ailleurs. Les études disponibles divergent fortement sur cette réaction. Seule la part financière du revenu du patrimoine est concernée : les loyers perçus suivent déjà le barème.",
           "monthlyShare": {
             "rate": -0.12,
             "of": "revenu-capital"
@@ -477,7 +477,7 @@
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Aucun effet direct. Un patrimoine qui ne produit aucun revenu n'est pas touché par une mesure sur les revenus du patrimoine. C'est la distinction la plus mal comprise du sujet : une maison habitée et un appartement loué sont deux formes de patrimoine, et une seule rapporte quelque chose chaque mois."
+          "note": "Aucun effet direct. Un patrimoine qui ne produit aucun revenu n'est pas touché par une mesure sur les revenus du patrimoine. La distinction compte : une maison habitée et un appartement loué sont deux formes de patrimoine, et une seule rapporte quelque chose chaque mois."
         },
         {
           "id": "kt-chomeurs",
@@ -677,7 +677,7 @@
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Un retraité dont l'épargne produit quelques centaines d'euros par an serait exonéré, alors qu'il est aujourd'hui prélevé à 30 % dès le premier euro. Un patrimoine qui ne produit aucun revenu n'est pas touché par une mesure sur les revenus du patrimoine. C'est la distinction la plus mal comprise du sujet : une maison habitée et un appartement loué sont deux formes de patrimoine, et une seule rapporte quelque chose chaque mois."
+          "note": "Un retraité dont l'épargne produit quelques centaines d'euros par an serait exonéré, alors qu'il est aujourd'hui prélevé à 30 % dès le premier euro. Un patrimoine qui ne produit aucun revenu n'est pas touché par une mesure sur les revenus du patrimoine. La distinction compte : une maison habitée et un appartement loué sont deux formes de patrimoine, et une seule rapporte quelque chose chaque mois."
         },
         {
           "id": "ke-chomeurs",
@@ -798,7 +798,7 @@
     {
       "id": "contester-cadrage",
       "label": "Je conteste la façon dont la question est posée",
-      "decisionDescription": "Le joueur refuse le cadrage : la question n'est pas de savoir à quel taux imposer un revenu du patrimoine, mais comment le patrimoine se constitue et se transmet, ce qui ne se règle pas par un taux.",
+      "decisionDescription": "Tu refuses la question telle qu'elle est posée : la question n'est pas de savoir à quel taux imposer un revenu du patrimoine, mais comment le patrimoine se constitue et se transmet, ce qui ne se règle pas par un taux.",
       "families": [
         "challenge_framing"
       ],

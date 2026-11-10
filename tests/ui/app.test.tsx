@@ -415,7 +415,8 @@ describe('page d’accueil visuelle', () => {
   it('présente tout le corpus avec un sceau de densité identique', () => {
     render(<App />)
     const cast = screen.getByRole('heading', { name: /personnes que tu peux incarner/ }).closest('section')!
-    const seals = cast.querySelectorAll('.seal')
+    // Le motif de chaque carte ; la jauge de position en reprend un second, plus petit.
+    const seals = cast.querySelectorAll('.cast__tile .seal')
     // Comparé au CORPUS, jamais à un nombre écrit en dur : la galerie montre
     // tout le monde, et ajouter un personnage sans l'y faire figurer serait
     // un corpus déclaré plus large qu'il n'est montré.

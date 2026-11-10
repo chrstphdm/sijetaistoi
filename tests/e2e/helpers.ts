@@ -115,3 +115,19 @@ export async function settle(page: Page) {
     { timeout: 5_000 },
   )
 }
+
+/**
+ * Fait défiler la page jusqu'en bas puis remonte, pour déclencher les
+ * animations d'apparition de l'accueil avant une capture pleine page. Sans
+ * cela, les sections jamais vues restent dans leur état d'attente.
+ */
+export async function revealAll(page: Page) {
+  const height = await page.evaluate(() => document.documentElement.scrollHeight)
+  const step = await page.evaluate(() => window.innerHeight * 0.7)
+  for (let y = 0; y <= height; y += step) {
+    await page.evaluate((top) => window.scrollTo(0, top), y)
+    await page.waitForTimeout(60)
+  }
+  await page.evaluate(() => window.scrollTo(0, 0))
+  await settle(page)
+}

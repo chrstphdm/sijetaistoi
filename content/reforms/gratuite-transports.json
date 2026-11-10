@@ -285,7 +285,7 @@
       ],
       "argumentsAgainst": [
         "La hausse de fréquentation observée dans les réseaux gratuits provient surtout de trajets auparavant faits à pied ou à vélo, et l'effet sur le trafic automobile est faible.",
-        "Elle bénéficie aux habitants des agglomérations desservies et la font financer par tous, y compris par ceux qui n'ont aucun réseau et pour qui la voiture reste obligatoire."
+        "Elle profite aux habitants des agglomérations desservies, mais elle est financée par tous, y compris par ceux qui n'ont aucun réseau et pour qui la voiture reste obligatoire."
       ]
     },
     {
@@ -636,7 +636,7 @@
     {
       "id": "contester-cadrage",
       "label": "Je conteste la façon dont la question est posée",
-      "decisionDescription": "Le joueur refuse le cadrage : la question n'est pas le prix du transport, mais la distance entre les logements abordables et les emplois, qui est le produit de décisions d'urbanisme et de prix du foncier.",
+      "decisionDescription": "Tu refuses la question telle qu'elle est posée : la question n'est pas le prix du transport, mais la distance entre les logements abordables et les emplois, qui est le produit de décisions d'urbanisme et de prix du foncier.",
       "families": [
         "challenge_framing"
       ],

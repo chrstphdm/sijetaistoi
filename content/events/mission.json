@@ -23,7 +23,7 @@
     "nature": "fiction",
     "note": "Environ 80 % du revenu d'activité indépendante d'un mois."
   },
-  "text": "Un ancien client rappelle : un chantier de {montant} à livrer sous six semaines. Il faudra décaler deux commandes en cours, et il paie généralement à quarante-cinq jours.",
+  "text": "Un ancien client rappelle : une commande de {montant} à livrer sous six semaines. Il faudra décaler deux commandes en cours, et il paie généralement à quarante-cinq jours.",
   "options": [
     {
       "id": "accepter",

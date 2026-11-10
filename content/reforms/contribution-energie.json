@@ -443,7 +443,7 @@
     {
       "id": "contester-cadrage",
       "label": "Je conteste la façon dont la question est posée",
-      "decisionDescription": "Le joueur refuse le cadrage : la question ne devrait pas être « où trouver trois milliards » mais porter sur l'obligation de rénovation, la régulation des loyers des passoires thermiques, ou la priorité relative de ce programme.",
+      "decisionDescription": "Tu refuses la question telle qu'elle est posée : la question ne devrait pas être « où trouver trois milliards » mais porter sur l'obligation de rénovation, la régulation des loyers des passoires thermiques, ou la priorité relative de ce programme.",
       "families": [
         "challenge_framing"
       ],

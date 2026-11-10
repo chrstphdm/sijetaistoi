@@ -262,7 +262,7 @@
           "horizon": "y1",
           "uncertainty": "highly_debated",
           "hypothesisId": "duree-indemnisation-retour-emploi",
-          "note": "Ses droits s'arrêteraient dans quatre mois au lieu de onze : à cinquante-quatre ans, sa durée maximale passerait de vingt-deux mois et demi à quinze. Le modèle représente cet écart par la différence moyenne entre son allocation et le minimum social qui prendrait le relais. À cinquante-quatre ans, la probabilité de retrouver un emploi avant l'échéance est précisément l'objet du débat, et les travaux disponibles ne s'accordent pas."
+          "note": "Ses droits s'arrêteraient dans quatre mois au lieu de onze : à cinquante-quatre ans, sa durée maximale passerait de vingt-deux mois et demi à quinze. Le modèle représente cet écart par la différence moyenne entre son allocation et le minimum social qui prendrait le relais. À cinquante-quatre ans, la probabilité de retrouver un emploi avant l'échéance est précisément l'objet du débat, et les études disponibles ne s'accordent pas."
         },
         {
           "id": "cd-inactifs",
@@ -603,7 +603,7 @@
     {
       "id": "contester-cadrage",
       "label": "Je conteste la façon dont la question est posée",
-      "decisionDescription": "Le joueur refuse le cadrage : la question n'est pas de savoir combien de temps indemniser, mais pourquoi il y a des emplois courts en nombre croissant et ce qui les produit.",
+      "decisionDescription": "Tu refuses la question telle qu'elle est posée : la question n'est pas de savoir combien de temps indemniser, mais pourquoi il y a des emplois courts en nombre croissant et ce qui les produit.",
       "families": [
         "challenge_framing"
       ],

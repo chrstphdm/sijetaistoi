@@ -58,7 +58,7 @@ function Differe({ cents, year, name }: { cents: number; year: number | null; na
   if (cents === 0 || year === null) return null
   return (
     <div className="provenance">
-      {`À partir de la ${year}ᵉ année, `}
+      {`À partir de la ${year === 1 ? '1re' : `${year}ᵉ`} année, `}
       {/* `signed` comme partout ailleurs sur cet ecran : un montant signe se
           rend d'une seule facon dans tout le jeu — signe, glyphe et mot —, et
           un second vocabulaire pour dire la meme chose (« s'y ajoute », « s'en

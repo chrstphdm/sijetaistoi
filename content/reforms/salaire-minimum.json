@@ -15,7 +15,7 @@
     "insee-niveaux-de-vie",
     "dares-contrats-courts"
   ],
-  "modelLimitations": "Le modèle applique une variation identique à l'intérieur d'une tranche de revenu, alors que l'effet d'une hausse du salaire minimum dépend du nombre d'heures travaillées : la même hausse de 10 % rapporte deux fois moins à un temps partiel de vingt-huit heures qu'à un temps plein, et le jeu écrase cet écart. Il ne représente pas l'effet sur l'emploi, qui est l'objet du désaccord central, ni la diffusion aux salaires immédiatement supérieurs — le tassement des grilles —, dont l'ampleur dépend des conventions collectives. Il ne représente pas non plus l'effet sur les prix, ni sur les finances publiques par le biais des allègements de cotisations, dont le coût croît mécaniquement avec le niveau du minimum. Le corpus ne contient qu'un seul employeur, ce qui interdit de comparer un artisan sans salarié et une entreprise de trente-quatre personnes.",
+  "modelLimitations": "Le modèle applique une variation identique à l'intérieur d'une tranche de revenu, alors que l'effet d'une hausse du salaire minimum dépend du nombre d'heures travaillées : la même hausse de 10 % rapporte un cinquième de moins à un temps partiel de vingt-huit heures qu'à un temps plein, et le jeu écrase cet écart. Il ne représente pas l'effet sur l'emploi, qui est l'objet du désaccord central, ni la diffusion aux salaires immédiatement supérieurs — le tassement des grilles —, dont l'ampleur dépend des conventions collectives. Il ne représente pas non plus l'effet sur les prix, ni sur les finances publiques par le biais des allègements de cotisations, dont le coût croît mécaniquement avec le niveau du minimum. Le corpus ne contient qu'un seul employeur, ce qui interdit de comparer un artisan sans salarié et une entreprise de trente-quatre personnes.",
   "options": [
     {
       "id": "statu-quo",
@@ -839,7 +839,7 @@
     {
       "id": "contester-cadrage",
       "label": "Je conteste la façon dont la question est posée",
-      "decisionDescription": "Le joueur refuse le cadrage : la question n'est pas le niveau du minimum, mais le fait qu'une part croissante des salariés y soit rémunérée, et ce qui produit cette concentration.",
+      "decisionDescription": "Tu refuses la question telle qu'elle est posée : la question n'est pas le niveau du minimum, mais le fait qu'une part croissante des salariés y soit rémunérée, et ce qui produit cette concentration.",
       "families": [
         "challenge_framing"
       ],

@@ -254,7 +254,7 @@ export function MethodScreen({ onBack }: { readonly onBack?: () => void }) {
           <h2 id="m-hypotheses">Les hypothèses contestées, et leurs deux lectures</h2>
           <p className="lead">
             {debated.length} hypothèse{debated.length > 1 ? 's' : ''} du modèle port
-            {debated.length > 1 ? 'ent' : 'e'} sur des points où les travaux disponibles ne
+            {debated.length > 1 ? 'ent' : 'e'} sur des points où les études disponibles ne
             convergent pas. Le jeu ne tranche pas : il nomme les deux lectures.
           </p>
           {/* Les lectures ont exactement le même traitement : aucune n'est en

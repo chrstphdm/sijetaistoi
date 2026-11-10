@@ -1,5 +1,6 @@
 import type { CharacterT } from '@/schemas/index.ts'
 import { Seal } from './Seal.tsx'
+import { Standing } from './PopulationPlace.tsx'
 
 /**
  * L'arrivee dans un personnage.
@@ -41,6 +42,10 @@ export function CharacterIntro({
       </ul>
 
       <p>{narrative.story}</p>
+
+      {/* Après l'histoire, jamais avant (charte C7) : présenté d'abord par
+          son revenu, un personnage devient un dossier. */}
+      <Standing character={character} />
 
       <p>
         <strong>Ce que tu veux ces prochains mois</strong>&nbsp;: {shortTermGoal.label}.

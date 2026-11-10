@@ -1,7 +1,7 @@
 {
   "id": "facture-retard",
   "charterVersion": "1.0",
-  "descriptiveTitle": "Une facture payée avec 45 jours de retard",
+  "descriptiveTitle": "Une facture réglée avec deux mois de retard",
   "valence": "negative",
   "intensity": 3,
   "dramaticFunction": [
@@ -23,7 +23,7 @@
     "nature": "fiction",
     "note": "Environ 80 % du revenu d'activité indépendante du mois : le plus gros client."
   },
-  "text": "Le plus gros client annonce un décalage de paiement : {montant} attendus ce mois-ci n'arriveront qu'en novembre. Le travail est livré, accepté, et facturé depuis six semaines.",
+  "text": "Le plus gros client annonce un décalage de paiement : {montant} attendus ce mois-ci n'arriveront que dans deux mois. Le travail est livré, accepté, et facturé depuis six semaines.",
   "options": [
     {
       "id": "attendre",

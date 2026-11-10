@@ -56,6 +56,12 @@ export function LoopDiagram() {
         className="loop__svg"
       >
         <circle cx={CX} cy={CY} r={R} className="loop__ring" />
+        {/* Le tracé qui parcourt la boucle quand elle apparaît. Décoratif :
+            l'anneau en pointillés reste dessous, et dit la même chose. */}
+        <circle
+          cx={CX} cy={CY} r={R} pathLength={100} className="loop__progress"
+          transform={`rotate(-90 ${CX} ${CY})`} aria-hidden="true"
+        />
         <path
           d="M -7 -8 L 0 0 L -7 8"
           className="loop__arrow"
@@ -65,7 +71,7 @@ export function LoopDiagram() {
         {STEPS.map((s, i) => {
           const { x, y } = at(i)
           return (
-            <g key={s.n}>
+            <g key={s.n} className="loop__step" style={{ ['--i' as string]: i } as React.CSSProperties}>
               <circle cx={x} cy={y} r={26} className="loop__disc" />
               <text x={x} y={y + 7} className="loop__num">
                 {s.n}

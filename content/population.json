@@ -1,0 +1,44 @@
+{
+  "note": "Repères de population, pour situer chaque personnage. Ce sont des faits publiés par l'Insee ; les personnages, eux, sont fictifs. Leur position est calculée à partir de leur relevé, selon la définition de l'Insee : revenu disponible du ménage divisé par ses unités de consommation.",
+  "livingStandardDeciles": {
+    "values": [
+      13970,
+      17700,
+      20980,
+      23880,
+      26740,
+      29880,
+      33680,
+      38780,
+      48580
+    ],
+    "year": 2024,
+    "unit": "EUR_year",
+    "sourceId": "insee-distribution-niveaux-de-vie",
+    "scope": "Niveau de vie annuel par personne, en euros 2024, France métropolitaine. Les ménages dont la personne de référence est étudiante sont hors du champ."
+  },
+  "tenure": {
+    "shares": {
+      "owner_outright": 37.6,
+      "owner_with_loan": 19.8,
+      "tenant_social": 17.3,
+      "tenant_private": 23.2,
+      "housed": 2.3
+    },
+    "date": "2026-01",
+    "sourceId": "insee-statut-occupation",
+    "scope": "Part des résidences principales, en %, au 1er janvier 2026 (provisoire)."
+  },
+  "households": {
+    "shares": {
+      "single": 39.1,
+      "loneParent": 9.5,
+      "coupleNoChild": 24.9,
+      "coupleWithChildren": 22.9,
+      "other": 3.6
+    },
+    "year": 2023,
+    "sourceId": "insee-structure-menages",
+    "scope": "Part des ménages, en %, recensement 2023."
+  }
+}

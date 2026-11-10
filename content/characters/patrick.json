@@ -7,7 +7,7 @@
     "firstName": "Patrick",
     "age": 54,
     "identityLine": "sans emploi depuis onze mois, ancien conducteur de ligne, locataire à Saint-Quentin",
-    "incomeDecile": 3,
+    "incomeDecile": 2,
     "calibrationSourceIds": [
       "unedic-allocations",
       "anil-loyers"

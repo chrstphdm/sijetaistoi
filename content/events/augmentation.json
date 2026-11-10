@@ -23,7 +23,7 @@
     "nature": "fiction",
     "note": "Revalorisation d'environ 2,5 % du salaire net."
   },
-  "text": "La revalorisation annoncée l'an dernier prend effet ce mois-ci : {montant} nets de plus par mois.",
+  "text": "La revalorisation annoncée l'an dernier prend effet ce mois-ci : {montant} nets de plus par mois. Pour qui perçoit la prime d'activité, une partie de la hausse sera reprise au prochain recalcul.",
   "options": [
     {
       "id": "mettre-de-cote",

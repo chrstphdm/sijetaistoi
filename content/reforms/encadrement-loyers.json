@@ -195,7 +195,7 @@
         }
       ],
       "argumentsFor": [
-        "Un plafond de loyer décourage la remise en location et l'entretien, et les travaux disponibles observent effectivement un report vers le meublé et la vente là où il s'applique.",
+        "Un plafond de loyer décourage la remise en location et l'entretien, et les études disponibles observent effectivement un report vers le meublé et la vente là où il s'applique.",
         "Le niveau des loyers résulte d'une pénurie de logements : agir sur le prix sans agir sur le nombre déplace le problème vers les files d'attente et les dossiers de garantie."
       ],
       "argumentsAgainst": [
@@ -420,7 +420,7 @@
         "Le plafond est fixé par référence au marché local lui-même, et non à un montant administré : il écrête les loyers les plus éloignés de la médiane sans fixer les prix."
       ],
       "argumentsAgainst": [
-        "Les travaux disponibles observent un report vers la location meublée, la vente et les locations de courte durée, c'est-à-dire une réduction de l'offre louée à l'année.",
+        "Les études disponibles observent un report vers la location meublée, la vente et les locations de courte durée, c'est-à-dire une réduction de l'offre louée à l'année.",
         "L'effet ne joue qu'à la relocation : il avantage ceux qui déménagent et laisse inchangés ceux qui restent, c'est-à-dire souvent les plus modestes."
       ]
     },
@@ -891,7 +891,7 @@
     {
       "id": "contester-cadrage",
       "label": "Je conteste la façon dont la question est posée",
-      "decisionDescription": "Le joueur refuse le cadrage : la question n'est pas de savoir comment répartir un parc insuffisant, mais pourquoi on n'en construit pas assez et qui décide de ne pas le faire.",
+      "decisionDescription": "Tu refuses la question telle qu'elle est posée : la question n'est pas de savoir comment répartir un parc insuffisant, mais pourquoi on n'en construit pas assez et qui décide de ne pas le faire.",
       "families": [
         "challenge_framing"
       ],

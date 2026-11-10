@@ -7,7 +7,7 @@
     "firstName": "Marc et Anne",
     "age": 48,
     "identityLine": "menuisier à son compte et cadre en mutuelle, deux adolescents, propriétaires près de Rennes",
-    "incomeDecile": 9,
+    "incomeDecile": 8,
     "calibrationSourceIds": [
       "insee-artisanat-revenus",
       "insee-niveaux-de-vie",
@@ -153,7 +153,7 @@
       "Qu'Anne puisse passer à quatre cinquièmes sans que cela se discute"
     ],
     "concerns": [
-      "Que Lucie choisisse une école privée à neuf mille euros l'année et qu'il ne sache pas dire non",
+      "Que Léa choisisse une école privée à neuf mille euros l'année et qu'il ne sache pas dire non",
       "Que le prochain impayé d'un client soit celui de trop"
     ],
     "nonMonetaryConstraint": "Il n'a pas pris trois semaines consécutives de congés depuis sept ans : quand l'atelier s'arrête, rien ne rentre.",
@@ -161,7 +161,7 @@
     "opinionAgainstOwnInterest": "Il est favorable à une imposition plus lourde des successions : « j'ai monté ça tout seul, je ne vois pas pourquoi mes enfants recevraient tout sans rien faire »."
   },
   "shortTermGoal": {
-    "label": "Réunir les 6 000 € d'apport promis à Lucie pour la rentrée de septembre",
+    "label": "Réunir les 6 000 € d'apport promis à Léa pour la rentrée de septembre",
     "amount": 6000,
     "deadline": "2027-09"
   },
@@ -190,7 +190,7 @@
     {
       "code": "projet",
       "monthlyAmount": 500,
-      "narrativeLabel": "ce qu'ils mettent de côté pour l'apport de Lucie"
+      "narrativeLabel": "ce qu'ils mettent de côté pour l'apport de Léa"
     }
   ],
   "narrative": {

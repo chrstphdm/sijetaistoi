@@ -93,7 +93,7 @@
     {
       "id": "hausse-uniforme",
       "label": "Un point de plus sur tout le taux réduit",
-      "decisionDescription": "Le taux réduit passe d'un point. Alimentation, transports et travaux concernés augmentent dans la même proportion.",
+      "decisionDescription": "Le taux réduit augmente d'un point. Alimentation, transports et travaux concernés augmentent dans la même proportion.",
       "families": [
         "levies"
       ],
@@ -434,7 +434,7 @@
     {
       "id": "contester-cadrage",
       "label": "Je conteste la façon dont la question est posée",
-      "decisionDescription": "Le joueur refuse le cadrage : la question n'est pas de savoir où prendre 4 milliards, mais à quoi ils servent et si cette dépense est la bonne.",
+      "decisionDescription": "Tu refuses la question telle qu'elle est posée : la question n'est pas de savoir où prendre 4 milliards, mais à quoi ils servent et si cette dépense est la bonne.",
       "families": [
         "challenge_framing"
       ],

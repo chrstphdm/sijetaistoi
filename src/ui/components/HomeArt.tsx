@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react'
+import { useState, type CSSProperties, type ReactNode } from 'react'
 import { characters } from '@/content/load.ts'
 import { Seal, sealHue } from './Seal.tsx'
 
@@ -28,6 +28,21 @@ const ids = () => characters.map((c) => c.id)
 export function HeroCast() {
   const all = ids()
   const n = characters.length
+  /*
+   * Un tirage, une fois, au chargement : un balayage passe sur toutes les
+   * tuiles à égalité, puis trois s'allument — au hasard, et différentes à
+   * chaque visite. C'est le mécanisme du jeu, montré plutôt que dit.
+   * Décoratif (tout le bloc est aria-hidden), et coupé si moins de
+   * mouvement est demandé.
+   */
+  const [drawn] = useState(() => {
+    const pool = Array.from({ length: n }, (_, i) => i)
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[pool[i], pool[j]] = [pool[j]!, pool[i]!]
+    }
+    return new Set(pool.slice(0, 3))
+  })
   return (
     <div className="hero-cast" aria-hidden="true">
       {characters.map((c, i) => {
@@ -35,8 +50,9 @@ export function HeroCast() {
         return (
           <div
             key={c.id}
-            className="hero-cast__tile"
+            className={`hero-cast__tile${drawn.has(i) ? ' hero-cast__tile--drawn' : ''}`}
             style={{
+              ['--i' as string]: i,
               ['--seal-hue' as string]: sealHue(c.id, all),
               ['--x' as string]: `${50 + 41 * Math.cos(a)}%`,
               ['--y' as string]: `${50 + 41 * Math.sin(a)}%`,

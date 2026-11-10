@@ -454,7 +454,7 @@
     {
       "id": "contester-cadrage",
       "label": "Je conteste la façon dont la question est posée",
-      "decisionDescription": "Le joueur refuse le cadrage : opposer les retraités entre eux, ou les retraités aux actifs, suppose que l'enveloppe soit fixe et que personne d'autre ne puisse contribuer.",
+      "decisionDescription": "Tu refuses la question telle qu'elle est posée : opposer les retraités entre eux, ou les retraités aux actifs, suppose que l'enveloppe soit fixe et que personne d'autre ne puisse contribuer.",
       "families": [
         "challenge_framing"
       ],
