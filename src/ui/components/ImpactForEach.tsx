@@ -207,9 +207,18 @@ export function ImpactForEach({ characters, world, scale, onScaleChange, screenI
                   d'un coup d'œil ; les phrases se déplient à la demande. */}
               <details className="impact__fold">
               <summary className="impact__head">
+                {/* QUI EST QUI. Le prénom seul ne disait pas de qui il
+                    s'agit : sans sa fiche en tête, « Malik » ne dit pas
+                    « intérimaire, hébergé chez sa mère ». L'âge et la ligne
+                    d'identité suivent le prénom, comme sur sa fiche. */}
                 <span className="impact__who">
                   <Seal id={c.id} allIds={characters.map((x) => x.id)} size={22} />
-                  <strong>{c.identity.firstName}</strong>
+                  <span className="impact__id">
+                    <strong>{c.identity.firstName}</strong>
+                    <span className="impact__profile">
+                      {c.identity.age} ans · {c.identity.identityLine}
+                    </span>
+                  </span>
                 </span>
                 {/* Le dessin double la phrase en dessous : décoratif pour un
                     lecteur d'écran, qui lit la phrase. */}

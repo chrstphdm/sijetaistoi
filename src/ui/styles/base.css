@@ -2523,3 +2523,16 @@ body:has(.page) { padding-inline: 0; }
   position: absolute; width: 1px; height: 1px; overflow: hidden;
   clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
 }
+
+/* Qui est qui, sur l'écran d'impact : âge et ligne d'identité sous le prénom. */
+.impact__head { grid-template-columns: minmax(11rem, 16rem) minmax(0, 1fr) minmax(7rem, 10rem); }
+.impact__who { align-items: flex-start; }
+.impact__who .seal { margin-top: 3px; }
+.impact__id { display: flex; flex-direction: column; min-width: 0; }
+.impact__id strong { white-space: normal; }
+.impact__profile {
+  font: 400 12px/1.35 var(--font-ui); color: var(--ink-2);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.impact__fold[open] .impact__profile { -webkit-line-clamp: unset; }
+@media (max-width: 560px) { .impact__head { grid-template-columns: minmax(0, 1fr) auto; } }
