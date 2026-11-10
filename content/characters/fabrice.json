@@ -1,0 +1,186 @@
+{
+  "id": "fabrice",
+  "charterVersion": "1.0",
+  "fictional": true,
+  "fictionNote": "Personnage fictif. Situation construite pour être plausible au regard des ordres de grandeur publics sur le revenu de solidarité active, les loyers du parc social à La Réunion et l'écart des prix alimentaires entre les départements d'outre-mer et l'Hexagone. Ne correspond à aucune personne réelle.",
+  "identity": {
+    "firstName": "Fabrice",
+    "age": 48,
+    "identityLine": "allocataire du revenu de solidarité active, ancien coffreur, locataire du parc social au Port, à La Réunion",
+    "incomeDecile": 1,
+    "calibrationSourceIds": [
+      "drees-minima-sociaux",
+      "ancols-loyers-sociaux",
+      "insee-niveaux-de-vie"
+    ]
+  },
+  "traits": {
+    "activities": [
+      "inactive"
+    ],
+    "tenure": "tenant_social",
+    "heating": "individual",
+    "householdSize": 1,
+    "childCount": 0,
+    "hasSchoolAgedChild": false,
+    "housingZone": "detendue",
+    "hasCar": false,
+    "recognisedDisability": false
+  },
+  "budget": {
+    "lines": [
+      {
+        "code": "prestations",
+        "group": "resource",
+        "value": {
+          "amount": 817,
+          "unit": "EUR_month",
+          "nature": "hypothesis",
+          "hypothesisId": "prestations-calibrage",
+          "note": "Revenu de solidarité active, diminué du forfait logement, et allocation de logement, dont le barème diffère dans les départements d'outre-mer. Montants calculés avec OpenFisca-France, législation de juin 2025 (voir scripts/openfisca). Le montant du revenu de solidarité active est le même qu'en Hexagone ; les prix, eux, ne le sont pas."
+        }
+      },
+      {
+        "code": "logement",
+        "group": "constrained",
+        "value": {
+          "amount": 390,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "T2 du parc social, charges comprises, au troisième étage d'un immeuble des années 1990."
+        }
+      },
+      {
+        "code": "energie",
+        "group": "constrained",
+        "value": {
+          "amount": 50,
+          "unit": "EUR_month",
+          "nature": "extrapolation",
+          "note": "Aucun chauffage : un chauffe-eau électrique, un réfrigérateur et deux ventilateurs, qui tournent de novembre à avril."
+        }
+      },
+      {
+        "code": "alimentation",
+        "group": "constrained",
+        "value": {
+          "amount": 270,
+          "unit": "EUR_month",
+          "nature": "hypothesis",
+          "hypothesisId": "socle-alimentaire",
+          "note": "Le socle alimentaire d'une personne seule, relevé de l'écart de prix avec l'Hexagone, qui est de l'ordre d'un tiers sur l'alimentation selon les comparaisons publiées."
+        }
+      },
+      {
+        "code": "transport",
+        "group": "constrained",
+        "value": {
+          "amount": 15,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Abonnement du réseau de bus de l'Ouest au tarif solidaire. Il n'a plus de voiture depuis six ans."
+        }
+      },
+      {
+        "code": "sante",
+        "group": "constrained",
+        "value": {
+          "amount": 20,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "La complémentaire santé solidaire est gratuite pour lui. Ce qui reste : les médicaments non remboursés pour son dos."
+        }
+      },
+      {
+        "code": "loisirs",
+        "group": "adjustable",
+        "value": {
+          "amount": 30,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      },
+      {
+        "code": "habillement",
+        "group": "adjustable",
+        "value": {
+          "amount": 15,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      }
+    ]
+  },
+  "stocks": {
+    "liquid7d": 70,
+    "liquid60d": 70,
+    "authorisedOverdraft": 0,
+    "netWealth": 250,
+    "precautionFloorMonths": 0
+  },
+  "parity": {
+    "strength": "Il sait couler une dalle et lire un plan mieux que bien des chefs de chantier : à l'atelier de l'association, ce sont les jeunes qui viennent le chercher.",
+    "vulnerability": "Il y a deux ans, une erreur de déclaration a produit un trop-perçu de 1 200 €, repris sur ses versements pendant dix mois. Il en garde la peur du formulaire.",
+    "aspirations": [
+      "Retrouver un poste de chef d'équipe, même à mi-temps, sur un chantier où il ne porterait plus",
+      "Aller voir sa fille à Lyon, qu'il n'a pas vue depuis trois ans"
+    ],
+    "concerns": [
+      "Que son dos ne le laisse plus jamais reprendre un chantier, sans que personne ne le reconnaisse",
+      "Qu'un nouveau trop-perçu tombe le mois où le réfrigérateur lâche"
+    ],
+    "nonMonetaryConstraint": "Une seule ligne de bus le relie aux zones où l'on embauche : un entretien à Saint-Pierre lui coûte une journée entière et deux correspondances.",
+    "nonMonetaryAdvantage": "Ses trois sœurs habitent à moins de vingt minutes, et sa mère l'attend chaque dimanche dans les hauts : il n'a jamais été seul un jour de difficulté.",
+    "opinionAgainstOwnInterest": "Il est contre le versement automatique des droits, qui lui rapporterait pourtant : « ce qui est versé sans qu'on demande est repris sans qu'on prévienne, et le jour où la machine se trompe, c'est encore moi qui rembourse »."
+  },
+  "shortTermGoal": {
+    "label": "Mettre de côté 900 € pour un billet aller-retour vers Lyon",
+    "amount": 900,
+    "deadline": "2027-12"
+  },
+  "embodiedDetails": [
+    "Il pêche à la jetée le samedi matin, et rapporte ce qu'il prend à sa sœur cadette.",
+    "Il garde dans son portefeuille la photo de la dernière dalle qu'il a coulée sur la route du littoral.",
+    "Il écoute du maloya en faisant la cuisine, toujours le même disque, que sa fille lui a laissé."
+  ],
+  "unavailableOptions": [
+    {
+      "option": "puiser-epargne",
+      "reason": "Il n'y a pas d'épargne : 70 € sur le compte, c'est ce qui reste avant le versement suivant."
+    },
+    {
+      "option": "travailler-plus",
+      "reason": "Les chantiers qui embauchent veulent des hommes capables de porter, et son dos ne le permet plus ; aucun organisme ne l'a pour autant reconnu inapte."
+    },
+    {
+      "option": "emprunter-banque",
+      "reason": "Aucune banque ne prête à un allocataire du revenu de solidarité active sans revenu d'activité."
+    }
+  ],
+  "equivalenceRefs": [
+    {
+      "code": "alimentation",
+      "monthlyAmount": 270,
+      "narrativeLabel": "son alimentation du mois"
+    },
+    {
+      "code": "logement",
+      "monthlyAmount": 390,
+      "narrativeLabel": "son loyer"
+    },
+    {
+      "code": "energie",
+      "monthlyAmount": 50,
+      "narrativeLabel": "sa facture d'électricité"
+    },
+    {
+      "code": "projet",
+      "monthlyAmount": 40,
+      "narrativeLabel": "ce qu'il essaie de mettre de côté pour le billet"
+    }
+  ],
+  "narrative": {
+    "story": "Fabrice a travaillé vingt-deux ans dans le béton, dont six sur le grand chantier de la route du littoral, qui l'a fait vivre et lui a abîmé le dos. Quand le chantier a réduit ses équipes, il n'a pas retrouvé de poste qui ne demande pas de porter. Ses droits au chômage se sont épuisés, et il perçoit le revenu de solidarité active depuis quatre ans. Il donne deux matinées par semaine à l'atelier d'une association de quartier, où il apprend le métier à des jeunes. Il ne sait pas si ces heures compteraient, si on les lui demandait."
+  },
+  "lineOverrides": []
+}

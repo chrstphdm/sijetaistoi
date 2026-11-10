@@ -83,7 +83,7 @@ export function HomeScreen({ onStart, onMethod, onLegal }: {
 
   /*
    * Ce que couvre le corpus, calculé et non affirmé. On n'écrit pas
-   * « représentatif » : treize situations ne représentent pas un pays, et la
+   * « représentatif » : quelques situations ne représentent pas un pays, et la
    * page méthode le dit. On montre ce qui est vrai — la couverture.
    */
   const sourceById = new Map(bundle.sources.map((s) => [s.id, s]))
@@ -275,7 +275,7 @@ export function HomeScreen({ onStart, onMethod, onLegal }: {
                   dit la même chose, en toutes lettres. */}
               <IncomeLadder />
               <p className="corpus__note">
-                Une couverture n’est pas un échantillon&nbsp;: treize situations ne représentent pas
+                Une couverture n’est pas un échantillon&nbsp;: {spellCount(characters.length)} situations ne représentent pas
                 un pays, et certaines manquent —{' '}
                 <button type="button" className="timeline__toggle" onClick={onMethod}>
                   lesquelles, et pourquoi

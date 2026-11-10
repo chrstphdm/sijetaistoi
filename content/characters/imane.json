@@ -1,0 +1,189 @@
+{
+  "id": "imane",
+  "charterVersion": "1.0",
+  "fictional": true,
+  "fictionNote": "Personnage fictif. Situation construite pour être plausible au regard des ordres de grandeur publics sur les salaires des ingénieurs de l'industrie, les loyers du parc privé dans l'agglomération d'Aix-Marseille et les conditions de séjour des ressortissants non européens. Ne correspond à aucune personne réelle.",
+  "identity": {
+    "firstName": "Imane",
+    "age": 33,
+    "identityLine": "ingénieure dans l'industrie des semi-conducteurs, de nationalité marocaine, vit seule, locataire à Aix-en-Provence",
+    "incomeDecile": 9,
+    "calibrationSourceIds": [
+      "insee-niveaux-de-vie",
+      "anil-loyers",
+      "insee-distribution-niveaux-de-vie"
+    ]
+  },
+  "traits": {
+    "activities": [
+      "employee"
+    ],
+    "tenure": "tenant_private",
+    "heating": "collective",
+    "householdSize": 1,
+    "childCount": 0,
+    "hasSchoolAgedChild": false,
+    "housingZone": "tendue",
+    "hasCar": true,
+    "recognisedDisability": false
+  },
+  "budget": {
+    "lines": [
+      {
+        "code": "salaire-net",
+        "group": "resource",
+        "value": {
+          "amount": 3900,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Ingénieure procédés, sept ans d'expérience, primes d'équipe comprises. Le seuil de salaire exigé pour son titre de séjour est très en dessous : ce n'est pas lui qui la contraint."
+        }
+      },
+      {
+        "code": "logement",
+        "group": "constrained",
+        "value": {
+          "amount": 1090,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "T2 du parc privé, charges comprises, près du centre. Il a fallu une garantie bancaire de six mois de loyer : aucun propriétaire n'acceptait un garant résidant au Maroc."
+        }
+      },
+      {
+        "code": "energie",
+        "group": "constrained",
+        "value": {
+          "amount": 75,
+          "unit": "EUR_month",
+          "nature": "extrapolation"
+        }
+      },
+      {
+        "code": "alimentation",
+        "group": "constrained",
+        "value": {
+          "amount": 380,
+          "unit": "EUR_month",
+          "nature": "hypothesis",
+          "hypothesisId": "socle-alimentaire"
+        }
+      },
+      {
+        "code": "transport",
+        "group": "constrained",
+        "value": {
+          "amount": 210,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Une petite voiture : le site est hors de la ville, et la navette ne passe pas aux horaires d'équipe."
+        }
+      },
+      {
+        "code": "sante",
+        "group": "constrained",
+        "value": {
+          "amount": 60,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      },
+      {
+        "code": "impots",
+        "group": "levy",
+        "value": {
+          "amount": 510,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Impôt sur le revenu, calculé avec OpenFisca-France, législation de juin 2025 (voir scripts/openfisca). Seule, sans enfant, elle n'a aucune part supplémentaire."
+        }
+      },
+      {
+        "code": "loisirs",
+        "group": "adjustable",
+        "value": {
+          "amount": 420,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Dont deux allers-retours par an vers Casablanca, lissés sur l'année."
+        }
+      },
+      {
+        "code": "habillement",
+        "group": "adjustable",
+        "value": {
+          "amount": 120,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      }
+    ]
+  },
+  "stocks": {
+    "liquid7d": 4200,
+    "liquid60d": 16500,
+    "authorisedOverdraft": 1000,
+    "netWealth": 16500,
+    "precautionFloorMonths": 3
+  },
+  "parity": {
+    "strength": "Elle est la seule de son équipe à remonter d'un défaut sur une plaquette jusqu'à l'étape qui l'a produit : aucune série ne part sans son avis.",
+    "vulnerability": "Si elle perdait son emploi et épuisait ses droits au chômage, il lui manquerait deux années de titre de séjour pour le revenu de solidarité active : rien ne viendrait après.",
+    "aspirations": [
+      "Obtenir une carte de résident de dix ans, pour ne plus compter les mois avant chaque renouvellement",
+      "Faire venir ses parents un été entier, sans que le visa soit refusé comme la dernière fois"
+    ],
+    "concerns": [
+      "Que l'usine soit rachetée et que son poste change d'intitulé au moment du renouvellement de son titre",
+      "Que la santé de son père impose qu'elle rentre, et qu'elle doive choisir entre lui et sa carrière"
+    ],
+    "nonMonetaryConstraint": "Son droit au séjour est adossé à son emploi : changer d'entreprise suppose une démarche en préfecture dont elle ne maîtrise pas le délai. Et elle ne vote à aucune élection, pas même municipale, dans le pays où elle paie ses impôts.",
+    "nonMonetaryAdvantage": "Trois langues et un métier où les candidats manquent : deux entreprises l'ont approchée cette année, et elle n'a jamais eu à chercher un poste.",
+    "opinionAgainstOwnInterest": "Elle trouve légitime que le revenu de solidarité active exige cinq ans de titre de séjour, alors que cette règle la laisserait sans aucun filet si elle perdait son emploi : « un pays peut demander qu'on ait d'abord contribué ; ce que je demande, c'est que la règle ne change pas en route »."
+  },
+  "shortTermGoal": {
+    "label": "Garder 6 000 € disponibles pendant la procédure de carte de résident",
+    "amount": 6000,
+    "deadline": "2027-10"
+  },
+  "embodiedDetails": [
+    "Elle appelle sa mère en visio chaque soir, pendant que celle-ci prépare le dîner.",
+    "Elle court le long de l'Arc le dimanche matin, avant la chaleur.",
+    "Elle garde sur son bureau une plaquette de silicium ratée, la première qu'elle a analysée."
+  ],
+  "unavailableOptions": [
+    {
+      "option": "demander-aide-sociale",
+      "reason": "Cinq ans de titre de séjour autorisant à travailler sont exigés pour le revenu de solidarité active ; elle n'en a que trois, ses années d'études ne comptant pas."
+    },
+    {
+      "option": "demander-aide-famille",
+      "reason": "Ses parents vivent d'une petite retraite au Maroc : l'argent va d'elle vers eux, jamais dans l'autre sens."
+    }
+  ],
+  "equivalenceRefs": [
+    {
+      "code": "logement",
+      "monthlyAmount": 1090,
+      "narrativeLabel": "son loyer"
+    },
+    {
+      "code": "alimentation",
+      "monthlyAmount": 380,
+      "narrativeLabel": "son alimentation du mois"
+    },
+    {
+      "code": "loisirs",
+      "monthlyAmount": 420,
+      "narrativeLabel": "son budget loisirs et voyages du mois"
+    },
+    {
+      "code": "projet",
+      "monthlyAmount": 250,
+      "narrativeLabel": "ce qu'elle envoie chaque mois à ses parents"
+    }
+  ],
+  "narrative": {
+    "story": "Imane est arrivée en France à vingt ans, pour une école d'ingénieurs à Grenoble, avec une valise et une lettre d'admission. Elle n'avait pas prévu de rester. Un stage dans une usine de semi-conducteurs est devenu un premier poste, puis un deuxième, près d'Aix. Son niveau de vie la place dans le cinquième le plus aisé du pays, ce qu'elle a mis du temps à croire. Elle envoie chaque mois de l'argent à ses parents, elle a pris l'habitude de garder une copie de chaque fiche de paie, et elle ne sait toujours pas dire si elle vit ici ou si elle y travaille."
+  },
+  "lineOverrides": []
+}

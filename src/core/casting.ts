@@ -41,7 +41,7 @@ export const CONSTRAINT_STATEMENTS: Readonly<Record<ConstraintId, string>> = {
    * « DE FACON PERCEPTIBLE » veut dire quelque chose de precis, et l'enonce
    * doit le dire : son budget mensuel change, des maintenant. Formule
    * autrement, l'enonce etait vrai de tout le monde — le controle de
-   * couverture du build oblige chaque option a atteindre les treize
+   * couverture du build oblige chaque option a atteindre tous les
    * personnages, effet nul compris — et la contrainte ne selectionnait donc
    * personne tout en restant affichee comme si elle agissait.
    */

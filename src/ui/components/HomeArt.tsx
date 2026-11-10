@@ -15,7 +15,7 @@ const ids = () => characters.map((c) => c.id)
 /**
  * Tous les personnages du corpus, en anneau, dans le bandeau d'ouverture.
  *
- * Un ANNEAU plutot qu'une grille : avec treize personnages, une grille
+ * Un ANNEAU plutot qu'une grille : selon le nombre de personnages, une grille
  * laisse une tuile orpheline au dernier rang, et un rang est toujours
  * « premier ». Sur un cercle, chaque place vaut les autres. L'anneau est
  * decale d'un demi-cran pour qu'aucune tuile ne tienne le sommet.
@@ -44,7 +44,9 @@ export function HeroCast() {
     return new Set(pool.slice(0, 3))
   })
   return (
-    <div className="hero-cast" aria-hidden="true">
+    // Le nombre de tuiles règle le moment où le tirage s'allume : écrit en dur,
+    // il précédait la fin du balayage dès que le corpus a grandi.
+    <div className="hero-cast" aria-hidden="true" style={{ ['--n-tiles' as string]: n } as CSSProperties}>
       {characters.map((c, i) => {
         const a = ((i + 0.5) / n) * 2 * Math.PI - Math.PI / 2
         return (

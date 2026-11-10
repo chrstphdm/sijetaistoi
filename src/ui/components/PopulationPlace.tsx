@@ -111,7 +111,7 @@ function SourcesNote({ outOfScope }: { readonly outOfScope: boolean }) {
 }
 
 /**
- * La courbe des niveaux de vie en France, et les treize personnages dessus.
+ * La courbe des niveaux de vie en France, et tous les personnages du corpus dessus.
  *
  * Abscisse : la part de la population au niveau de vie inférieur. Ordonnée :
  * le niveau de vie mensuel. Au-delà du neuvième décile, l'Insee ne publie pas

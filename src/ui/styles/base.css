@@ -2280,7 +2280,7 @@ fieldset:has(input[type='radio']) > label:has(input:focus-visible) {
   animation:
     tile-in 520ms var(--ease-enter) both,
     tile-sweep 420ms ease-out calc(700ms + var(--i) * 80ms) backwards,
-    tile-drawn 1800ms var(--ease-enter) calc(700ms + 13 * 80ms + 200ms) backwards;
+    tile-drawn 1800ms var(--ease-enter) calc(700ms + var(--n-tiles, 13) * 80ms + 200ms) backwards;
 }
 @keyframes tile-sweep {
   40% { box-shadow: inset 0 0 0 2px oklch(0.85 0.12 var(--seal-hue)), 0 0 0 4px oklch(0.85 0.12 var(--seal-hue) / 0.25); }

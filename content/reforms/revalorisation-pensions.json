@@ -403,7 +403,7 @@
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Faire porter la revalorisation sur une cotisation des actifs laisse de côté ceux qui ne sont ni l'un ni l'autre : demandeurs d'emploi, personnes en invalidité. Ils ne paient rien et ne reçoivent rien, aujourd'hui. Ils toucheront une pension un jour, calculée sur une carrière interrompue, et c'est cet effet-là que le modèle ne sait pas représenter."
+          "note": "Faire porter la revalorisation sur une cotisation des actifs laisse de côté ceux qui ne sont ni l'un ni l'autre : demandeurs d'emploi, personnes en invalidité, allocataires du revenu de solidarité active. Ils ne paient rien et ne reçoivent rien, aujourd'hui. Ils toucheront une pension un jour, calculée sur une carrière interrompue, et c'est cet effet-là que le modèle ne sait pas représenter."
         },
         {
           "id": "ca-recette",

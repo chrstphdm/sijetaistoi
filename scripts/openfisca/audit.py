@@ -56,10 +56,13 @@ COMMUNE = {
     'sophie': '54395',      # Nancy
     'thomas': '44109',      # Nantes
     'yanis': '69123',       # Lyon
+    'agnes': '25462',       # Pontarlier (Doubs)
+    'fabrice': '97407',     # Le Port (La Réunion)
+    'imane': '13001',       # Aix-en-Provence
 }
 
 # Âges des enfants quand l'histoire les donne.
-CHILD_AGES = {'rachid': [4, 7], 'claire': [6], 'marc-anne': [15, 17]}
+CHILD_AGES = {'rachid': [4, 7], 'claire': [6], 'marc-anne': [15, 17], 'agnes': [17, 12]}
 
 TENURE = {
     'owner_outright': 'proprietaire',
