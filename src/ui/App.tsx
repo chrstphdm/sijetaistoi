@@ -281,12 +281,15 @@ export function App() {
 
       {step.kind === 'callback' && (
         <>
+          {/* Le bouton vient APRÈS le rappel : placé dans la fiche, au-dessus,
+              il permettait de commencer le mois sans avoir vu le moment
+              central du jeu — sa propre règle, vécue par quelqu'un d'autre. */}
           <CharacterIntro
             character={character} month={month} act={state.act} allIds={allIds}
-            onContinue={actions.startMonths}
           />
           {step.selection.kind === 'selected' && (
             <CallbackPanel
+              month={month}
               callback={step.selection.callback}
               characterName={character.identity.firstName}
             />
@@ -302,6 +305,11 @@ export function App() {
             </section>
           )}
 
+          <section className="sheet">
+            <button type="button" className="btn-primary" onClick={actions.startMonths}>
+              Commencer le mois
+            </button>
+          </section>
         </>
       )}
 
@@ -318,11 +326,33 @@ export function App() {
         const latest = lastJudgement(state, askedId)
         const alreadyAnswered = state.opinions.filter((o) => o.questionId === askedId).length > 1
         const rule = state.world.rules.find((r) => r.reformId === askedId)
+        const asked = reforms.find((r) => r.id === askedId)
         return (
           <section className="sheet" aria-labelledby="relaunch-title">
             <p className="sheet__kicker">Après quelques mois avec {character.identity.firstName}</p>
             <h2 id="relaunch-title">La même question, maintenant</h2>
             {rule && <p>Ta règle&nbsp;: <strong>{rule.shortLabel}</strong>.</p>}
+            {/* SE REMÉMORER LA QUESTION. Elle a été posée un acte plus tôt :
+                sans son énoncé et ses options, on rejugeait de mémoire. Toutes
+                les options, dans l'ordre où elles avaient été présentées, au
+                même format ; seule la mention écrite « ta décision » distingue
+                celle qui a été choisie. */}
+            {asked && (
+              <details className="recall">
+                <summary>Revoir la question et ce que tu avais décidé</summary>
+                <h3 className="recall__title">{asked.descriptiveTitle}</h3>
+                <p>{asked.context}</p>
+                <ol className="recall__options">
+                  {asked.options.map((o) => (
+                    <li key={o.id} className={o.id === rule?.optionId ? 'recall__option recall__option--mine' : 'recall__option'}>
+                      {o.id === rule?.optionId && <span className="recall__mine">Ta décision</span>}
+                      <strong>{o.label}</strong>
+                      <span>{o.decisionDescription}</span>
+                    </li>
+                  ))}
+                </ol>
+              </details>
+            )}
             {earlier && <p>{relaunchSentence(earlier, `À l’acte ${state.act - 1}`)}</p>}
             <JudgementScale
               value={alreadyAnswered ? latest : null}

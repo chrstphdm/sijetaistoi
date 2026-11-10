@@ -52,6 +52,7 @@ export function ImpactProjection({ world }: { readonly world: WorldState }) {
     return {
       id: c.id,
       name: c.identity.firstName,
+      profile: `${c.identity.age} ans · ${c.identity.identityLine}`,
       points,
       total: last.cumulativeCents,
       slack: computeMonthlyBudget(toBudgetLines(c)).slackCents,
@@ -82,6 +83,9 @@ export function ImpactProjection({ world }: { readonly world: WorldState }) {
                 {formatEuros(s.total)} en dix ans
               </span>
             </p>
+            {/* Qui est qui : au bilan, trois actes plus tard, le prénom
+                seul ne suffit plus à se souvenir de la personne. */}
+            <p className="proj__who">{s.profile}</p>
 
             <svg
               viewBox={`0 0 ${W} ${H}`}

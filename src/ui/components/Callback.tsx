@@ -15,15 +15,17 @@ import { Amount } from './Amount.tsx'
  * La mise en scene est identique quel que soit le signe : le meme gabarit
  * sert a « tu paies 27 € de plus » et a « tu touches 31 € de plus ».
  */
-export function CallbackPanel({ callback, characterName }: {
+export function CallbackPanel({ callback, characterName, month }: {
   readonly callback: Callback
   readonly characterName: string
+  /** Le mois réel du rappel. Il était écrit en dur, « Septembre 2027 », quel que soit l'acte. */
+  readonly month: string
 }) {
   const { rule, deltaCents, here, elsewhere } = callback
 
   return (
     <section className="sheet" aria-labelledby="callback-title">
-      <p className="sheet__kicker">Septembre 2027</p>
+      <p className="sheet__kicker">{month}</p>
       <h2 id="callback-title">{rule.shortLabel}</h2>
 
       {/* T1 — la règle est un fait du monde */}
@@ -69,7 +71,8 @@ export function QuotaBlockedNote() {
       <p role="note">
         Une règle que tu as décidée affecte ce personnage, mais ce jeu s’interdit de ne te montrer
         que les conséquences défavorables de tes propres choix. Ce rappel est donc mis de côté pour
-        l’instant. Tu peux le consulter dans le registre.
+        l’instant. Son effet reste visible sur l’écran « Le choix vu par chacun », après la
+        prochaine décision.
       </p>
     </section>
   )

@@ -16,7 +16,8 @@ export function CharacterIntro({
   readonly month: string
   readonly act: number
   readonly allIds: readonly string[]
-  readonly onContinue: () => void
+  /** Absent quand l'écran ajoute d'autres blocs avant le bouton (le rappel). */
+  readonly onContinue?: () => void
 }) {
   const { identity, embodiedDetails, shortTermGoal, narrative } = character
   return (
@@ -51,9 +52,11 @@ export function CharacterIntro({
         <strong>Ce que tu veux ces prochains mois</strong>&nbsp;: {shortTermGoal.label}.
       </p>
 
-      <button type="button" className="btn-primary" onClick={onContinue}>
-        Commencer le mois
-      </button>
+      {onContinue && (
+        <button type="button" className="btn-primary" onClick={onContinue}>
+          Commencer le mois
+        </button>
+      )}
     </section>
   )
 }

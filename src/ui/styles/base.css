@@ -2536,3 +2536,19 @@ body:has(.page) { padding-inline: 0; }
 }
 .impact__fold[open] .impact__profile { -webkit-line-clamp: unset; }
 @media (max-width: 560px) { .impact__head { grid-template-columns: minmax(0, 1fr) auto; } }
+
+/* Bilan : qui est qui sous chaque courbe. */
+.proj__who { font: 400 12px/1.35 var(--font-ui); color: var(--ink-2); margin: 0 0 var(--space-2); max-width: none; }
+
+/* Relance : la question d'origine, à déplier. */
+.recall { margin: var(--space-3) 0 var(--space-4); padding: var(--space-3) var(--space-4); background: var(--paper-sunk); border-radius: var(--radius-m); }
+.recall > summary { font-weight: 600; color: var(--perspective-a); min-height: var(--tap); display: flex; align-items: center; }
+.recall__title { font-size: 18px; margin: var(--space-3) 0 var(--space-2); }
+.recall p { font-size: 15px; max-width: none; }
+.recall__options { list-style: none; padding: 0; margin: var(--space-3) 0; display: grid; gap: var(--space-2); }
+.recall__option { display: flex; flex-direction: column; gap: 2px; padding: var(--space-3); background: var(--paper-raised); border: 1px solid var(--rule-hair); border-radius: var(--radius-s); font: 400 14px/1.45 var(--font-ui); color: var(--ink-2); }
+.recall__option strong { color: var(--ink); font-size: 15px; }
+/* La décision prise : un mot écrit ET un filet — jamais la seule couleur. */
+.recall__option--mine { border: 2px solid var(--perspective-a); }
+.recall__mine { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--perspective-a); }
+.recall__wording { font-style: italic; }
