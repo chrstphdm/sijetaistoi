@@ -129,14 +129,45 @@
                   "activities",
                   "contains",
                   "inactive"
+                ],
+                [
+                  "recognisedDisability",
+                  "eq",
+                  true
                 ]
               ]
             },
-            "description": "Personnes sans activité"
+            "description": "Personnes sans activité, en invalidité"
           },
           "horizon": "y1",
           "uncertainty": "established",
           "note": "Non concernée : une pension d'invalidité n'ouvre pas de droits à l'assurance chômage, et n'en consomme pas."
+        },
+        {
+          "id": "cq-rsa",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ],
+                [
+                  "recognisedDisability",
+                  "eq",
+                  false
+                ]
+              ]
+            },
+            "description": "Sans activité ni invalidité reconnue : allocataires du revenu de solidarité active"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Pas d'effet aujourd'hui : les droits à l'assurance chômage sont épuisés, et le revenu de solidarité active n'en dépend pas. Ce sont pourtant ces règles qui s'appliqueraient après une reprise d'emploi suivie d'une nouvelle perte."
         },
         {
           "id": "cq-finances",
@@ -276,14 +307,45 @@
                   "activities",
                   "contains",
                   "inactive"
+                ],
+                [
+                  "recognisedDisability",
+                  "eq",
+                  true
                 ]
               ]
             },
-            "description": "Personnes sans activité"
+            "description": "Personnes sans activité, en invalidité"
           },
           "horizon": "y1",
           "uncertainty": "established",
           "note": "Non concernée directement. Une personne en invalidité qui reprendrait un emploi puis le perdrait relèverait de ces règles-là : le modèle ne représente pas ce chemin."
+        },
+        {
+          "id": "cd-rsa",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ],
+                [
+                  "recognisedDisability",
+                  "eq",
+                  false
+                ]
+              ]
+            },
+            "description": "Sans activité ni invalidité reconnue : allocataires du revenu de solidarité active"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Pas d'effet direct. Après une reprise d'emploi puis une nouvelle perte, les droits ouverts seraient plus courts, et le retour au minimum social viendrait plus tôt. Le modèle ne représente pas ce chemin."
         },
         {
           "id": "cd-finances",
@@ -424,14 +486,45 @@
                   "activities",
                   "contains",
                   "inactive"
+                ],
+                [
+                  "recognisedDisability",
+                  "eq",
+                  true
                 ]
               ]
             },
-            "description": "Personnes sans activité"
+            "description": "Personnes sans activité, en invalidité"
           },
           "horizon": "y1",
           "uncertainty": "established",
           "note": "Non concernée."
+        },
+        {
+          "id": "cg-rsa",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ],
+                [
+                  "recognisedDisability",
+                  "eq",
+                  false
+                ]
+              ]
+            },
+            "description": "Sans activité ni invalidité reconnue : allocataires du revenu de solidarité active"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Pas d'effet : les droits à l'assurance chômage sont épuisés."
         },
         {
           "id": "cg-finances",
@@ -570,14 +663,45 @@
                   "activities",
                   "contains",
                   "inactive"
+                ],
+                [
+                  "recognisedDisability",
+                  "eq",
+                  true
                 ]
               ]
             },
-            "description": "Personnes sans activité"
+            "description": "Personnes sans activité, en invalidité"
           },
           "horizon": "y1",
           "uncertainty": "established",
           "note": "Même remarque : sa pension supporte la contribution sociale généralisée à taux réduit, et un transfert vers la cotisation l'en allégerait marginalement."
+        },
+        {
+          "id": "cc-rsa",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ],
+                [
+                  "recognisedDisability",
+                  "eq",
+                  false
+                ]
+              ]
+            },
+            "description": "Sans activité ni invalidité reconnue : allocataires du revenu de solidarité active"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet : le revenu de solidarité active ne supporte ni cotisation ni contribution sociale."
         },
         {
           "id": "cc-finances",

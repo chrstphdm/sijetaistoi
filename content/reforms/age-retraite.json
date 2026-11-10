@@ -129,14 +129,45 @@
                   "activities",
                   "contains",
                   "inactive"
+                ],
+                [
+                  "recognisedDisability",
+                  "eq",
+                  true
                 ]
               ]
             },
-            "description": "Personnes sans activité"
+            "description": "Personnes sans activité, en invalidité"
           },
           "horizon": "y1",
           "uncertainty": "established",
           "note": "Aucun changement aujourd'hui. Sa pension d'invalidité se convertira en pension de retraite à l'âge actuel."
+        },
+        {
+          "id": "sq-rsa",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ],
+                [
+                  "recognisedDisability",
+                  "eq",
+                  false
+                ]
+              ]
+            },
+            "description": "Sans activité ni invalidité reconnue : allocataires du revenu de solidarité active"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun changement aujourd'hui. Un allocataire du revenu de solidarité active doit demander sa retraite dès l'âge d'ouverture des droits, et ses années au minimum social ne lui valident aucun trimestre."
         },
         {
           "id": "sq-finances",
@@ -273,14 +304,45 @@
                   "activities",
                   "contains",
                   "inactive"
+                ],
+                [
+                  "recognisedDisability",
+                  "eq",
+                  true
                 ]
               ]
             },
-            "description": "Personnes sans activité"
+            "description": "Personnes sans activité, en invalidité"
           },
           "horizon": "y1",
           "uncertainty": "established",
           "note": "Une pension d'invalidité se convertit en pension de retraite à l'âge d'ouverture des droits. Décaler cet âge prolonge d'autant la période d'invalidité, à un montant qui n'est pas le même. Le modèle ne chiffre pas cet écart."
+        },
+        {
+          "id": "ar-rsa",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ],
+                [
+                  "recognisedDisability",
+                  "eq",
+                  false
+                ]
+              ]
+            },
+            "description": "Sans activité ni invalidité reconnue : allocataires du revenu de solidarité active"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Aucun effet sur le budget d'aujourd'hui. À l'âge d'ouverture des droits, un allocataire du revenu de solidarité active passe à sa pension : décaler cet âge le maintient deux ans de plus au minimum social, à un montant qui n'est pas le même. Le modèle ne chiffre pas cet écart, lointain."
         },
         {
           "id": "ar-penibilite",
@@ -449,14 +511,45 @@
                   "activities",
                   "contains",
                   "inactive"
+                ],
+                [
+                  "recognisedDisability",
+                  "eq",
+                  true
                 ]
               ]
             },
-            "description": "Personnes sans activité"
+            "description": "Personnes sans activité, en invalidité"
           },
           "horizon": "y1",
           "uncertainty": "established",
           "note": "Les périodes d'invalidité valident des trimestres selon des règles distinctes. Le jeu ne les modélise pas, et cette absence est importante : c'est exactement là que se joue l'effet de la mesure pour elle."
+        },
+        {
+          "id": "dc-rsa",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": 0,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ],
+                [
+                  "recognisedDisability",
+                  "eq",
+                  false
+                ]
+              ]
+            },
+            "description": "Sans activité ni invalidité reconnue : allocataires du revenu de solidarité active"
+          },
+          "horizon": "y1",
+          "uncertainty": "established",
+          "note": "Les années passées au revenu de solidarité active ne valident aucun trimestre. Allonger la durée exigée éloigne d'autant le taux plein pour qui a cessé de cotiser avant la fin de sa carrière : l'effet est réel mais lointain, et le modèle ne le chiffre pas."
         },
         {
           "id": "dc-entree-tardive",

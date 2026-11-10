@@ -15,7 +15,7 @@
     "insee-niveaux-de-vie",
     "cnaf-cout-garde"
   ],
-  "modelLimitations": "Trois limites pèsent lourd ici. D'abord, le jeu applique les variations en euros par mois à l'intérieur d'une tranche de revenu, et non en pourcentage du droit réel : une même baisse de 8 % représente 34 € pour l'un et 83 € pour l'autre, et le modèle écrase cet écart. Ensuite, le non-recours n'est modélisé par aucun attribut : le gain d'un versement automatique est appliqué uniformément à la tranche, alors que deux personnes de ce corpus réclament déjà tout ce à quoi elles ont droit et n'y gagneraient rien. Enfin, et surtout, le corpus ne contient aucun allocataire du revenu de solidarité active : la mesure la plus discutée du pays ne touche directement personne ici, et cette absence est déclarée sur la page méthode.",
+  "modelLimitations": "Trois limites pèsent lourd ici. D'abord, le jeu applique les variations en euros par mois à l'intérieur d'une tranche de revenu, et non en pourcentage du droit réel : une même baisse de 8 % représente 34 € pour l'un et 83 € pour l'autre, et le modèle écrase cet écart. Ensuite, le non-recours n'est modélisé par aucun attribut : le gain d'un versement automatique est appliqué uniformément à la tranche, alors que deux personnes de ce corpus réclament déjà tout ce à quoi elles ont droit et n'y gagneraient rien. Enfin, le corpus ne contient qu'un allocataire du revenu de solidarité active, sans aucune activité : la condition d'heures ne peut être comparée ni entre allocataires, ni avec un allocataire qui travaille quelques heures, et le modèle ne sait pas quelles activités seraient reconnues.",
   "options": [
     {
       "id": "statu-quo",
@@ -253,14 +253,61 @@
                     "contains",
                     "student"
                   ]
+                },
+                {
+                  "not": {
+                    "and": [
+                      [
+                        "activities",
+                        "contains",
+                        "inactive"
+                      ],
+                      [
+                        "recognisedDisability",
+                        "eq",
+                        false
+                      ]
+                    ]
+                  }
                 }
               ]
             },
-            "description": "Deux premiers déciles : bénéficiaires de prestations sous conditions"
+            "description": "Deux premiers déciles, en activité ou en invalidité : bénéficiaires de prestations sous conditions"
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Effet nul, et c'est l'argument central des partisans : qui travaille déjà remplit la condition sans rien changer. L'effet se concentrerait sur ceux qui ne travaillent pas — que ce corpus ne contient pas."
+          "note": "Effet nul, et c'est l'argument central des partisans : qui travaille déjà remplit la condition sans rien changer. L'effet se concentre sur ceux qui ne travaillent pas."
+        },
+        {
+          "id": "mh-sans-activite",
+          "kind": "budget_line",
+          "code": "prestations",
+          "monthlyDelta": -165,
+          "scope": {
+            "when": {
+              "and": [
+                [
+                  "activities",
+                  "contains",
+                  "inactive"
+                ],
+                [
+                  "recognisedDisability",
+                  "eq",
+                  false
+                ]
+              ]
+            },
+            "description": "Sans activité ni invalidité reconnue : allocataires du revenu de solidarité active"
+          },
+          "horizon": "y1",
+          "uncertainty": "highly_debated",
+          "hypothesisId": "conditionnalite-retour-emploi",
+          "note": "C'est ici que la mesure porte. Faute de quinze heures d'activité reconnues, le versement serait suspendu en partie : le modèle retient environ un tiers du revenu de solidarité active, soit un cinquième de la ligne de prestations, l'aide au logement n'étant pas concernée. Deux inconnues pèsent autant que le montant : quelles heures comptent — un bénévolat régulier, une formation, des soins — et ce qui est proposé à qui n'en trouve pas. Que la condition ramène vers l'emploi ou qu'elle éloigne du droit est précisément ce qui est débattu.",
+          "monthlyShare": {
+            "rate": -0.2,
+            "of": "prestations"
+          }
         },
         {
           "id": "mh-etudiants",
@@ -929,7 +976,7 @@
       ],
       "argumentsFor": [
         "Discuter des conditions d'accès à un minimum social revient à tenir pour acquis qu'il faille un minimum social, donc que les salaires et les loyers soient ce qu'ils sont.",
-        "Ce corpus ne contient aucun allocataire du revenu de solidarité active : la décision la plus débattue du pays s'y joue à vide, et aucun arbitrage entre les quatre options ne corrige cela."
+        "Le montant du revenu de solidarité active est le même à La Réunion et dans l'Hexagone, alors que les prix ne le sont pas : discuter des conditions d'accès laisse de côté ce que ce montant permet de vivre, selon l'endroit."
       ],
       "argumentsAgainst": [
         "Les règles d'accès produisent des effets immédiats sur des personnes réelles, que l'on refuse ou non le cadrage : quelqu'un les écrira.",

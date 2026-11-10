@@ -1,0 +1,228 @@
+{
+  "id": "agnes",
+  "charterVersion": "1.0",
+  "fictional": true,
+  "fictionNote": "Ménage fictif. Situation construite pour être plausible au regard des ordres de grandeur publics sur les revenus des exploitants de l'élevage laitier en appellation fromagère, les salaires de l'industrie agroalimentaire et les prestations familiales. Ne correspond à aucune personne réelle.",
+  "identity": {
+    "firstName": "Agnès",
+    "age": 46,
+    "identityLine": "éleveuse laitière associée avec son frère, mariée, deux enfants, dans le Haut-Doubs près de Pontarlier",
+    "incomeDecile": 5,
+    "calibrationSourceIds": [
+      "insee-artisanat-revenus",
+      "insee-niveaux-de-vie",
+      "insee-patrimoine"
+    ]
+  },
+  "traits": {
+    "activities": [
+      "self_employed",
+      "employee"
+    ],
+    "tenure": "owner_outright",
+    "heating": "individual",
+    "householdSize": 4,
+    "childCount": 2,
+    "hasSchoolAgedChild": true,
+    "housingZone": "detendue",
+    "hasCar": true,
+    "recognisedDisability": false
+  },
+  "budget": {
+    "lines": [
+      {
+        "code": "revenu-independant",
+        "group": "resource",
+        "value": {
+          "amount": 2000,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Sa part du résultat de l'exploitation, lissée sur l'année. Le lait payé pour le fromage d'appellation place l'exploitation au-dessus de la moyenne de l'élevage laitier ; les années de sécheresse, la part tombe sous 1 200 €."
+        }
+      },
+      {
+        "code": "salaire-net",
+        "group": "resource",
+        "value": {
+          "amount": 2300,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Salaire de son mari, technicien de maintenance dans une fromagerie coopérative du plateau."
+        }
+      },
+      {
+        "code": "prestations",
+        "group": "resource",
+        "value": {
+          "amount": 152,
+          "unit": "EUR_month",
+          "nature": "hypothesis",
+          "hypothesisId": "prestations-calibrage",
+          "note": "Allocations familiales pour deux enfants, calculées avec OpenFisca-France, législation de juin 2025 (voir scripts/openfisca)."
+        }
+      },
+      {
+        "code": "logement",
+        "group": "constrained",
+        "value": {
+          "amount": 180,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Taxe foncière, assurance et entretien de la maison des grands-parents, reprise à côté de la ferme. Aucun loyer, aucun emprunt."
+        }
+      },
+      {
+        "code": "energie",
+        "group": "constrained",
+        "value": {
+          "amount": 190,
+          "unit": "EUR_month",
+          "nature": "extrapolation",
+          "note": "Chauffage au bois, coupé sur la parcelle familiale, et électricité. L'hiver dure ici six mois."
+        }
+      },
+      {
+        "code": "alimentation",
+        "group": "constrained",
+        "value": {
+          "amount": 780,
+          "unit": "EUR_month",
+          "nature": "hypothesis",
+          "hypothesisId": "socle-alimentaire"
+        }
+      },
+      {
+        "code": "transport",
+        "group": "constrained",
+        "value": {
+          "amount": 330,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Deux voitures : la fromagerie est à vingt-cinq minutes, le collège à vingt, et aucun car ne passe au hameau."
+        }
+      },
+      {
+        "code": "enfants",
+        "group": "constrained",
+        "value": {
+          "amount": 210,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Cantine du cadet, internat de semaine de l'aînée au lycée de Pontarlier, licence de ski de fond."
+        }
+      },
+      {
+        "code": "sante",
+        "group": "constrained",
+        "value": {
+          "amount": 170,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Deux complémentaires, dont celle d'Agnès, plus chère parce qu'elle ne passe pas par un employeur."
+        }
+      },
+      {
+        "code": "impots",
+        "group": "levy",
+        "value": {
+          "amount": 73,
+          "unit": "EUR_month",
+          "nature": "fiction",
+          "note": "Impôt sur le revenu du foyer, calculé avec OpenFisca-France, législation de juin 2025 (voir scripts/openfisca). Le revenu agricole y est traité comme un bénéfice indépendant ordinaire, ce qui est une approximation."
+        }
+      },
+      {
+        "code": "loisirs",
+        "group": "adjustable",
+        "value": {
+          "amount": 230,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      },
+      {
+        "code": "habillement",
+        "group": "adjustable",
+        "value": {
+          "amount": 140,
+          "unit": "EUR_month",
+          "nature": "fiction"
+        }
+      }
+    ]
+  },
+  "stocks": {
+    "liquid7d": 3100,
+    "liquid60d": 7800,
+    "authorisedOverdraft": 1000,
+    "netWealth": 240000,
+    "precautionFloorMonths": 2
+  },
+  "parity": {
+    "strength": "Elle connaît ses soixante vaches une à une, et le troupeau n'a pas perdu un veau au vêlage depuis trois ans : la coopérative le cite en exemple.",
+    "vulnerability": "Tout son patrimoine est dans l'exploitation. Une maladie dans l'étable, et la valeur comme le revenu disparaîtraient en même temps.",
+    "aspirations": [
+      "Que son frère et elle prennent enfin un salarié pour se libérer un week-end sur deux",
+      "Que Lou, qui veut être vétérinaire, réussisse le concours sans y laisser sa santé"
+    ],
+    "concerns": [
+      "Un deuxième été sans pluie, qui obligerait à acheter du foin au prix fort",
+      "Que son frère, qui a dix ans de plus qu'elle, veuille s'arrêter avant qu'un repreneur soit trouvé"
+    ],
+    "nonMonetaryConstraint": "La traite a lieu deux fois par jour, tous les jours de l'année : elle n'est pas partie plus de quatre jours d'affilée depuis l'installation, et jamais en même temps que son frère.",
+    "nonMonetaryAdvantage": "Elle travaille dehors, chez elle, avec un associé en qui elle a toute confiance, et ses enfants ont grandi entre la maison et l'étable, à cinquante mètres l'une de l'autre.",
+    "opinionAgainstOwnInterest": "Elle voudrait que les aides agricoles soient versées par personne qui travaille plutôt qu'à l'hectare, alors que l'exploitation, qui s'est agrandie en reprenant les terres de deux voisins, y perdrait : « l'hectare, ça récompense celui qui rachète le voisin, pas celui qui s'installe »."
+  },
+  "shortTermGoal": {
+    "label": "Réunir 4 000 € pour la première année d'études de Lou à Besançon",
+    "amount": 4000,
+    "deadline": "2027-09"
+  },
+  "embodiedDetails": [
+    "Elle chante dans la chorale du village, le jeudi soir, entre la traite et le dîner.",
+    "Elle tient un cahier des naissances du troupeau, à la main, depuis le premier veau.",
+    "Elle fait du ski de fond avec Tom le dimanche après-midi, quand la neige tient."
+  ],
+  "unavailableOptions": [
+    {
+      "option": "arret-maladie",
+      "reason": "Personne ne la remplace à la traite : s'arrêter suppose de payer un service de remplacement qu'il faut réserver des semaines à l'avance."
+    },
+    {
+      "option": "demenager-moins-cher",
+      "reason": "Elle vit à cinquante mètres de son étable, et les bêtes ne se déplacent pas."
+    }
+  ],
+  "equivalenceRefs": [
+    {
+      "code": "alimentation",
+      "monthlyAmount": 780,
+      "narrativeLabel": "l'alimentation du mois pour quatre"
+    },
+    {
+      "code": "transport",
+      "monthlyAmount": 330,
+      "narrativeLabel": "les deux voitures du mois"
+    },
+    {
+      "code": "loisirs",
+      "monthlyAmount": 230,
+      "narrativeLabel": "leur budget loisirs du mois"
+    },
+    {
+      "code": "projet",
+      "monthlyAmount": 300,
+      "narrativeLabel": "ce qu'ils mettent de côté pour les études de Lou"
+    }
+  ],
+  "narrative": {
+    "story": "Agnès s'est installée à vingt-neuf ans, après sept ans comme comptable dans une concession agricole, pour reprendre avec son frère la ferme de leurs parents. Ils ont modernisé l'étable, repris des terres, et vendent leur lait à la coopérative qui en fait du fromage d'appellation. Sur le papier, le foyer vit au milieu du pays. Mais une part de ce revenu reste dans l'exploitation pour rembourser le bâtiment, et il varie d'un tiers d'une année à l'autre. Elle n'a jamais regretté son ancien bureau, sauf certains matins de janvier, à moins quinze."
+  },
+  "lineOverrides": [
+    {
+      "code": "transport",
+      "constrained": true,
+      "justification": "Hameau sans aucune desserte en car : sans les deux voitures, ni le travail de son mari ni le collège ne sont accessibles."
+    }
+  ]
+}

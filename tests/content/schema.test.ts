@@ -7,6 +7,7 @@ import { Character } from '@/schemas/character.ts'
 import { LifeEvent } from '@/schemas/event.ts'
 import { Reform, ReformOption, Effect } from '@/schemas/reform.ts'
 import { ContentBundle } from '@/schemas/index.ts'
+import { spellCount } from '@/ui/words.ts'
 
 const bundlePath = fileURLToPath(new URL('../../content/bundle.json', import.meta.url))
 const bundle = JSON.parse(readFileSync(bundlePath, 'utf8'))
@@ -229,8 +230,10 @@ describe('corpus complet — ce que le jeu peut faire apparaître', () => {
   it('déclare sur la page méthode chaque décile que le corpus n’occupe pas', () => {
     // Un corpus qui saute un décile laisse un trou dont personne ne parle.
     // Les absences doivent être DÉCLARÉES sur la page méthode, pas
-    // découvertes par un joueur. Depuis que le décile est vérifié contre le
-    // budget, le cinquième et le neuvième sont vides : ils sont nommés.
+    // découvertes par un joueur. Quand le décile a été vérifié contre le
+    // budget, le cinquième et le neuvième se sont révélés vides ; ils ont été
+    // nommés, puis occupés. La règle reste : un décile qui se viderait de
+    // nouveau devrait être nommé sur la page méthode.
     const ORDINAL = ['premier', 'deuxième', 'troisième', 'quatrième', 'cinquième',
       'sixième', 'septième', 'huitième', 'neuvième', 'dixième']
     const deciles = new Set(chars.map((c) => c.identity.incomeDecile))
@@ -239,6 +242,15 @@ describe('corpus complet — ce que le jeu peut faire apparaître', () => {
     expect(manquants.length, 'au plus deux déciles manquants').toBeLessThanOrEqual(2)
     const methode = JSON.stringify(bundle.method)
     for (const d of manquants) expect(methode, `décile ${d} absent et non déclaré`).toContain(ORDINAL[d - 1])
+  })
+
+  it('écrit dans le texte le nombre de personnages que le corpus contient', () => {
+    // L'introduction et la page méthode disaient « treize » en toutes
+    // lettres : du texte, que l'ajout de trois personnages rendait faux sans
+    // qu'aucun test ne le voie. Le nombre écrit doit être celui du corpus.
+    const n = spellCount(chars.length)
+    expect(JSON.stringify(bundle.intro)).toContain(`parmi les ${n} du jeu`)
+    expect(JSON.stringify(bundle.method)).toContain(`${n.charAt(0).toUpperCase()}${n.slice(1)} situations`)
   })
 
   it('couvre les situations d’activité, y compris celles qui n’en sont pas une', () => {
