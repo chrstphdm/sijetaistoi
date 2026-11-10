@@ -1,4 +1,5 @@
 import { REPO_URL } from '../links.ts'
+import { DISCLAIMER } from '../disclaimer.ts'
 
 /**
  * Mentions légales et avertissement.
@@ -9,12 +10,6 @@ import { REPO_URL } from '../links.ts'
  * condition de l'avoir communiquée à l'hébergeur (art. 6-III-2) : c'est
  * l'option retenue ici.
  */
-
-/** L'avertissement, repris tel quel en bas de l'accueil et sur l'écran du contrat. */
-export const DISCLAIMER =
-  'Ce jeu est une fiction pédagogique. Les personnages et les instances qui posent les questions sont fictifs ; ' +
-  'les montants sont des ordres de grandeur, ni des prévisions, ni un conseil financier ou juridique. ' +
-  'Il n’est lié à aucun parti ni à aucun candidat, et ne publie aucun résultat sur les opinions de ses joueurs.'
 
 export function LegalScreen({ onBack }: { readonly onBack: () => void }) {
   return (

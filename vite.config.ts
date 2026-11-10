@@ -13,6 +13,26 @@ export default defineConfig({
   build: {
     target: 'es2023',
     sourcemap: true,
+    rolldownOptions: {
+      output: {
+        /*
+         * Deux fichiers à part, chargés au démarrage comme avant mais en
+         * parallèle, et surtout mis en cache séparément : corriger un texte
+         * ne fait plus retélécharger React, et une mise à jour du code ne
+         * fait plus retélécharger les 350 ko du contenu.
+         *
+         * Le contenu n'est PAS chargé à la demande : le moteur le lit de
+         * façon synchrone dès le montage (tirage des personnages, reprise
+         * d'une partie), et le rendre asynchrone toucherait au déterminisme.
+         */
+        codeSplitting: {
+          groups: [
+            { name: 'react', test: /node_modules[\\/](react|react-dom|scheduler)[\\/]/ },
+            { name: 'contenu', test: /content[\\/]bundle\.json$/ },
+          ],
+        },
+      },
+    },
   },
   test: {
     globals: true,

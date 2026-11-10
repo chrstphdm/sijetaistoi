@@ -5,11 +5,8 @@ import type { Scale } from '@/core/impact.ts'
 import { characters, reforms } from '@/content/load.ts'
 import { CONSTRAINT_STATEMENTS } from '@/core/casting.ts'
 import { useGame } from './useGame.ts'
-import { CharacterIntro } from './components/CharacterIntro.tsx'
 import { ContractScreen, HomeScreen } from './components/HomeScreen.tsx'
 import { GameRail } from './components/GameRail.tsx'
-import { MethodScreen } from './components/MethodScreen.tsx'
-import { LegalScreen } from './components/LegalScreen.tsx'
 
 /**
  * L'Atelier n'existe QU'EN DÉVELOPPEMENT.
@@ -28,16 +25,12 @@ const STUDIO_AVAILABLE = import.meta.env.DEV
 const Studio = STUDIO_AVAILABLE
   ? lazy(() => import('@/studio/Studio.tsx').then((m) => ({ default: m.Studio })))
   : null
-import { MonthScreen } from './components/MonthScreen.tsx'
-import { MonthlyBudget } from './components/MonthlyBudget.tsx'
-import { MonthTrend } from './components/MonthTrend.tsx'
 import { entryOf } from './monthLog.ts'
-import { ReformVote } from './components/ReformVote.tsx'
 import { ImpactForEach, rotationOrder } from './components/ImpactForEach.tsx'
-import { JudgementScale } from './components/JudgementScale.tsx'
-import { CallbackPanel, QuotaBlockedNote } from './components/Callback.tsx'
-import { SummaryScreen } from './components/Summary.tsx'
-import { ImpactProjection } from './components/ImpactProjection.tsx'
+import {
+  CallbackPanel, CharacterIntro, ImpactProjection, JudgementScale, LegalScreen, MethodScreen,
+  MonthlyBudget, MonthScreen, MonthTrend, preloadScreens, QuotaBlockedNote, ReformVote, SummaryScreen,
+} from './screens.ts'
 import { relaunchSentence } from '@/core/opinion.ts'
 import { makeSeed, replaySameSeed, seedFromUrl, startFreshGame } from './seed.ts'
 import { setupFromUrl, isPrepared, EMPTY_SETUP } from './setup.ts'
@@ -121,6 +114,48 @@ export function App() {
   }, [])
 
   /*
+   * Les écrans différés (screens.ts) sont demandés une fois l'accueil
+   * affiché, sans attendre le clic : ils arrivent pendant la lecture et se
+   * rendent ensuite sans détour, comme s'ils avaient toujours été là.
+   *
+   * Après le premier affichage, et non aussitôt : demandés dès le montage,
+   * ils partaient avant que la page soit peinte, lui disputaient la bande
+   * passante, et Lighthouse mesurait un premier affichage PLUS LENT
+   * qu'avant le découpage. requestAnimationFrame, même doublé, ne suffisait
+   * pas : la peinture est présentée plus tard que l'image n'est calculée.
+   * On attend donc que le navigateur annonce lui-même le premier affichage,
+   * avec un délai de secours là où il ne l'annonce pas.
+   */
+  useEffect(() => {
+    let done = false
+    const start = () => {
+      if (done) return
+      done = true
+      preloadScreens().catch(() => {
+        // Réseau coupé : chaque écran retentera à son affichage.
+      })
+    }
+    const fallback = window.setTimeout(start, 2000)
+    let observer: PerformanceObserver | null = null
+    try {
+      observer = new PerformanceObserver((list) => {
+        if (list.getEntriesByName('first-contentful-paint').length === 0) return
+        observer?.disconnect()
+        window.setTimeout(start, 0)
+      })
+      observer.observe({ type: 'paint', buffered: true })
+    } catch {
+      // Pas de mesure des peintures (navigateur ancien, jsdom) : le délai
+      // de secours s'en charge.
+    }
+    return () => {
+      done = true
+      observer?.disconnect()
+      window.clearTimeout(fallback)
+    }
+  }, [])
+
+  /*
    * Remise a zero a chaque changement d'ecran : defilement, focus, titre.
    *
    * Appele AVANT tout retour conditionnel : un hook doit s'executer a chaque
@@ -179,7 +214,9 @@ export function App() {
       <div className="layout layout--single" id="haut">
         <SkipLink />
         <main className="layout__main" id="contenu" tabIndex={-1}>
-          <LegalScreen onBack={() => setShowLegal(false)} />
+          <Suspense fallback={null}>
+            <LegalScreen onBack={() => setShowLegal(false)} />
+          </Suspense>
         </main>
       </div>
     )
@@ -192,7 +229,9 @@ export function App() {
       <div className="layout layout--single" id="haut">
         <SkipLink />
         <main className="layout__main" id="contenu" tabIndex={-1}>
-          <MethodScreen onBack={() => setShowMethod(false)} onLegal={() => setShowLegal(true)} />
+          <Suspense fallback={null}>
+            <MethodScreen onBack={() => setShowMethod(false)} onLegal={() => setShowLegal(true)} />
+          </Suspense>
         </main>
         <BackToTop />
       </div>
@@ -239,6 +278,7 @@ export function App() {
           state={state} step={step} nameOf={nameOf} allIds={allIds}
           month={month} monthsDone={game.monthsDone}
         />
+        <Suspense fallback={null}>
         {(step.kind === 'month' || step.kind === 'relaunch') && (
           <MonthlyBudget
             budget={budget} month={month} variant="panel"
@@ -253,11 +293,15 @@ export function App() {
             />
           </MonthlyBudget>
         )}
+        </Suspense>
       </div>
 
       <main className="layout__main" id="contenu" tabIndex={-1}>
       <ScreenTitle>{titleOf(step, state.act, character.identity.firstName)}</ScreenTitle>
 
+      {/* Le titre reste HORS de l'attente : la remise à zéro du focus le
+          vise dès le changement d'écran, même si le contenu arrive après. */}
+      <Suspense fallback={null}>
       {step.kind === 'intro' && (
         <CharacterIntro
           character={character} month={month} act={state.act} allIds={allIds}
@@ -452,6 +496,7 @@ export function App() {
           </section>
         </>
       )}
+      </Suspense>
 
       {/* Pied de page : toujours accessible, jamais encombrant. Le registre
           transforme « le jeu me punit » en « j'ai construit un monde », et la
