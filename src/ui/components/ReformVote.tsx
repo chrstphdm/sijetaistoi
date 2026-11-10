@@ -2,6 +2,8 @@ import { useState } from 'react'
 import type { ReformT, ReformOptionT } from '@/schemas/index.ts'
 import { ScopeBand, ScopeMark } from './ScopeBand.tsx'
 import { formatRecurring } from '@/core/phrasing.ts'
+import { firstOccurrences } from '../glossary.ts'
+import { Glossed, Term } from './Term.tsx'
 
 /**
  * L'ecran de vote.
@@ -63,7 +65,9 @@ export function ReformVote({ reform, order, who, onVote }: Props) {
 
       <ScopeBand scope="collective" who={who} />
 
-      <p>{reform.context}</p>
+      {/* Le contexte est le premier texte de l'écran : ses termes techniques
+          y sont marqués, chacun une fois. */}
+      <p><Glossed text={reform.context} mark={firstOccurrences([reform.context])[0]} /></p>
 
       <p className="provenance">
         {reform.options.length} possibilités, dans un ordre tiré au sort. Déplie-en une pour voir
@@ -138,7 +142,7 @@ export function ReformVote({ reform, order, who, onVote }: Props) {
       <details className="footnote">
         <summary>D’où vient ce chiffre, et ce que ce modèle ignore</summary>
         <p className="provenance">
-          Objectif de {reform.objective.amount} Md€ posé par {reform.statedBy}.{' '}
+          Objectif de {reform.objective.amount} <Term id="md-eur">Md€</Term> posé par {reform.statedBy}.{' '}
           {reform.objective.note}
         </p>
         <p className="provenance">{reform.modelLimitations}</p>

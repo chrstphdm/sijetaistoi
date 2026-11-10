@@ -1,6 +1,8 @@
 import type { CharacterT } from '@/schemas/index.ts'
 import { Seal } from './Seal.tsx'
 import { Standing } from './PopulationPlace.tsx'
+import { firstOccurrences } from '../glossary.ts'
+import { Glossed } from './Term.tsx'
 
 /**
  * L'arrivee dans un personnage.
@@ -19,6 +21,8 @@ export function CharacterIntro({
   readonly onContinue: () => void
 }) {
   const { identity, embodiedDetails, shortTermGoal, narrative } = character
+  // Termes du glossaire, une fois chacun, dans l'ordre de lecture.
+  const marks = firstOccurrences([...embodiedDetails, narrative.story])
   return (
     <section className="sheet" aria-labelledby="intro-title">
       <p className="sheet__kicker">
@@ -36,12 +40,12 @@ export function CharacterIntro({
       </p>
 
       <ul className="details">
-        {embodiedDetails.map((d) => (
-          <li key={d}>{d}</li>
+        {embodiedDetails.map((d, k) => (
+          <li key={d}><Glossed text={d} mark={marks[k]} /></li>
         ))}
       </ul>
 
-      <p>{narrative.story}</p>
+      <p><Glossed text={narrative.story} mark={marks[embodiedDetails.length]} /></p>
 
       {/* Après l'histoire, jamais avant (charte C7) : présenté d'abord par
           son revenu, un personnage devient un dossier. */}

@@ -15,7 +15,7 @@
     "insee-niveaux-de-vie",
     "cnaf-cout-garde"
   ],
-  "modelLimitations": "Trois limites pèsent lourd ici. D'abord, le jeu applique les variations en euros par mois à l'intérieur d'une tranche de revenu, et non en pourcentage du droit réel : une même baisse de 8 % représente 34 € pour l'un et 83 € pour l'autre, et le modèle écrase cet écart. Ensuite, le non-recours n'est modélisé par aucun attribut : le gain d'un versement automatique est appliqué uniformément à la tranche, alors que deux personnes de ce corpus réclament déjà tout ce à quoi elles ont droit et n'y gagneraient rien. Enfin, et surtout, le corpus ne contient aucun allocataire du revenu de solidarité active : la mesure la plus discutée du pays ne touche directement personne ici, et cette absence est déclarée sur la page méthode.",
+  "modelLimitations": "Trois limites pèsent lourd ici. D'abord, le jeu applique les variations en euros par mois à l'intérieur d'une tranche de revenu, et non en pourcentage du droit réel : une même baisse de 8 % représente 34 € pour l'un et 83 € pour l'autre, et le modèle écrase cet écart. Ensuite, le non-recours n'est modélisé par aucun attribut : le gain d'un versement automatique est appliqué uniformément à la tranche, alors que deux des personnages réclament déjà tout ce à quoi elles ont droit et n'y gagneraient rien. Enfin, et surtout, aucun des personnages n'est allocataire du revenu de solidarité active : la mesure la plus discutée du pays ne touche directement personne ici, et cette absence est déclarée sur la page méthode.",
   "options": [
     {
       "id": "statu-quo",
@@ -260,7 +260,7 @@
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Effet nul, et c'est l'argument central des partisans : qui travaille déjà remplit la condition sans rien changer. L'effet se concentrerait sur ceux qui ne travaillent pas — que ce corpus ne contient pas."
+          "note": "Effet nul, et c'est l'argument central des partisans : qui travaille déjà remplit la condition sans rien changer. L'effet se concentrerait sur ceux qui ne travaillent pas — qu'aucun personnage n'incarne."
         },
         {
           "id": "mh-etudiants",
@@ -929,7 +929,7 @@
       ],
       "argumentsFor": [
         "Discuter des conditions d'accès à un minimum social revient à tenir pour acquis qu'il faille un minimum social, donc que les salaires et les loyers soient ce qu'ils sont.",
-        "Ce corpus ne contient aucun allocataire du revenu de solidarité active : la décision la plus débattue du pays s'y joue à vide, et aucun arbitrage entre les quatre options ne corrige cela."
+        "Aucun des personnages n'est allocataire du revenu de solidarité active : la décision la plus débattue du pays s'y joue à vide, et aucun arbitrage entre les quatre options ne corrige cela."
       ],
       "argumentsAgainst": [
         "Les règles d'accès produisent des effets immédiats sur des personnes réelles, que l'on refuse ou non le cadrage : quelqu'un les écrira.",

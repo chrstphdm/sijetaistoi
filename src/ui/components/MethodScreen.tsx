@@ -8,6 +8,8 @@ import { MIN_OBSERVATIONS } from '@/core/summary.ts'
 import { Icon } from './HomeArt.tsx'
 import { Seal } from './Seal.tsx'
 import { DOCUMENTS, REPO_URL } from '../links.ts'
+import { firstOccurrences } from '../glossary.ts'
+import { Glossed, GlossaryList } from './Term.tsx'
 
 /**
  * La page methode.
@@ -91,6 +93,27 @@ export function MethodScreen({ onBack, onLegal }: { readonly onBack?: () => void
   const allIds = bundle.characters.map((c) => c.id)
   const maxThreshold = THRESHOLDS[THRESHOLDS.length - 1]! * 1.2
 
+  /*
+   * Les termes du glossaire, marqués à leur première apparition dans
+   * l'ordre de lecture de la page — une seule fois chacun. Le glossaire
+   * complet est en bas de page, avant les sources.
+   */
+  const reading: string[] = [
+    ...(biases ? [biases.lead, ...biases.items.flatMap((it) => {
+      const { title, body } = splitLead(it)
+      return title ? [title, body] : [body]
+    })] : []),
+    ...(checks ? [checks.lead, ...checks.items] : []),
+    ...AVAILABILITY_STATEMENTS,
+    ...Object.values(CONSTRAINT_STATEMENTS),
+    ...debated.flatMap((h) => [h.question, ...h.readings.map((r) => r.mechanismLabel)]),
+    ...[numbers, privacy, ...others].flatMap((sec) => (sec ? [sec.lead, ...sec.items] : [])),
+  ]
+  const firsts = firstOccurrences(reading)
+  const marks = new Map<string, string[]>()
+  reading.forEach((t, k) => { if (!marks.has(t)) marks.set(t, firsts[k]!) })
+  const g = (text: string) => <Glossed text={text} mark={marks.get(text)} />
+
   return (
     <div className="page method">
       <header className="hero hero--compact">
@@ -118,14 +141,14 @@ export function MethodScreen({ onBack, onLegal }: { readonly onBack?: () => void
         {biases && (
           <section className="band" aria-labelledby="m-partialite-residuelle">
             <h2 id="m-partialite-residuelle">{biases.title}</h2>
-            <p className="lead">{biases.lead}</p>
+            <p className="lead">{g(biases.lead)}</p>
             <ol className="biases">
               {biases.items.map((it) => {
                 const { title, body } = splitLead(it)
                 return (
                   <li key={it} className="bias">
-                    {title && <h3>{title}</h3>}
-                    <p>{body}</p>
+                    {title && <h3>{g(title)}</h3>}
+                    <p>{g(body)}</p>
                   </li>
                 )
               })}
@@ -136,12 +159,12 @@ export function MethodScreen({ onBack, onLegal }: { readonly onBack?: () => void
         {checks && (
           <section className="band band--tint" aria-labelledby="m-ce-qui-est-verifie">
             <h2 id="m-ce-qui-est-verifie">{checks.title}</h2>
-            <p className="lead">{checks.lead}</p>
+            <p className="lead">{g(checks.lead)}</p>
             <ul className="checks">
               {checks.items.map((it) => (
                 <li key={it} className="check">
                   <span className="check__mark"><CheckIcon /></span>
-                  <p>{it}</p>
+                  <p>{g(it)}</p>
                 </li>
               ))}
             </ul>
@@ -189,7 +212,7 @@ export function MethodScreen({ onBack, onLegal }: { readonly onBack?: () => void
               <dd>{MOTION_SPEC_VERSION}</dd>
             </div>
             <div className="stat">
-              <dt>Corpus</dt>
+              <dt>Contenu du jeu</dt>
               <dd>
                 {bundle.characters.length} personnages · {bundle.events.length} événements ·{' '}
                 {bundle.reforms.length} décisions collectives
@@ -207,7 +230,7 @@ export function MethodScreen({ onBack, onLegal }: { readonly onBack?: () => void
           </p>
           <ul className="details">
             {AVAILABILITY_STATEMENTS.map((r) => (
-              <li key={r}>{r}</li>
+              <li key={r}>{g(r)}</li>
             ))}
           </ul>
           <p className="provenance">
@@ -230,12 +253,12 @@ export function MethodScreen({ onBack, onLegal }: { readonly onBack?: () => void
               <span className="draw__seals" aria-hidden="true">
                 {allIds.map((id) => <Seal key={id} id={id} allIds={allIds} size={26} />)}
               </span>
-              <p>Les {bundle.characters.length} personnages du corpus</p>
+              <p>Les {bundle.characters.length} personnages</p>
             </li>
             {Object.values(CONSTRAINT_STATEMENTS).map((s) => (
               <li key={s} className="draw__step">
                 <span className="draw__icon"><FilterIcon /></span>
-                <p>{s}</p>
+                <p>{g(s)}</p>
               </li>
             ))}
             <li className="draw__step draw__step--last">
@@ -263,12 +286,12 @@ export function MethodScreen({ onBack, onLegal }: { readonly onBack?: () => void
             {debated.map((h) => (
               <article key={h.id} className="hypo">
                 <p className="hypo__status">Hypothèse {STATUS[h.status] ?? h.status}</p>
-                <h3>{h.question}</h3>
+                <h3>{g(h.question)}</h3>
                 <ul className="hypo__readings">
                   {h.readings.map((r) => (
                     <li key={r.id}>
                       <strong>Lecture {r.id}</strong>
-                      <span>{r.mechanismLabel}</span>
+                      <span>{g(r.mechanismLabel)}</span>
                     </li>
                   ))}
                 </ul>
@@ -291,9 +314,9 @@ export function MethodScreen({ onBack, onLegal }: { readonly onBack?: () => void
                 <section key={s.id} className="duo__card" aria-labelledby={`m-${s.id}`}>
                   <span className="duo__icon">{icon}</span>
                   <h2 id={`m-${s.id}`}>{s.title}</h2>
-                  <p className="duo__lead">{s.lead}</p>
+                  <p className="duo__lead">{g(s.lead)}</p>
                   <ul>
-                    {s.items.map((it) => <li key={it}>{it}</li>)}
+                    {s.items.map((it) => <li key={it}>{g(it)}</li>)}
                   </ul>
                 </section>
               ))}
@@ -304,12 +327,25 @@ export function MethodScreen({ onBack, onLegal }: { readonly onBack?: () => void
         {others.map((s) => (
           <section key={s.id} className="band" aria-labelledby={`m-${s.id}`}>
             <h2 id={`m-${s.id}`}>{s.title}</h2>
-            <p className="lead">{s.lead}</p>
+            <p className="lead">{g(s.lead)}</p>
             <ul className="plain">
-              {s.items.map((it) => <li key={it}>{it}</li>)}
+              {s.items.map((it) => <li key={it}>{g(it)}</li>)}
             </ul>
           </section>
         ))}
+
+        {/* Tous les termes techniques du jeu, au même endroit. Ceux des
+            écrans y sont marqués à leur première apparition ; ici, rien
+            n'est replié ni à survoler. */}
+        <section className="band band--tint" aria-labelledby="m-glossaire" id="glossaire">
+          <h2 id="m-glossaire">Glossaire</h2>
+          <p className="lead">
+            Les mots techniques employés dans le jeu, définis en une phrase. Dans les écrans, ils
+            sont soulignés en pointillé à leur première apparition&nbsp;: les survoler, les toucher
+            ou les atteindre au clavier affiche leur définition.
+          </p>
+          <GlossaryList />
+        </section>
 
         <section className="band" aria-labelledby="m-sources">
           <h2 id="m-sources">Les sources utilisées pour calibrer</h2>

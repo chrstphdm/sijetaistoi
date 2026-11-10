@@ -80,6 +80,31 @@ export const BudgetLineRef = z.object({
   methodNote: z.string().min(10),
 })
 
+/**
+ * Une entree du glossaire.
+ *
+ * Le jeu s'adresse a tout le monde et parle pourtant de deciles, de reste a
+ * vivre et de non-recours. Chaque terme technique est defini ici, une fois,
+ * et l'interface le marque a sa premiere apparition sur un ecran.
+ *
+ * La definition est COURTE (160 signes) : elle s'affiche dans une bulle, a
+ * cote du mot, et une bulle qui deborde ne se lit pas. Elle decrit, elle ne
+ * qualifie pas — la charte s'y applique comme a tout le contenu, et le
+ * lexique la controle. `forms` liste les autres graphies a reconnaitre
+ * (pluriels surtout) ; `sourceId`, la source dont la definition est reprise.
+ */
+export const GlossaryEntry = z.object({
+  id: Id,
+  term: z.string().min(2),
+  forms: z.array(z.string().min(2)).default([]),
+  definition: z
+    .string()
+    .min(20)
+    .max(160, { error: 'une définition de glossaire tient en 160 signes : elle s’affiche dans une bulle' }),
+  sourceId: Id.optional(),
+})
+
+export type GlossaryEntryT = z.infer<typeof GlossaryEntry>
 export type SourceT = z.infer<typeof Source>
 export type HypothesisT = z.infer<typeof Hypothesis>
 export type BudgetLineRefT = z.infer<typeof BudgetLineRef>

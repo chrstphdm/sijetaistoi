@@ -1,0 +1,79 @@
+[
+  {
+    "id": "reste-a-vivre",
+    "term": "reste à vivre",
+    "definition": "Ce qui reste d'un mois de revenus une fois réglées les dépenses déjà engagées : logement, énergie, crédits, impôts et cotisations."
+  },
+  {
+    "id": "niveau-de-vie",
+    "term": "niveau de vie",
+    "forms": ["niveaux de vie"],
+    "definition": "Revenu disponible d'un ménage divisé par son nombre d'unités de consommation. Il permet de comparer des ménages de tailles différentes.",
+    "sourceId": "insee-niveaux-de-vie"
+  },
+  {
+    "id": "unite-de-consommation",
+    "term": "unité de consommation",
+    "forms": ["unités de consommation"],
+    "definition": "Mesure de la taille d'un ménage : 1 pour le premier adulte, 0,5 pour chaque autre personne de 14 ans ou plus, 0,3 par enfant plus jeune.",
+    "sourceId": "insee-niveaux-de-vie"
+  },
+  {
+    "id": "decile",
+    "term": "décile",
+    "forms": ["déciles"],
+    "definition": "On range la population du niveau de vie le plus bas au plus élevé, puis on la coupe en dix groupes de même taille : chacun est un décile.",
+    "sourceId": "insee-distribution-niveaux-de-vie"
+  },
+  {
+    "id": "median",
+    "term": "médian",
+    "forms": ["médiane", "médians", "médianes"],
+    "definition": "Valeur qui partage une population en deux moitiés : autant de personnes au-dessous qu'au-dessus. Elle peut différer de la moyenne."
+  },
+  {
+    "id": "zone-tendue",
+    "term": "zone tendue",
+    "forms": ["zones tendues"],
+    "definition": "Commune où la demande de logements à louer dépasse nettement l'offre. Des règles de location particulières s'y appliquent."
+  },
+  {
+    "id": "taux-d-effort",
+    "term": "taux d'effort",
+    "definition": "Part des revenus d'un ménage consacrée à une dépense, le plus souvent au logement."
+  },
+  {
+    "id": "prime-d-activite",
+    "term": "prime d'activité",
+    "definition": "Prestation mensuelle versée aux personnes qui travaillent, salariées ou indépendantes, lorsque leurs revenus sont modestes.",
+    "sourceId": "drees-minima-sociaux"
+  },
+  {
+    "id": "minima-sociaux",
+    "term": "minima sociaux",
+    "forms": ["minimum social"],
+    "definition": "Prestations qui garantissent un revenu minimal aux personnes dont les ressources sont faibles, comme le RSA ou l'allocation aux adultes handicapés.",
+    "sourceId": "drees-minima-sociaux"
+  },
+  {
+    "id": "non-recours",
+    "term": "non-recours",
+    "definition": "Situation d'une personne qui ne perçoit pas une prestation à laquelle elle a droit, quelle qu'en soit la raison.",
+    "sourceId": "drees-minima-sociaux"
+  },
+  {
+    "id": "tresorerie",
+    "term": "trésorerie",
+    "definition": "L'argent disponible tout de suite, sur le compte ou en épargne, pour régler une dépense sans attendre ni emprunter."
+  },
+  {
+    "id": "md-eur",
+    "term": "Md€",
+    "definition": "Milliard d'euros, soit mille millions d'euros."
+  },
+  {
+    "id": "graine",
+    "term": "graine",
+    "definition": "Code court qui fixe tous les tirages au sort d'une partie. La même graine redonne exactement la même partie."
+  }
+]

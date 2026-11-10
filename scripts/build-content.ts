@@ -8,13 +8,20 @@
  *
  * Aucune normalisation silencieuse. Si un contenu est douteux, le script
  * echoue et le dit — il ne corrige rien dans le dos de l'auteur.
+ *
+ * Une seule exception, et elle est declaree : la typographie (apostrophe
+ * typographique, espaces insecables de la ponctuation francaise). Ce n'est
+ * pas un contenu douteux mais une convention d'affichage, que personne ne
+ * saisit correctement a la main. Elle est appliquee ici, en un seul endroit,
+ * par une fonction pure et testee : src/content/typography.ts.
  */
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { z } from 'zod'
 import { ContentBundle, IntroPage, MethodPage, Population } from '../src/schemas/index.ts'
-import { Source, Hypothesis, BudgetLineRef } from '../src/schemas/referentials.ts'
+import { Source, Hypothesis, BudgetLineRef, GlossaryEntry } from '../src/schemas/referentials.ts'
+import { normaliseStrings } from '../src/content/typography.ts'
 import { Character } from '../src/schemas/character.ts'
 import { LifeEvent } from '../src/schemas/event.ts'
 import { Reform } from '../src/schemas/reform.ts'
@@ -70,6 +77,7 @@ const method = parseOne(MethodPage, 'method.json', readJson('method.json'))
 const intro = parseOne(IntroPage, 'intro.json', readJson('intro.json'))
 const population = parseOne(Population, 'population.json', readJson('population.json'))
 const principles = readJson('principles.json')
+const glossary = parseArrayFile(GlossaryEntry, 'glossary.json')
 
 // --------------------------------------------------- integrite referentielle
 const sourceIds = new Set(sources.map((s) => s.id))
@@ -77,6 +85,20 @@ const hypothesisIds = new Set(hypotheses.map((h) => h.id))
 const lineCodes = new Set(budgetLines.map((l) => l.code))
 
 const complain = (file: string, path: string, message: string) => problems.push({ file, path, message })
+
+// Le glossaire : sources connues, et aucune graphie revendiquée par deux
+// entrées — sinon le même mot recevrait deux définitions selon l'écran.
+const glossaryForms = new Map<string, string>()
+for (const g of glossary) {
+  if (g.sourceId && !sourceIds.has(g.sourceId))
+    complain('glossary.json', `${g.id}.sourceId`, `source inconnue : ${g.sourceId}`)
+  for (const form of [g.term, ...g.forms]) {
+    const key = form.toLocaleLowerCase('fr').replace(/['’]/g, "'")
+    const other = glossaryForms.get(key)
+    if (other) complain('glossary.json', g.id, `« ${form} » est déjà défini par « ${other} »`)
+    glossaryForms.set(key, g.id)
+  }
+}
 
 // Chaque repère de population cite une source connue (charte A2).
 for (const [key, block] of Object.entries(population ?? {}))
@@ -327,6 +349,7 @@ const used = new Set<string>()
 // Les repères de population citent leurs sources.
 if (population)
   for (const block of [population.livingStandardDeciles, population.tenure, population.households]) used.add(block.sourceId)
+for (const g of glossary) if (g.sourceId) used.add(g.sourceId)
 for (const c of characters) {
   c.identity.calibrationSourceIds.forEach((s) => used.add(s))
   c.budget.lines.forEach((l) => {
@@ -367,7 +390,9 @@ if (problems.length > 0) {
   process.exit(1)
 }
 
-const bundle = {
+// Typographie française sur toutes les chaînes lisibles du paquet — et
+// seulement là : identifiants, adresses et codes sont laissés intacts.
+const bundle = normaliseStrings({
   contentVersion: '0.1.0',
   builtFrom: { fileCount, charterVersion: '1.0' },
   sources,
@@ -379,8 +404,9 @@ const bundle = {
   method,
   intro,
   population,
+  glossary,
   principles,
-}
+})
 
 const verified = ContentBundle.safeParse(bundle)
 if (!verified.success) {
@@ -395,5 +421,5 @@ console.log(
   `✓ content/bundle.json — ${fileCount} fichiers, ${characters.length} personnages, ` +
     `${events.length} événements, ${reforms.length} réformes`,
 )
-console.log(`  ${sources.length} sources, ${hypotheses.length} hypothèses, ${budgetLines.length} postes budgétaires`)
+console.log(`  ${sources.length} sources, ${hypotheses.length} hypothèses, ${budgetLines.length} postes budgétaires, ${glossary.length} termes de glossaire`)
 if (orphans.length) console.log(`  note : ${orphans.length} référence(s) jamais utilisée(s) — ${orphans.join(', ')}`)

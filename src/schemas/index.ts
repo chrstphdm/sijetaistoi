@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { Id } from './primitives.ts'
-import { Source, Hypothesis, BudgetLineRef } from './referentials.ts'
+import { Source, Hypothesis, BudgetLineRef, GlossaryEntry } from './referentials.ts'
 import { Character } from './character.ts'
 import { LifeEvent } from './event.ts'
 import { Reform } from './reform.ts'
@@ -155,6 +155,7 @@ export const ContentBundle = z.object({
   method: MethodPage,
   intro: IntroPage,
   population: Population,
+  glossary: z.array(GlossaryEntry).min(1),
   principles: z.object({
     note: z.string().min(40),
     principles: z.array(Principle).min(10),

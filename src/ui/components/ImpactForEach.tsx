@@ -9,6 +9,7 @@ import { optionLookup, toBudgetLines, toStocks, traitsOf } from '@/content/load.
 import type { CharacterT } from '@/schemas/index.ts'
 import { Amount } from './Amount.tsx'
 import { Seal } from './Seal.tsx'
+import { Term } from './Term.tsx'
 
 /**
  * « Le choix vu par chacun ».
@@ -168,7 +169,7 @@ export function ImpactForEach({ characters, world, scale, onScaleChange, screenI
 
       <p role="note">
         Changer d’échelle change la mesure, pas les faits. Aucune de ces quatre mesures n’est
-        neutre&nbsp;: rapporter au reste à vivre suppose que ce qui compte est le besoin, rapporter
+        neutre&nbsp;: rapporter au <Term id="reste-a-vivre">reste à vivre</Term> suppose que ce qui compte est le besoin, rapporter
         au revenu que ce qui compte est la proportion, compter en euros qu’un euro est un euro.
       </p>
 

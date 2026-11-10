@@ -222,7 +222,7 @@
           },
           "horizon": "y1",
           "uncertainty": "established",
-          "note": "Effet nul dans ce corpus : aucun de ces ménages n'a d'enfant étudiant. Pour un ménage qui en a un, la hausse serait d'environ 110 € par mois."
+          "note": "Effet nul pour ces personnages : aucun de ces ménages n'a d'enfant étudiant. Pour un ménage qui en a un, la hausse serait d'environ 110 € par mois."
         },
         {
           "id": "fm-recette",

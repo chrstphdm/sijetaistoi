@@ -1,0 +1,74 @@
+/*
+ * Glossaire — un terme technique et sa bulle de définition.
+ *
+ * Le terme garde la typographie du texte qui l'entoure : il se signale par
+ * un soulignement pointillé, pas par une couleur (charte E2) — et pas par
+ * un aspect de bouton, qui le ferait lire comme une action.
+ */
+
+.gloss { position: relative; display: inline; }
+
+/* Spécificité supérieure aux deux règles `button` de base.css. */
+button.gloss__term {
+  display: inline-block;
+  min-height: 24px;   /* cible tactile, WCAG 2.2 — comme .timeline__toggle */
+  min-width: 24px;
+  margin: 0; padding: 0;
+  font: inherit; font-weight: inherit; line-height: inherit; letter-spacing: inherit;
+  color: inherit; text-align: inherit; text-transform: inherit;
+  vertical-align: baseline;
+  background: none;
+  border: 0; border-radius: 0;
+  border-bottom: 1px dotted currentColor;
+  cursor: help;
+  transition: none;
+}
+button.gloss__term:hover { background: none; border-bottom-style: solid; }
+
+.gloss__tip {
+  position: absolute;
+  z-index: 30;
+  left: 0;
+  top: calc(100% + 6px);
+  display: block;
+  width: max-content;
+  max-width: min(20rem, calc(100vw - 2rem));
+  padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+  transform: translateX(var(--gloss-shift, 0px));
+  font-family: system-ui, sans-serif;
+  font-size: 14px; font-weight: 400; line-height: 1.45;
+  font-style: normal; text-align: left; text-transform: none; letter-spacing: normal;
+  white-space: normal;
+  color: var(--ink);
+  background: var(--paper-raised);
+  border: 1px solid var(--rule-strong);
+  border-radius: 4px;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.18);
+  animation: gloss-in 120ms var(--ease-enter, ease-out) both;
+}
+.gloss__word { display: block; font-weight: 600; margin-bottom: 0.15rem; }
+.gloss__source { display: block; margin-top: 0.3rem; font-size: 12px; color: var(--ink-3); }
+
+@keyframes gloss-in {
+  from { opacity: 0; transform: translate(var(--gloss-shift, 0px), -3px); }
+  to   { opacity: 1; transform: translateX(var(--gloss-shift, 0px)); }
+}
+
+/* La bulle apparaît sans mouvement si on le demande : elle ne porte aucune
+   information par l'animation. */
+@media (prefers-reduced-motion: reduce) {
+  .gloss__tip { animation: none; }
+}
+
+/* ------------------------------------------- Le glossaire, page méthode */
+.glossary {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  gap: var(--space-4, 1rem) var(--space-6, 1.5rem);
+  margin: 0;
+}
+.glossary__entry { scroll-margin-top: var(--space-6, 1.5rem); }
+.glossary dt { font-weight: 600; margin-bottom: var(--space-1, 0.25rem); }
+.glossary dd { margin: 0; max-width: var(--measure-narrative, 34ch); }
+/* Sur bande teintée, --ink-3 tombe sous 4,5:1 : --ink-2 tient. */
+.glossary .glossary__source { display: block; margin-top: var(--space-1, 0.25rem); color: var(--ink-2); }

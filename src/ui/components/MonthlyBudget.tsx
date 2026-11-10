@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import type { MonthlyBudget as Budget, BudgetLine } from '@/core/types.ts'
 import { labelFor } from '@/content/load.ts'
 import { Amount } from './Amount.tsx'
+import { Term } from './Term.tsx'
 
 /**
  * Le releve mensuel.
@@ -155,12 +156,17 @@ export function MonthlyBudget({
       </dl>
       {deficit ? (
         <p className="provenance">
-          Ce qui est déjà engagé dépasse ce qui entre&nbsp;: le mois ne se boucle pas sans
+          {/* Le terme est nommé ici, une fois : c'est celui des écrans
+              suivants (« en % du reste à vivre »), et il faut l'avoir vu
+              défini avant de devoir le lire. */}
+          Le <Term id="reste-a-vivre">reste à vivre</Term> est négatif. Ce qui est déjà engagé
+          dépasse ce qui entre&nbsp;: le mois ne se boucle pas sans
           toucher à {Math.round(adjustable / 100)} € de dépenses ajustables, puiser dans
           l’épargne, ou passer à découvert.
         </p>
       ) : (
         <p className="provenance">
+          Ce montant est le <Term id="reste-a-vivre">reste à vivre</Term>.
           Sur ce montant, {Math.round(adjustable / 100)} € sont déjà prévus pour des dépenses que
           {' '}{budget.adjustableCents === 0 ? 'personne ne' : 'le personnage'} peut décaler.
         </p>
